@@ -10,6 +10,8 @@ __pycache__/
 .Python
 env/
 build/
+bin/
+include/
 develop-eggs/
 dist/
 downloads/
@@ -99,3 +101,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+pip-selfcheck.json
