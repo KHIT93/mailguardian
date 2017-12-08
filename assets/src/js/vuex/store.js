@@ -1,13 +1,11 @@
 import Vue from 'vue';
-import Vuex from 'vuex';const LOGIN = "LOGIN";
+import Vuex from 'vuex';
 import state from './state';
 import getters from './getters';
 import mutations from './mutations';
 import actions from './actions';
 
-const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-const LOGIN_FAILED = "LOGIN_FAILED";
-const LOGOUT = "LOGOUT";
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state,
