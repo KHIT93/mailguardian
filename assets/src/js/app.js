@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import VueRouter from 'vue-router';
+import components from './components/global_components';
 import * as moment from 'moment';
 
 window.Vue = Vue;
@@ -55,5 +56,8 @@ const app = new Vue({
     el: '#app',
     router,
     store,
-    components: {}
+    components,
+    created() {
+        this.$store.dispatch('getCurrentUser');
+    }
 });

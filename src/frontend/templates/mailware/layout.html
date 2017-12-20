@@ -8,8 +8,9 @@
         <title>Mailware</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" />
     </head>
-    <body>
+    <body class="font-sans bg-grey-lighter">
         <div id="app">
+            <mailware-navigation></mailware-navigation>
             {% block content %}{% endblock %}
         </div>
         <script src="{% static 'js/app.js' %}" defer></script>

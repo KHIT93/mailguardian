@@ -7,8 +7,8 @@ import Login from '../pages/Login.vue';
 
 export default [
     { path: '/', component: Home, name: 'home' },
-        { path: '/login', component: Login, name: 'login' },
+    { path: '/login', component: Login, name: 'login' },
 
-        /** Catchall route to display 404 page */
-        { path: '*', component: NotFound, name: 'not_found' }
+    /** Catchall route to display 404 page */
+    { path: '*', component: NotFound, name: 'not_found' }
 ]
