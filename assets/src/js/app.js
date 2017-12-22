@@ -11,6 +11,7 @@ Vue.use(VueRouter);
 import {store} from './vuex/store';
 
 let Cookies = require('js-cookie');
+window.Cookies = Cookies;
 
 import routes from './routing/routes';
 
@@ -58,6 +59,14 @@ const app = new Vue({
     store,
     components,
     created() {
-        this.$store.dispatch('getCurrentUser');
-    }
+        this.$store.dispatch('checkSession').then(() => {
+            if (this.$store.getters.isLoggedIn) {
+                this.$store.dispatch('getCurrentUser');
+            }
+            else {
+                router.push('/login');
+            }
+        });
+
+    },
 });

@@ -116,7 +116,7 @@ sub InitConnection {
 
     # Our reason for existence - the persistent connection to the database
     if (CheckSQLVersion() >= 50503 ) {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
+        $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
             $db_user, $db_pass,
             { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
         );
@@ -125,7 +125,7 @@ sub InitConnection {
         }
         $dbh->do('SET NAMES utf8mb4');
     } else {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
+        $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
             $db_user, $db_pass,
             { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
         );

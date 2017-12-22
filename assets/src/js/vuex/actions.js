@@ -1,18 +1,37 @@
 export default {
-    login({commit}) {
-        state.pending = true;
+    login({commit, state}) {
+        commit('toggleLoading');
         //AJAX call for logging in
-        state.pending = false;
+        commit('toggleLoading');
     },
-    logout({commit}) {
-        state.pending = true;
+    logout({commit, state}) {
+        commit('toggleLoading');
         //AJAX call for logging out
-        state.isLoggedIn = false;
-        state.pending = false;
+        commit('toggleLoading');
     },
-    getCurrentUser({commit}) {
-        state.pending = true;
+    getCurrentUser({commit, state}) {
+        commit('toggleLoading');
         //AJAX call to fetch the current user
-        state.user
+        if(state.isLoggedIn) {
+            axios.post('/api/current-user/').then(response => {
+                commit('setCurrentUser',response.data);
+                commit('toggleLoading');
+            }).catch(error => {
+                console.log(error);
+                commit('toggleLoading');
+            })
+        }
+    },
+    checkSession({commit, state}) {
+        commit('toggleLoading');
+        axios.post('/api/current-user/').then(response => {
+            if(response.status == 403) {
+                commit('setIsLoggedIn', false);
+            }
+            else if(response.status == 200) {
+                commit('setIsLoggedIn', true);
+            }
+            commit('toggleLoading');
+        })
     }
 }

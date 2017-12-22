@@ -1,3 +1,4 @@
+let Cookies = require('js-cookie');
 export default {
     user(state) {
         return state.user;
