@@ -60,6 +60,7 @@ const app = new Vue({
     components,
     created() {
         this.$store.dispatch('checkSession').then(() => {
+            console.log(this.$store.getters.isLoggedIn);
             if (this.$store.getters.isLoggedIn) {
                 this.$store.dispatch('getCurrentUser');
             }

@@ -1,6 +1,6 @@
 <template>
     <!-- Navigation -->
-    <div class="fixed z-50 w-full" v-if="isLoggedIn">
+    <div class="fixed z-10 w-full" v-if="isLoggedIn">
         <div>
             <!-- Top nav -->
             <div class="bg-blue-dark">
@@ -23,7 +23,7 @@
             </div>
         </div>
         <!-- Secondary -->
-        <div class="bg-blue-dark sm:block sm:bg-white sm:border-b" :class="computeClasses">
+        <div class="bg-blue-dark sm:block sm:bg-white sm:border-b" :class="{'hidden' : hide}">
             <div class="container mx-auto px-4">
                 <div class="sm:flex">
                     <div class="flex -mb-px mr-6">

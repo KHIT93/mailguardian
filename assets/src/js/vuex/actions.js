@@ -23,15 +23,20 @@ export default {
         }
     },
     checkSession({commit, state}) {
-        commit('toggleLoading');
-        axios.post('/api/current-user/').then(response => {
-            if(response.status == 403) {
-                commit('setIsLoggedIn', false);
-            }
-            else if(response.status == 200) {
-                commit('setIsLoggedIn', true);
-            }
+        return new Promise((resolve, reject) => {
             commit('toggleLoading');
+            axios.post('/api/current-user/').then(response => {
+                if(response.status == 403) {
+                    commit('setIsLoggedIn', false);
+                }
+                else if(response.status == 200) {
+                    commit('setIsLoggedIn', true);
+                }
+                commit('toggleLoading');
+                resolve();
+            }).catch(error => {
+                reject();
+            })
         })
     }
 }
