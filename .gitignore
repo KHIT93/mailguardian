@@ -105,3 +105,5 @@ pip-selfcheck.json
 *.sqlite*
 node_modules/
 .vscode/
+mailware-env.json
+.DS_Store
