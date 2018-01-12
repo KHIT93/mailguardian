@@ -8,5 +8,8 @@ export default {
     },
     loading(state) {
         return state.loading;
+    },
+    filters(state) {
+        return state.report.filters;
     }
 }

@@ -18,8 +18,10 @@ from django.urls import path, re_path, include
 from frontend.views import IndexTemplateView
 from rest_framework import routers
 from .api.viewsets import UserViewSet
-from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet
+from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
+from mail.views import MessageActionAPIView
 from .api.views import CurrentUserView
+from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -29,11 +31,16 @@ router.register(r'message-headers', HeaderViewSet)
 router.register(r'spam-reports', SpamReportViewSet)
 router.register(r'rbl-reports', RblReportViewSet)
 router.register(r'mcp-reports', McpReportViewSet)
+router.register(r'mailscanner-reports', MailscannerReportViewSet)
+router.register(r'lists', ListEntryViewSet)
+router.register(r'blacklist', BlacklistEntryViewSet)
+router.register(r'whitelist', WhitelistEntryViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
     path('api/current-user/', CurrentUserView.as_view()),
     path('api/', include(router.urls)),
+    path('api/message-actions', MessageActionAPIView.as_view()),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

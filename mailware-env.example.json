@@ -1,0 +1,31 @@
+{
+    "debug": true,
+    "database": {
+        "name": "mailware",
+        "user": "mailware",
+        "password": "mailware",
+        "host": "localhost",
+        "port": "5432",
+        "options": {
+            "sslmode": "require"
+        }
+    },
+    "language_code": "en-us",
+    "time_zone": "UTC",
+    "api_only_mode": false,
+    "hostconfig": {
+        "salearn_bin":"/usr/bin/salearn",
+        "mailscanner_bin":"/usr/sbin/MailScanner",
+        "mailscanner_config_dir": "/etc/MailScanner",
+        "mailscanner_share_dir": "/usr/share/MailScanner",
+        "mailscanner_lib_dir": "/usr/lib/MailScanner",
+        "tmp_dir":"/tmp",
+        "sa_rules_dir":"/usr/share/spamassassin"
+    },
+    "retention": {
+        "records":60,
+        "audit":60,
+        "quarantine":60
+    },
+    "mta": "sendmail"
+}

@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import json
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+MAILWARE_ENV = json.load(open(os.path.join(os.path.dirname(BASE_DIR), "mailware-env.json")))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -22,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'kri^w&+#rz=dh-ll&opl7lo1k4-t#(q9psg#v9q5+4=pu7_3v='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = MAILWARE_ENV["debug"]
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +44,7 @@ INSTALLED_APPS = [
     'guardian',
     'frontend',
     'mail',
+    'lists',
 ]
 
 MIDDLEWARE = [
@@ -79,17 +84,30 @@ WSGI_APPLICATION = 'mailware.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mailware_dev',
-        'USER': 'mailware_dev',
-        'PASSWORD': 'mailware',
-        'HOST': '172.16.240.7',
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
+        'NAME': MAILWARE_ENV["database"]["name"],
+        'USER': MAILWARE_ENV["database"]["user"],
+        'PASSWORD': MAILWARE_ENV["database"]["password"],
+        'HOST': MAILWARE_ENV["database"]["host"],
+        'PORT': MAILWARE_ENV["database"]["port"],
+        'OPTIONS': MAILWARE_ENV["database"]["options"],
     }
 }
 
+# Caching
+# https://docs.djangoproject.com/en/2.0/topics/cache/#database-caching
+if DEBUG:
+    CACHES = {
+        'default': {
+            'BACKEND': 'path.to.backend',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'cache',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -113,10 +131,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = MAILWARE_ENV["language_code"]
 
 #TIME_ZONE = 'UTC'
-TIME_ZONE = 'Europe/Copenhagen'
+TIME_ZONE = MAILWARE_ENV["time_zone"]
 
 USE_I18N = True
 
@@ -144,7 +162,9 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'mailware.pagination.PageNumberPaginationWithPageCount',
+    'PAGE_SIZE': 100
 }
 
 
@@ -154,3 +174,22 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # this is default
     'guardian.backends.ObjectPermissionBackend',
 )
+
+#MailWare specific settings
+TMP_DIR = MAILWARE_ENV['hostconfig']['tmp_dir']
+MTA = MAILWARE_ENV['mta']
+
+#MailScanner settings
+MAILSCANNER_BIN = MAILWARE_ENV["hostconfig"]["mailscanner_bin"]
+MAILSCANNER_CONFIG_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_config_dir"]
+MAILSCANNER_SHARE_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_share_dir"]
+MAILSCANNER_LIB_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_lib_dir"]
+
+# SpamAssassin settings
+SALEARN_BIN = MAILWARE_ENV['hostconfig']['salearn_bin']
+SA_RULES_DIR = MAILWARE_ENV['hostconfig']['sa_rules_dir']
+
+# Retention policy
+RECORD_RETENTION = MAILWARE_ENV['retention']['records']
+AUDIT_RETENTION = MAILWARE_ENV['retention']['audit']
+QUARANTINE_RETENTION = MAILWARE_ENV['retention']['quarantine']

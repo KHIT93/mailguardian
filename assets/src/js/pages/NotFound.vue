@@ -1,12 +1,14 @@
 <template>
-    <v-card>
-            <v-card-title>
-                <v-icon x-large class="red--text">error_outline</v-icon> Page not found
-            </v-card-title>
-        <v-card-text>
+    <div class="text-center text-grey-darker py-6">
+        <div>
+            <div class="mb-2">
+                <span class="text-5xl">Page not found</span>
+            </div>
+            <div class="uppercase">
                 Whoops! The page you were looking for does not seem to exist.
-        </v-card-text>
-    </v-card>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
