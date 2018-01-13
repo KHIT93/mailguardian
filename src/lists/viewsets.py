@@ -16,7 +16,7 @@ class ListEntryViewSet(viewsets.ModelViewSet):
                     Q(to_address__icontains=search_key) | Q(to_domain__icontains=search_key) | Q(to_ip_address__icontains=search_key)
                 )
         else:
-            return ListEntry.objects.all()
+            return self.queryset
 
 class BlacklistEntryViewSet(ListEntryViewSet):
     queryset = ListEntry.objects.filter(listing_type='blacklisted')
