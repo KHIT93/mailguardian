@@ -31,11 +31,13 @@
             </div>
         </div>
         <div class="sm:flex">
-            <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 mr-1">
-                <mw-lists-table :list="whitelist"></mw-lists-table>
+            <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 sm:mr-1">
+                <h2 class="font-normal text-center border-b">Whitelist</h2>
+                <mw-lists-table :list="whitelist" @next="next_whitelist" @previous="previous_whitelist" @confirmDelete="delete_entry_modal"></mw-lists-table>
             </div>
-            <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 ml-1">
-                <mw-lists-table :list="blacklist"></mw-lists-table>
+            <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 sm:ml-1">
+                <h2 class="font-normal text-center border-b">Blacklist</h2>
+                <mw-lists-table :list="blacklist" @next="next_blacklist" @previous="previous_blacklist" @confirmDelete="delete_entry_modal"></mw-lists-table>
             </div>
         </div>
         <mw-modal @close="cancel_list" @submit="submit_list" :show="show_modal" :modal-title="'Add ' + form.listing_type + ' entry'">
@@ -133,6 +135,9 @@
                 </div>
             </form>
         </mw-modal>
+        <mw-modal @close="delete_entry_no" @submit="delete_entry" submit-button-text="Yes" close-button-text="No" :show="delete_modal" modal-title="Delete entry?">
+            <p>Are you sure that you want to delete the {{ entry_to_delete.listing_type }} entry from {{ entry_to_delete._from }} to {{ entry_to_delete._to }}?</p>
+        </mw-modal>
     </div>
 </template>
 <script>
@@ -147,10 +152,12 @@ export default {
     },
     data: () => {
         return {
-            search_query: "",
+            search_query: null,
             blacklist: [],
             whitelist: [],
+            entry_to_delete: {},
             show_modal: false,
+            delete_modal: false,
             listing_choice_from: '',
             listing_choice_to: '',
             form: new Form({
@@ -158,8 +165,8 @@ export default {
                 to_address: '',
                 from_domain: '',
                 to_domain: '',
-                from_ip_address: '',
-                to_ip_address: '',
+                from_ip_address: null,
+                to_ip_address: null,
                 listing_type: ''
             })
         }
@@ -172,24 +179,47 @@ export default {
         ...mapGetters(['loading'])
     },
     methods: {
-        get(query = null) {
+        async get(query = null) {
             if(!this.loading) {
                 this.toggleLoading();
             }
+            await this.get_whitelist(query);
+            await this.get_blacklist(query);
+            this.toggleLoading();
+        },
+        get_blacklist(query = null, page = null) {
             let qs = '';
             if (query) {
                 qs = '?search='+query;
             }
+            if (page) {
+                qs = '?page='+page;
+            }
+            if (query && page) {
+                qs = '?search='+query+'&page='+page;
+            }
+            axios.get('/api/blacklist/'+qs).then(response => {
+                this.blacklist = response.data;
+            });
+        },
+        get_whitelist(query = null, page = null) {
+            let qs = '';
+            if (query) {
+                qs = '?search='+query;
+            }
+            if (page) {
+                qs = '?page='+page;
+            }
+            if (query && page) {
+                qs = '?search='+query+'&page='+page;
+            }
             axios.get('/api/whitelist/'+qs).then(response => {
                 this.whitelist = response.data;
             });
-            axios.get('/api/blacklist/'+qs).then(response => {
-                this.blacklist = response.data;
-                this.toggleLoading();
-            });
         },
-        search() {
-            this.get(this.search_query);
+        async search() {
+            await this.get(this.search_query);
+            this.search_query = null;
         },
         show_blacklist_modal() {
             this.form.listing_type = 'blacklisted'
@@ -204,11 +234,54 @@ export default {
             this.form.post('/api/lists/').then(() => {
                 this.toggleLoading();
                 this.show_modal = false;
+                this.get();
             });
         },
         cancel_list() {
             this.show_modal = false;
             this.form.reset();
+        },
+        delete_entry_modal(item) {
+            console.log(item);
+            this.entry_to_delete = item;
+            this.delete_modal = true;
+        },
+        delete_entry() {
+            this.toggleLoading();
+            axios.delete('/api/lists/'+this.entry_to_delete.id+'/').then(response => {
+                this.toggleLoading();
+                this.entry_to_delete = {};
+                this.delete_modal = false;
+                this.get();
+            }).catch(error => {
+                this.toggleLoading();
+                this.entry_to_delete = {};
+                this.delete_modal = false;
+            });
+        },
+        delete_entry_no() {
+            this.entry_to_delete = {};
+            this.delete_modal = false;
+        },
+        next_whitelist(event) {
+            let page = 0;
+            page = this.whitelist.next.split("?page=")[1];
+            this.get_whitelist(this.search_query, page);
+        },
+        previous_whitelist(event) {
+            let page = 0;
+            page = this.whitelist.previous.split("?page=")[1];
+            this.get_whitelist(this.search_query, page);
+        },
+        next_blacklist(event) {
+            let page = 0;
+            page = this.blacklist.next.split("?page=")[1];
+            this.get_blacklist(this.search_query, page);
+        },
+        previous_blacklist(event) {
+            let page = 0;
+            page = this.blacklist.previous.split("?page=")[1];
+            this.get_blacklist(this.search_query, page);
         },
         ...mapMutations(['toggleLoading'])
     }

@@ -21,8 +21,8 @@ class ListEntry(models.Model):
     to_address = models.CharField("To", max_length=511, blank=True, default="", db_index=True)
     from_domain = models.CharField(max_length=255, blank=True, default="", db_index=True)
     to_domain = models.CharField(max_length=255, blank=True, default="", db_index=True)
-    from_ip_address = models.GenericIPAddressField("IP Address", blank=True, null=True, default="", db_index=True)
-    to_ip_address = models.GenericIPAddressField("IP Address", blank=True, null=True, default="", db_index=True)
+    from_ip_address = models.GenericIPAddressField("IP Address", blank=True, null=True, db_index=True)
+    to_ip_address = models.GenericIPAddressField("IP Address", blank=True, null=True, db_index=True)
     listing_type = models.CharField(max_length=12, choices=(
         ('blacklisted', 'Blacklisted'),
         ('whitelisted', 'Whitelisted')
