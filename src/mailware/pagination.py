@@ -12,4 +12,5 @@ class PageNumberPaginationWithPageCount(PageNumberPagination):
             ('previous', self.get_previous_link()),
             ('page_count', self.page.paginator.num_pages),
             ('results', data),
+            ('current', self.request.query_params.get(self.page_query_param, 1))
         ]))

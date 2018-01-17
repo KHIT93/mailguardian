@@ -32,9 +32,9 @@ router.register(r'spam-reports', SpamReportViewSet)
 router.register(r'rbl-reports', RblReportViewSet)
 router.register(r'mcp-reports', McpReportViewSet)
 router.register(r'mailscanner-reports', MailscannerReportViewSet)
-router.register(r'lists', ListEntryViewSet)
 router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)
+router.register(r'lists', ListEntryViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
