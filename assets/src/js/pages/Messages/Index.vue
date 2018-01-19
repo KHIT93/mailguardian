@@ -1,5 +1,5 @@
 <template>
-    <mw-message-list :messages="messages"></mw-message-list>
+    <mw-message-list :messages="messages" :count="message_count"></mw-message-list>
 </template>
 <script>
 import { mapMutations } from 'vuex';
@@ -11,6 +11,7 @@ export default {
     data: () => {
         return {
             messages: [],
+            message_count: 0,
             interval: null,
         }
     },
@@ -25,6 +26,7 @@ export default {
             this.toggleLoading();
             axios.get('/api/messages/?page_size=50').then(response => {
                 this.messages = response.data.results;
+                this.message_count = response.data.count;
                 this.toggleLoading();
             })
         },
