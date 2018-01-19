@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import Form from '../../classes/Form';
 export default {
     data: () => {

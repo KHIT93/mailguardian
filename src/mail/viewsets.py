@@ -16,9 +16,9 @@ class HeaderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.query_params.__contains__('message'):
-            return Headers.objects.filter(message_id=self.request.query_params.get('message'))
+            return self.queryset.filter(message_id=self.request.query_params.get('message'))
         else:
-            return Headers.objects.all()
+            return self.queryset
 
 class SpamReportViewSet(viewsets.ModelViewSet):
     queryset = SpamReport.objects.all()
@@ -27,9 +27,9 @@ class SpamReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.query_params.__contains__('message'):
-            return SpamReport.objects.filter(message_id=self.request.query_params.get('message'))
+            return self.queryset.filter(message_id=self.request.query_params.get('message'))
         else:
-            return SpamReport.objects.all()
+            return self.queryset
 
 class RblReportViewSet(viewsets.ModelViewSet):
     queryset = RblReport.objects.all()
@@ -38,9 +38,9 @@ class RblReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.query_params.__contains__('message'):
-            return RblReport.objects.filter(message_id=self.request.query_params.get('message'))
+            return self.queryset.filter(message_id=self.request.query_params.get('message'))
         else:
-            return RblReport.objects.all()
+            return self.queryset
 
 class MailscannerReportViewSet(viewsets.ModelViewSet):
     queryset = MailscannerReport.objects.all()
@@ -49,9 +49,9 @@ class MailscannerReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.query_params.__contains__('message'):
-            return MailscannerReport.objects.filter(message_id=self.request.query_params.get('message'))
+            return self.queryset.filter(message_id=self.request.query_params.get('message'))
         else:
-            return MailscannerReport.objects.all()
+            return self.queryset
 
 class McpReportViewSet(viewsets.ModelViewSet):
     queryset = McpReport.objects.all()
@@ -60,6 +60,6 @@ class McpReportViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.query_params.__contains__('message'):
-            return McpReport.objects.filter(message_id=self.request.query_params.get('message'))
+            return self.queryset.filter(message_id=self.request.query_params.get('message'))
         else:
-            return McpReport.objects.all()
+            return self.queryset
