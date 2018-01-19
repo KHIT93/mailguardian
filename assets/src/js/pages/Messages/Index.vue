@@ -1,67 +1,13 @@
 <template>
-    <div class="container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="bg-white border sm:rounded shadow">
-            <div class="flex shadow">
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                    <div class="">
-                        From
-                    </div>
-                </div>
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                    <div class="">
-                        To
-                    </div>
-                </div>
-                <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
-                    <div class="">
-                        Subject
-                    </div>
-                </div>
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                    <div class="">
-                        Recieved
-                    </div>
-                </div>
-                <div class="text-grey-darker hidden sm:block sm:w-1/5 px-2 py-2 font-semibold">
-                    <div class="">
-                        Status
-                    </div>
-                </div>
-            </div>
-            <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in messages" :key="item.id" @click="details(item.id)">
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                    <div class="">
-                        <p>{{ item.from_address }}</p>
-                    </div>
-                </div>
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                    <div class="">
-                        <p>{{ item.to_address }}</p>
-                    </div>
-                </div>
-                <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
-                    <div class="">
-                        <p>{{ item.subject }}</p>
-                    </div>
-                </div>
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                    <div class="">
-                        <p>{{ item.timestamp }}</p>
-                    </div>
-                </div>
-                <div class="text-grey-darker hidden sm:block sm:w-1/5 p-2">
-                    <div class="">
-                        <p>Status</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <mw-message-list :messages="messages"></mw-message-list>
 </template>
 <script>
 import { mapMutations } from 'vuex';
-import router from '../../routing/router';
+import MessageList from '../../components/MessageList.vue';
 export default {
+    components: {
+        'mw-message-list': MessageList
+    },
     data: () => {
         return {
             messages: [],
@@ -81,9 +27,6 @@ export default {
                 this.messages = response.data.results;
                 this.toggleLoading();
             })
-        },
-        details(id) {
-            router.push('/messages/'+id);
         },
         ...mapMutations(['toggleLoading'])
     },
