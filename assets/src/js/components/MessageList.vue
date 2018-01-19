@@ -28,7 +28,10 @@
                     </div>
                 </div>
             </div>
-            <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in messages" :key="item.id" @click="details(item.id)">
+            <div class="flex text-sm break-words items-center p-2" v-if="count == 0">
+                <p>There are currently no messages to display</p>
+            </div>
+            <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in messages" :key="item.id" @click="details(item.id)" v-else>
                 <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
                     <div class="">
                         <p>{{ item.from_address }}</p>
@@ -61,7 +64,7 @@
 <script>
 import router from '../routing/router';
 export default {
-    props: ['messages'],
+    props: ['messages', 'count'],
     data: () => {
         return {
 
