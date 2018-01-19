@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="sm:w-1/3 p-2 bg-white border sm:rounded shadow mb-2 sm:mb-0 sm:ml-1">
-                <h2 class="font-normal text-lg text-center">Reports</h2>
+                <h2 class="font-normal text-lg text-center">Statistics</h2>
                 <hr>
                 <div class="sm:flex hover:bg-grey-lighter text-sm">
                     <div class="sm:w-1/2">
@@ -83,6 +83,24 @@
                     <div class="sm:w-1/2 text-right">
                         {{ message_count }}
                     </div>
+                </div>
+                <hr>
+                <h2 class="font-normal text-lg text-center">Reports</h2>
+                <hr>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/messages">See all messages</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/message-operations">Perform message operations</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/messages-by-date">Total messages by date</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-mail-relays">Top 10 mail relays</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/sa-rule-hits">Spam rule hits</router-link>
                 </div>
             </div>
         </div>
