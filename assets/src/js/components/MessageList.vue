@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto sm:px-4 pt-6 pb-8">
+    <div class="container mx-auto">
         <div class="bg-white border sm:rounded shadow">
             <div class="flex shadow">
                 <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
