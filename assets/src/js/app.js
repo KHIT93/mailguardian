@@ -66,12 +66,20 @@ Vue.filter('byte_display', value => {
 });
 
 /**
+ * Next, we define some constants to keep track of special
+ * API endpoints that are used across multiple components
+ */
+
+const VIEW_MESSAGE_ENDPOINT = '';
+const MESSAGE_ACTIONS_ENDPOINT = '/api/message-actions/';
+
+/**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- import { mapGetters, mapActions, mapMutations } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 const app = new Vue({
     el: '#app',
