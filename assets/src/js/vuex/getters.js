@@ -11,5 +11,11 @@ export default {
     },
     filters(state) {
         return state.report.filters;
+    },
+    filterOptions(state) {
+        return state.report.filter_options;
+    },
+    csrftoken(state) {
+        return state.csrftoken;
     }
 }

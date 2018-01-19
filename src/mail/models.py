@@ -5,6 +5,7 @@ from django.db import models
 class Message(models.Model):
     class Meta:
         ordering = ('-timestamp',)
+        get_latest_by = 'timestamp'
         indexes = [
             models.Index(fields=['from_address', 'from_domain']),
 

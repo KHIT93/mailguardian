@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'frontend',
     'mail',
     'lists',
+    'reports',
 ]
 
 MIDDLEWARE = [
