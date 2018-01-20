@@ -10,20 +10,35 @@ from rest_framework.permissions import IsAuthenticated
 class MessageActionAPIView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
-        data = MessageActionSerializer(data=request.data)
-        if not data.is_valid():
-            return Response(data.data, status=status.HTTP_400_BAD_REQUEST)
-        message = Message.objects.filter(id=data.data.get('message_id')).first()
-        if message == None:
-            return Response(data.data, status=status.HTTP_404_NOT_FOUND)
-        if data.data.get('action') == "spam":
-            return self._spam(message)
-        if data.data.get('action') == "ham":
-            return self._ham(message)
-        if data.data.get('action') == "release":
-            return self._release(message)
+        data = request.data['data']
+        action = request.data['action']
+        if not isinstance(data, list):
+            data = [data]
 
-        return Response(data.data, status=status.HTTP_204_NO_CONTENT)
+        # At this point we should pass the message(s) to Celery for processing
+        # and return a response to the client
+        for message in data:
+            if action == "spam":
+                return self._spam(message)
+            if action == "ham":
+                return self._ham(message)
+            if action == "release":
+                return self._release(message)
+        #data = MessageActionSerializer(data=request.data)
+        #if not data.is_valid():
+        #    return Response(data.data, status=status.HTTP_400_BAD_REQUEST)
+        #message = Message.objects.filter(id=data.data.get('message_id')).first()
+        #if message == None:
+        #    return Response(data.data, status=status.HTTP_404_NOT_FOUND)
+        #if data.data.get('action') == "spam":
+        #    return self._spam(message)
+        #if data.data.get('action') == "ham":
+        #    return self._ham(message)
+        #if data.data.get('action') == "release":
+        #    return self._release(message)
+
+        #return Response(data.data, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)        
 
     def _spam(self, message):
         # Here we need to call salearn and pass the parameters
