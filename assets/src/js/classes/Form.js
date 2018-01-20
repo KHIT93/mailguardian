@@ -127,7 +127,9 @@ export default class Form {
      * @param {object} data
      */
     onSuccess(data) {
-        console.log(data);
+        if(process.env.NODE_ENV != "production") {
+            console.log(data);
+        }
         this.reset();
     }
 
