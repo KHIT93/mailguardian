@@ -9,6 +9,7 @@ import MessageDetails from '../pages/Messages/Detail.vue';
 import Lists from '../pages/Lists/Index.vue';
 import Reports from '../pages/Reports/Index.vue';
 import ReportMessageList from '../pages/Reports/Messages.vue';
+import ReportMessageOperations from '../pages/Reports/MessageOperations.vue';
 
 export default [
     { path: '/', component: Home, name: 'home' },
@@ -18,6 +19,8 @@ export default [
     { path: '/lists', component: Lists, name: 'lists' },
     { path: '/reports', component: Reports, name: 'reports' },
     { path: '/reports/messages', component: ReportMessageList, name: 'reports.messages' },
+    { path: '/reports/message-operations', component: ReportMessageOperations, name: 'reports.messages.operations' },
+    
 
     /** Catchall route to display 404 page */
     { path: '*', component: NotFound, name: 'not_found' }
