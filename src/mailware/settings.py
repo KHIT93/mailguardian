@@ -164,10 +164,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
     'DEFAULT_PAGINATION_CLASS': 'mailware.pagination.PageNumberPaginationWithPageCount',
     'PAGE_SIZE': 100
 }
-
 
 # Guardian Authentication backends
 # https://django-guardian.readthedocs.io/en/stable/configuration.html#configuration
