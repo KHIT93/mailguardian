@@ -17,6 +17,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'mailscanner_hostname',
             'spam_score',
             'timestamp',
+            'date',
             'size',
             'token',
             'whitelisted',

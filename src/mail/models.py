@@ -72,6 +72,7 @@ class Message(models.Model):
     spam_score = models.DecimalField(db_index=True, default=0.00, max_digits=7, decimal_places=2)
     mcp_score = models.DecimalField(db_index=True, default=0.00, max_digits=7, decimal_places=2)
     timestamp = models.DateTimeField(db_index=True)
+    date = models.DateField(db_index=True)
     size = models.FloatField(default=0)
     token = models.CharField(max_length=255, null=True)
     mailq_id = models.TextField("Mailqueue identification", null=True)

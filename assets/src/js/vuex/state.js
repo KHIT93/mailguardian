@@ -14,7 +14,7 @@ export default {
             subject: null,
             client_ip: null,
             mailscanner_hostname: null,
-            timestamp: null,
+            date: null,
             whitelisted: null,
             blacklisted: null,
             is_spam: null,
@@ -77,7 +77,7 @@ export default {
                 ],
                 field_type: 'text'
             },
-            timestamp: {
+            date: {
                 operators: [
                     { label: 'equals', value: '=' },
                     { label: 'does not equal', value: '<>' },
