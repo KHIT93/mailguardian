@@ -188,7 +188,7 @@ export default {
         },
         remove_filter(filter) {
             this.removeFilter(filter);
-            //this.get();
+            this.get();
         },
         ...mapMutations(['toggleLoading', 'resetFilters', 'setFilter', 'removeFilter'])
     }
