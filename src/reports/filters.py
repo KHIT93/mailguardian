@@ -60,19 +60,19 @@ class MessageQuerySetFilter(QuerySetFilter):
             elif filters['mailscanner_hostname']['operator'] == '<>':
                 qs = qs.filter(~Q(mailscanner_hostname__iexact=filters['mailscanner_hostname']['value']))
 
-        if 'timestamp' in filters:
-            if filters['timestamp']['operator'] == '=':
-                qs = qs.filter(timestamp__iexact=filters['timestamp']['value'])
-            elif filters['timestamp']['operator'] == '<>':
-                qs = qs.filter(~Q(timestamp__iexact=filters['timestamp']['value']))
-            elif filters['timestamp']['operator'] == 'gt':
-                qs = qs.filter(timestamp__gt=filters['timestamp']['value'])
-            elif filters['timestamp']['operator'] == 'gte':
-                qs = qs.filter(timestamp__gte=filters['timestamp']['value'])
-            elif filters['timestamp']['operator'] == 'lt':
-                qs = qs.filter(timestamp__lt=filters['timestamp']['value'])
-            elif filters['timestamp']['operator'] == 'lte':
-                qs = qs.filter(timestamp__lte=filters['timestamp']['value'])
+        if 'date' in filters:
+            if filters['date']['operator'] == '=':
+                qs = qs.filter(date=filters['date']['value'])
+            elif filters['date']['operator'] == '<>':
+                qs = qs.filter(~Q(date=filters['date']['value']))
+            elif filters['date']['operator'] == 'gt':
+                qs = qs.filter(date__gt=filters['date']['value'])
+            elif filters['date']['operator'] == 'gte':
+                qs = qs.filter(date__gte=filters['date']['value'])
+            elif filters['date']['operator'] == 'lt':
+                qs = qs.filter(date__lt=filters['date']['value'])
+            elif filters['date']['operator'] == 'lte':
+                qs = qs.filter(date__lte=filters['date']['value'])
 
         if 'whitelisted' in filters:
             if filters['whitelisted']['operator'] == 1:

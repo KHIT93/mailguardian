@@ -22,7 +22,7 @@ from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, M
 from mail.views import MessageActionAPIView
 from .api.views import CurrentUserView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
-from reports.views import SummaryApiView, MessageListApiView
+from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -44,6 +44,8 @@ urlpatterns = [
     path('api/message-actions/', MessageActionAPIView.as_view()),
     path('api/reports/summary/', SummaryApiView.as_view()),
     path('api/reports/messages/', MessageListApiView.as_view()),
+    path('api/reports/messages-by-date/', MessagesByDateApiView.as_view()),
+    path('api/reports/top-mail-relays/', TopMailRelaysApiView.as_view()),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
