@@ -45,5 +45,5 @@ class TopMailRelaysApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('client_ip'), filters)
-        serializer = MessageRelaysSerializer(qs.annotate(Count('id')).order_by('id__count'), many=True)
+        serializer = MessageRelaysSerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
