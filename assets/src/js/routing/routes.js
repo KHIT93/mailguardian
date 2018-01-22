@@ -23,7 +23,7 @@ export default [
     { path: '/reports/messages', component: ReportMessageList, name: 'reports.messages' },
     { path: '/reports/message-operations', component: ReportMessageOperations, name: 'reports.messages.operations' },
     { path: '/reports/messages-by-date', component: ReportMessagesByDate, name: 'reports.messages.date' },
-    { path: '/reports/top-mai-relays', component: ReportMessageRelays, name: 'reports.messages.relays' },    
+    { path: '/reports/top-mail-relays', component: ReportMessageRelays, name: 'reports.messages.relays' },    
 
     /** Catchall route to display 404 page */
     { path: '*', component: NotFound, name: 'not_found' }
