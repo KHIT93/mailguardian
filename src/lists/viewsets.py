@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from django.db.models import Q
 from .models import ListEntry
 from .serializers import ListEntrySerializer
@@ -7,6 +8,7 @@ class ListEntryViewSet(viewsets.ModelViewSet):
     queryset = ListEntry.objects.all()
     serializer_class = ListEntrySerializer
     model = ListEntry
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.query_params.__contains__('search'):
