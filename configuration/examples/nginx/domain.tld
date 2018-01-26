@@ -2,17 +2,11 @@ server {
         listen 443 ssl http2;
         listen 80;
         ## Set Nginx variable to determine if we should redirect to HTTPS ##
-        if ($scheme = "http") {
-            set $redirect_https 1;
-        }
+        if ($scheme = "http") { set $redirect_https 1; }
         ## Exclude HTTPS redirect for SSL/TLS certificate domain validation challenge ##
-        if ($request_uri ~ ^/.well-known/acme-challenge/) {
-            set $redirect_https 0;
-        }
+        if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }
         ## If none of the above rules apply, redirect the user to HTTPS ##
-        if ($redirect_https) {
-            rewrite ^ https://$server_name$request_uri? permanent;
-        }
+        if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }
         server_name domain.tld;
         client_max_body_size 32M;
         proxy_read_timeout 720s;
@@ -28,8 +22,8 @@ server {
 
         ## SSL parameters ##
         ssl on;
-        ssl_certificate /home/mailware/cert/vkdata.dk.crt;
-        ssl_certificate_key /home/mailware/cert/vkdata.dk.key;
+        ssl_certificate /home/mailware/cert/domain.tld.crt;
+        ssl_certificate_key /home/mailware/cert/domain.tld.key;
         ssl_dhparam /home/mailware/cert/dhparam.pem;
         ssl_session_cache shared:SSL:50m;
         ssl_session_timeout 30m;
