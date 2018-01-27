@@ -2,11 +2,12 @@
 # Mailware for MailScanner
 # Copyright (C) 2003-2011  Steve Freegard (steve@freegard.name)
 # Copyright (C) 2011  Garrod Alwood (garrod.alwood@lorodoes.com)
-# Copyright (C) 2014-2017  Mailware Team (https://github.com/Mailware/1.2.0/graphs/contributors)
+# Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
+# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailware/contributers.md)
 #
 #   Custom Module Mailware
 #
-#   Version 1.5
+#   Version 1.0
 #
 # This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
 # License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later
@@ -45,7 +46,7 @@ use Digest::SHA1;
 use vars qw($VERSION);
 
 ### The package version, both in 1.23 style *and* usable by MakeMaker:
-$VERSION = substr q$Revision: 1.5 $, 10;
+$VERSION = substr q$Revision: 1.0 $, 10;
 
 # Trace settings - uncomment this to debug
 #DBI->trace(2,'/tmp/dbitrace.log');
@@ -115,28 +116,22 @@ sub InitConnection {
     listen(SERVER, SOMAXCONN) or exit;
 
     # Our reason for existence - the persistent connection to the database
-    if (CheckSQLVersion() >= 50503 ) {
-        $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8mb4');
-    } else {
-        $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8');
+    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
+        $db_user, $db_pass,
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
+    );
+    if (!$dbh) {
+        MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
     }
+    # $dbh->do('SET NAMES utf8mb4');
 
-    $sth = $dbh->prepare("INSERT INTO maillog (timestamp, id, size, from_address, from_domain, to_address, to_domain, subject, clientip, archive, isspam, ishighspam, issaspam, isrblspam, spamwhitelisted, spamblacklisted, sascore, spamreport, virusinfected, nameinfected, otherinfected, report, ismcp, ishighmcp, issamcp, mcpwhitelisted, mcpblacklisted, mcpsascore, mcpreport, hostname, date, time, headers, quarantined, rblspamreport, token) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)") or
-        MailScanner::Log::WarnLog("Mailware: Error: %s", $DBI::errstr);
+    $sth_mail = $dbh->prepare("INSERT INTO mail_message (from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_spam, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or
+        MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
+    $sth_headers = $dbh->prepare("INSERT INTO mail_headers (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);
+    $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
+    $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
+    $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
+    $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
 }
 
 sub ExitLogging {
@@ -182,7 +177,7 @@ sub ListenForMessages {
         InitConnection unless $dbh->ping;
 
         # Log message
-        $sth->execute(
+        $sth_mail->execute(
             $$message{timestamp},
             $$message{id},
             $$message{size},
@@ -220,15 +215,110 @@ sub ListenForMessages {
             $$message{rblspamreport},
             $$message{token});
 
+        $sth_mail->execute(
+            $$message{from},
+            $$message{from_domain},
+            $$message{to},
+            $$message{to_domain},
+            $$message{subject},
+            $$message{clientip},
+            $$message{hostname},
+            $$message{sascore},
+            $$message{timestamp},
+            $$message{token},
+            $$message{spamwhitelisted},
+            $$message{spamblacklisted},
+            $$message{issaspam},
+            $$message{isrblspam},
+            $$message{quarantined},
+            $$message{virusinfected},
+            $$message{size},
+            $$message{id},
+            $$message{issamcp},
+            $$message{mcpsascore},
+            $$message{date},
+        );
+        
+        my $message_id = $sth_mail->fetchrow_hashref(){"id"};
+
+        # Uncomment this row for debugging
+        #MailScanner::Log::InfoLog("Mailware: $$message_id: Mailware SQL inserted row");
+
         # This doesn't work in the event we have no connection by now ?
-        if (!$sth) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id}: Mailware SQL Cannot insert row: %s", $sth->errstr);
+        if (!$sth_mail) {
+            MailScanner::Log::WarnLog("Mailware: $$message{id}: Mailware SQL Cannot insert row: %s", $sth_mail->errstr);
         } else {
             MailScanner::Log::InfoLog("Mailware: $$message{id}: Logged to Mailware SQL");
         }
 
+        # Log Message Headers
+        $sth_headers->execute(
+            $$message{headers},
+            $message_id
+        );
+
+        # This doesn't work in the event we have no connection by now ?
+        if (!$sth_headers) {
+            MailScanner::Log::WarnLog("Mailware: $$message{id} Headers: Mailware SQL Cannot insert row: %s", $sth_headers->errstr);
+        } else {
+            MailScanner::Log::InfoLog("Mailware: $$message{id} Headers: Logged to Mailware SQL");
+        }
+
+        # Log Message MailScanner Report
+        $sth_report->execute(
+            $$message{reports},
+            $message_id
+        );
+
+        # This doesn't work in the event we have no connection by now ?
+        if (!$sth_report) {
+            MailScanner::Log::WarnLog("Mailware: $$message{id} MailScanner Report: Mailware SQL Cannot insert row: %s", $sth_report->errstr);
+        } else {
+            MailScanner::Log::InfoLog("Mailware: $$message{id} MailScanner Report: Logged to Mailware SQL");
+        }
+
+        # Log Message MCP Report
+        $sth_mcp->execute(
+            $$message{mcpreport},
+            $message_id
+        );
+
+        # This doesn't work in the event we have no connection by now ?
+        if (!$sth_mcp) {
+            MailScanner::Log::WarnLog("Mailware: $$message{id} MCP Report: Mailware SQL Cannot insert row: %s", $sth_mcp->errstr);
+        } else {
+            MailScanner::Log::InfoLog("Mailware: $$message{id} MCP Report: Logged to Mailware SQL");
+        }
+
+        # Log Message RBL Report
+        $sth_rbl->execute(
+            $$message{rblspamreport},
+            $message_id
+        );
+
+        # This doesn't work in the event we have no connection by now ?
+        if (!$sth_rbl) {
+            MailScanner::Log::WarnLog("Mailware: $$message{id} RBL Report: Mailware SQL Cannot insert row: %s", $sth_rbl->errstr);
+        } else {
+            MailScanner::Log::InfoLog("Mailware: $$message{id} RBL Report: Logged to Mailware SQL");
+        }
+
+        # Log Message SPAM Report
+        $sth_spam->execute(
+            $$message{spamreport},
+            $message_id
+        );
+
+        # This doesn't work in the event we have no connection by now ?
+        if (!$sth_spam) {
+            MailScanner::Log::WarnLog("Mailware: $$message{id} SPAM Report: Mailware SQL Cannot insert row: %s", $sth_spam->errstr);
+        } else {
+            MailScanner::Log::InfoLog("Mailware: $$message{id} SPAM Report: Logged to Mailware SQL");
+        }
+
         # Unset
         $message = undef;
+        $message_id = undef;
 
     }
 }
@@ -247,7 +337,7 @@ sub EndMailwareLogging {
 sub MailwareLogging {
     my ($message) = @_;
 
-    # Don't bother trying to do an insert if  no message is passed-in
+    # Don't bother trying to do an insert if no message is passed-in
     return unless $message;
 
     # Fix duplicate 'to' addresses for Postfix users

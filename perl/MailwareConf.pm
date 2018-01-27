@@ -10,8 +10,8 @@ use strict;
 # Change the values below to match the Mailware database settings as set in conf.php
 my ($db_name) = 'mailware';
 my ($db_host) = 'localhost';
-my ($db_user) = 'Mailware';
-my ($db_pass) = 'Mailware';
+my ($db_user) = 'mailware';
+my ($db_pass) = 'mailware';
 
 # Change the value below for SQLSpamSettings.pm (default = 15)
 my ($ss_refresh_time) = 15;       # Time in minutes before lists are refreshed

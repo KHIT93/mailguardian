@@ -2,11 +2,12 @@
 # Mailware for MailScanner
 # Copyright (C) 2003-2011  Steve Freegard (steve@freegard.name)
 # Copyright (C) 2011  Garrod Alwood (garrod.alwood@lorodoes.com)
-# Copyright (C) 2014-2017  Mailware Team (https://github.com/Mailware/1.2.0/graphs/contributors)
+# Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
+# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailware/contributers.md)
 #
 #   Custom Module SQLBlackWhiteList
 #
-#   Version 1.5
+#   Version 1.0
 #
 # This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
 # License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later
@@ -39,14 +40,13 @@ use vars qw($VERSION);
 #use Data::Dumper;
 
 ### The package version, both in 1.23 style *and* usable by MakeMaker:
-$VERSION = substr q$Revision: 1.5 $, 10;
+$VERSION = substr q$Revision: 1.0 $, 10;
 
 use DBI;
 my (%Whitelist, %Blacklist);
 my ($wtime, $btime);
 my ($dbh);
 my ($sth);
-my ($SQLversion);
 
 # Get database information from 00MailwareConf.pm
 use File::Basename;
@@ -60,20 +60,6 @@ my ($db_pass) = Mailware_get_db_password();
 
 # Get refresh time from from 00MailwareConf.pm
 my ($bwl_refresh_time) =  Mailware_get_BWL_refresh_time();
-
-# Check MySQL version
-sub CheckSQLVersion {
-    $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-        $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
-    );
-    if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: SQLBlackWhiteList:: Unable to initialise database connection: %s", $DBI::errstr);
-    }
-    $SQLversion = $dbh->{mysql_serverversion};
-    $dbh->disconnect;
-    return $SQLversion
-}
 
 #
 # Initialise SQL spam whitelist and blacklist
@@ -130,26 +116,14 @@ sub CreateList {
     my ($type, $BlackWhite) = @_;
     my ($sql, $to_address, $from_address, $count, $filter);
 
-    # Check if MySQL is >= 5.3.3
-    if (CheckSQLVersion() >= 50503 ) {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8mb4');
-    } else {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8');
+    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
+        $db_user, $db_pass,
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1}
+    );
+    if (!$dbh) {
+        MailScanner::Log::WarnLog("Mailware: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
+    $dbh->do('SET NAMES utf8mb4');
 
     # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
     #MailScanner::Log::WarnLog("Mailware: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
@@ -159,7 +133,7 @@ sub CreateList {
         delete $BlackWhite->{$_};
     }
     
-    $sql = "SELECT to_address, from_address FROM $type";
+    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type=$type";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$to_address, \$from_address);
@@ -169,16 +143,6 @@ sub CreateList {
         $BlackWhite->{lc($to_address)}{lc($from_address)} = 1; # Store entry
         $count++;
     }
-
-    $sql = "SELECT filter, from_address FROM $type INNER JOIN user_filters ON $type.to_address = user_filters.username";
-    $sth = $dbh->prepare($sql);
-    $sth->execute;
-    $sth->bind_columns(undef, \$filter, \$from_address);
-    while($sth->fetch()) {
-        $BlackWhite->{lc($filter)}{lc($from_address)} = 1; # Store entry
-        $count++;
-    }
-
     # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
     #MailScanner::Log::WarnLog("Mailware: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
     

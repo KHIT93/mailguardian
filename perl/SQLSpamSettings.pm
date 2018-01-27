@@ -2,11 +2,12 @@
 # Mailware for MailScanner
 # Copyright (C) 2003-2011  Steve Freegard (steve@freegard.name)
 # Copyright (C) 2011  Garrod Alwood (garrod.alwood@lorodoes.com)
-# Copyright (C) 2014-2017  Mailware Team (https://github.com/Mailware/1.2.0/graphs/contributors)
+# Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
+# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailware/contributers.md)
 #
 #   Custom Module SQLSpamSettings
 #
-#   Version 1.5
+#   Version 1.0
 #
 # This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public
 # License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later
@@ -41,7 +42,7 @@ no  strict 'subs'; # Allow bare words for parameter %'s
 use vars qw($VERSION);
 
 ### The package version, both in 1.23 style *and* usable by MakeMaker:
-$VERSION = substr q$Revision: 1.5 $, 10;
+$VERSION = substr q$Revision: 1.0 $, 10;
 
 use DBI;
 my ($dbh);
@@ -66,9 +67,9 @@ my ($ss_refresh_time) =  Mailware_get_SS_refresh_time();
 
 # Check MySQL version
 sub CheckSQLVersion {
-    $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
+    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
         $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1}
     );
     if (!$dbh) {
         MailScanner::Log::WarnLog("Mailware: SQLSpamSettings:: Unable to initialise database connection: %s", $DBI::errstr);
@@ -166,28 +167,15 @@ sub CreateScoreList
     my ($type, $UserList) = @_;
     my ($sql, $username, $count);
 
-    # Check if MySQL is >= 5.3.3
-    if (CheckSQLVersion() >= 50503 ) {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8mb4');
-    } else {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: SQLSpamSettings::CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8');
+    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
+        $db_user, $db_pass,
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
+    );
+    if (!$dbh) {
+        MailScanner::Log::WarnLog("Mailware: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
-    $sql = "SELECT username, $type FROM users WHERE $type > 0";
+    $sql = "SELECT username, $type FROM auth_user WHERE $type > 0";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$username, \$type);
@@ -212,28 +200,15 @@ sub CreateNoScanList
     my ($type, $NoScanList) = @_;
     my ($sql, $username, $count);
 
-    # Check if MySQL is >= 5.3.3
-    if (CheckSQLVersion() >= 50503 ) {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: SQLSpamSettings::CreateNoScanList::: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8mb4');
-    } else {
-        $dbh = DBI->connect("DBI:mysql:database=$db_name;host=$db_host",
-            $db_user, $db_pass,
-            { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
-        );
-        if (!$dbh) {
-            MailScanner::Log::WarnLog("Mailware: SQLSpamSettings::CreateNoScanList::: Unable to initialise database connection: %s", $DBI::errstr);
-        }
-        $dbh->do('SET NAMES utf8');
+    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
+        $db_user, $db_pass,
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
+    );
+    if (!$dbh) {
+        MailScanner::Log::WarnLog("Mailware: SQLSpamSettings::CreateNoScanList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
-    $sql = "SELECT username, $type FROM users WHERE $type > 0";
+    $sql = "SELECT username, $type FROM auth_user WHERE $type > 0";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$username, \$type);
