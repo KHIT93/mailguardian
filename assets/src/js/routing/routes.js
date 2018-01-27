@@ -12,6 +12,7 @@ import ReportMessageList from '../pages/Reports/Messages.vue';
 import ReportMessageOperations from '../pages/Reports/MessageOperations.vue';
 import ReportMessagesByDate from '../pages/Reports/MessagesByDate.vue';
 import ReportMessageRelays from '../pages/Reports/MessageRelays.vue';
+import Tools from '../pages/Tools/Index.vue';
 
 export default [
     { path: '/', component: Home, name: 'home' },
@@ -23,7 +24,8 @@ export default [
     { path: '/reports/messages', component: ReportMessageList, name: 'reports.messages' },
     { path: '/reports/message-operations', component: ReportMessageOperations, name: 'reports.messages.operations' },
     { path: '/reports/messages-by-date', component: ReportMessagesByDate, name: 'reports.messages.date' },
-    { path: '/reports/top-mail-relays', component: ReportMessageRelays, name: 'reports.messages.relays' },    
+    { path: '/reports/top-mail-relays', component: ReportMessageRelays, name: 'reports.messages.relays' },
+    { path: '/tools', component: Tools, name: 'tools' },
 
     /** Catchall route to display 404 page */
     { path: '*', component: NotFound, name: 'not_found' }
