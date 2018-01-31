@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'guardian',
     'core',
     'frontend',
+    'domains',
     'mail',
     'lists',
     'reports',
