@@ -236,7 +236,7 @@ sub ListenForMessages {
             $$message{id},
             $$message{issamcp},
             $$message{mcpsascore},
-            $$message{date},
+            $$message{date}
         );
         
         my $message_id = $sth_mail->fetchrow_hashref(){"id"};
