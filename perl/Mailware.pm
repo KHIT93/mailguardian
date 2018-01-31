@@ -125,13 +125,13 @@ sub InitConnection {
     }
     # $dbh->do('SET NAMES utf8mb4');
 
-    $sth_mail = $dbh->prepare("INSERT INTO mail_message (from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_spam, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or
+    my $sth_mail = $dbh->prepare("INSERT INTO mail_message (from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_spam, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or
         MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
-    $sth_headers = $dbh->prepare("INSERT INTO mail_headers (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);
-    $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
-    $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
-    $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
-    $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
+    my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);
+    my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
+    my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
+    my $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
+    my $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
 }
 
 sub ExitLogging {
