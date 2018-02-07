@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+# from django.db.models.signals import post_save
 
 # https://gist.github.com/solusipse/7ed8e1da104baaee3f05
 
@@ -42,12 +42,13 @@ class MailUser(models.Model):
     def __str__(self):
         return '{0} ({1} -> {2})'.format(self.user.email, self.domain, self.domain.destination)
 
-def create_mailuser(sender, **kwargs):
-    user = kwargs['instance']
-    if kwargs['created']:
-        mail_user = MailUser(user=user, domain=user.email.split('@')[1])
-        mail_user.save()
-post_save.connect(create_mailuser, sender=User)
+# def create_mailuser(sender, **kwargs):
+#     user = kwargs['instance']
+#     if kwargs['created']:
+#         domain = Domain.objects.filter(name=user.email.split('@')[1]).first()
+#         mail_user = MailUser(user=user, domain=domain.id)
+#         mail_user.save()
+# post_save.connect(create_mailuser, sender=User)
 
 # class Transport(models.Model):
 #     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
