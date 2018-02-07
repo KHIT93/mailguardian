@@ -18,12 +18,13 @@ from django.conf import settings
 from django.urls import path, re_path, include
 from frontend.views import IndexTemplateView
 from rest_framework import routers
-from .api.viewsets import UserViewSet
+from core.viewsets import UserViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
 from mail.views import MessageActionAPIView
-from .api.views import CurrentUserView
+from core.views import CurrentUserView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView
+from domains.viewsets import DomainViewSet, MailUserViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -37,6 +38,8 @@ router.register(r'mailscanner-reports', MailscannerReportViewSet)
 router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)
+router.register(r'domains', DomainViewSet)
+router.register(r'mail-users', MailUserViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
