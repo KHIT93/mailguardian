@@ -15,4 +15,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         if obj.first_name != "" and obj.last_name != "":
             return obj.first_name + " " + obj.last_name
         else:
-            return obj.first_name + obj.last_name
+            return obj.username
