@@ -34,6 +34,10 @@ if(process.env.NODE_ENV != "production") {
         console.log('Starting Request', request);
         return request;
     });
+    window.axios.interceptors.response.use(response => {
+        console.log('Response for previous request to ' + response.request.responseURL + ': ', response);
+        return response;
+    });
 }
 
 /**

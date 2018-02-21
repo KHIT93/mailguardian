@@ -38,7 +38,7 @@
             <div class="flex text-sm break-words items-center p-2" v-if="count == 0">
                 <p>There are currently no users to display</p>
             </div>
-            <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in users" :key="item.id" v-else>
+            <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in users" :key="item.id" v-else @click="edit(item.id)">
                 <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
                     <div class="">
                         <p>{{ item.email }}</p>
@@ -87,10 +87,16 @@
                 Next
             </button>
         </div>
+        <div class="mt-4 mb-2">
+            <router-link to="/admin/users/add" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow no-underline">
+                Add User
+            </router-link>
+        </div>
     </mw-admin-layout>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import router from '../../../routing/router';
 import AdminLayout from '../../../components/AdminLayout.vue';
 export default {
     data: () => {
@@ -141,6 +147,9 @@ export default {
         previous() {
             page = this.users.previous.split("?page=")[1];
             this.get(this.search, page);
+        },
+        edit(id) {
+            router.push('/admin/users/'+id);
         }
     }
 }

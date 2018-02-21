@@ -21,7 +21,7 @@
         <div class="container mx-auto px-4">
             <div class="sm:flex lg:block">
                 <div class="flex -mb-px mr-6">
-                    <router-link to="/admin/users" exact active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
+                    <router-link to="/admin/users" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
                         <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"/>
                             <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
@@ -30,7 +30,7 @@
                     </router-link>
                 </div>
                 <div class="flex -mb-px mr-6">
-                    <router-link to="/admin/domains" exact active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
+                    <router-link to="/admin/domains" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
                         <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"/>
                             <path d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 19c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
@@ -39,7 +39,7 @@
                     </router-link>
                 </div>
                 <div class="flex -mb-px mr-6">
-                    <router-link to="/admin/mailscanner-config" exact active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
+                    <router-link to="/admin/mailscanner-config" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
                         <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                             <path d="M0 0h24v24H0z" fill="none"/>
@@ -48,7 +48,7 @@
                     </router-link>
                 </div>
                 <div class="flex -mb-px">
-                    <router-link to="/admin/mailscanner-rules" exact active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
+                    <router-link to="/admin/mailscanner-rules" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
                         <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <defs>
                                 <path d="M0 0h24v24H0V0z" id="a"/>

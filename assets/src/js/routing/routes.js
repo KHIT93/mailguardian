@@ -16,6 +16,8 @@ import Tools from '../pages/Tools/Index.vue';
 import Admin from '../pages/Admin/Index.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
 import Users from '../pages/Admin/Users/Index.vue';
+import UserForm from '../pages/Admin/Users/Form.vue';
+import DomainForm from '../pages/Admin/Domains/Form.vue';
 
 export default [
     { path: '/', component: Home, name: 'home' },
@@ -32,7 +34,11 @@ export default [
 
     { path: '/admin', component: Admin, name: 'admin.index'},
     { path: '/admin/domains', component: Domains, name: 'admin.domains.index' },
+    { path: '/admin/domains/add', component: DomainForm, name: 'admin.domains.add' },
+    { path: '/admin/domains/:id', component: DomainForm, name: 'admin.domains.edit', props: true },
     { path: '/admin/users', component: Users, name: 'admin.users.index' },
+    { path: '/admin/users/add', component: UserForm, name: 'admin.users.add' },
+    { path: '/admin/users/:id', component: UserForm, name: 'admin.users.edit', props: true },
 
     /** Catchall route to display 404 page */
     { path: '*', component: NotFound, name: 'not_found' }
