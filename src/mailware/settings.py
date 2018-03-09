@@ -195,6 +195,7 @@ MAILSCANNER_LIB_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_lib_dir"]
 
 # SpamAssassin settings
 SALEARN_BIN = MAILWARE_ENV['hostconfig']['salearn_bin']
+SA_BIN = MAILWARE_ENV['hostconfig']['sa_bin']
 SA_RULES_DIR = MAILWARE_ENV['hostconfig']['sa_rules_dir']
 
 # Retention policy
