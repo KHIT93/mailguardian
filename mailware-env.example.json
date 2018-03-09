@@ -15,6 +15,7 @@
     "api_only_mode": false,
     "hostconfig": {
         "salearn_bin":"/usr/bin/salearn",
+        "sa_bin": "/usr/bin/spamassassin",
         "mailscanner_bin":"/usr/sbin/MailScanner",
         "mailscanner_config_dir": "/etc/MailScanner",
         "mailscanner_share_dir": "/usr/share/MailScanner",
