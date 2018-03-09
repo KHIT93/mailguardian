@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 class Message(models.Model):
@@ -87,6 +88,9 @@ class Message(models.Model):
 
     def __str__(self):
         return str(self.id) + "[" + str(self.from_address) + " to " + str(self.to_address) + "]"
+
+    def file_path(self):
+        return None
 
 class RblReport(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

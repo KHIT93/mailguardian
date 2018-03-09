@@ -5,6 +5,7 @@ from .models import Message
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from django.conf import settings
 
 # Create your views here.
 class MessageActionAPIView(APIView):
@@ -43,6 +44,7 @@ class MessageActionAPIView(APIView):
     def _spam(self, message):
         # Here we need to call salearn and pass the parameters
         # needed to learn the message as a spam message
+        command = "sudo {0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
         return Response({}, status=status.HTTP_204_NO_CONTENT)
     
     def _ham(self, message):
