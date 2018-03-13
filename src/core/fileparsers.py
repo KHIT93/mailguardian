@@ -16,7 +16,7 @@ class DefaultsFileParse(BaseFileParser):
     def parse(self, filepath):
         file = open(filepath, 'r')
         for l in file.readlines():
-            if l[0] == '#':
+            if l.startswith(l):
                 continue
             key, value = l.split('=')
             self.save(key, value, filepath)
@@ -27,7 +27,7 @@ class MailscannerConfFileParser(BaseFileParser):
         file = open(filepath, 'r')
         for l in file.readlines():
             print(l)
-            if l[0] == '#':
+            if l.startswith(l):
                 continue
             key, value = l.split(' = ')
             self.save(key, value, filepath)
