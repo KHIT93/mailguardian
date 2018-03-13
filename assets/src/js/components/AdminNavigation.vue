@@ -39,7 +39,7 @@
                     </router-link>
                 </div>
                 <div class="flex -mb-px mr-6">
-                    <router-link to="/admin/mailscanner-config" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
+                    <router-link to="/admin/mailscanner/configuration" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
                         <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                             <path d="M0 0h24v24H0z" fill="none"/>
@@ -48,7 +48,7 @@
                     </router-link>
                 </div>
                 <div class="flex -mb-px">
-                    <router-link to="/admin/mailscanner-rules" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
+                    <router-link to="/admin/mailscanner/rules" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75">
                         <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <defs>
                                 <path d="M0 0h24v24H0V0z" id="a"/>

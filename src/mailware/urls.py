@@ -21,7 +21,7 @@ from rest_framework import routers
 from core.viewsets import UserViewSet, MailScannerConfigurationViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
 from mail.views import MessageActionAPIView
-from core.views import CurrentUserView
+from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView
 from domains.viewsets import DomainViewSet, MailUserViewSet
@@ -51,6 +51,7 @@ urlpatterns = [
     path('api/reports/messages/', MessageListApiView.as_view()),
     path('api/reports/messages-by-date/', MessagesByDateApiView.as_view()),
     path('api/reports/top-mail-relays/', TopMailRelaysApiView.as_view()),
+    path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 

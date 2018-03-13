@@ -21,4 +21,4 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class MailScannerConfigurationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MailScannerConfiguration
-        fields = ('id', 'url', 'key', 'value')
+        fields = ('id', 'url', 'key', 'value', 'filepath')
