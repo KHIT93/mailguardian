@@ -26,10 +26,11 @@ class MailScannerConfiguration(models.Model):
         files = [f for f in listdir(settings.MAILSCANNER_CONFIG_DIR) if isfile(join(settings.MAILSCANNER_CONFIG_DIR, f))]
         for f in files:
             print(settings.MAILSCANNER_CONFIG_DIR + '/' + f)
-            module = importlib.import_module('core.fileparsers')
-            classname = getattr(module, f.replace('.', ' ').title().replace(' ', '') + 'FileParser')
             parser = None
+            classname = f.replace('.', ' ').title().replace(' ', '') + 'FileParser'
             try:
+                module = importlib.import_module('core.fileparsers')
+                classname = getattr(module, classname)
                 parser = classname()
             except AttributeError:
                 parser = None
