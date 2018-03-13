@@ -24,9 +24,6 @@ export default {
     components: {
         'mw-admin-layout': AdminLayout
     },
-    computed: {
-        ...mapGetters(['user'])
-    },
     mounted() {
         console.log('Page not found.')
     }

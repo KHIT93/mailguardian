@@ -13,6 +13,7 @@ import ReportMessageOperations from '../pages/Reports/MessageOperations.vue';
 import ReportMessagesByDate from '../pages/Reports/MessagesByDate.vue';
 import ReportMessageRelays from '../pages/Reports/MessageRelays.vue';
 import Tools from '../pages/Tools/Index.vue';
+import AdminNotFound from '../pages/Admin/NotFound.vue';
 import Admin from '../pages/Admin/Index.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
 import Users from '../pages/Admin/Users/Index.vue';
@@ -46,5 +47,6 @@ export default [
     { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true },
 
     /** Catchall route to display 404 page */
+    { path: '/admin/*', component: AdminNotFound, name: 'admin.not_found' },
     { path: '*', component: NotFound, name: 'not_found' }
 ]
