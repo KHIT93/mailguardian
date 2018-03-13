@@ -34,22 +34,25 @@ class MailscannerConfFileParser(BaseFileParser):
             self.save(key, value, filepath)
         file.close()
 
-class SpamassassinConfFileParser(BaseFileParser):
-    def parse(self, filepath):
-        file = open(filepath, 'r')
-        for l in file.readlines():
-            if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
-                continue
-            print('CURRENT STRING: "' + l + '"')
-            key, value = l.split('\t')
-            self.save(key, value, filepath)
-        file.close()
-    def save(self, key, value1, value2, filepath):
-        qs = SpamAssassinConfiguration.objects.filter(key=key)
-        if qs.exists():
-            entity = qs.first()
-            entity.rule = value1
-            entity.value = value2
-            entity.save()
-        else:
-            SpamAssassinConfiguration.objects.create(key=key, rule=value1, value=value2, filepath=filepath)
+# class SpamassassinConfFileParser(BaseFileParser):
+#     def parse(self, filepath):
+#         file = open(filepath, 'r')
+#         for l in file.readlines():
+#             if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
+#                 continue
+#             print('CURRENT STRING: "' + l + '"')
+#             key = None
+#             value1 = ""
+#             value2 = ""
+#             key, value1, value2 = l.split(' ')
+#             self.save(key, value1, value2, filepath)
+#         file.close()
+#     def save(self, key, value1, value2, filepath):
+#         qs = SpamAssassinConfiguration.objects.filter(key=key)
+#         if qs.exists():
+#             entity = qs.first()
+#             entity.rule = value1
+#             entity.value = value2
+#             entity.save()
+#         else:
+#             SpamAssassinConfiguration.objects.create(key=key, rule=value1, value=value2, filepath=filepath)
