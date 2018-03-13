@@ -28,7 +28,6 @@ class MailScannerConfiguration(models.Model):
             print(settings.MAILSCANNER_CONFIG_DIR + '/' + f)
             module = importlib.import_module('core.fileparsers')
             classname = getattr(module, f.replace('.', ' ').title().replace(' ', '') + 'FileParser')
-            print(classname)
             parser = None
             try:
                 parser = classname()
