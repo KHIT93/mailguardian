@@ -35,7 +35,7 @@ class MailScannerConfiguration(models.Model):
             except AttributeError:
                 parser = None
             if parser:
-                parser.parse(f)
+                parser.parse(settings.MAILSCANNER_CONFIG_DIR + '/' + f)
             else:
                 print('Parser {0} does not exist'.format(classname))
 
