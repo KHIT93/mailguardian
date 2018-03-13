@@ -26,6 +26,7 @@ class MailscannerConfFileParser(BaseFileParser):
     def parse(self, filepath):
         file = open(filepath, 'r')
         for l in file.readlines():
+            print(l)
             if l[0] == '#':
                 continue
             key, value = l.split(' = ')
