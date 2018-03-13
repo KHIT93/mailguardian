@@ -16,7 +16,7 @@ class DefaultsFileParse(BaseFileParser):
     def parse(self, filepath):
         file = open(filepath, 'r')
         for l in file.readlines():
-            if not l or (l.startswith('#') or l.startswith('include ')):
+            if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
                 continue
             print('CURRENT STRING: "' + l + '"')
             key, value = l.split('=')
@@ -27,7 +27,7 @@ class MailscannerConfFileParser(BaseFileParser):
     def parse(self, filepath):
         file = open(filepath, 'r')
         for l in file.readlines():
-            if not l or (l.startswith('#') or l.startswith('include ')):
+            if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
                 continue
             print('CURRENT STRING: "' + l + '"')
             key, value = l.split(' = ')
@@ -38,7 +38,7 @@ class SpamassassinConfFileParser(BaseFileParser):
     def parse(self, filepath):
         file = open(filepath, 'r')
         for l in file.readlines():
-            if not l or (l.startswith('#') or l.startswith('include ')):
+            if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
                 continue
             print('CURRENT STRING: "' + l + '"')
             key, value = l.split('\t')
