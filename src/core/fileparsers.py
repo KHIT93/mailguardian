@@ -19,6 +19,7 @@ class DefaultsFileParse(BaseFileParser):
             if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
                 continue
             print('CURRENT STRING: "' + l + '"')
+            l = l.replace('\n', '')
             key, value = l.split('=')
             self.save(key, value, filepath)
         file.close()
@@ -30,6 +31,7 @@ class MailscannerConfFileParser(BaseFileParser):
             if not l.rstrip() or (l.startswith('#') or l.startswith('include ')):
                 continue
             print('CURRENT STRING: "' + l + '"')
+            l = l.replace('\n', '')
             key, value = l.split(' = ')
             self.save(key, value, filepath)
         file.close()
