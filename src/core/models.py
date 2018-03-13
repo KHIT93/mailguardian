@@ -3,6 +3,7 @@ from django.conf import settings
 import uuid
 from os import listdir
 from os.path import isfile, join
+import importlib
 #from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -21,14 +22,16 @@ class MailScannerConfiguration(models.Model):
         return str(self.key)
 
     @staticmethod
-    def sync_files_to_db(self):
+    def sync_files_to_db():
         files = [f for f in listdir(settings.MAILSCANNER_CONFIG_DIR) if isfile(join(settings.MAILSCANNER_CONFIG_DIR, f))]
         for f in files:
             print(f)
-            classname = 'core.fileparsers.' + f.replace('.', ' ').title().replace(' ', '') + 'FileParser'
+            module = importlib.import_module('core.fileparsers')
+            classname = getattr(module, f.replace('.', ' ').title().replace(' ', '') + 'FileParser')
+            print(classname)
             parser = None
             try:
-                parser = classname
+                parser = classname()
             except AttributeError:
                 parser = None
             if parser:
