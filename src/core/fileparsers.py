@@ -22,7 +22,7 @@ class DefaultsFileParse(BaseFileParser):
             self.save(key, value, filepath)
         file.close()
             
-class MailScannerConfFileParser(BaseFileParser):
+class MailscannerConfFileParser(BaseFileParser):
     def parse(self, filepath):
         file = open(filepath, 'r')
         for l in file.readlines():
@@ -45,7 +45,8 @@ class SpamassassinConfFileParser(BaseFileParser):
         qs = SpamAssassinConfiguration.objects.filter(key=key)
         if qs.exists():
             entity = qs.first()
-            entity.value = value
+            entity.rule = value1
+            entity.value = value2
             entity.save()
         else:
-            SpamAssassinConfiguration.objects.create(key=key, value=value, filepath=filepath)
+            SpamAssassinConfiguration.objects.create(key=key, rule=value1, value=value2, filepath=filepath)
