@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from domains.serializers import MailUserSerializer
+from .models import MailScannerConfiguration
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,3 +17,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             return obj.first_name + " " + obj.last_name
         else:
             return obj.username
+
+class MailScannerConfigurationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MailScannerConfiguration
+        fields = ('id', 'url', 'key', 'value')
