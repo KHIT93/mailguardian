@@ -25,7 +25,7 @@ class MailScannerConfiguration(models.Model):
     def sync_files_to_db():
         files = [f for f in listdir(settings.MAILSCANNER_CONFIG_DIR) if isfile(join(settings.MAILSCANNER_CONFIG_DIR, f))]
         for f in files:
-            print(f)
+            print(settings.MAILSCANNER_CONFIG_DIR + '/' + f)
             module = importlib.import_module('core.fileparsers')
             classname = getattr(module, f.replace('.', ' ').title().replace(' ', '') + 'FileParser')
             print(classname)
