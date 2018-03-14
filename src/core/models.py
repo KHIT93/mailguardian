@@ -25,7 +25,6 @@ class MailScannerConfiguration(models.Model):
     def sync_files_to_db():
         files = [f for f in listdir(settings.MAILSCANNER_CONFIG_DIR) if isfile(join(settings.MAILSCANNER_CONFIG_DIR, f))]
         for f in files:
-            print(settings.MAILSCANNER_CONFIG_DIR + '/' + f)
             parser = None
             classname = f.replace('.', ' ').title().replace(' ', '') + 'FileParser'
             try:
@@ -35,7 +34,7 @@ class MailScannerConfiguration(models.Model):
             except AttributeError:
                 parser = None
             if parser:
-                parser.parse(settings.MAILSCANNER_CONFIG_DIR + '/' + f)
+                parser.parse(f)
             else:
                 print('Parser {0} does not exist'.format(classname))
 
