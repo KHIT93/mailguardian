@@ -9,14 +9,14 @@
                         Domain
                     </div>
                 </div>
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                    <div class="">
-                        Destination
-                    </div>
-                </div>
                 <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
                     <div class="">
                         Relay type
+                    </div>
+                </div>
+                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
+                    <div class="">
+                        Destination
                     </div>
                 </div>
                 <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
@@ -44,14 +44,14 @@
                         <p>{{ item.name }}</p>
                     </div>
                 </div>
-                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                    <div class="">
-                        <p>{{ item.destination }}</p>
-                    </div>
-                </div>
                 <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
                     <div class="">
                         <p>{{ item.relay_type }}</p>
+                    </div>
+                </div>
+                <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
+                    <div class="">
+                        <p>{{ item.destination }}</p>
                     </div>
                 </div>
                 <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
