@@ -202,6 +202,7 @@ module.exports = {
 
   fonts: {
     'sans': [
+      'Raleway',
       'Avenir Next',
       '-apple-system',
       'BlinkMacSystemFont',
