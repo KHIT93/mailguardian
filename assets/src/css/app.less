@@ -5,13 +5,20 @@
  * You can see the styles here:
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
  *
- * If using `postcss-import`, you should import this line from it's own file:
- * 
- * @import "./tailwind-preflight.css";
+ * If using `postcss-import`, use this import instead:
  *
- * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+ * @import "tailwindcss/preflight";
  */
  @tailwind preflight;
+
+ /**
+  * This injects any component classes registered by plugins.
+  *
+  * If using `postcss-import`, use this import instead:
+  *
+  * @import "tailwindcss/components";
+  */
+ @tailwind components;
  
  /**
   * Here you would add any of your custom component classes; stuff that you'd
@@ -33,11 +40,9 @@
   * This injects all of Tailwind's utility classes, generated based on your
   * config file.
   *
-  * If using `postcss-import`, you should import this line from it's own file:
-  * 
-  * @import "./tailwind-utilities.css";
+  * If using `postcss-import`, use this import instead:
   *
-  * See: https://github.com/tailwindcss/tailwindcss/issues/53#issuecomment-341413622
+  * @import "tailwindcss/utilities";
   */
  @tailwind utilities;
  
@@ -55,6 +60,7 @@
   * @import "utilities/background-patterns";
   * @import "utilities/skew-transforms";
   */
+ 
 [v-cloak] { display:none; }
 
 .alert {

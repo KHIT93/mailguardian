@@ -370,6 +370,26 @@ module.exports = {
 
   /*
   |-----------------------------------------------------------------------------
+  | Background sizes               https://tailwindcss.com/docs/background-size
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you define your background sizes. We provide some common
+  | values that are useful in most projects, but feel free to add other sizes
+  | that are specific to your project here as well.
+  |
+  | Class name: .bg-{size}
+  |
+  */
+
+  backgroundSize: {
+    'auto': 'auto',
+    'cover': 'cover',
+    'contain': 'contain',
+  },
+
+
+  /*
+  |-----------------------------------------------------------------------------
   | Border widths                     https://tailwindcss.com/docs/border-width
   |-----------------------------------------------------------------------------
   |
@@ -863,11 +883,11 @@ module.exports = {
   modules: {
     appearance: ['responsive'],
     backgroundAttachment: false,
-    backgroundColors: ['responsive', 'hover'],
+    backgroundColors: ['responsive', 'hover', 'active'],
     backgroundPosition: false,
     backgroundRepeat: false,
     backgroundSize: ['responsive'],
-    borderColors: ['responsive', 'hover'],
+    borderColors: ['responsive', 'hover', 'active'],
     borderRadius: ['responsive'],
     borderStyle: ['responsive'],
     borderWidths: ['responsive'],
@@ -892,7 +912,7 @@ module.exports = {
     pointerEvents: ['responsive'],
     position: ['responsive'],
     resize: false,
-    shadows: ['responsive'],
+    shadows: ['responsive', 'active'],
     svgFill: [],
     svgStroke: [],
     textAlign: ['responsive'],
@@ -908,6 +928,26 @@ module.exports = {
     zIndex: ['responsive'],
   },
 
+    /*
+  |-----------------------------------------------------------------------------
+  | Plugins                                https://tailwindcss.com/docs/plugins
+  |-----------------------------------------------------------------------------
+  |
+  | Here is where you can register any plugins you'd like to use in your
+  | project. Tailwind's built-in `container` plugin is enabled by default to
+  | give you a Bootstrap-style responsive container component out of the box.
+  |
+  | Be sure to view the complete plugin documentation to learn more about how
+  | the plugin system works.
+  |
+  */
+
+  plugins: [
+    require('./plugins/container')({
+      // center: true,
+      // padding: '1rem',
+    }),
+  ],
 
   /*
   |-----------------------------------------------------------------------------
