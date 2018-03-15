@@ -21,6 +21,7 @@ import UserForm from '../pages/Admin/Users/Form.vue';
 import DomainForm from '../pages/Admin/Domains/Form.vue';
 import MailScannerConfiguration from '../pages/Admin/MailscannerConfig/Index.vue';
 import MailScannerConfigurationForm from '../pages/Admin/MailscannerConfig/Form.vue';
+import Settings from '../pages/Admin/Settings/Index.vue';
 
 export default [
     { path: '/', component: Home, name: 'home' },
@@ -45,6 +46,7 @@ export default [
     { path: '/admin/mailscanner/configuration', component: MailScannerConfiguration, name: 'admin.mailscanner.configuration.index'},
     { path: '/admin/mailscanner/configuration/add', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.add' },
     { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true },
+    { path: '/admin/settings', component: Settings, name: 'admin.settings.index'},
 
     /** Catchall route to display 404 page */
     { path: '/admin/*', component: AdminNotFound, name: 'admin.not_found' },

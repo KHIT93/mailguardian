@@ -50,10 +50,15 @@ class MessageActionAPIView(APIView):
     def _ham(self, message):
         # Here we need to call salear and the parameters
         # needed to learn the message as not harmful
+        command = "sudo {0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def _release(self, message):
         # Here we need to instruct the local MTA
         # to resend the message for the intended
         # recipient or an alternate recipient
+        # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS FILEPATH_TO_MESSAGE 2>&1
+        command = "sudo {0} -i -f {1} {2} {3} 2>&1".format(settings.SENDMAIL_BIN, "", message.to_address, message.file_path())
+        message.released = True
+        message.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)

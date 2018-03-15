@@ -18,7 +18,7 @@ from django.conf import settings
 from django.urls import path, re_path, include
 from frontend.views import IndexTemplateView
 from rest_framework import routers
-from core.viewsets import UserViewSet, MailScannerConfigurationViewSet
+from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
 from mail.views import MessageActionAPIView
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
@@ -41,6 +41,7 @@ router.register(r'whitelist', WhitelistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
 router.register(r'mail-users', MailUserViewSet)
+router.register(r'settings', SettingsViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),

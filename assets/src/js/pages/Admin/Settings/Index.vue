@@ -1,0 +1,79 @@
+<template>
+    <mw-admin-layout>
+        <h2 class="font-normal text-center mb-2">Application settings</h2>
+        <p class="text-center">Configure the application to your liking</p>
+        <div>
+            <div class="flex text-sm shadow">
+                <div class="text-grey-darker w-1/3 p-2">
+                    <div class="font-semibold">
+                        Key
+                    </div>
+                </div>
+                <div class="text-grey-darker w-1/2 p-2">
+                    <div class="font-semibold">
+                        Value
+                    </div>
+                </div>
+                <div class="text-grey-darker w-1/6 p-2">
+                    <div class="font-semibold">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="shadow">
+                <mw-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mw-settings-item>
+            </div>
+        </div>
+    </mw-admin-layout>
+</template>
+
+<script>
+import { mapGetters, mapMutations } from 'vuex';
+import AdminLayout from '../../../components/AdminLayout.vue';
+import SettingsItem from '../../../components/SettingsItem.vue';
+export default {
+    data: () => {
+        return {
+            config: [],
+            search_query: ""
+        }
+    },
+    components: {
+        'mw-admin-layout': AdminLayout,
+        'mw-settings-item': SettingsItem
+    },
+    computed: {
+        ...mapGetters(['user'])
+    },
+    mounted() {
+        this.get();
+    },
+    methods: {
+        get(query = null, page = null) {
+            this.toggleLoading();
+            this.config = [];
+            let qs = '';
+            if (query) {
+                qs = '?search='+query;
+            }
+            if (page) {
+                qs = '?page='+page;
+            }
+            if (query && page) {
+                qs = '?search='+query+'&page='+page;
+            }
+            axios.get('/api/settings/'+qs).then(response => {
+                this.config = response.data;
+                this.toggleLoading();            
+            }).catch(error => {
+                this.toggleLoading();
+            });                ;
+        },
+        async search() {
+            await this.get(this.search_query);
+            this.search_query = null;
+        },
+        ...mapMutations(['toggleLoading'])
+    }
+}
+</script>

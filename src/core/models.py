@@ -57,3 +57,14 @@ class SpamAssassinConfiguration(models.Model):
     rule = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
     filepath = models.CharField(max_length=511, default=settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf')
+
+class Setting(models.Model):
+    class Meta:
+        db_table = 'core_settings'
+        ordering = ('key',)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    key = models.CharField(max_length=255, unique=True)
+    value = models.TextField()
+
+    def __str__(self):
+        return str(self.key)

@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
-from .models import MailScannerConfiguration
-from .serializers import UserSerializer, MailScannerConfigurationSerializer
+from .models import MailScannerConfiguration, Setting
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer
 from django.db.models import Q
 
 # ViewSets define the view behavior.
@@ -28,3 +28,9 @@ class MailScannerConfigurationViewSet(viewsets.ModelViewSet):
         if self.request.query_params.__contains__('filename'):
             qs = qs.filter(filepath=self.request.query_params.get('filename'))
         return qs
+
+class SettingsViewSet(viewsets.ModelViewSet):
+    queryset = Setting.objects.all()
+    serializer_class = SettingsSerializer
+    permission_classes = (IsAdminUser,)
+    model = Setting
