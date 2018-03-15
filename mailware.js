@@ -202,12 +202,11 @@ module.exports = {
 
   fonts: {
     'sans': [
-      'Raleway',
+      'Roboto',
       'Avenir Next',
       '-apple-system',
       'BlinkMacSystemFont',
       'Segoe UI',
-      'Roboto',
       'Oxygen',
       'Ubuntu',
       'Cantarell',
