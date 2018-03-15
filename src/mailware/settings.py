@@ -186,6 +186,7 @@ AUTHENTICATION_BACKENDS = (
 #MailWare specific settings
 TMP_DIR = MAILWARE_ENV['hostconfig']['tmp_dir']
 MTA = MAILWARE_ENV['mta']
+SENDMAIL_BIN = MAILWARE_ENV['hostconfig']['sendmail_bin']
 
 #MailScanner settings
 MAILSCANNER_BIN = MAILWARE_ENV["hostconfig"]["mailscanner_bin"]
