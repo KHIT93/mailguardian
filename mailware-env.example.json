@@ -1,5 +1,8 @@
 {
     "debug": true,
+    "hosts": [
+        "localhost"
+    ],
     "database": {
         "name": "mailware",
         "user": "mailware",

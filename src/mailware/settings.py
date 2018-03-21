@@ -28,7 +28,7 @@ SECRET_KEY = 'kri^w&+#rz=dh-ll&opl7lo1k4-t#(q9psg#v9q5+4=pu7_3v='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILWARE_ENV["debug"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = MAILWARE_ENV["hosts"]
 
 
 # Application definition
