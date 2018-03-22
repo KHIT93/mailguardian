@@ -12,12 +12,13 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import json
+from core.helpers import MailWareConfiguration
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MAILWARE_ENV = json.load(open(os.path.join(os.path.dirname(BASE_DIR), "mailware-env.json")))
+MAILWARE_ENV = MailWareConfiguration(json.load(open(os.path.join(os.path.dirname(BASE_DIR), "mailware-env.json"))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -26,9 +27,9 @@ MAILWARE_ENV = json.load(open(os.path.join(os.path.dirname(BASE_DIR), "mailware-
 SECRET_KEY = 'kri^w&+#rz=dh-ll&opl7lo1k4-t#(q9psg#v9q5+4=pu7_3v='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = MAILWARE_ENV["debug"]
+DEBUG = MAILWARE_ENV.get("debug", False)
 
-ALLOWED_HOSTS = MAILWARE_ENV["hosts"]
+ALLOWED_HOSTS = MAILWARE_ENV.get("hosts", [])
 
 
 # Application definition
@@ -88,12 +89,14 @@ WSGI_APPLICATION = 'mailware.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': MAILWARE_ENV["database"]["name"],
-        'USER': MAILWARE_ENV["database"]["user"],
-        'PASSWORD': MAILWARE_ENV["database"]["password"],
-        'HOST': MAILWARE_ENV["database"]["host"],
-        'PORT': MAILWARE_ENV["database"]["port"],
-        'OPTIONS': MAILWARE_ENV["database"]["options"],
+        'NAME': MAILWARE_ENV.get("database.name", 'mailware'),
+        'USER': MAILWARE_ENV.get("database.user", 'mailware'),
+        'PASSWORD': MAILWARE_ENV.get("database.password", 'mailware'),
+        'HOST': MAILWARE_ENV.get("database.host", 'localhost'),
+        'PORT': MAILWARE_ENV.get("database.port", ''),
+        'OPTIONS': {
+            'sslmode': MAILWARE_ENV.get("database.options.sslmode", 'prefer')
+        },
     }
 }
 
@@ -137,10 +140,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = MAILWARE_ENV["language_code"]
+LANGUAGE_CODE = MAILWARE_ENV.get("language_code", "en_US")
 
-#TIME_ZONE = 'UTC'
-TIME_ZONE = MAILWARE_ENV["time_zone"]
+TIME_ZONE = MAILWARE_ENV.get("time_zone", "UTC")
 
 USE_I18N = True
 
@@ -184,22 +186,22 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #MailWare specific settings
-TMP_DIR = MAILWARE_ENV['hostconfig']['tmp_dir']
-MTA = MAILWARE_ENV['mta']
-SENDMAIL_BIN = MAILWARE_ENV['hostconfig']['sendmail_bin']
+TMP_DIR = MAILWARE_ENV.get('hostconfig.tmp_dir', '/tmp')
+MTA = MAILWARE_ENV.get('mta', 'postfix')
+SENDMAIL_BIN = MAILWARE_ENV.get('hostconfig.sendmail_bin', '/usr/sbin/sendmail')
 
 #MailScanner settings
-MAILSCANNER_BIN = MAILWARE_ENV["hostconfig"]["mailscanner_bin"]
-MAILSCANNER_CONFIG_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_config_dir"]
-MAILSCANNER_SHARE_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_share_dir"]
-MAILSCANNER_LIB_DIR = MAILWARE_ENV["hostconfig"]["mailscanner_lib_dir"]
+MAILSCANNER_BIN = MAILWARE_ENV.get("hostconfig.mailscanner_bin", '/usr/sbin/MailScanner')
+MAILSCANNER_CONFIG_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_config_dir", '/etc/MailScanner')
+MAILSCANNER_SHARE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_share_dir", '/usr/share/MailScanner')
+MAILSCANNER_LIB_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_lib_dir", '/usr/lib/MailScanner')
 
 # SpamAssassin settings
-SALEARN_BIN = MAILWARE_ENV['hostconfig']['salearn_bin']
-SA_BIN = MAILWARE_ENV['hostconfig']['sa_bin']
-SA_RULES_DIR = MAILWARE_ENV['hostconfig']['sa_rules_dir']
+SALEARN_BIN = MAILWARE_ENV.get('hostconfig.salearn_bin', '/usr/bin/salearn')
+SA_BIN = MAILWARE_ENV.get('hostconfig.sa_bin', '/usr/bin/spamassassin')
+SA_RULES_DIR = MAILWARE_ENV.get('hostconfig.sa_rules_dir', '/usr/share/spamassassin')
 
 # Retention policy
-RECORD_RETENTION = MAILWARE_ENV['retention']['records']
-AUDIT_RETENTION = MAILWARE_ENV['retention']['audit']
-QUARANTINE_RETENTION = MAILWARE_ENV['retention']['quarantine']
+RECORD_RETENTION = MAILWARE_ENV.get('retention.records', 60)
+AUDIT_RETENTION = MAILWARE_ENV.get('retention.audit', 60)
+QUARANTINE_RETENTION = MAILWARE_ENV.get('retention.quarantine', 60)
