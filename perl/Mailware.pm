@@ -104,7 +104,7 @@ sub InitConnection {
     # Our reason for existence - the persistent connection to the database
     $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
         $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8mb4 => 1 }
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
     );
     if (!$dbh) {
         MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
@@ -374,7 +374,7 @@ sub MailwareLogging {
         $quarantined = 1;
     }
 
-    # Get timestamp, and format it so it is suitable to use with MySQL
+    # Get timestamp, and format it so it is suitable to use with PostgreSQL
     my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
     my ($timestamp) = sprintf("%d-%02d-%02d %02d:%02d:%02d",
         $year + 1900, $mon + 1, $mday, $hour, $min, $sec);
