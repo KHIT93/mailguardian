@@ -327,7 +327,7 @@ sub MailwareLogging {
     #Uncomment below lines for debugging
     #my $msgid = $message->{id};
     #if (open(MESSAGE, "> /tmp/msg-$msgid")) {
-    #    print MESSAGE Dumper($message);
+    #    MailScanner::Log::InfoLog(MESSAGE Dumper($message));
     #    close(MESSAGE);
     #}
 
