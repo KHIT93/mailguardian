@@ -57,9 +57,8 @@ my ($hostname) = hostname;
 my $loop = inet_aton("127.0.0.1");
 my $server_port = 11553;
 my $timeout = 3600;
-my ($SQLversion);
 
-# Get database information from 00MailwareConf.pm
+# Get database information from MailwareConf.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
 require $dirname.'/MailwareConf.pm';
@@ -88,19 +87,6 @@ sub InitMailwareLogging {
         }
         exit;
     }
-}
-
-sub CheckSQLVersion {
-    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
-        $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 1, RaiseError => 1, mysql_enable_utf8 => 1 }
-    );
-    if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
-    }
-    $SQLversion = $dbh->{mysql_serverversion};
-    $dbh->disconnect;
-    return $SQLversion
 }
 
 sub InitConnection {
@@ -240,7 +226,7 @@ sub ListenForMessages {
 
 
         # Uncomment this row for debugging
-        #MailScanner::Log::InfoLog("Mailware: $$message_id: Mailware SQL inserted row");
+        #MailScanner::Log::InfoLog("Mailware: $message_id: Mailware SQL inserted row");
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_mail) {
@@ -337,6 +323,13 @@ sub MailwareLogging {
 
     # Don't bother trying to do an insert if no message is passed-in
     return unless $message;
+
+    #Uncomment below lines for debugging
+    #my $msgid = $message->{id};
+    #if (open(MESSAGE, "> /tmp/msg-$msgid")) {
+    #    print MESSAGE Dumper($message);
+    #    close(MESSAGE);
+    #}
 
     # Fix duplicate 'to' addresses for Postfix users
     my (%rcpts);
