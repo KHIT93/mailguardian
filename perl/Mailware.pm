@@ -52,7 +52,7 @@ $VERSION = substr q$Revision: 1.0 $, 10;
 #DBI->trace(2,'/tmp/dbitrace.log');
 
 my ($dbh);
-my ($sth);
+my ($sth_mail);
 my ($hostname) = hostname;
 my $loop = inet_aton("127.0.0.1");
 my $server_port = 11553;
