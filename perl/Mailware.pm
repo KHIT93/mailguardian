@@ -33,6 +33,7 @@ package MailScanner::CustomConfig;
 use strict;
 use DBI;
 use utf8;
+use Data::UUID;
 use Sys::Hostname;
 use Storable(qw[freeze thaw]);
 use POSIX;
@@ -57,6 +58,7 @@ my ($hostname) = hostname;
 my $loop = inet_aton("127.0.0.1");
 my $server_port = 11553;
 my $timeout = 3600;
+my $ug = Data::UUID->new;
 
 # Get database information from MailwareConf.pm
 use File::Basename;
@@ -199,6 +201,7 @@ sub ListenForMessages {
         #     $$message{token});
 
         $sth_mail->execute(
+            $ug->create_str();
             $$message{from},
             $$message{from_domain},
             $$message{to},
