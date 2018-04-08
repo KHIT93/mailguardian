@@ -225,9 +225,6 @@ sub ListenForMessages {
             $$message{date}
         );
         
-        
-
-
         # Uncomment this row for debugging
         #MailScanner::Log::InfoLog("Mailware: $message_id: Mailware SQL inserted row");
 
@@ -238,12 +235,18 @@ sub ListenForMessages {
             MailScanner::Log::InfoLog("Mailware: $$message{id}: Logged to Mailware SQL");
         }
 
+        # Uncomment this row for debugging
+        #MailScanner::Log::InfoLog("Mailware: $$message{id}: Mailware SQL Before storing headers");
+
         # Log Message Headers
         $sth_headers->execute(
             $ug->create_str(),
             $$message{headers},
             $message_id
         );
+
+        # Uncomment this row for debugging
+        #MailScanner::Log::InfoLog("Mailware: $$message{id}: Mailware SQL After storing headers");
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_headers) {
