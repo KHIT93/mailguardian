@@ -153,7 +153,7 @@ sub ListenForMessages {
 
         # Check to make sure DB connection is still valid
         InitConnection unless $dbh->ping;
-        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_spam, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
+        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
         my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);
         my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
         my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
