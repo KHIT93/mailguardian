@@ -167,6 +167,10 @@ sub ListenForMessages {
         if ($$message{isrblspam} ne undef) {
             $isrblspam = $$message{isrblspam};
         }
+        my $issaspam = 0;
+        if ($$message{issaspam} ne undef) {
+            $issaspam = $$message{issaspam};
+        }
         my $issamcp = 0;
         if ($$message{issamcp} ne undef) {
             $issamcp = $$message{issamcp};
@@ -185,7 +189,7 @@ sub ListenForMessages {
             $$message{token},
             $$message{spamwhitelisted},
             $$message{spamblacklisted},
-            $$message{issaspam},
+            $issaspam,
             $isrblspam,
             $$message{quarantined},
             $$message{virusinfected},
