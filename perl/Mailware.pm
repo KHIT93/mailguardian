@@ -156,49 +156,7 @@ sub ListenForMessages {
         # Check to make sure DB connection is still valid
         InitConnection unless $dbh->ping;
         my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
-        my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);
-        my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
-        my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
-        my $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
-        my $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
         # Log message
-        # $sth_mail->execute(
-        #     $$message{timestamp},
-        #     $$message{id},
-        #     $$message{size},
-        #     $$message{from},
-        #     $$message{from_domain},
-        #     $$message{to},
-        #     $$message{to_domain},
-        #     $$message{subject},
-        #     $$message{clientip},
-        #     $$message{archiveplaces},
-        #     $$message{isspam},
-        #     $$message{ishigh},
-        #     $$message{issaspam},
-        #     $$message{isrblspam},
-        #     $$message{spamwhitelisted},
-        #     $$message{spamblacklisted},
-        #     $$message{sascore},
-        #     $$message{spamreport},
-        #     $$message{virusinfected},
-        #     $$message{nameinfected},
-        #     $$message{otherinfected},
-        #     $$message{reports},
-        #     $$message{ismcp},
-        #     $$message{ishighmcp},
-        #     $$message{issamcp},
-        #     $$message{mcpwhitelisted},
-        #     $$message{mcpblacklisted},
-        #     $$message{mcpsascore},
-        #     $$message{mcpreport},
-        #     $$message{hostname},
-        #     $$message{date},
-        #     $$message{"time"},
-        #     $$message{headers},
-        #     $$message{quarantined},
-        #     $$message{rblspamreport},
-        #     $$message{token});
         my $message_id = $ug->create_str();
         $sth_mail->execute(
             $message_id,
@@ -237,7 +195,7 @@ sub ListenForMessages {
 
         # Uncomment this row for debugging
         #MailScanner::Log::InfoLog("Mailware: $$message{id}: Mailware SQL Before storing headers");
-
+        my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);        
         # Log Message Headers
         $sth_headers->execute(
             $ug->create_str(),
@@ -255,6 +213,7 @@ sub ListenForMessages {
             MailScanner::Log::InfoLog("Mailware: $$message{id} Headers: Logged to Mailware SQL");
         }
 
+        my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
         # Log Message MailScanner Report
         $sth_report->execute(
             $ug->create_str(),
@@ -269,6 +228,7 @@ sub ListenForMessages {
             MailScanner::Log::InfoLog("Mailware: $$message{id} MailScanner Report: Logged to Mailware SQL");
         }
 
+        my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
         # Log Message MCP Report
         $sth_mcp->execute(
             $ug->create_str(),
@@ -283,6 +243,7 @@ sub ListenForMessages {
             MailScanner::Log::InfoLog("Mailware: $$message{id} MCP Report: Logged to Mailware SQL");
         }
 
+        my $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
         # Log Message RBL Report
         $sth_rbl->execute(
             $ug->create_str(),
@@ -297,6 +258,7 @@ sub ListenForMessages {
             MailScanner::Log::InfoLog("Mailware: $$message{id} RBL Report: Logged to Mailware SQL");
         }
 
+        my $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
         # Log Message SPAM Report
         $sth_spam->execute(
             $ug->create_str(),
