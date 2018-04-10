@@ -77,14 +77,14 @@ class Message(models.Model):
     size = models.FloatField(default=0)
     token = models.CharField(max_length=255, null=True)
     mailq_id = models.TextField("Mailqueue identification", null=True)
-    whitelisted = models.NullBooleanField(db_index=True, default=False)
-    blacklisted = models.NullBooleanField(db_index=True, default=False)
-    is_spam = models.NullBooleanField(db_index=True, default=False)
-    is_mcp = models.NullBooleanField(db_index=True, default=False, blank=True, null=True)
-    is_rbl_listed = models.NullBooleanField("Is RBL listed", db_index=True, default=False)
-    quarantined = models.NullBooleanField(db_index=True, default=False)
-    infected = models.NullBooleanField(db_index=True, default=False)
-    released = models.NullBooleanField(db_index=True, default=False)
+    whitelisted = models.BooleanField(db_index=True, default=False)
+    blacklisted = models.BooleanField(db_index=True, default=False)
+    is_spam = models.BooleanField(db_index=True, default=False)
+    is_mcp = models.BooleanField(db_index=True, default=False)
+    is_rbl_listed = models.BooleanField("Is RBL listed", db_index=True, default=False)
+    quarantined = models.BooleanField(db_index=True, default=False)
+    infected = models.BooleanField(db_index=True, default=False)
+    released = models.BooleanField(db_index=True, default=False)
 
     def __str__(self):
         return str(self.id) + "[" + str(self.from_address) + " to " + str(self.to_address) + "]"
