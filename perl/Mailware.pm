@@ -106,7 +106,7 @@ sub InitConnection {
     # Our reason for existence - the persistent connection to the database
     $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
         $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 0, RaiseError => 1 }
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
     );
     if (!$dbh) {
         MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
@@ -158,6 +158,11 @@ sub ListenForMessages {
         my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id") or MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
         # Log message
         my $message_id = $ug->create_str();
+        my $header_id = $ug->create_str();
+        my $report_id = $ug->create_str();
+        my $mcp_id = $ug->create_str();
+        my $rbl_id = $ug->create_str();
+        my $spam_id = $ug->create_str();
         $sth_mail->execute(
             $message_id,
             $$message{from},
@@ -198,7 +203,7 @@ sub ListenForMessages {
         my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);        
         # Log Message Headers
         $sth_headers->execute(
-            $ug->create_str(),
+            $header_id,
             $$message{headers},
             $message_id
         );
@@ -216,7 +221,7 @@ sub ListenForMessages {
         my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
         # Log Message MailScanner Report
         $sth_report->execute(
-            $ug->create_str(),
+            $report_id,
             $$message{reports},
             $message_id
         );
@@ -231,7 +236,7 @@ sub ListenForMessages {
         my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
         # Log Message MCP Report
         $sth_mcp->execute(
-            $ug->create_str(),
+            $mcp_id,
             $$message{mcpreport},
             $message_id
         );
@@ -246,7 +251,7 @@ sub ListenForMessages {
         my $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
         # Log Message RBL Report
         $sth_rbl->execute(
-            $ug->create_str(),
+            $rbl_id,
             $$message{rblspamreport},
             $message_id
         );
@@ -261,7 +266,7 @@ sub ListenForMessages {
         my $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (id, contents, message_id) VALUES (?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
         # Log Message SPAM Report
         $sth_spam->execute(
-            $ug->create_str(),
+            $spam_id,
             $$message{spamreport},
             $message_id
         );
@@ -273,11 +278,11 @@ sub ListenForMessages {
             MailScanner::Log::InfoLog("Mailware: $$message{id} SPAM Report: Logged to Mailware SQL");
         }
 
-        $dbh->commit();
+        #$dbh->commit();
 
         # Unset
         $message = undef;
-        $message_id = undef;
+        #$message_id = undef;
 
     }
 }
