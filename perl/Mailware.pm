@@ -106,7 +106,7 @@ sub InitConnection {
     # Our reason for existence - the persistent connection to the database
     $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
         $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
+        { PrintError => 0, AutoCommit => 0, RaiseError => 1 }
     );
     if (!$dbh) {
         MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
@@ -272,6 +272,8 @@ sub ListenForMessages {
         } else {
             MailScanner::Log::InfoLog("Mailware: $$message{id} SPAM Report: Logged to Mailware SQL");
         }
+
+        $dbh->commit();
 
         # Unset
         $message = undef;
