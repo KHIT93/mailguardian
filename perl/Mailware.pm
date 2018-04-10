@@ -163,6 +163,14 @@ sub ListenForMessages {
         my $mcp_id = $ug->create_str();
         my $rbl_id = $ug->create_str();
         my $spam_id = $ug->create_str();
+        my $isrblspam = 0;
+        if ($$message{isrblspam} ne undef) {
+            $isrblspam = $$message{isrblspam};
+        }
+        my $issamcp = 0;
+        if ($$message{issamcp} ne undef) {
+            $issamcp = $$message{issamcp};
+        }
         $sth_mail->execute(
             $message_id,
             $$message{from},
@@ -178,12 +186,12 @@ sub ListenForMessages {
             $$message{spamwhitelisted},
             $$message{spamblacklisted},
             $$message{issaspam},
-            $$message{isrblspam},
+            $isrblspam,
             $$message{quarantined},
             $$message{virusinfected},
             $$message{size},
             $$message{id},
-            $$message{issamcp},
+            $issamcp,
             $$message{mcpsascore},
             $$message{date}
         );
