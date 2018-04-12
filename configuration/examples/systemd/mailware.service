@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User=mailware
-Group=www-data
+Group=mtagroup
 WorkingDirectory=/home/mailware/app/src
 ExecStart=/home/mailware/app/bin/gunicorn --access-logfile - --workers 4 --bind unix:/home/mailware/app/run/mailware.sock mailware.wsgi:application
 
