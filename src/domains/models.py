@@ -38,9 +38,14 @@ class MailUser(models.Model):
     domain = models.ForeignKey(Domain, related_name='domain', on_delete=models.CASCADE)
     is_domain_admin = models.BooleanField(default=False)
     user = models.OneToOneField(User, related_name='mailuser', on_delete=models.CASCADE)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    full_email = models.CharField(max_length=511)
 
     def __str__(self):
         return '{0} ({1} -> {2})'.format(self.user.email, self.domain, self.domain.destination)
+
+    def save(self, *args, **kwargs):
+        self.full_email = self.email + self.domain.name
 
 # def create_mailuser(sender, **kwargs):
 #     user = kwargs['instance']
