@@ -56,7 +56,7 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
     def get_report(self, obj):
         report = {}
         if not obj.contents == None:
-            raw = obj.contents.replace('not spam, ', '').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').split(', ')
+            raw = obj.contents.replace('not spam, ', '').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').replace('autolear=', '').split(', ')
             print(obj.id)
             del(raw[1])
             del(raw[0])
