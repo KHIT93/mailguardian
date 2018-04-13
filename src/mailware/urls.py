@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import path, re_path, include
-from frontend.views import IndexTemplateView
+from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
 from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
@@ -47,6 +47,7 @@ urlpatterns = [
     path('', IndexTemplateView.as_view()),
     path('api/current-user/', CurrentUserView.as_view()),
     path('api/', include(router.urls)),
+    path('api/dashboard/', DashboardApiView.as_view()),
     path('api/message-actions/', MessageActionAPIView.as_view()),
     path('api/reports/summary/', SummaryApiView.as_view()),
     path('api/reports/messages/', MessageListApiView.as_view()),

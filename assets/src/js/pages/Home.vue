@@ -5,7 +5,7 @@
                 <div class="sm:w-1/3 text-center text-grey-darker py-6">
                     <div class="sm:border-r">
                         <div class="mb-2">
-                            <span class="text-5xl">300</span>
+                            <span class="text-5xl">{{ daily_total }}</span>
                         </div>
                         <div class="uppercase">
                             Total emails recieved
@@ -15,7 +15,7 @@
                 <div class="sm:w-1/3 text-center text-grey-darker py-6">
                     <div class="sm:border-r">
                         <div class="mb-2">
-                            <span class="text-5xl">30</span>
+                            <span class="text-5xl">{{ daily_spam }}</span>
                         </div>
                         <div class="uppercase">
                             Spam emails recieved
@@ -25,7 +25,7 @@
                 <div class="sm:w-1/3 text-center text-grey-darker py-6">
                     <div>
                         <div class="mb-2">
-                            <span class="text-5xl">5</span>
+                            <span class="text-5xl">{{ daily_virus }}</span>
                         </div>
                         <div class="uppercase">
                             Viruses recieved
@@ -45,6 +45,21 @@
             return {
                 chartdata: [],
                 modal: false,
+                daily_total: 0,
+                daily_spam: 0,
+                daily_virus: 0
+            }
+        },
+        mount() {
+            this.get();
+        },
+        methods: {
+            get() {
+                axios.post('/api/dashboard/', {}).then(response => {
+                    this.daily_total = response.data.daily_total;
+                    this.daily_spam = response.data.daily_spam;
+                    this.daily_virus = response.data.daily_virus;
+                });
             }
         },
         components: {
