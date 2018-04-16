@@ -45,7 +45,7 @@ class MailUser(models.Model):
         return '{0} ({1} -> {2})'.format(self.user.email, self.domain, self.domain.destination)
 
     def save(self, *args, **kwargs):
-        self.full_email = self.email + self.domain.name
+        self.full_email = self.email + '@' + self.domain.name
         super(MailUser, self).save(*args, **kwargs)
 
 # def create_mailuser(sender, **kwargs):
