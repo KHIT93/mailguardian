@@ -46,6 +46,7 @@ class MailUser(models.Model):
 
     def save(self, *args, **kwargs):
         self.full_email = self.email + self.domain.name
+        super(MailUser, self).save(*args, **kwargs)
 
 # def create_mailuser(sender, **kwargs):
 #     user = kwargs['instance']
