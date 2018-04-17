@@ -25,7 +25,8 @@
         "mailscanner_lib_dir": "/usr/lib/MailScanner",
         "tmp_dir":"/tmp",
         "sa_rules_dir":"/usr/share/spamassassin",
-        "sendmail_bin":"/usr/sbin/sendmail"
+        "sendmail_bin":"/usr/sbin/sendmail",
+        "mailscanner_quarantine_dir": "/var/spool/MailScanner"
     },
     "retention": {
         "records":60,
