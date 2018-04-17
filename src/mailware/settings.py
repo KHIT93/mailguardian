@@ -197,7 +197,7 @@ MAILSCANNER_BIN = MAILWARE_ENV.get("hostconfig.mailscanner_bin", '/usr/sbin/Mail
 MAILSCANNER_CONFIG_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_config_dir", '/etc/MailScanner')
 MAILSCANNER_SHARE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_share_dir", '/usr/share/MailScanner')
 MAILSCANNER_LIB_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_lib_dir", '/usr/lib/MailScanner')
-MAILSCANNER_QUARANTINE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_quarantine_dir", '/var/spool/MailScanner')
+MAILSCANNER_QUARANTINE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_quarantine_dir", '/var/spool/MailScanner/quarantine')
 
 # SpamAssassin settings
 SALEARN_BIN = MAILWARE_ENV.get('hostconfig.salearn_bin', '/usr/bin/salearn')
