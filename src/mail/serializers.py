@@ -20,6 +20,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'date',
             'size',
             'token',
+            'mailq_id',
             'whitelisted',
             'blacklisted',
             'is_spam',
