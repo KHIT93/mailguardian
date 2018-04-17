@@ -50,7 +50,7 @@
                 daily_virus: 0
             }
         },
-        mount() {
+        mounted() {
             this.get();
         },
         methods: {
