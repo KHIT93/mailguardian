@@ -21,6 +21,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'size',
             'token',
             'mailq_id',
+            'mailq_path',
             'whitelisted',
             'blacklisted',
             'is_spam',
@@ -30,9 +31,13 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'queue_file_exists'
             )
     queue_file_exists = serializers.SerializerMethodField()
+    mailq_path = serializers.SerializerMethodField()
 
     def get_queue_file_exists(self, obj):
         return obj.queue_file_exists()
+    
+    def get_mailq_path(self, obj):
+        return obj.file_path()
 
 class HeaderSerializer(serializers.HyperlinkedModelSerializer):
     headers = serializers.SerializerMethodField()
