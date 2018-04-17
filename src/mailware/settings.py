@@ -197,12 +197,12 @@ MAILSCANNER_BIN = MAILWARE_ENV.get("hostconfig.mailscanner_bin", '/usr/sbin/Mail
 MAILSCANNER_CONFIG_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_config_dir", '/etc/MailScanner')
 MAILSCANNER_SHARE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_share_dir", '/usr/share/MailScanner')
 MAILSCANNER_LIB_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_lib_dir", '/usr/lib/MailScanner')
-MAILSCANNER_QUARANTINE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_lib_dir", '/usr/lib/MailScanner')
+MAILSCANNER_QUARANTINE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_quarantine_dir", '/var/spool/MailScanner')
 
 # SpamAssassin settings
 SALEARN_BIN = MAILWARE_ENV.get('hostconfig.salearn_bin', '/usr/bin/salearn')
 SA_BIN = MAILWARE_ENV.get('hostconfig.sa_bin', '/usr/bin/spamassassin')
-SA_RULES_DIR = MAILWARE_ENV.get('hostconfig.mailscanner_quarantine_dir', '/var/spool/MailScanner')
+SA_RULES_DIR = MAILWARE_ENV.get('hostconfig.sa_rules_dir', '/usr/share/spamassassin')
 
 # Retention policy
 RECORD_RETENTION = MAILWARE_ENV.get('retention.records', 60)
