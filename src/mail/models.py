@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.conf import settings
+import os, datetime
 
 # Create your models here.
 class Message(models.Model):
@@ -90,7 +91,16 @@ class Message(models.Model):
         return str(self.id) + "[" + str(self.from_address) + " to " + str(self.to_address) + "]"
 
     def file_path(self):
-        return None
+        if self.mailq_id:
+            return os.path.join(settings.MAILSCANNER_QUARANTINE_DIR, str(datetime.date.today()).replace('-',''), "nonspam", self.mailq_id)
+        else:
+            return None
+    
+    def queue_file_exists(self):
+        if self.file_path():
+            if os.path.isfile(self.file_path()):
+                return True
+        return False
 
 class RblReport(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

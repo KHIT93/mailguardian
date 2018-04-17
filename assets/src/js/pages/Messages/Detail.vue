@@ -2,7 +2,7 @@
     <div class="container mx-auto sm:px-4 pt-6 pb-8">
         <div class="bg-white border sm:rounded shadow p-2">
             <h2 class="border-b">Details for message <em>{{ uuid }}</em></h2>
-            <mw-message-actions @view="showMessage" class="border-b" :uuid="uuid"></mw-message-actions>
+            <mw-message-actions @view="showMessage" class="border-b" :uuid="uuid" v-if="message.queue_file_exists"></mw-message-actions>
             <div class="sm:flex">
                 <div class="sm:w-1/2 sm:border-r border-b">
                     <div class="flex hover:bg-grey-lighter text-sm">
@@ -312,8 +312,8 @@
                     </div>
                 </div>
             </div>
-            <mw-message-actions @view="showMessage" class="border-t" :uuid="uuid"></mw-message-actions>
-            <mw-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message">
+            <mw-message-actions @view="showMessage" class="border-t" :uuid="uuid" v-if="message.queue_file_exists"></mw-message-actions>
+            <mw-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message" v-if="message.queue_file_exists">
                 {{ message_contents }}
             </mw-modal>
         </div>
@@ -400,7 +400,14 @@ export default {
             })
         },
         async getMessageContents() {
-            this.message_contents = 'Message contents are no longer available on this server';
+            if (this.message.queue_file_exists) {
+                axios.get('/api/messages/' + this.uuid + '/contents/').then(response => {
+                    this.message_contents = response.data.message_contents;
+                });
+            }
+            else {
+                this.message_contents = 'Message contents are no longer available on this server';
+            }
         }
     },
     mounted() {

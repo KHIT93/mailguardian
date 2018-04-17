@@ -1,8 +1,12 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer
 from mailware.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from email.message import EmailMessage
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -10,6 +14,18 @@ class MessageViewSet(viewsets.ModelViewSet):
     model = Message
     pagination_class = PageNumberPaginationWithPageCount
     permission_classes = (IsAuthenticated,)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='contents', url_name='message-file-contents')
+    def get_message_contents(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        data = { 'message_id':message.id, 'mailq_id': message.mailq_id, 'message_contents': None }
+        if message.queue_file_exists():
+            f = open(message.file_path())
+            data['message_contents'] = EmailMessage().set_content(f.read())
+            f.close()
+        
+        serializer = MessageContentsSerializer(data)
+        return Response(serializer.data)
 
 class HeaderViewSet(viewsets.ModelViewSet):
     queryset = Headers.objects.all()

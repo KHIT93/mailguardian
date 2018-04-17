@@ -25,8 +25,13 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'is_spam',
             'is_rbl_listed',
             'quarantined',
-            'infected'
+            'infected',
+            'queue_file_exists'
             )
+    queue_file_exists = serializers.SerializerMethodField()
+
+    def get_queue_file_exists(self, obj):
+        return obj.queue_file_exists()
 
 class HeaderSerializer(serializers.HyperlinkedModelSerializer):
     headers = serializers.SerializerMethodField()
@@ -103,5 +108,12 @@ class MessageActionSerializer(serializers.Serializer):
     message_id = serializers.UUIDField()
     action = serializers.CharField(max_length=255)
     class Meta:
-        model = McpReport
+        #model = McpReport
         fields = ('message_id', 'action')
+
+class MessageContentsSerializer(serializers.Serializer):
+    message_id = serializers.UUIDField()
+    mailq_id = serializers.CharField()
+    message_contents = serializers.CharField()
+    class Meta:
+        fields = ('mesage_id', 'mailq_id', 'message_contents')
