@@ -19,7 +19,7 @@ class DashboardApiView(APIView):
         today = datetime.date.today()
         result = None
         with connection.cursor() as cursor:
-            cursor.execute("select count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where date = '{0}'".format(today))
+            cursor.execute("select count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where date = '{0}'".format(str(today)))
             result = cursor.fetchone()
         data = {
            'daily_total' : result[0],
