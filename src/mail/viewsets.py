@@ -21,7 +21,9 @@ class MessageViewSet(viewsets.ModelViewSet):
         data = { 'message_id':message.id, 'mailq_id': message.mailq_id, 'message_contents': None }
         if message.queue_file_exists():
             f = open(message.file_path())
-            data['message_contents'] = EmailMessage().set_content(f.read())
+            m = EmailMessage()
+            m.set_content(f.read())
+            data['message_contents'] = m
             f.close()
         
         serializer = MessageContentsSerializer(data)
