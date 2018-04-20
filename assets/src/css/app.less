@@ -63,22 +63,6 @@
  
 [v-cloak] { display:none; }
 
-.alert {
-  @apply .border .px-4 .py-3 .rounded .relative;
-}
-.alert .alert-info {
-  @apply .bg-blue-lightest .border-blue-light .text-blue-dark;
-}
-.alert .alert-success {
-  @apply .bg-green-lightest .border-green-light .text-green-dark;
-}
-.alert .alert-warning {
-  @apply .bg-orange-lightest .border-orange-light .text-orange-dark;
-}
-.alert .alert-danger {
-  @apply .bg-red-lightest .border-red-light .text-red-dark;
-}
-
 .loader {
   @apply .absolute .m-0;
   right: 50%;
@@ -88,4 +72,16 @@
 
 .fade {
   transition: opacity 2s ease-in-out;
+}
+
+.table tr {
+  @apply .border;
+}
+
+.table tbody tr:hover {
+  @apply .bg-grey-lighter;
+}
+
+.table td {
+  @apply .border-r .border-l;
 }

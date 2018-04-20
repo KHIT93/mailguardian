@@ -8,7 +8,7 @@
                 <div class="mb-2">
                     Mail queue at {{ moment(loaded_at).format('YYYY-MM-DD hh:mm:ss') }}
                 </div>
-                <table class="w-full text-sm">
+                <table class="w-full table text-sm">
                     <thead>
                         <tr>
                             <th>Queue ID</th>
@@ -19,7 +19,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="mail in mails" :key="mail.qid" class="hover:bg-grey-lighter text-sm">
+                        <tr v-for="mail in mails" :key="mail.qid" class="text-sm">
                             <td>{{ mail.qid }}</td>
                             <td>{{ mail.sender }}</td>
                             <td>{{ mail.recipients.join(', ') }}</td>
