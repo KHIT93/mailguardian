@@ -22,7 +22,7 @@
                         <tr v-for="mail in mails" :key="mail.qid">
                             <td>{{ mail.qid }}</td>
                             <td>{{ mail.sender }}</td>
-                            <td>{{ mail.recipients }}</td>
+                            <td>{{ mail.recipients.join(', ') }}</td>
                             <td>{{ mail.date }}</td>
                             <td>{{ mail.status }}</td>
                         </tr>
