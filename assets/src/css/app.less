@@ -74,12 +74,8 @@
   transition: opacity 2s ease-in-out;
 }
 
-.table thead {
-  @apply .border-r .border-l .border-b;
-}
-
-.table tr {
-  @apply .border;
+.table th {
+  @apply .border-b .p-2;
 }
 
 .table tbody tr:hover {
@@ -87,9 +83,5 @@
 }
 
 .table td {
-  @apply .border-l;
-}
-
-.table td:last-child {
-  @apply .border-l .border-r;
+  @apply .border-t .p-2;
 }
