@@ -7,6 +7,8 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from email.message import EmailMessage
+from pymailq.store import PostqueueStore
+import json
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -28,6 +30,12 @@ class MessageViewSet(viewsets.ModelViewSet):
         
         serializer = MessageContentsSerializer(data)
         return Response(serializer.data)
+    
+    @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='queue', url_name='message-queue')
+    def get_queue(self, request):
+        store = PostqueueStore()
+        store.load()
+        return Response(json.dumps(store.mails))
 
 class HeaderViewSet(viewsets.ModelViewSet):
     queryset = Headers.objects.all()
