@@ -3,7 +3,7 @@
     <div>
         <div class="fixed z-10 w-full" v-if="isLoggedIn">
             <!-- Top nav -->
-            <div class="bg-blue-dark" :class="{ 'shadow-md' : hide, 'lg:shadow-md':!hide }">
+            <div class="bg-grey-darkest" :class="{ 'shadow-md' : hide, 'lg:shadow-md':!hide }">
                 <div class="container mx-auto px-4">
                     <div class="flex items-center lg:justify-between py-2 md:py-0">
                         <div class="w-1/4 lg:hidden">
@@ -34,7 +34,7 @@
         </div>
         <div class="lg:flex">
             <!-- Secondary -->
-            <div v-if="isLoggedIn" class="bg-blue-dark lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
+            <div v-if="isLoggedIn" class="bg-grey-darkest lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
                 <div class="container mx-auto px-4">
                     <div class="">
                         <div class="flex -mb-px">
