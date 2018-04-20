@@ -13,6 +13,7 @@ import ReportMessageOperations from '../pages/Reports/MessageOperations.vue';
 import ReportMessagesByDate from '../pages/Reports/MessagesByDate.vue';
 import ReportMessageRelays from '../pages/Reports/MessageRelays.vue';
 import Tools from '../pages/Tools/Index.vue';
+import Mailqueue from '../pages/Tools/Mailqueue.vue';
 import AdminNotFound from '../pages/Admin/NotFound.vue';
 import Admin from '../pages/Admin/Index.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
@@ -35,6 +36,7 @@ export default [
     { path: '/reports/messages-by-date', component: ReportMessagesByDate, name: 'reports.messages.date' },
     { path: '/reports/top-mail-relays', component: ReportMessageRelays, name: 'reports.messages.relays' },
     { path: '/tools', component: Tools, name: 'tools.index' },
+    { path: '/tools/mailqueue', component: Mailqueue, name: 'tools.mailqueue' },
 
     { path: '/admin', component: Admin, name: 'admin.index'},
     { path: '/admin/domains', component: Domains, name: 'admin.domains.index' },
