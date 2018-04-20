@@ -36,7 +36,7 @@
                         </router-link>
                     </div>
                     <div class="flex -mb-px mr-6">
-                        <router-link to="/messages" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75 lg:hover:border-grey-dark">
+                        <router-link to="/messages" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75 lg:hover:border-grey-dark">
                             <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                                 <path d="M0 0h24v24H0z" fill="none"/>
@@ -54,7 +54,7 @@
                         </router-link>
                     </div>
                     <div class="flex -mb-px mr-6">
-                        <router-link to="/reports" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75 lg:hover:border-grey-dark">
+                        <router-link to="/reports" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 border-b border-blue-dark" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 border-b border-transparent hover:opacity-75 lg:hover:border-grey-dark">
                             <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
                                 <path d="M0 0h24v24H0z" fill="none"/>
