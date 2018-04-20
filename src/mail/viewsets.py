@@ -1,5 +1,5 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer
 from mailware.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from email.message import EmailMessage
 from pymailq.store import PostqueueStore
-import json
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -35,7 +34,8 @@ class MessageViewSet(viewsets.ModelViewSet):
     def get_queue(self, request):
         store = PostqueueStore()
         store.load()
-        return Response(json.dumps(store.mails))
+        serializer = PostqueueStoreSerializer({ 'mails':PostqueueStoreMailSerializer(store.mails), 'loaded_at':store.loaded_at })
+        return Response(serializer.data)
 
 class HeaderViewSet(viewsets.ModelViewSet):
     queryset = Headers.objects.all()

@@ -122,3 +122,25 @@ class MessageContentsSerializer(serializers.Serializer):
     message_contents = serializers.CharField()
     class Meta:
         fields = ('mesage_id', 'mailq_id', 'message_contents')
+
+class PostqueueStoreMailSerializer(serializers.Serializer):
+    qid = serializers.CharField(max_length=255)
+    size = serializers.FloatField()
+    parsed = serializers.BooleanField()
+    parse_error = serializers.CharField()
+    date = serializers.DateTimeField()
+    status = serializers.CharField()
+    sender = serializers.CharField()
+    recipients = serializers.ListField(child=serializers.CharField())
+    errors = serializers.ListField(child=serializers.CharField())
+
+    class Meta:
+        fields = ('qid', 'size', 'parsed', 'parse_error', 'data', 'status', 'sender', 'recipients', 'errors')
+
+class PostqueueStoreSerializer(serializers.Serializer):
+    mails = PostqueueStoreMailSerializer(many=True, read_only=True)
+    loaded_at = serializers.DateTimeField()
+
+    class Meta:
+        fields = ('mails', 'loaded_at')
+
