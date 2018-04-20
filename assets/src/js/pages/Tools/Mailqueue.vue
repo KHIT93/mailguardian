@@ -6,7 +6,7 @@
             </div>
             <div v-else>
                 <div class="mb-2">
-                    Mail queue at {{ moment(loaded_at).format('YYYY-MM-DD hh:mm:ss') }}
+                    Mail queue at {{ moment(loaded_at).format('YYYY-MM-DD HH:mm:ss') }}
                 </div>
                 <table class="w-full table text-sm">
                     <thead>
