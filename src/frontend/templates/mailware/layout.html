@@ -11,8 +11,9 @@
     </head>
     <body class="font-sans bg-grey-lighter">
         <div id="app">
-            <mailware-navigation></mailware-navigation>
-            {% block content %}{% endblock %}
+            <mw-wrapper v-cloak>
+                {% block content %}{% endblock %}
+            </mw-wrapper>
             <div class="fixed pin z-50 bg-smoke-light fade" :class="{ 'hidden' : !loading }">
                 <div class="loader" style="top:50%; right:50%;">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="stroke-current h-10 w-10">

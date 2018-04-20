@@ -1,5 +1,5 @@
 {% extends 'mailware/layout.html' %}
 
 {% block content %}
-    <router-view class="pt-18 lg:pt-32">{% csrf_token %}</router-view>
+    <router-view v-cloak>{% csrf_token %}</router-view>
 {% endblock %}

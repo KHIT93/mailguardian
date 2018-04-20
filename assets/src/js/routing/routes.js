@@ -14,8 +14,6 @@ import ReportMessagesByDate from '../pages/Reports/MessagesByDate.vue';
 import ReportMessageRelays from '../pages/Reports/MessageRelays.vue';
 import Tools from '../pages/Tools/Index.vue';
 import Mailqueue from '../pages/Tools/Mailqueue.vue';
-import AdminNotFound from '../pages/Admin/NotFound.vue';
-import Admin from '../pages/Admin/Index.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
 import Users from '../pages/Admin/Users/Index.vue';
 import UserForm from '../pages/Admin/Users/Form.vue';
@@ -38,7 +36,6 @@ export default [
     { path: '/tools', component: Tools, name: 'tools.index' },
     { path: '/tools/mailqueue', component: Mailqueue, name: 'tools.mailqueue' },
 
-    { path: '/admin', component: Admin, name: 'admin.index'},
     { path: '/admin/domains', component: Domains, name: 'admin.domains.index' },
     { path: '/admin/domains/add', component: DomainForm, name: 'admin.domains.add' },
     { path: '/admin/domains/:id', component: DomainForm, name: 'admin.domains.edit', props: true },
@@ -51,6 +48,5 @@ export default [
     { path: '/admin/settings', component: Settings, name: 'admin.settings.index'},
 
     /** Catchall route to display 404 page */
-    { path: '/admin/*', component: AdminNotFound, name: 'admin.not_found' },
     { path: '*', component: NotFound, name: 'not_found' }
 ]

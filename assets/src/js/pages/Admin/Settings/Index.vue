@@ -1,35 +1,36 @@
 <template>
-    <mw-admin-layout>
-        <h2 class="font-normal text-center mb-2">Application settings</h2>
-        <p class="text-center">Configure the application to your liking</p>
-        <div>
-            <div class="flex text-sm shadow">
-                <div class="text-grey-darker w-1/3 p-2">
-                    <div class="font-semibold">
-                        Key
+    <div class="container mx-auto sm:px-2 pt-2 pb-8">
+        <div class="bg-white border sm:rounded shadow p-2">
+            <h2 class="font-normal text-center mb-2">Application settings</h2>
+            <p class="text-center">Configure the application to your liking</p>
+            <div>
+                <div class="flex text-sm shadow">
+                    <div class="text-grey-darker w-1/3 p-2">
+                        <div class="font-semibold">
+                            Key
+                        </div>
+                    </div>
+                    <div class="text-grey-darker w-1/2 p-2">
+                        <div class="font-semibold">
+                            Value
+                        </div>
+                    </div>
+                    <div class="text-grey-darker w-1/6 p-2">
+                        <div class="font-semibold">
+                            
+                        </div>
                     </div>
                 </div>
-                <div class="text-grey-darker w-1/2 p-2">
-                    <div class="font-semibold">
-                        Value
-                    </div>
+                <div class="shadow">
+                    <mw-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mw-settings-item>
                 </div>
-                <div class="text-grey-darker w-1/6 p-2">
-                    <div class="font-semibold">
-                        
-                    </div>
-                </div>
-            </div>
-            <div class="shadow">
-                <mw-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mw-settings-item>
             </div>
         </div>
-    </mw-admin-layout>
+    </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
-import AdminLayout from '../../../components/AdminLayout.vue';
 import SettingsItem from '../../../components/SettingsItem.vue';
 export default {
     data: () => {
@@ -39,7 +40,6 @@ export default {
         }
     },
     components: {
-        'mw-admin-layout': AdminLayout,
         'mw-settings-item': SettingsItem
     },
     computed: {

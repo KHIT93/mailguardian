@@ -1,57 +1,57 @@
 <template>
-    <mw-admin-layout>
-        <h2 class="font-normal text-center mb-2">MailScanner Configuration</h2>
-        <p class="text-center">Here you can search, add, edit or remove data from the MailScanner configuration files</p>
-        <p class="text-center text-red">Please only do changes to these settings if you are technically qualified to do so and make sure to consult the MailScanner documentation first</p>
-        <div class="sm:flex bg-white border sm:rounded shadow p-2 mt-2 mb-2 sm:items-center">
-            <div class="sm:w-1/4">
-                <div class="p-2">
-                    <router-link to="/admin/mailscanner/configuration/add" class="flex-no-shrink bg-grey-lightest hover:bg-grey-lighter hover:border-grey-lighter border-grey-lightest text-sm border-4 text-black py-1 px-2 rounded shadow no-underline">
-                        Add configuration option
-                    </router-link>
-                </div>
-            </div>
-            <form @submit.prevent="search">
-            <div>
-                <div class="flex text-sm items-center">
-                    <div class="text-grey-darker w-3/4 md:w-5/6 p-2">
-                        <div class="font-semibold">
-                            <input type="text" name="search" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" v-model="search_query" placeholder="Type something here..."/>
-                        </div>
+    <div class="container mx-auto sm:px-2 pt-2 pb-8">
+        <div class="bg-white border sm:rounded shadow p-2">
+            <h2 class="font-normal text-center mb-2">MailScanner Configuration</h2>
+            <p class="text-center">Here you can search, add, edit or remove data from the MailScanner configuration files</p>
+            <p class="text-center text-red">Please only do changes to these settings if you are technically qualified to do so and make sure to consult the MailScanner documentation first</p>
+            <div class="sm:flex bg-white border sm:rounded shadow p-2 mt-2 mb-2 sm:items-center">
+                <div class="sm:w-1/4">
+                    <div class="p-2">
+                        <router-link to="/admin/mailscanner/configuration/add" class="flex-no-shrink bg-grey-lightest hover:bg-grey-lighter hover:border-grey-lighter border-grey-lightest text-sm border-4 text-black py-1 px-2 rounded shadow no-underline">
+                            Add configuration option
+                        </router-link>
                     </div>
-                    <div>
-                        <div class="md:flex md:ml-2">
-                            <div class="">
-                                <div class="relative">
-                                    <select v-model="search_file" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
-                                        <option value="">-- Select file --</option>
-                                        <option v-for="file in files" :key="file" :value="file">{{ file }}</option>
-                                    </select>
-                                    <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+                <form @submit.prevent="search">
+                <div>
+                    <div class="flex text-sm items-center">
+                        <div class="text-grey-darker w-3/4 md:w-5/6 p-2">
+                            <div class="font-semibold">
+                                <input type="text" name="search" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" v-model="search_query" placeholder="Type something here..."/>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="md:flex md:ml-2">
+                                <div class="">
+                                    <div class="relative">
+                                        <select v-model="search_file" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                            <option value="">-- Select file --</option>
+                                            <option v-for="file in files" :key="file" :value="file">{{ file }}</option>
+                                        </select>
+                                        <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-grey-darker w-1/4 md:w-1/6 p-2">
-                        <div class="">
-                            <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
-                                Search
-                            </button>
+                        <div class="text-grey-darker w-1/4 md:w-1/6 p-2">
+                            <div class="">
+                                <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                                    Search
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
-            
-            </form>
+            <mw-mailscanner-configuration-table :list="config" @next="next" @previous="previous"></mw-mailscanner-configuration-table>
         </div>
-        <mw-mailscanner-configuration-table :list="config" @next="next" @previous="previous"></mw-mailscanner-configuration-table>
-    </mw-admin-layout>
+    </div>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex';
-import AdminLayout from '../../../components/AdminLayout.vue';
 import MailScannerConfigurationTable from '../../../components/MailScannerConfigurationTable.vue';
 export default {
     data: () => {
@@ -62,7 +62,6 @@ export default {
         }
     },
     components: {
-        'mw-admin-layout': AdminLayout,
         'mw-mailscanner-configuration-table': MailScannerConfigurationTable
     },
     computed: {
