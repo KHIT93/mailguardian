@@ -10,52 +10,41 @@ class Message(models.Model):
         get_latest_by = 'timestamp'
         indexes = [
             models.Index(fields=['from_address', 'from_domain']),
-
             models.Index(fields=['to_address', 'to_domain']),
-
             models.Index(fields=['from_address', 'to_address']),
-
             models.Index(fields=['from_address', 'to_domain']),
-
             models.Index(fields=['to_address', 'from_domain']),
-
             models.Index(fields=['client_ip', 'mailscanner_hostname']),
-
             models.Index(fields=['from_address', 'blacklisted']),
             models.Index(fields=['from_address', 'whitelisted']),
             models.Index(fields=['from_address', 'infected']),
             models.Index(fields=['from_address', 'is_spam']),
             models.Index(fields=['from_address', 'quarantined']),
             models.Index(fields=['from_address', 'is_rbl_listed']),
-
             models.Index(fields=['to_address', 'blacklisted']),
             models.Index(fields=['to_address', 'whitelisted']),
             models.Index(fields=['to_address', 'infected']),
             models.Index(fields=['to_address', 'is_spam']),
             models.Index(fields=['to_address', 'quarantined']),
             models.Index(fields=['to_address', 'is_rbl_listed']),
-
             models.Index(fields=['from_domain', 'blacklisted']),
             models.Index(fields=['from_domain', 'whitelisted']),
             models.Index(fields=['from_domain', 'infected']),
             models.Index(fields=['from_domain', 'is_spam']),
             models.Index(fields=['from_domain', 'quarantined']),
             models.Index(fields=['from_domain', 'is_rbl_listed']),
-
             models.Index(fields=['to_domain', 'blacklisted']),
             models.Index(fields=['to_domain', 'whitelisted']),
             models.Index(fields=['to_domain', 'infected']),
             models.Index(fields=['to_domain', 'is_spam']),
             models.Index(fields=['to_domain', 'quarantined']),
             models.Index(fields=['to_domain', 'is_rbl_listed']),
-
             models.Index(fields=['client_ip', 'blacklisted']),
             models.Index(fields=['client_ip', 'whitelisted']),
             models.Index(fields=['client_ip', 'infected']),
             models.Index(fields=['client_ip', 'is_spam']),
             models.Index(fields=['client_ip', 'quarantined']),
             models.Index(fields=['client_ip', 'is_rbl_listed']),
-
             models.Index(fields=['mailscanner_hostname', 'blacklisted']),
             models.Index(fields=['mailscanner_hostname', 'whitelisted']),
             models.Index(fields=['mailscanner_hostname', 'infected']),
@@ -126,3 +115,4 @@ class Headers(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     message = models.OneToOneField('Message', on_delete=models.CASCADE, unique=True)
     contents = models.TextField(null=True, blank=True)
+

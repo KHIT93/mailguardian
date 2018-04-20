@@ -114,7 +114,6 @@ class MessageActionSerializer(serializers.Serializer):
     message_id = serializers.UUIDField()
     action = serializers.CharField(max_length=255)
     class Meta:
-        #model = McpReport
         fields = ('message_id', 'action')
 
 class MessageContentsSerializer(serializers.Serializer):
