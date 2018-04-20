@@ -20,8 +20,8 @@
                         <div class="hidden md:block md:w-2/3">
                             <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-50 focus:opacity-100 w-full p-3 text-grey-darker"/>
                         </div>
-                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full hover:text-white text-grey-light">
-                            <div class="">
+                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full hover:text-white text-grey-light" title="Log out">
+                            <div @click="logout">
                                 <svg class="fill-current h-6 w-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
                                     <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
@@ -34,7 +34,7 @@
         </div>
         <div class="lg:flex">
             <!-- Secondary -->
-            <div class="bg-blue-dark lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
+            <div v-if="isLoggedIn" class="bg-blue-dark lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
                 <div class="container mx-auto px-4">
                     <div class="">
                         <div class="flex -mb-px">
@@ -135,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="lg:w-4/5" :class="{ 'pt-0 lg:pt-12' : !hide, 'pt-12': hide }">
+            <div :class="{ 'pt-0 lg:pt-12' : !hide, 'pt-12': hide, 'w-full':!isLoggedIn, 'lg:w-4/5':isLoggedIn }">
                 <slot></slot>
             </div>
         </div>
@@ -155,6 +155,11 @@ export default {
             return (this.hide) ? "hidden" : "";
         },
         ...mapGetters(['isLoggedIn', 'user'])
+    },
+    methods: {
+        logout() {
+            window.location.href = '/api-auth/logout?next=/';
+        }
     }
 }
 </script>
