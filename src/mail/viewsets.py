@@ -34,7 +34,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     def get_queue(self, request):
         store = PostqueueStore()
         store.load()
-        serializer = PostqueueStoreSerializer({ 'mails':PostqueueStoreMailSerializer(store.mails, many=True), 'loaded_at':store.loaded_at })
+        serializer = PostqueueStoreSerializer({ 'mails':store.mails, 'loaded_at':store.loaded_at })
         return Response(serializer.data)
 
 class HeaderViewSet(viewsets.ModelViewSet):
