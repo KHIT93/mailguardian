@@ -12,7 +12,7 @@
                             </div>
                             <div class="pt-2">
                                 <div class="pb-1">
-                                    <button class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.from_address, message.to_address, 'whitelisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <defs>
@@ -29,7 +29,7 @@
                                 </div>
 
                                 <div>
-                                    <button class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.from_address, message.to_address, 'blacklisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M0 0h24v24H0z" fill="none"/>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="pt-2">
                                 <div class="pb-1">
-                                    <button class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.to_address, message.from_address, 'whitelisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <defs>
@@ -88,7 +88,7 @@
                                 </div>
 
                                 <div>
-                                    <button class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.to_address, message.from_address, 'blacklisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M0 0h24v24H0z" fill="none"/>
@@ -332,6 +332,8 @@ export default {
             mcpreport: {},
             mailscanner_report: {},
             show_modal: false,
+            show_listing_modal: false,
+            listing_type: '',
             message_contents: ''
         }
     },
@@ -408,6 +410,24 @@ export default {
             else {
                 this.message_contents = 'Message contents are no longer available on this server';
             }
+        },
+        createListing(from_address, to_address, listing_type) {
+            let f = from_address.split('@')
+            let t = to_address.split('@')
+            console.log('Create new ' + listing_type + ' entry for email from ' + from_address + ' to ' + to_address);
+            console.log('From', f);
+            console.log('To', t);
+            axios.post('/api/lists/', {
+                'from_address': f[0],
+                'from_domain': f[1],
+                'to_address': t[0],
+                'to_domain': t[1],
+                'listing_type': listing_type,
+                'from_ip_address': null,
+                'to_ip_address': null
+            }).then(response => {
+                console.log(response.data);
+            });
         }
     },
     mounted() {
