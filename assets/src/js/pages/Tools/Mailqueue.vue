@@ -53,7 +53,7 @@ export default {
     methods: {
         get() {
             this.toggleLoading();
-            axios.get('/api/messages/queue').then(response => {
+            axios.get('/api/messages/queue/').then(response => {
                 this.mails = response.data.mails;
                 this.loaded_at = response.data.loaded_at;
                 this.toggleLoading();
