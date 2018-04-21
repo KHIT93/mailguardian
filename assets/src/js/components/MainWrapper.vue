@@ -18,9 +18,9 @@
                             MailWare
                         </div>
                         <div class="hidden md:block md:w-2/3">
-                            <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-50 focus:opacity-100 w-full p-3 text-grey-darker"/>
+                            <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-grey-dark"/>
                         </div>
-                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full hover:text-white text-grey-light" title="Log out">
+                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full hover:text-white text-grey" title="Log out">
                             <div @click="logout">
                                 <svg class="fill-current h-6 w-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
