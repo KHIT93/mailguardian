@@ -20,7 +20,6 @@ from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
 from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
-from mail.views import MessageActionAPIView
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView
@@ -48,7 +47,6 @@ urlpatterns = [
     path('api/current-user/', CurrentUserView.as_view()),
     path('api/', include(router.urls)),
     path('api/dashboard/', DashboardApiView.as_view()),
-    path('api/message-actions/', MessageActionAPIView.as_view()),
     path('api/reports/summary/', SummaryApiView.as_view()),
     path('api/reports/messages/', MessageListApiView.as_view()),
     path('api/reports/messages-by-date/', MessagesByDateApiView.as_view()),
