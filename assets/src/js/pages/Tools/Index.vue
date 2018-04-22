@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto sm:px-4 pt-6 pb-8">
+    <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="bg-white border sm:rounded shadow p-2">
             <div v-if="user.is_staff">
                 <h2>Admin tools</h2>

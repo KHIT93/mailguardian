@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto sm:px-4 pt-6 pb-8">
+    <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="sm:flex">
             <div class="bg-white border sm:rounded shadow min-w-full">
                 <div class="flex shadow">

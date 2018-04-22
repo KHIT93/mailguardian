@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto">
+    <div class="sm:container mx-auto">
         <div class="bg-white border sm:rounded shadow">
             <mw-message-list-header></mw-message-list-header>
             <div class="flex text-sm break-words items-center p-2" v-if="count == 0">

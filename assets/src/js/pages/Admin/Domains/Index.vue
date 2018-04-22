@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto sm:px-2 pt-2 pb-8">
+    <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
         <div class="bg-white border sm:rounded shadow p-2">
             <h2 class="font-normal text-center mb-2">Domain management</h2>
             <p>Here you can manage the domains that have been created on the system</p>

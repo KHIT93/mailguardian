@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto sm:px-4 pt-6 pb-8">
+    <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="bg-white border sm:rounded shadow">
             <div class="sm:flex sm:justify-between">
                 <div class="sm:w-1/3 text-center text-grey-darker py-6">

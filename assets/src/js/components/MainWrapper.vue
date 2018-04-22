@@ -34,10 +34,10 @@
         </div>
         <div class="lg:flex">
             <!-- Secondary -->
-            <div v-if="isLoggedIn" class="bg-grey-darkest lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
+            <div v-if="isLoggedIn" class="bg-grey-darkest lg:shadow-md lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
                 <div class="container mx-auto px-4">
                     <div class="">
-                        <div class="flex -mb-px">
+                        <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
@@ -46,7 +46,7 @@
                                 Dashboard
                             </router-link>
                         </div>
-                        <div class="flex -mb-px">
+                        <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/messages" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
@@ -55,7 +55,7 @@
                                 Messages
                             </router-link>
                         </div>
-                        <div class="flex -mb-px">
+                        <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/lists" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
@@ -64,7 +64,7 @@
                                 Lists
                             </router-link>
                         </div>
-                        <div class="flex -mb-px">
+                        <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/reports" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
@@ -73,7 +73,7 @@
                                 Reports
                             </router-link>
                         </div>
-                        <div class="flex -mb-px">
+                        <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/tools" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path clip-rule="evenodd" d="M0 0h24v24H0z" fill="none"/>
@@ -82,8 +82,8 @@
                                 Tools
                             </router-link>
                         </div>
-                        <div class="flex -mb-px mr-6" v-if="user.is_staff">
-                            <router-link to="/admin/users" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                        <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/users" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
                                     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
@@ -91,8 +91,8 @@
                                 Users
                             </router-link>
                         </div>
-                        <div class="flex -mb-px mr-6" v-if="user.is_staff">
-                            <router-link to="/admin/domains" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                        <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/domains" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
                                     <path d="M20 13H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1zM7 19c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM20 3H4c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zM7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
@@ -100,8 +100,8 @@
                                 Domains
                             </router-link>
                         </div>
-                        <div class="flex -mb-px mr-6" v-if="user.is_staff">
-                            <router-link to="/admin/mailscanner/configuration" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                        <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/mailscanner/configuration" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                                     <path d="M0 0h24v24H0z" fill="none"/>
@@ -109,8 +109,8 @@
                                 MailScanner Configuration
                             </router-link>
                         </div>
-                        <div class="flex -mb-px mr-6" v-if="user.is_staff">
-                            <router-link to="/admin/mailscanner/rules" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                        <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/mailscanner/rules" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <defs>
                                         <path d="M0 0h24v24H0V0z" id="a"/>
@@ -123,8 +123,8 @@
                                 MailScanner Rules
                             </router-link>
                         </div>
-                        <div class="flex -mb-px" v-if="user.is_staff">
-                            <router-link to="/admin/settings" active-class="no-underline opacity-100 text-black sm:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-black opacity-50 sm:opacity-100 sm:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                        <div class="flex -mb-px" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/settings" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <svg class="h-6 w-6 fill-current mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 0h24v24H0z" fill="none"/>
                                     <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
@@ -159,6 +159,11 @@ export default {
     methods: {
         logout() {
             window.location.href = '/api-auth/logout?next=/';
+        },
+        hideMenu() {
+            if (!this.hide) {
+                this.hide = true;
+            }
         }
     }
 }

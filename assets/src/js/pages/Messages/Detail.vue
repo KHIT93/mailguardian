@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto sm:px-4 pt-6 pb-8">
+    <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="bg-white border sm:rounded shadow p-2">
             <h2 class="border-b">Details for message <em>{{ uuid }}</em></h2>
             <mw-message-actions @view="showMessage" class="border-b" :uuid="uuid" v-if="message.queue_file_exists"></mw-message-actions>

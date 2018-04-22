@@ -1,5 +1,5 @@
 <template>
-    <mw-message-list :messages="messages" :count="message_count" class="sm:px-4 pt-6 pb-8"></mw-message-list>
+    <mw-message-list :messages="messages" :count="message_count" class="lg:px-4 pt-6 pb-8"></mw-message-list>
 </template>
 <script>
 import { mapMutations } from 'vuex';

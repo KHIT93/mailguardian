@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container mx-auto px-4">
+        <div class="sm:container mx-auto px-4">
             <div class="flex justify-between" v-if="page_count > 1">
                 <button @click="previous_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
                     Prev
