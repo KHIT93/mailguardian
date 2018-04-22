@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import router from '../../../routing/router';
 import Form from '../../../classes/Form';
 export default {
@@ -114,7 +114,9 @@ export default {
                     active: response.data.active,
                     allowed_accounts: response.data.allowed_accounts,
                 });
-            })
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            });
         },
         submit() {
             if (this.id) {
@@ -127,21 +129,31 @@ export default {
         add() {
             this.form.post('/api/domains/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('Domain created', `The domain ${data.name} has been created`, 'success'));
                 router.push('/admin/domains');
-            })
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            });
         },
         update() {
             this.form.put('/api/domains/'+this.entity.id+'/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('Domain updated', `The domain ${data.name} has been updated`, 'success'));
                 router.push('/admin/domains');
-            })
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            });
         },
         destroy() {
             this.form.delete('/api/domains/'+this.entity.id+'/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('Domain deleted', `The domain ${data.name} has been deleted`, 'success'));
                 router.push('/admin/users');
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
-        }
+        },
+        ...mapMutations(['notify'])
     }
 }
 </script>

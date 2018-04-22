@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import router from '../../../routing/router';
 import Form from '../../../classes/Form';
 export default {
@@ -112,21 +112,31 @@ export default {
         add() {
             this.form.post('/api/mailscanner-configuration/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('Configuration option added', `The configuration option ${data.key} has been added`, 'success'));
                 router.push('/admin/mailscanner-configuration');
-            })
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            });
         },
         update() {
             this.form.put('/api/mailscanner-configuration/'+this.entity.id+'/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('Configuration option updated', `The configuration option ${data.key} has been updated`, 'success'));
                 router.push('/admin/mailscanner-configuration');
-            })
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            });
         },
         destroy() {
             this.form.delete('/api/mailscanner-configuration/'+this.entity.id+'/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('Configuration option deleted', `The configuration option ${data.key} has been deleted`, 'success'));
                 router.push('/admin/mailscanner-configuration');
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
-        }
+        },
+        ...mapMutations(['notify'])
     }
 }
 </script>

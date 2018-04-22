@@ -343,7 +343,7 @@ export default {
                 this.message = response.data;
             }).catch(error => {
                 console.error(error);
-                this.flash({ variant: 'error', message: error});
+                this.notify(this.createNotification('An error occurred while getting the message details', `${error}`, 'error'));
             })
         },
         getMessageHeaders() {
@@ -353,7 +353,7 @@ export default {
                 }
             }).catch(error => {
                 console.error(error);
-                this.flash({ variant: 'error', message: error});
+                this.notify(this.createNotification('An error occurred whle getting the message headers', `${error}`, 'error'));
             })
         },
         getSpamReport() {
@@ -363,7 +363,7 @@ export default {
                 }
             }).catch(error => {
                 console.error(error);
-                this.flash({ variant: 'error', message: error});
+                this.notify(this.createNotification('An error occurred while getting the spam report', `${error}`, 'error'));
             })
         },
         getRblReport() {
@@ -373,7 +373,7 @@ export default {
                 }
             }).catch(error => {
                 console.error(error);
-                this.flash({ variant: 'error', message: error});
+                this.notify(this.createNotification('An error occurred while getting the RBL report', `${error}`, 'error'));
             })
         },
         getMcpReport() {
@@ -383,7 +383,7 @@ export default {
                 }
             }).catch(error => {
                 console.error(error);
-                this.flash({ variant: 'error', message: error});
+                this.notify(this.createNotification('An error occurred while getting the MCP report', `${error}`, 'error'));
             })
         },
         getMailscannerReport() {
@@ -393,7 +393,7 @@ export default {
                 }
             }).catch(error => {
                 console.error(error);
-                this.flash({ variant: 'error', message: error});
+                this.notify(this.createNotification('An error occurred while getting the Mailscanning report', `${error}`, 'error'));
             })
         },
         showMessage() {
@@ -405,6 +405,8 @@ export default {
             if (this.message.queue_file_exists) {
                 axios.get('/api/messages/' + this.uuid + '/contents/').then(response => {
                     this.message_contents = response.data.message_contents;
+                }).catch(error => {
+                    this.notify(this.createNotification('An error occurred while getting the message contents', `${error}`, 'error'));
                 });
             }
             else {
@@ -424,6 +426,9 @@ export default {
                 'to_ip_address': null
             }).then(response => {
                 console.log(response.data);
+                this.notify(this.createNotification('Entry created', `A ${response.data.listing_type} entry has been created`, 'success'));
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         }
     },

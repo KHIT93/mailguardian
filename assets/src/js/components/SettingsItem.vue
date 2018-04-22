@@ -32,6 +32,7 @@
 </template>
 <script>
 import Form from '../classes/Form';
+import { mapMutations } from 'vuex';
 export default {
     props: ['item'],
     data: () => {
@@ -51,11 +52,16 @@ export default {
     methods: {
         async submit() {
             this.saving = true;
-            await this.form.patch('/api/settings/'+this.item.id+'/');
+            await this.form.patch('/api/settings/'+this.item.id+'/').then(data => {
+                this.notify(this.createNotification('Settings saved', `The setting ${data.key} has been saved`, 'success'));                
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));                
+            });
             this.saving = false;
             this.editing = false;
             this.$emit('saved');
-        }
+        },
+        ...mapMutations(['notify'])
     }
 }
 </script>

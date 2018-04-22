@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import router from '../../../routing/router';
 import Form from '../../../classes/Form';
 export default {
@@ -120,21 +120,31 @@ export default {
         add() {
             this.form.post('/api/users/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('User added', `The user ${data.email} has been added`, 'success'));
                 router.push('/admin/users');
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         update() {
             this.form.put('/api/users/'+this.entity.id+'/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('User updated', `The user ${data.email} has been updated`, 'success'));
                 router.push('/admin/users');
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         destroy() {
             this.form.delete('/api/users/'+this.entity.id+'/').then(data => {
                 console.log(data);
+                this.notify(this.createNotification('User deleted', `The user ${data.email} has been deleted`, 'success'));
                 router.push('/admin/users');
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
-        }
+        },
+        ...mapMutations(['notify'])
     }
 }
 </script>
