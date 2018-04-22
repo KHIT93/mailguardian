@@ -412,11 +412,8 @@ export default {
             }
         },
         createListing(from_address, to_address, listing_type) {
-            let f = from_address.split('@')
-            let t = to_address.split('@')
-            console.log('Create new ' + listing_type + ' entry for email from ' + from_address + ' to ' + to_address);
-            console.log('From', f);
-            console.log('To', t);
+            let f = from_address.split('@');
+            let t = to_address.split('@');
             axios.post('/api/lists/', {
                 'from_address': f[0],
                 'from_domain': f[1],
