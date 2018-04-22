@@ -1,3 +1,4 @@
+import uuidv1 from 'uuid/v1';
 export default {
     setIsLoggedIn(state, isLoggedIn) {
         state.isLoggedIn = isLoggedIn;
@@ -31,5 +32,17 @@ export default {
             quarantined: null,
             infected: null
         };
+    },
+    notify(state, notification) {
+        return state.notifications.push(notification);
+    },
+    purgeNotification(state, notification = null) {
+        if (notification) {
+            //Find notification in array and remove it
+            state.notifications.splice(state.notifications.indexOf(notification), 1);
+        }
+        else {
+            state.notifications.filter(n => n.persistent == false).shift();
+        }
     }
 }

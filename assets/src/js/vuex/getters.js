@@ -17,5 +17,8 @@ export default {
     },
     csrftoken(state) {
         return state.csrftoken;
+    },
+    notifications(state) {
+        return state.notifications;
     }
 }

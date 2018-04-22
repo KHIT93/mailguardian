@@ -69,6 +69,19 @@ Vue.filter('byte_display', value => {
     }
 });
 
+Vue.mixin({
+    methods: {
+        createNotification(title, message, type='info', persistent=false) {
+            return {
+                'title': title,
+                'message': message,
+                'type': type,
+                'persistent': persistent
+            };
+        }
+    }
+})
+
 /**
  * Next, we define some constants to keep track of special
  * API endpoints that are used across multiple components
@@ -109,7 +122,7 @@ const app = new Vue({
     },
     methods: {
         ...mapActions(['checkSession', 'getCurrentUser']),
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading' ,'notify'])
     },
     computed: {
         ...mapGetters(['loading', 'isLoggedIn', 'user'])
