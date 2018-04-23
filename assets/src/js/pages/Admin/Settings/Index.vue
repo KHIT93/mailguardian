@@ -4,25 +4,19 @@
             <h2 class="font-normal text-center mb-2">Application settings</h2>
             <p class="text-center">Configure the application to your liking</p>
             <div>
-                <div class="flex text-sm shadow">
-                    <div class="text-grey-darker w-1/3 p-2">
-                        <div class="font-semibold">
-                            Key
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/2 p-2">
-                        <div class="font-semibold">
-                            Value
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/6 p-2">
-                        <div class="font-semibold">
-                            
-                        </div>
-                    </div>
-                </div>
-                <div class="shadow">
-                    <mw-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mw-settings-item>
+                <div class="flex text-sm shadow table-wrapper">
+                    <table class="table text-sm">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <mw-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mw-settings-item>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@
             <div v-if="!user.is_staff">
                 <p>You are not authorized to view the mail queue</p>
             </div>
-            <div v-else>
+            <div v-else class="table-wrapper">
                 <div class="mb-2">
                     Mail queue at {{ moment(loaded_at).format('YYYY-MM-DD HH:mm:ss') }}
                 </div>

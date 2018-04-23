@@ -3,75 +3,33 @@
         <div class="bg-white border sm:rounded shadow p-2">
             <h2 class="font-normal text-center mb-2">Domain management</h2>
             <p>Here you can manage the domains that have been created on the system</p>
-            <div class="bg-white border sm:rounded shadow">
-                <div class="flex shadow">
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Domain
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Relay type
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Destination
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Allowed email accounts
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Created
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 px-2 py-2 font-semibold">
-                        <div class="">
-                            Changed
-                        </div>
-                    </div>
-                </div>
-                <div class="flex text-sm break-words items-center p-2" v-if="count == 0">
-                    <p>There are currently no domains to display</p>
-                </div>
-                <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in domains" :key="item.id" v-else @click="edit(item.id)">
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ item.name }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ item.relay_type }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ item.destination }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p v-if="item.allowed_accounts == -1">Unlimited</p>
-                            <p v-else>{{ item.allowed_accounts }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ moment(item.created_timestamp).fromNow() }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 p-2">
-                        <div class="">
-                            <p>{{ moment(item.updated_timestamp).fromNow() }}</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-white border sm:rounded shadow table-wrapper">
+                <table class="table text-sm">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th class="hidden md:table-cell">Relay type</th>
+                            <th>Destination</th>
+                            <th class="hidden md:table-cell">Allowed email accounts</th>
+                            <th class="hidden md:table-cell">Created</th>
+                            <th class="hidden md:table-cell">Changed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="count == 0">
+                            <td colspan="6">There are currently no domains to display</td>
+                        </tr>
+                        <tr v-for="item in domains" :key="item.id" v-else @click="edit(item.id)">
+                            <td>{{ item.name }}</td>
+                            <td class="hidden md:table-cell">{{ item.relay_type }}</td>
+                            <td>{{ item.destination }}</td>
+                            <td class="hidden md:table-cell" v-if="item.allowed_accounts == -1">Unlimited</td>
+                            <td class="hidden md:table-cell" v-else>{{ item.allowed_accounts }}</td>
+                            <td class="hidden md:table-cell">{{ moment(item.created_timestamp).fromNow() }}</td>
+                            <td class="hidden md:table-cell">{{ moment(item.updated_timestamp).fromNow() }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="inline-flex pt-2 rounded" v-if="page_count > 1">
                 <button @click="previous" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-l" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">

@@ -3,82 +3,46 @@
         <div class="bg-white border sm:rounded shadow p-2">
             <h2 class="font-normal text-center mb-2">User management</h2>
             <p>Here you can manage the users that have been created on the system</p>
-            <div class="bg-white border sm:rounded shadow">
-                <div class="flex shadow">
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Email
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            First name
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Last name
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Staff member
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Domain Administrator
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 px-2 py-2 font-semibold">
-                        <div class="">
-                            Domain
-                        </div>
-                    </div>
-                </div>
-                <div class="flex text-sm break-words items-center p-2" v-if="count == 0">
-                    <p>There are currently no users to display</p>
-                </div>
-                <div class="flex hover:bg-grey-lighter text-sm cursor-pointer break-words" v-for="item in users" :key="item.id" v-else @click="edit(item.id)">
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ item.email }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ item.first_name }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker hidden sm:block sm:w-1/5 border-r p-2">
-                        <div class="">
-                            <p>{{ item.last_name }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 sm:w-1/5 border-r p-2">
-                        <div class="text-grey-darker p-2">
-                            <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.is_staff, 'bg-grey': !item.is_staff }" >
-                                    {{ item.is_staff | yesno }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 sm:w-1/5 border-r p-2">
-                        <div class="text-grey-darker p-2">
-                            <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.mailuser.is_domain_admin, 'bg-grey': !item.mailuser.is_domain_admin }" >
-                                    {{ item.mailuser.is_domain_admin | yesno }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/3 sm:w-1/5 sm:w-1/5 p-2">
-                        <div class="">
-                            <p v-if="item.mailuser">{{ item.mailuser.domain_id }}</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-white border sm:rounded shadow table-wrapper">
+                <table class="table text-sm">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Staff member</th>
+                            <th>Domain Administrator</th>
+                            <th>Domain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="count == 0">
+                            <td colspan="6">There are currently no users to display</td>
+                        </tr>
+                        <tr v-for="item in users" :key="item.id" v-else @click="edit(item.id)">
+                            <td>{{ item.email }}</td>
+                            <td>{{ item.first_name }}</td>
+                            <td>{{ item.last_name }}</td>
+                            <td>
+                                <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
+                                    <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.is_staff, 'bg-grey': !item.is_staff }" >
+                                        {{ item.is_staff | yesno }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
+                                    <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.mailuser.is_domain_admin, 'bg-grey': !item.mailuser.is_domain_admin }" >
+                                        {{ item.mailuser.is_domain_admin | yesno }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span v-if="item.mailuser">{{ item.mailuser.domain_id }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="inline-flex pt-2 rounded" v-if="page_count > 1">
                 <button @click="previous" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-l" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">

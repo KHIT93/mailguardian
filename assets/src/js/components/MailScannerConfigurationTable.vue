@@ -1,41 +1,18 @@
 <template>
-    <div>
-        <div class="flex text-sm shadow">
-            <div class="text-grey-darker w-1/3 p-2">
-                <div class="font-semibold">
-                    Key
-                </div>
-            </div>
-            <div class="text-grey-darker w-1/3 p-2">
-                <div class="font-semibold">
-                    Value
-                </div>
-            </div>
-            <div class="text-grey-darker w-1/3 p-2">
-                <div class="font-semibold">
-                    File
-                </div>
-            </div>
-        </div>
-        <div class="shadow">
-            <div class="flex hover:bg-grey-lighter text-sm cursor-pointer" v-for="item in list.results" :key="item.id" @click="details(item.id)">
-                <div class="text-grey-darker w-1/3 p-2 overflow-hidden">
-                    <div class="">
-                        {{ item.key }}
-                    </div>
-                </div>
-                <div class="text-grey-darker w-1/3 p-2 overflow-hidden">
-                    <div class="">
-                        {{ item.value }}
-                    </div>
-                </div>
-                <div class="text-grey-darker w-1/3 p-2 overflow-hidden">
-                    <div class="">
-                        {{ item.filepath }}
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="table-wrapper">
+        <table class="table text-sm">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>File</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <mw-mailscanner-configuration-item :item="item" v-for="item in list.results" :key="item.id" @saved="saved()"></mw-mailscanner-configuration-item>
+            </tbody>
+        </table>
         <div class="inline-flex pt-2 rounded">
             <button @click="previous" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-l" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : list.current == 1}">
                 Prev
@@ -58,12 +35,16 @@
 
 <script>
 import router from '../routing/router';
+import MailScannerConfigurationItem from './MailScannerConfigurationItem.vue';
 export default {
     props: ['list'],
     data: () => {
         return {
             search_key: ""
         }
+    },
+    components: {
+        'mw-mailscanner-configuration-item': MailScannerConfigurationItem
     },
     methods: {
         previous() {
@@ -76,8 +57,8 @@ export default {
                 this.$emit('next');
             }
         },
-        details(id) {
-            router.push('/admin/mailscanner/configuration/'+id);
+        saved() {
+            this.$emit('saved');
         }
     }
 }

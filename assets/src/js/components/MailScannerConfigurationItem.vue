@@ -16,6 +16,7 @@
                 {{ item.value }}
             </div>
         </td>
+        <td>{{ item.filepath }}</td>
         <td>
             <div class="" v-if="editing">
                 <button type="button" @click="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-xs border-4 text-white py-1 px-1 rounded shadow" :class="{ 'bg-blue-lighter hover:bg-blue-lighter border-blue-lighter':saving }" :disabled="saving">
@@ -46,13 +47,14 @@ export default {
         this.form = new Form({
             id: this.item.id,
             key: this.item.key,
-            value: this.item.value
+            value: this.item.value,
+            filepath: this.item.filepath
         });
     },
     methods: {
         async submit() {
             this.saving = true;
-            await this.form.patch('/api/settings/'+this.item.id+'/').then(data => {
+            await this.form.patch('/api/mailscanner-configuration/'+this.item.id+'/').then(data => {
                 this.notify(this.createNotification('Settings saved', `The setting ${data.key} has been saved`, 'success'));                
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));                

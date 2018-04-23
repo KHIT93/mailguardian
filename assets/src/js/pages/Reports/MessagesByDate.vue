@@ -1,43 +1,26 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="sm:flex">
-            <div class="bg-white border sm:rounded shadow min-w-full">
-                <div class="flex shadow">
-                    <div class="text-grey-darker w-1/2 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Date
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/2 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Number of messages
-                        </div>
-                    </div>
-                </div>
-                <div class="flex hover:bg-grey-lighter text-sm" v-for="item in dates" :key="item.date">
-                    <div class="text-grey-darker w-1/2 border-r p-2">
-                        <div class="">
-                            <p>{{ item.date }}</p>
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/2 border-r p-2">
-                        <div class="">
-                            <p>{{ item.id__count }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex shadow border-t-2">
-                    <div class="text-grey-darker w-1/2 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            Total
-                        </div>
-                    </div>
-                    <div class="text-grey-darker w-1/2 border-r px-2 py-2 font-semibold">
-                        <div class="">
-                            {{ messageTotalCount }}
-                        </div>
-                    </div>
-                </div>
+            <div class="bg-white border sm:rounded shadow min-w-full table-wrapper">
+                <table class="table text-sm">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Number of messages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in dates" :key="item.date">
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.id__count }}</td>
+                        </tr>
+                        <tr>
+                        <tr class="font-extrabold border-t-2 text-base">
+                            <td>Total</td>
+                            <td>{{ messageTotalCount }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

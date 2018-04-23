@@ -46,7 +46,7 @@
                 </div>
                 </form>
             </div>
-            <mw-mailscanner-configuration-table :list="config" @next="next" @previous="previous"></mw-mailscanner-configuration-table>
+            <mw-mailscanner-configuration-table :list="config" @next="next" @previous="previous" @saved="get(query, file)"></mw-mailscanner-configuration-table>
         </div>
     </div>
 </template>

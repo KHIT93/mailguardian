@@ -4,7 +4,7 @@
         <div class="fixed z-10 w-full" v-if="isLoggedIn">
             <!-- Top nav -->
             <div class="bg-grey-darkest" :class="{ 'shadow-md' : hide, 'lg:shadow-md':!hide }">
-                <div class="container mx-auto px-4">
+                <div class="mx-auto px-4">
                     <div class="flex items-center lg:justify-between py-2 md:py-0">
                         <div class="w-1/4 lg:hidden">
                             <div href="#" @click="hide = !hide">

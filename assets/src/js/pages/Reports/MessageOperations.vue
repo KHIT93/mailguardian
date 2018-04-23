@@ -22,12 +22,32 @@
             </div>
         </div>
         <div class="container mx-auto px-4">
-            <div class="bg-white border sm:rounded shadow">
-                <mw-message-list-header></mw-message-list-header>
-                <div class="flex text-sm break-words items-center p-2" v-if="message_count == 0">
-                    <p>There are currently no messages to display</p>
-                </div>
-                <mw-message-list-entry v-for="item in messages" :key="item.id" :item="item" @click="item.selected = !item.selected" v-else :class="{ 'bg-blue-lighter hover:bg-blue-light': item.selected }"></mw-message-list-entry>
+            <div class="bg-white border sm:rounded shadow table-wrapper">
+                <table class="table text-sm cursor-pointer break-words">
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                            <th class="hidden md:table-cell">Subject</th>
+                            <th>Recieved</th>
+                            <th class="hidden md:table-cell">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="message_count == 0">
+                            <td colspan="5">
+                                There are currently no messages to display
+                            </td>
+                        </tr>
+                        <tr v-for="item in messages" :key="item.id" class="text-grey-darker" @click="item.selected = !item.selected" v-else :class="{ 'bg-blue-lighter hover:bg-blue-light': item.selected }">
+                            <td>{{ item.from_address }}</td>
+                            <td>{{ item.to_address }}</td>
+                            <td class="hidden md:table-cell">{{ item.subject }}</td>
+                            <td>{{ item.timestamp }}</td>
+                            <td class="hidden md:table-cell">Status</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="container mx-auto px-4">
@@ -44,15 +64,9 @@
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';
-import MessageListHeader from '../../components/MessageListHeader.vue';
-import MessageListEntry from '../../components/MessageListEntry.vue';
 import Form from '../../classes/Form';
 import OperatableMessage from '../../classes/OperatableMessage';
 export default {
-    components: {
-        'mw-message-list-entry': MessageListEntry,
-        'mw-message-list-header': MessageListHeader
-    },
     data: () => {
         return {
             messages: [],
