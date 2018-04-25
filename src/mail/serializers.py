@@ -72,7 +72,8 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
             if 'too large' in raw:
                 too_large = True
             print(obj.id)
-            del(raw[1])
+            if not too_large:
+                del(raw[1])
             del(raw[0])
             for r in raw:
                 if not r.startswith('required'):
