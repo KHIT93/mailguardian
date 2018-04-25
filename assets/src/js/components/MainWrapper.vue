@@ -34,7 +34,7 @@
         </div>
         <div class="lg:flex">
             <!-- Secondary -->
-            <div v-if="isLoggedIn" class="bg-grey-darkest lg:shadow-md lg:block lg:bg-white lg:border-b lg:w-1/5 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
+            <div v-if="isLoggedIn" class="bg-grey-darkest lg:shadow-md lg:block lg:bg-white lg:border-b lg:w-1/5 xxl:w-1/6 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
                 <div class="container mx-auto px-4">
                     <div class="">
                         <div class="flex -mb-px" @click="hideMenu()">
@@ -135,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div :class="{ 'pt-0 lg:pt-12' : !hide, 'pt-12': hide, 'w-full':!isLoggedIn, 'lg:w-4/5':isLoggedIn }">
+            <div :class="{ 'pt-0 lg:pt-12' : !hide, 'pt-12': hide, 'w-full':!isLoggedIn, 'lg:w-4/5 xxl:w-5/6':isLoggedIn }">
                 <slot></slot>
             </div>
         </div>
