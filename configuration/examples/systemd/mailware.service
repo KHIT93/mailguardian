@@ -6,7 +6,7 @@ After=network.target
 User=mailware
 Group=mtagroup
 WorkingDirectory=/home/mailware/app/src
-ExecStart=/home/mailware/app/bin/gunicorn --access-logfile - --workers 4 --bind unix:/home/mailware/app/run/mailware.sock mailware.wsgi:application
+ExecStart=/home/mailware/app/bin/gunicorn --access-logfile /var/log/mailware/app.log --workers 4 --bind unix:/home/mailware/app/run/mailware.sock mailware.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
