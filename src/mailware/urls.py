@@ -22,7 +22,7 @@ from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, Settings
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
-from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView
+from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView, MessagesPerHourApiView, TopSendersByQuantityApiView, TopSendersByVolumeApiView, TopRecipientsByQuantityApiView, TopRecipientsByVolumeApiView, TopSenderDomainsByQuantityApiView, TopSenderDomainsByVolumeApiView, TopRecipientDomainsByQuantityApiView, TopRecipientDomainsByVolumeApiView
 from domains.viewsets import DomainViewSet, MailUserViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
@@ -52,6 +52,15 @@ urlpatterns = [
     path('api/reports/messages/', MessageListApiView.as_view()),
     path('api/reports/messages-by-date/', MessagesByDateApiView.as_view()),
     path('api/reports/top-mail-relays/', TopMailRelaysApiView.as_view()),
+    path('api/reports/messages-per-hour/', MessagesPerHourApiView.as_view()),
+    path('api/reports/top-senders-by-quantity/', TopSendersByQuantityApiView.as_view()),
+    path('api/reports/top-senders-by-volume/', TopSendersByVolumeApiView.as_view()),
+    path('api/reports/top-recipients-by-quantity/', TopRecipientsByQuantityApiView.as_view()),
+    path('api/reports/top-recipients-by-volume/', TopRecipientsByVolumeApiView.as_view()),
+    path('api/reports/top-sender-domains-by-quantity/', TopSenderDomainsByQuantityApiView.as_view()),
+    path('api/reports/top-sender-domains-by-volume/', TopSenderDomainsByVolumeApiView.as_view()),
+    path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
+    path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
     path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

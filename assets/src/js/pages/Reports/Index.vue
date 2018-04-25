@@ -1,26 +1,26 @@
 <template>
-    <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="sm:flex">
-            <div class="sm:w-2/3 sm:mr-1">
-                <div class="sm:flex">
-                    <div class="sm:w-1/2 p-2 bg-white border sm:rounded shadow mb-2 sm:mb-0 sm:mr-1">
+    <div class="md:container mx-auto md:px-4 pt-6 pb-8 xxl:w-1/2">
+        <div class="md:flex">
+            <div class="w-full md:mr-1">
+                <div class="md:flex">
+                    <div class="md:w-1/2 p-2 bg-white border md:rounded shadow mb-2 md:mb-0 md:mr-1">
                         <h2 class="font-normal text-lg text-center">Currently applied filters</h2>
                         <hr>
                         <div class="text-sm text-grey-dark" v-if="activeFiltersCount == 0">
                             You have not configured any filters. Please use the options below to set some filters
                         </div>
-                        <div class="sm:flex hover:bg-grey-lighter text-sm pb-1" v-for="(value, key) in activeFilters" :key="key" v-else>
-                            <div class="sm:w-3/4 pt-1">
+                        <div class="md:flex hover:bg-grey-lighter text-sm pb-1" v-for="(value, key) in activeFilters" :key="key" v-else>
+                            <div class="md:w-3/4 pt-1">
                                 {{ key.replace('_', ' ') }}&nbsp;{{ filterOptions[key].operators.filter(operator => operator.value == value.operator)[0].label }}&nbsp;{{ value.value }}
                             </div>
-                            <div class="sm:w-1/4 text-right">
+                            <div class="md:w-1/4 text-right">
                                 <button role="button" @click="remove_filter(key)" class="bg-red hover:bg-red-dark text-white py-1 px-2 border border-red-light rounded shadow text-sm no-underline ml-2">
                                     Remove
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="sm:w-1/2 p-2 bg-white border sm:rounded shadow mb-2 sm:mb-0 sm:ml-1">
+                    <div class="md:w-1/2 p-2 bg-white border md:rounded shadow mb-2 md:mb-0 md:ml-1">
                         <h2 class="font-normal text-lg text-center">Add a new filter</h2>
                         <hr>
                         <form @submit.prevent="add_filter">
@@ -57,7 +57,9 @@
                     </div>
                 </div>
             </div>
-            <div class="sm:w-1/3 p-2 bg-white border sm:rounded shadow mb-2 sm:mb-0 sm:ml-1">
+        </div>
+        <div class="md:flex md:mr-1 mt-1">
+            <div class="w-full md:w-1/2 p-2 bg-white border md:rounded shadow mb-2 md:mb-0 md:mr-1">
                 <h2 class="font-normal text-lg text-center">Statistics</h2>
                 <hr>
                 <div class="sm:flex hover:bg-grey-lighter text-sm">
@@ -84,7 +86,8 @@
                         {{ message_count }}
                     </div>
                 </div>
-                <hr>
+            </div>
+            <div class="md:w-1/2 p-2 bg-white border md:rounded shadow mb-2 md:mb-0 md:ml-1">
                 <h2 class="font-normal text-lg text-center">Reports</h2>
                 <hr>
                 <div class="hover:bg-grey-lighter text-sm">
@@ -97,10 +100,43 @@
                     <router-link to="/reports/messages-by-date">Total messages by date</router-link>
                 </div>
                 <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/messages-per-hour">Messages per hour in the last 24 hours</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
                     <router-link to="/reports/top-mail-relays">Top 10 mail relays</router-link>
                 </div>
                 <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-senders-by-quantity">Top 10 senders by quantity</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-senders-by-volume">Top 10 senders by volume</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-recipients-by-quantity">Top 10 recipients by quantity</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-recipients-by-volume">Top 10 recipients by volume</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-sender-domains-by-quantity">Top 10 sender domains by quantity</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-sender-domains-by-volume">Top 10 sender domains by volume</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-recipient-domains-by-quantity">Top 10 recipient domains by quantity</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/top-recipient-domains-by-volume">Top 10 recipient domains by volume</router-link>
+                </div>
+                <!-- <div class="hover:bg-grey-lighter text-sm">
+                    <router-link to="/reports/sa-score-distribution">SpamAssassin score distribution</router-link>
+                </div>
+                <div class="hover:bg-grey-lighter text-sm">
                     <router-link to="/reports/sa-rule-hits">Spam rule hits</router-link>
+                </div> -->
+                <div class="hover:bg-grey-lighter text-sm" v-if="user.is_staff">
+                    <router-link to="/admin/audit-log">Audit Log</router-link>
                 </div>
             </div>
         </div>
@@ -160,7 +196,7 @@ export default {
                 return this.selectedFilterOptions.field_type;
             }
         },
-        ...mapGetters(['filters', 'filterOptions', 'isLoggedIn', 'loading'])
+        ...mapGetters(['filters', 'filterOptions', 'isLoggedIn', 'loading', 'user'])
     },
     methods: {
         get() {

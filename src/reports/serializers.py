@@ -7,3 +7,39 @@ class MessagesByDateSerializer(serializers.Serializer):
 class MessageRelaysSerializer(serializers.Serializer):
     client_ip = serializers.CharField(max_length=255)
     id__count = serializers.IntegerField()
+
+class MessagesPerHourSerializer(serializers.Serializer):
+    timestamp = serializers.CharField(max_length=255)
+    id__count = serializers.IntegerField()
+
+class TopSendersByQuantitySerializer(serializers.Serializer):
+    from_address = serializers.CharField(max_length=255)
+    id__count = serializers.IntegerField()
+
+class TopSendersByVolumeSerializer(serializers.Serializer):
+    from_address = serializers.CharField(max_length=255)
+    size__sum = serializers.IntegerField()
+
+class TopRecipientsByQuantitySerializer(serializers.Serializer):
+    to_address = serializers.CharField(max_length=255)
+    id__count = serializers.IntegerField()
+
+class TopRecipientsByVolumeSerializer(serializers.Serializer):
+    to_address = serializers.CharField(max_length=255)
+    size__sum = serializers.IntegerField()
+
+class TopSenderDomainsByQuantitySerializer(serializers.Serializer):
+    from_domain = serializers.CharField(max_length=255)
+    id__count = serializers.IntegerField()
+
+class TopSenderDomainsByVolumeSerializer(serializers.Serializer):
+    from_domain = serializers.CharField(max_length=255)
+    size__sum = serializers.IntegerField()
+
+class TopRecipientDomainsByQuantitySerializer(serializers.Serializer):
+    to_domain = serializers.CharField(max_length=255)
+    id__count = serializers.IntegerField()
+
+class TopRecipientDomainsByVolumeSerializer(serializers.Serializer):
+    to_domain = serializers.CharField(max_length=255)
+    size__sum = serializers.IntegerField()
