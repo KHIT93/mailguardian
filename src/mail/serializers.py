@@ -66,8 +66,11 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_report(self, obj):
         report = {}
+        too_large = False
         if not obj.contents == None:
-            raw = obj.contents.replace('not spam, ', '').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').replace('autolearn=', '').split(', ')
+            raw = obj.contents.replace('not spam, ', '').replace('not spam ', '').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').replace('autolearn=', '').split(', ')
+            if '(too large)' in raw:
+                too_large = True
             print(obj.id)
             del(raw[1])
             del(raw[0])
@@ -78,6 +81,8 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
                         report[key] = value
                     except:
                         pass
+            if too_large:
+                report['TOO_LARGE'] = 0.00
         return report
 
 class RblReportSerializer(serializers.HyperlinkedModelSerializer):
