@@ -68,12 +68,13 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
         report = {}
         too_large = False
         if not obj.contents == None:
-            raw = obj.contents.replace('not spam, ', '').replace('not spam ', '').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').replace('autolearn=', '').split(', ')
-            if '(too large)' in raw:
+            raw = obj.contents.replace('not spam, ', '').replace('not spam (too large)', 'too large').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').replace('autolearn=', '').split(', ')
+            if 'too large' in raw:
                 too_large = True
             print(obj.id)
-            del(raw[1])
-            del(raw[0])
+            if not too_large:
+                del(raw[1])
+                del(raw[0])
             for r in raw:
                 if not r.startswith('required'):
                     try:
