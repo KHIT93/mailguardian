@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from domains.serializers import MailUserSerializer
-from .models import MailScannerConfiguration, Setting
+from .models import MailScannerConfiguration, Setting, AuditLog
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -27,3 +27,8 @@ class SettingsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Setting
         fields = ('id', 'url', 'key', 'value')
+
+class AuditLogSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = AuditLog
+        fields = ('id', 'url', 'user', 'ip_address', 'timestamp', 'module', 'action', 'message')

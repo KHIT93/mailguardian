@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
-from .models import MailScannerConfiguration, Setting
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer
+from .models import MailScannerConfiguration, Setting, AuditLog
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, AuditLogSerializer
 from django.db.models import Q
 
 # ViewSets define the view behavior.
@@ -34,3 +34,9 @@ class SettingsViewSet(viewsets.ModelViewSet):
     serializer_class = SettingsSerializer
     permission_classes = (IsAdminUser,)
     model = Setting
+
+class AuditLogViewSet(viewsets.ModelViewSet):
+    queryset = AuditLog.objects.all()
+    serializer_class = AuditLogSerializer
+    permission_classes = (IsAdminUser,)
+    model = AuditLog
