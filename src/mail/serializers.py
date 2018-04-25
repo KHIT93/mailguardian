@@ -72,9 +72,8 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
             if 'too large' in raw:
                 too_large = True
             print(obj.id)
-            if not too_large:
-                del(raw[1])
-                del(raw[0])
+            del(raw[1])
+            del(raw[0])
             for r in raw:
                 if not r.startswith('required'):
                     try:
@@ -83,7 +82,7 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
                     except:
                         pass
             if too_large:
-                report['TOO_LARGE'] = 0.00
+                report['TOO_LARGE'] = 'The message is too large to be scanned by SpamAssassin'
         return report
 
 class RblReportSerializer(serializers.HyperlinkedModelSerializer):
