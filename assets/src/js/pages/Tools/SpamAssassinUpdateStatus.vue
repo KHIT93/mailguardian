@@ -38,7 +38,7 @@ export default {
         sync() {
             this.toggleLoading();
             axios.post('/api/sa-rules/sync/').then(response => {
-                this.last_updated = response.data.value;
+                this.notify(this.createNotification('Rule descriptions synchronized', 'The spamassassin rule descriptions have been synchronized with the application', 'success'))
                 this.toggleLoading();
             }).catch(error => {
                 this.toggleLoading();
