@@ -203,6 +203,7 @@ MAILSCANNER_QUARANTINE_DIR = MAILWARE_ENV.get("hostconfig.mailscanner_quarantine
 SALEARN_BIN = MAILWARE_ENV.get('hostconfig.salearn_bin', '/usr/bin/salearn')
 SA_BIN = MAILWARE_ENV.get('hostconfig.sa_bin', '/usr/bin/spamassassin')
 SA_RULES_DIR = MAILWARE_ENV.get('hostconfig.sa_rules_dir', '/usr/share/spamassassin')
+SA_PREF = MAILWARE_ENV.get('hostconfig.sa_pref_file', MAILSCANNER_CONFIG_DIR+'/spamassassin.conf')
 
 # Retention policy
 RECORD_RETENTION = MAILWARE_ENV.get('retention.records', 60)
