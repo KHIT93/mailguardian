@@ -127,7 +127,8 @@ class SpamAssassinRule(models.Model):
         output = subprocess.check_output("/bin/grep -hr '^\s*describe' {0} {1} /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin /var/lib/spamassassin 2>/dev/null | /usr/bin/sort | /usr/bin/uniq".format(settings.SA_RULES_DIR, settings.SA_PREF), shell=True)
         descriptions = re.findall(r"^(?:\s*)describe\s+(\S+)\s+(.+)$", output.decode(), re.MULTILINE)
         for match in descriptions:
-            if rule = SpamAssassinRule.objects.filter(key=match[0]).first():
+            if SpamAssassinRule.objects.filter(key=match[0]).first():
+                rule = SpamAssassinRule.objects.filter(key=match[0]).first()
                 rule.value = match[1]
                 rule.save()
             else:
