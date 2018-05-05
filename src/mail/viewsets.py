@@ -144,10 +144,11 @@ class SpamAssassinRuleViewSet(viewsets.ModelViewSet):
     model = SpamAssassinRule
     permission_classes = (IsAdminUser,)
 
-    @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='sync', url_name='sa-rule-descriptions-sync')
+    @action(methods=['post'], detail=False, permission_classes=[IsAdminUser], url_path='sync', url_name='sa-rule-descriptions-sync')
     def post_sync_rule_descriptions(self, request):
         try:
-            SpamAssassinRule().sync_files()
+            sa = SpamAssassinRule()
+            sa.sync_files()
         except Exception as e:
             return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
