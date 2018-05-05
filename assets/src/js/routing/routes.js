@@ -23,6 +23,7 @@ import ReportTopRecipientDomainsByQuantity from '../pages/Reports/TopRecipientDo
 import ReportTopRecipientDomainsByVolume from '../pages/Reports/TopRecipientDomainsByVolume.vue';
 import Tools from '../pages/Tools/Index.vue';
 import Mailqueue from '../pages/Tools/Mailqueue.vue';
+import SpamAssassinUpdateStatus from '../pages/Tools/SpamAssassinUpdateStatus.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
 import Users from '../pages/Admin/Users/Index.vue';
 import UserForm from '../pages/Admin/Users/Form.vue';
@@ -54,6 +55,7 @@ export default [
 
     { path: '/tools', component: Tools, name: 'tools.index' },
     { path: '/tools/mailqueue', component: Mailqueue, name: 'tools.mailqueue' },
+    { path: '/tools/sa-status', component: SpamAssassinUpdateStatus, name: 'tools.sa.status'},
 
     { path: '/admin/domains', component: Domains, name: 'admin.domains.index' },
     { path: '/admin/domains/add', component: DomainForm, name: 'admin.domains.add' },

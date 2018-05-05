@@ -9,7 +9,7 @@
                     <li>View job queue</li>
                     <li>Clam AV Status</li>
                     <li>GeoIP update status</li>
-                    <li>SpamAssassin rules status</li>
+                    <li><router-link to="/tools/sa-status">SpamAssassin rules status</router-link></li>
                 </ul>
             </div>
             <div>
