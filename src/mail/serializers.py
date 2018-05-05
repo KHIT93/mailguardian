@@ -1,4 +1,4 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule
 from rest_framework import serializers
 
 # Serializers define the API representation.
@@ -79,7 +79,12 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
                 if not r.startswith('required'):
                     try:
                         key, value = r.split(' ')
-                        report[key] = value
+                        description = ''
+                        try:
+                            description = SpamAssassinRule.objects.filter(key=key).first().value
+                        except:
+                            description = ''
+                        report[key] = { 'value' : value, 'description': description }
                     except:
                         pass
             if too_large:
@@ -149,4 +154,9 @@ class PostqueueStoreSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('mails', 'loaded_at')
+
+class SpamAssassinRuleSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SpamAssassinRule
+        fields = ('id', 'url', 'key', 'value')
 

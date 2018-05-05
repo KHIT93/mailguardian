@@ -1,5 +1,5 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, SpamAssassinRuleSerializer
 from mailware.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -137,3 +137,17 @@ class McpReportViewSet(viewsets.ModelViewSet):
             return self.queryset.filter(message_id=self.request.query_params.get('message'))
         else:
             return self.queryset
+
+class SpamAssassinRuleViewSet(viewsets.ModelViewSet):
+    queryset = SpamAssassinRule.objects.all()
+    serializer_class = SpamAssassinRuleSerializer
+    model = SpamAssassinRule
+    permission_classes = (IsAdminUser,)
+
+    @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='sync', url_name='sa-rule-descriptions-sync')
+    def post_sync_rule_descriptions(self, request):
+        try:
+            SpamAssassinRule().sync_files()
+        except Exception as e:
+            return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
