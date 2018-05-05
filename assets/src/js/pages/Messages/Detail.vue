@@ -290,10 +290,13 @@
                         <div class="text-center font-bold bg-grey-lightest" v-show="spamreport.id">Spam report</div>
                         <div class="flex hover:bg-grey-lighter text-sm" v-for="(value, key) in spamreport.report" :key="key">
                             <div class="w-3/4">
-                                <a class="text-black no-underline" :href="'http://wiki.apache.org/spamassassin/Rules/' + key" target="_blank">{{ key }}</a>
+                                <a class="text-black no-underline" :href="'http://wiki.apache.org/spamassassin/Rules/' + key" target="_blank">
+                                    <span v-if="value.description">{{ value.description }}</span>
+                                    <span v-else>{{ key }}</span>
+                                </a>
                             </div>
                             <div class="w-1/4 text-right">
-                                {{ value }}
+                                {{ value.value }}
                             </div>
                         </div>
                         <div class="text-center font-bold bg-grey-lightest" v-show="mcpreport.id">MCP report</div>
