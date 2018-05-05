@@ -7,6 +7,7 @@ from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from rest_framework import status
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -40,7 +41,9 @@ class SettingsViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='by-key', url_name='settings-by-key')
     def post_search_by_key(self, request, pk=None):
-        entity = get_object_or_404(Setting.objects.all(), key=request.POST['key'])
+        if not 'key' in request.POST:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+        entity = get_object_or_404(Setting, key=request.POST['key'])
         serializer = SettingsSerializer(entity, context={'request': request})
         return Response(serializer.data)
 

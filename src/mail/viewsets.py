@@ -151,8 +151,7 @@ class SpamAssassinRuleViewSet(viewsets.ModelViewSet):
         try:
             sa = SpamAssassinRule()
             sa.sync_files()
-            settings, created = Setting.objects.get_or_create(key='sa.last_updated')
-            settings.value = str(datetime.datetime.now())
+            Setting.objects.update_or_create(key='sa.last_updated', defaults={'value':str(datetime.datetime.now())})
         except Exception as e:
             return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
