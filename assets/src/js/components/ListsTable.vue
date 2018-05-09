@@ -22,12 +22,12 @@
             <div class="flex hover:bg-grey-lighter text-sm" v-for="item in list.results" :key="item.id">
                 <div class="text-grey-darker w-1/3 md:w-2/5 p-2">
                     <div class="">
-                        {{ item._from }}
+                        {{ item.from_address }}
                     </div>
                 </div>
                 <div class="text-grey-darker w-1/3 md:w-2/5 p-2">
                     <div class="">
-                        {{ item._to }}
+                        {{ item.to_address }}
                     </div>
                 </div>
                 <div class="text-grey-darker w-1/3 md:w-1/5 p-2">

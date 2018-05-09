@@ -51,7 +51,7 @@
                         </div>
                         <div class="md:w-3/4">
                             <div class="relative">
-                                <select v-model="listing_choice_from" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <select v-model="listing_choice_from" @change="from_reset" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
                                     <option value="">-- Select --</option>
                                     <option value="from_address">Senders email address or domain</option>
                                     <option value="from_ip_address">Senders IP-address</option>
@@ -71,9 +71,9 @@
                         </label>
                     </div>
                     <div class="md:w-3/4 inline-flex">
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="from_address" v-model="form.from_address" id="from_address" type="email" placeholder="JaneDoe">
+                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="from_address" v-model="from" id="from_address" type="email" placeholder="JaneDoe">
                         <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue w-full rounded py-2 px-4 text-grey-darker" name="from_domain" v-model="form.from_domain" id="from_domain" type="text" placeholder="example.com">
+                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue w-full rounded py-2 px-4 text-grey-darker" name="from_domain" v-model="from_domain" id="from_domain" type="text" placeholder="example.com">
                     </div>
                 </div>
 
@@ -84,7 +84,7 @@
                         </label>
                     </div>
                     <div class="md:w-3/4">
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="from_ip_address" v-model="form.from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444">
+                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444">
                     </div>
                 </div>
 
@@ -97,7 +97,7 @@
                         </div>
                         <div class="md:w-3/4">
                             <div class="relative">
-                                <select v-model="listing_choice_to" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <select v-model="listing_choice_to" @change="to_reset" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
                                     <option value="">-- Select --</option>
                                     <option value="to_address">Recipients email address or domain</option>
                                     <option value="to_ip_address">Recipients IP-address</option>
@@ -117,9 +117,9 @@
                         </label>
                     </div>
                     <div class="md:w-3/4 inline-flex">
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="form.to_address" id="to_address" type="email" placeholder="JohnDoe">
+                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="to" id="to_address" type="email" placeholder="JohnDoe">
                         <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="to_domain" v-model="form.to_domain" id="to_domain" type="text" placeholder="example.com">                    
+                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com">                    
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@
                         </label>
                     </div>
                     <div class="md:w-3/4">
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="to_ip_address" v-model="form.to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444">
+                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444">
                     </div>
                 </div>
             </form>
@@ -161,14 +161,16 @@ export default {
             listing_choice_from: '',
             listing_choice_to: '',
             form: new Form({
-                from_address: '',
-                to_address: '',
-                from_domain: '',
-                to_domain: '',
-                from_ip_address: null,
-                to_ip_address: null,
+                from_address: this.from_address,
+                to_address: this.to_address,
                 listing_type: ''
-            })
+            }),
+            from_ip_address: '',
+            to_ip_address: '',
+            from_domain: '',
+            to_domain: '',
+            from: '',
+            to: ''
         }
     },
     mounted() {
@@ -176,6 +178,26 @@ export default {
         this.get();
     },
     computed: {
+        from_address() {
+            if (this.from_ip_address && this.from_ip_address != '') {
+                this.form.from_address = this.from_ip_address;
+                return this.from_ip_address;
+            }
+            else {
+                this.form.from_address = this.from + '@' + this.from_domain;
+                return this.from + '@' + this.from_domain;
+            }
+        },
+        to_address() {
+            if (this.to_ip_address && this.to_ip_address != '') {
+                this.form.to_address = this.to_ip_address;
+                return this.to_ip_address;
+            }
+            else {
+                this.form.to_address = this.to + '@' + this.to_domain;
+                return this.to + '@' + this.to_domain;
+            }
+        },
         ...mapGetters(['loading'])
     },
     methods: {
@@ -239,6 +261,8 @@ export default {
         },
         cancel_list() {
             this.show_modal = false;
+            this.from_reset();
+            this.to_reset();
             this.form.reset();
         },
         delete_entry_modal(item) {
@@ -282,6 +306,16 @@ export default {
             let page = 0;
             page = this.blacklist.previous.split("?page=")[1];
             this.get_blacklist(this.search_query, page);
+        },
+        from_reset() {
+            this.from_ip_address = '';
+            this.from_domain = '';
+            this.from = '';
+        },
+        to_reset() {
+            this.to_ip_address = '';
+            this.to_domain = '';
+            this.to = '';
         },
         ...mapMutations(['toggleLoading'])
     }

@@ -14,8 +14,7 @@ class ListEntryViewSet(viewsets.ModelViewSet):
         if self.request.query_params.__contains__('search'):
             search_key = self.request.query_params.get('search')
             return self.queryset.filter(
-                    Q(from_address__icontains=search_key) | Q(from_domain__icontains=search_key) | Q(from_ip_address__icontains=search_key) |
-                    Q(to_address__icontains=search_key) | Q(to_domain__icontains=search_key) | Q(to_ip_address__icontains=search_key)
+                    Q(from_address__icontains=search_key) | Q(to_address__icontains=search_key)
                 )
         else:
             return self.queryset
