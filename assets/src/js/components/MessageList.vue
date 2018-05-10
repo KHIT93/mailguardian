@@ -17,12 +17,21 @@
                             There are currently no messages to display
                         </td>
                     </tr>
-                    <tr v-for="item in messages" :key="item.id" class="text-grey-darker" @click="details(item.id)" v-else>
+                    <tr v-for="item in messages" :key="item.id" class="text-grey-darkest" :class="computeColorClasses(item)" @click="details(item.id)" v-else>
                         <td>{{ item.from_address }}</td>
                         <td>{{ item.to_address }}</td>
                         <td class="hidden md:table-cell">{{ item.subject }}</td>
                         <td>{{ item.timestamp }}</td>
-                        <td class="hidden md:table-cell">Status</td>
+                        <td class="hidden md:table-cell">
+                            <span v-if="item.is_clean">Clean</span>
+                            <template v-else>
+                                <span v-if="item.is_spam">Spam</span>
+                                <span v-if="item.is_rbl_listed">RBL</span>
+                                <span v-if="item.infected">Infected</span>
+                            </template>
+                            <span v-if="item.blacklisted">Blacklisted</span>
+                            <span v-if="item.whitelisted">Whitelisted</span>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -45,6 +54,20 @@ export default {
     methods: {
         details(id) {
             router.push('/messages/'+id);
+        },
+        computeColorClasses(item) {
+            if (item.is_spam) {
+                return 'bg-red';
+            }
+            if (item.is_rbl_listed) {
+                return 'bg-orange';
+            }
+            if (item.blacklisted) {
+                return 'bg-black text-white';
+            }
+            if (item.whitelisted) {
+                return 'bg-green-lighter';
+            }
         }
     }
 }

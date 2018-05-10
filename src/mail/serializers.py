@@ -28,16 +28,24 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'is_rbl_listed',
             'quarantined',
             'infected',
-            'queue_file_exists'
+            'queue_file_exists',
+            'is_clean'
             )
     queue_file_exists = serializers.SerializerMethodField()
     mailq_path = serializers.SerializerMethodField()
+    is_clean = serializers.SerializerMethodField()
 
     def get_queue_file_exists(self, obj):
         return obj.queue_file_exists()
     
     def get_mailq_path(self, obj):
         return obj.file_path()
+
+    def get_is_clean(self, obj):
+        if not obj.is_spam and not obj.is_rbl_listed and not obj.infected:
+            return True
+        else:
+            return False
 
 class HeaderSerializer(serializers.HyperlinkedModelSerializer):
     headers = serializers.SerializerMethodField()
