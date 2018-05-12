@@ -1,4 +1,4 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule, TransportLog
 from rest_framework import serializers
 
 # Serializers define the API representation.
@@ -168,3 +168,7 @@ class SpamAssassinRuleSerializer(serializers.HyperlinkedModelSerializer):
         model = SpamAssassinRule
         fields = ('id', 'url', 'key', 'value')
 
+class TransportLogSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TransportLog
+        fields = ('id', 'url', 'message_id', 'timestamp', 'transport_host', 'transport_type', 'relay_host', 'dsn', 'dsn_message', 'delay')

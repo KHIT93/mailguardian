@@ -1,5 +1,5 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, SpamAssassinRuleSerializer
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule, TransportLog
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, SpamAssassinRuleSerializer, TransportLogSerializer
 from mailware.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -31,6 +31,13 @@ class MessageViewSet(viewsets.ModelViewSet):
             f.close()
         
         serializer = MessageContentsSerializer(data)
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
+    def get_message_transport_logs(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        
+        serializer = TransportLogSerializer(message.transportlog_set.all(), many=True, context={'request': request})
         return Response(serializer.data)
     
     @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='queue', url_name='message-queue')
@@ -155,3 +162,9 @@ class SpamAssassinRuleViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+class TransportLogViewSet(viewsets.ModelViewSet):
+    queryset = TransportLog.objects.all()
+    serializer_class = TransportLogSerializer
+    model = TransportLog
+    permission_classes = (IsAuthenticated,)

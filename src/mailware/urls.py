@@ -19,7 +19,7 @@ from django.urls import path, re_path, include
 from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
 from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet
-from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, SpamAssassinRuleViewSet
+from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, SpamAssassinRuleViewSet, TransportLogViewSet
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView, MessagesPerHourApiView, TopSendersByQuantityApiView, TopSendersByVolumeApiView, TopRecipientsByQuantityApiView, TopRecipientsByVolumeApiView, TopSenderDomainsByQuantityApiView, TopSenderDomainsByVolumeApiView, TopRecipientDomainsByQuantityApiView, TopRecipientDomainsByVolumeApiView
@@ -35,6 +35,7 @@ router.register(r'spam-reports', SpamReportViewSet)
 router.register(r'rbl-reports', RblReportViewSet)
 router.register(r'mcp-reports', McpReportViewSet)
 router.register(r'mailscanner-reports', MailscannerReportViewSet)
+router.register(r'transport-logs', TransportLogViewSet)
 router.register(r'sa-rules', SpamAssassinRuleViewSet)
 router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)

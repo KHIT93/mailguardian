@@ -133,3 +133,17 @@ class SpamAssassinRule(models.Model):
                 rule.save()
             else:
                 SpamAssassinRule.objects.get_or_create(key=match[0], value=match[1])
+
+class TransportLog(models.Model):
+    class Meta:
+        ordering = ('timestamp',)
+        get_latest_by = 'timestamp'
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(db_index=True)
+    transport_host = models.CharField(max_length=255, db_index=True)
+    transport_type = models.CharField(max_length=255, db_index=True)
+    relay_host = models.CharField(max_length=255, db_index=True)
+    dsn = models.CharField(max_length=255, db_index=True)
+    dsn_message = models.TextField(db_index=True)
+    delay = models.DurationField()

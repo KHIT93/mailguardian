@@ -273,7 +273,7 @@
                     </div>
                 </div>
             </div>
-            <div class="sm:flex">
+            <div class="sm:flex mb-2">
                 <div class="sm:w-1/2 sm:border-r">
                     <div class="text-center font-bold bg-grey-lightest">Message Headers</div>
                     <div class="flex hover:bg-grey-lighter text-xs" v-for="(value, key) in headers.headers" :key="key">
@@ -315,6 +315,33 @@
                     </div>
                 </div>
             </div>
+            <div class="w-full" v-if="transport_log.length">
+                <div class="text-center font-bold bg-grey-lightest">Transport log</div>
+                <div class="table-wrapper">
+                    <table class="table text-sm">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>DSN</th>
+                                <th>Message</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="log in transport_log" :key="log.id">
+                                <td>{{ log.timestamp }}</td>
+                                <td>{{ log.dsn }}</td>
+                                <td>{{ log.dsn_message }}</td>
+                                <td>{{ log.transport_host }}</td>
+                                <td>{{ log.relay_host }}</td>
+                                <td>{{ log.transport_type }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <mw-message-actions @view="showMessage" class="border-t" :uuid="uuid" v-if="message.queue_file_exists"></mw-message-actions>
             <mw-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message" v-if="message.queue_file_exists">
                 {{ message_contents }}
@@ -334,6 +361,7 @@ export default {
             rblreport: {},
             mcpreport: {},
             mailscanner_report: {},
+            transport_log: [],
             show_modal: false,
             show_listing_modal: false,
             listing_type: '',
@@ -399,6 +427,13 @@ export default {
                 this.notify(this.createNotification('An error occurred while getting the Mailscanning report', `${error}`, 'error'));
             })
         },
+        getTransportLog() {
+            axios.get('/api/messages/'+this.uuid+'/transport-log').then(response => {
+                this.transport_log = response.data;
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred while getting the Transport log', `${error}`, 'error'));
+            });
+        },
         showMessage() {
             this.getMessageContents().then(() => {
                 this.show_modal = true;
@@ -442,6 +477,7 @@ export default {
             this.getRblReport();
             this.getMcpReport();
             this.getMailscannerReport();
+            this.getTransportLog();
         });
     },
     components: {
