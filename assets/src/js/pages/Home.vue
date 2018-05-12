@@ -59,7 +59,9 @@
                 daily_total: 0,
                 daily_spam: 0,
                 daily_virus: 0,
-                chart: {},
+                chart: {
+                    'labels': []
+                },
                 chartheight: 150,
                 interval: 'last_hour'
             }
