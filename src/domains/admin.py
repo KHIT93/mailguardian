@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Domain, MailUser
+from .models import Domain
 
 # Register your models here.
 admin.site.register(Domain)
-admin.site.register(MailUser)

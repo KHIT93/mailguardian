@@ -5,16 +5,6 @@
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
                         <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
-                            Username*
-                        </label>
-                    </div>
-                    <div class="md:w-1/2">
-                        <input v-model="form.username" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="username" id="username" type="text" placeholder="JaneDoe" required>
-                    </div>
-                </div>
-                <div class="md:flex md:items-center mb-6">
-                    <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
                             Email address*
                         </label>
                     </div>
@@ -105,7 +95,7 @@ export default {
                     first_name: response.data.first_name,
                     last_name: response.data.last_name,
                     is_staff: response.data.is_staff,
-                    is_domain_admin: response.data.mailuser.is_domain_admin
+                    is_domain_admin: response.data.is_domain_admin
                 });
             })
         },

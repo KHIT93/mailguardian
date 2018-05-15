@@ -23,7 +23,7 @@ from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, M
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView, MessagesPerHourApiView, TopSendersByQuantityApiView, TopSendersByVolumeApiView, TopRecipientsByQuantityApiView, TopRecipientsByVolumeApiView, TopSenderDomainsByQuantityApiView, TopSenderDomainsByVolumeApiView, TopRecipientDomainsByQuantityApiView, TopRecipientDomainsByVolumeApiView
-from domains.viewsets import DomainViewSet, MailUserViewSet
+from domains.viewsets import DomainViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -41,7 +41,7 @@ router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
-router.register(r'mail-users', MailUserViewSet)
+# router.register(r'mail-users', MailUserViewSet)
 router.register(r'settings', SettingsViewSet)
 router.register(r'audit-log', AuditLogViewSet)
 

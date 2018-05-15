@@ -12,7 +12,6 @@
                             <th>Last name</th>
                             <th>Staff member</th>
                             <th>Domain Administrator</th>
-                            <th>Domain</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,13 +31,10 @@
                             </td>
                             <td>
                                 <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                    <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.mailuser.is_domain_admin, 'bg-grey': !item.mailuser.is_domain_admin }" >
-                                        {{ item.mailuser.is_domain_admin | yesno }}
+                                    <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.is_domain_admin, 'bg-grey': !item.is_domain_admin }" >
+                                        {{ item.is_domain_admin | yesno }}
                                     </span>
                                 </div>
-                            </td>
-                            <td>
-                                <span v-if="item.mailuser">{{ item.mailuser.domain_id }}</span>
                             </td>
                         </tr>
                     </tbody>
