@@ -6,7 +6,7 @@ from .models import MailScannerConfiguration, Setting, AuditLog
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'url', 'email', 'is_staff', 'is_domain_admin', 'is_active', 'first_name', 'last_name', 'full_name', 'date_joined')
+        fields = ('id', 'url', 'email', 'is_staff', 'is_domain_admin', 'is_active', 'first_name', 'last_name', 'full_name', 'date_joined', 'domains')
 
     full_name = serializers.SerializerMethodField()
     # mailuser = MailUserSerializer(many=False, read_only=True)

@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
+from domains.serializers import DomainSerializer
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -15,6 +16,13 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = (IsAdminUser,)
     model = User
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAdminUser], url_path='domains', url_name='user-domains')
+    def get_user_domains(self, request, pk=None):
+        user = get_object_or_404(User.objects.all(), pk=pk)
+        serializer = DomainSerializer(user.domains.all(), many=True, context={'request': request})
+        return Response(serializer.data)
+
 
 class MailScannerConfigurationViewSet(viewsets.ModelViewSet):
     queryset = MailScannerConfiguration.objects.all()
