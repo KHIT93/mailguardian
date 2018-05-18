@@ -41,6 +41,12 @@
                         </label>
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6" v-if="!form.is_staff">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <mw-user-domains :domains="form.domains" @submit="addDomain" @destroy="removeDomain"></mw-user-domains>
+                    </div>
+                </div>
                 <div class="flex flex-row-reverse border-t pt-2">
                     <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
                         Submit
@@ -58,8 +64,12 @@
 import { mapGetters, mapMutations } from 'vuex';
 import router from '../../../routing/router';
 import Form from '../../../classes/Form';
+import UserDomainTable from '../../../components/UserDomainTable.vue';
 export default {
     props: ['id'],
+    components: {
+        'mw-user-domains': UserDomainTable
+    },
     data: () => {
         return {
             entity: {},
@@ -77,7 +87,8 @@ export default {
                 first_name: '',
                 last_name: '',
                 is_staff: false,
-                is_domain_admin: false
+                is_domain_admin: false,
+                domains: []
             });
         }
     },
@@ -95,9 +106,13 @@ export default {
                     first_name: response.data.first_name,
                     last_name: response.data.last_name,
                     is_staff: response.data.is_staff,
-                    is_domain_admin: response.data.is_domain_admin
+                    is_domain_admin: response.data.is_domain_admin,
+                    domains: []
                 });
             })
+            axios.get('/api/users/'+this.id+'/domains/').then(response => {
+                this.form.domains = response.data;
+            });
         },
         submit() {
             if (this.id) {
@@ -133,6 +148,12 @@ export default {
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
+        },
+        addDomain(domain) {
+            this.form.domains.push(domain);
+        },
+        removeDomain(domain) {
+            this.form.domains.splice(this.form.domains.findIndex(d => d === domain), 1);
         },
         ...mapMutations(['notify'])
     }

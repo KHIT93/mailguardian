@@ -4,10 +4,12 @@ import components from './components/global_components';
 import * as moment from 'moment';
 import Nl2br from 'vue-nl2br';
 import PortalVue from 'portal-vue';
+import vSelect from 'vue-select';
 
 window.Vue = Vue;
 window.moment = moment;
-Vue.component('nl2br', Nl2br)
+Vue.component('nl2br', Nl2br);
+Vue.component('v-select', vSelect);
 Vue.use(PortalVue);
 
 import {store} from './vuex/store';
