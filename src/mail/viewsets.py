@@ -36,8 +36,47 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
     def get_message_transport_logs(self, request, pk=None):
         message = get_object_or_404(Message.objects.all(), pk=pk)
-        
         serializer = TransportLogSerializer(message.transportlog_set.all(), many=True, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='headers', url_name='message-headers')
+    def get_message_headers(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        if not hasattr(message, 'headers'):
+            return Response({}, status.HTTP_204_NO_CONTENT)
+        serializer = HeaderSerializer(message.headers, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='rbl-report', url_name='message-rbl-report')
+    def get_message_rbl_report(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        if not hasattr(message, 'rblreport'):
+            return Response({}, status.HTTP_204_NO_CONTENT)
+        serializer = RblReportSerializer(message.rblreport, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='spam-report', url_name='message-spam-report')
+    def get_message_spam_report(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        if not hasattr(message, 'spamreport'):
+            return Response({}, status.HTTP_204_NO_CONTENT)
+        serializer = SpamReportSerializer(message.spamreport, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='mcp-report', url_name='message-mcp-report')
+    def get_message_mcp_report(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        if not hasattr(message, 'mcpreport'):
+            return Response({}, status.HTTP_204_NO_CONTENT)
+        serializer = McpReportSerializer(message.mcpreport, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='mailscanner-report', url_name='message-mailscanner-report')
+    def get_message_mailscanner_report(self, request, pk=None):
+        message = get_object_or_404(Message.objects.all(), pk=pk)
+        if not hasattr(message, 'mailscannerreport'):
+            return Response({}, status.HTTP_204_NO_CONTENT)
+        serializer = MailscannerReportSerializer(message.mailscannerreport, context={'request': request})
         return Response(serializer.data)
     
     @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='queue', url_name='message-queue')

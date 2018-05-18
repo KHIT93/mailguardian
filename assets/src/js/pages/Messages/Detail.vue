@@ -351,6 +351,7 @@
 </template>
 <script>
 import MessageActions from '../../components/MessageActions.vue';
+import { mapMutations, mapGetters } from 'vuex';
 export default {
     props: ['uuid'],
     data: () => {
@@ -378,57 +379,47 @@ export default {
             })
         },
         getMessageHeaders() {
-            axios.get('/api/message-headers/?message=' + this.uuid + '').then(response => {
-                if(response.data.results[0]) {
-                    this.headers = response.data.results[0];
-                }
+            axios.get('/api/messages/' + this.uuid + '/headers/').then(response => {
+                this.headers = response.data;
             }).catch(error => {
                 console.error(error);
                 this.notify(this.createNotification('An error occurred whle getting the message headers', `${error}`, 'error'));
             })
         },
         getSpamReport() {
-            axios.get('/api/spam-reports/?message=' + this.uuid + '').then(response => {
-                if(response.data.results[0]) {
-                    this.spamreport = response.data.results[0];
-                }
+            axios.get('/api/messages/' + this.uuid + '/spam-report/').then(response => {
+                this.spamreport = response.data;
             }).catch(error => {
                 console.error(error);
                 this.notify(this.createNotification('An error occurred while getting the spam report', `${error}`, 'error'));
             })
         },
         getRblReport() {
-            axios.get('/api/rbl-reports/?message=' + this.uuid + '').then(response => {
-                if(response.data.results[0]) {
-                    this.rblreport = response.data.results[0];
-                }
+            axios.get('/api/messages/' + this.uuid + '/rbl-report/').then(response => {
+                this.rblreport = response.data;
             }).catch(error => {
                 console.error(error);
                 this.notify(this.createNotification('An error occurred while getting the RBL report', `${error}`, 'error'));
             })
         },
         getMcpReport() {
-            axios.get('/api/mcp-reports/?message=' + this.uuid + '').then(response => {
-                if(response.data.results[0]) {
-                    this.mcpreport = response.data.results[0];
-                }
+            axios.get('/api/messages/' + this.uuid + '/mcp-report/').then(response => {
+                this.mcpreport = response.data;
             }).catch(error => {
                 console.error(error);
                 this.notify(this.createNotification('An error occurred while getting the MCP report', `${error}`, 'error'));
             })
         },
         getMailscannerReport() {
-            axios.get('/api/mailscanner-reports/?message=' + this.uuid + '').then(response => {
-                if(response.data.results[0]) {
-                    this.mailscanner_report = response.data.results[0];
-                }
+            axios.get('/api/messages/' + this.uuid + '/mailscanner-report/').then(response => {
+                this.mailscanner_report = response.data;
             }).catch(error => {
                 console.error(error);
                 this.notify(this.createNotification('An error occurred while getting the Mailscanning report', `${error}`, 'error'));
             })
         },
         getTransportLog() {
-            axios.get('/api/messages/'+this.uuid+'/transport-log').then(response => {
+            axios.get('/api/messages/'+this.uuid+'/transport-log/').then(response => {
                 this.transport_log = response.data;
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred while getting the Transport log', `${error}`, 'error'));
@@ -468,7 +459,8 @@ export default {
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
-        }
+        },
+        ...mapMutations(['notify'])
     },
     mounted() {
         this.getMessage().then(() => {
