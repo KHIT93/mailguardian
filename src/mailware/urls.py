@@ -41,7 +41,6 @@ router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
-# router.register(r'mail-users', MailUserViewSet)
 router.register(r'settings', SettingsViewSet)
 router.register(r'audit-log', AuditLogViewSet)
 
@@ -64,7 +63,8 @@ urlpatterns = [
     path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
     path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
     path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('rest-auth/', include('rest_auth.urls'))
 ]
 
 if settings.DEBUG:

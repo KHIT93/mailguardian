@@ -117,7 +117,9 @@ export default {
     },
     methods: {
         logout() {
-            window.location.href = '/api-auth/logout?next=/';
+            axios.post('/rest-auth/logout/', {}).then(response => {
+                window.location.href = '/';
+            })
         },
         hideMenu() {
             if (!this.hide) {

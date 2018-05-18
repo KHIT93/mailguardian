@@ -9,7 +9,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.username" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="username" id="username" type="text" placeholder="JaneDoe@example.com">
+                        <input v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="username" id="username" type="text" placeholder="JaneDoe@example.com">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -56,7 +56,7 @@
         data: () => {
             return {
                 form: new Form({
-                    username: '',
+                    email: '',
                     password: ''
                 }),
                 loading: false
@@ -73,6 +73,11 @@
         methods: {
             submit() {
                 this.loading = true;
+                this.form.post('/rest-auth/login/').then(response => {
+                    window.location.href = '/';
+                }).catch(error => {
+                    console.log(error.response);
+                })
             }
         }
     }
