@@ -11,13 +11,17 @@ class ListEntryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
+        qs = super(ListEntryViewSet, self).get_queryset()
         if self.request.query_params.__contains__('search'):
             search_key = self.request.query_params.get('search')
-            return self.queryset.filter(
+            qs = qs.filter(
                     Q(from_address__icontains=search_key) | Q(to_address__icontains=search_key)
                 )
-        else:
-            return self.queryset
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        return qs
 
 class BlacklistEntryViewSet(ListEntryViewSet):
     queryset = ListEntry.objects.filter(listing_type='blacklisted')

@@ -137,7 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'core.User'
-
+OLD_PASSWORD_FIELD_ENABLED = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -180,6 +180,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'mailware.pagination.PageNumberPaginationWithPageCount',
     'PAGE_SIZE': 100
+}
+
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailwarePasswordResetSerializer'
 }
 
 # Guardian Authentication backends

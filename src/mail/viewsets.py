@@ -11,6 +11,7 @@ from pymailq.store import PostqueueStore
 from django.conf import settings
 from core.models import Setting
 import datetime
+from django.db.models import Q
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -19,9 +20,17 @@ class MessageViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPaginationWithPageCount
     permission_classes = (IsAuthenticated,)
 
+    def get_queryset(self):
+        qs = super(MessageViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains.all()]
+        qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        return qs
+
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='contents', url_name='message-file-contents')
     def get_message_contents(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         data = { 'message_id':message.id, 'mailq_id': message.mailq_id, 'message_contents': None }
         if message.queue_file_exists():
             f = open(message.file_path())
@@ -35,13 +44,13 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
     def get_message_transport_logs(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         serializer = TransportLogSerializer(message.transportlog_set.all(), many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='headers', url_name='message-headers')
     def get_message_headers(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'headers'):
             return Response({}, status.HTTP_204_NO_CONTENT)
         serializer = HeaderSerializer(message.headers, context={'request': request})
@@ -49,7 +58,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='rbl-report', url_name='message-rbl-report')
     def get_message_rbl_report(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'rblreport'):
             return Response({}, status.HTTP_204_NO_CONTENT)
         serializer = RblReportSerializer(message.rblreport, context={'request': request})
@@ -57,7 +66,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='spam-report', url_name='message-spam-report')
     def get_message_spam_report(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'spamreport'):
             return Response({}, status.HTTP_204_NO_CONTENT)
         serializer = SpamReportSerializer(message.spamreport, context={'request': request})
@@ -65,7 +74,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='mcp-report', url_name='message-mcp-report')
     def get_message_mcp_report(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'mcpreport'):
             return Response({}, status.HTTP_204_NO_CONTENT)
         serializer = McpReportSerializer(message.mcpreport, context={'request': request})
@@ -73,7 +82,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='mailscanner-report', url_name='message-mailscanner-report')
     def get_message_mailscanner_report(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'mailscannerreport'):
             return Response({}, status.HTTP_204_NO_CONTENT)
         serializer = MailscannerReportSerializer(message.mailscannerreport, context={'request': request})
@@ -88,7 +97,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=True, permission_classes=[IsAuthenticated], url_path='action', url_name='message-action')
     def post_action(self, request, pk=None):
-        message = get_object_or_404(Message.objects.all(), pk=pk)
+        message = get_object_or_404(self.get_queryset(), pk=pk)
         data = request.data['data']
         action = request.data['action']
         if not isinstance(data, list):
@@ -133,10 +142,12 @@ class HeaderViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.query_params.__contains__('message'):
-            return self.queryset.filter(message_id=self.request.query_params.get('message'))
-        else:
-            return self.queryset
+        qs = super(HeaderViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
+        return qs
 
 class SpamReportViewSet(viewsets.ModelViewSet):
     queryset = SpamReport.objects.all()
@@ -145,10 +156,12 @@ class SpamReportViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.query_params.__contains__('message'):
-            return self.queryset.filter(message_id=self.request.query_params.get('message'))
-        else:
-            return self.queryset
+        qs = super(SpamReportViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
+        return qs
 
 class RblReportViewSet(viewsets.ModelViewSet):
     queryset = RblReport.objects.all()
@@ -157,10 +170,12 @@ class RblReportViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.query_params.__contains__('message'):
-            return self.queryset.filter(message_id=self.request.query_params.get('message'))
-        else:
-            return self.queryset
+        qs = super(RblReportViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
+        return qs
 
 class MailscannerReportViewSet(viewsets.ModelViewSet):
     queryset = MailscannerReport.objects.all()
@@ -169,10 +184,12 @@ class MailscannerReportViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.query_params.__contains__('message'):
-            return self.queryset.filter(message_id=self.request.query_params.get('message'))
-        else:
-            return self.queryset
+        qs = super(MailscannerReportViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
+        return qs
 
 class McpReportViewSet(viewsets.ModelViewSet):
     queryset = McpReport.objects.all()
@@ -181,10 +198,12 @@ class McpReportViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.query_params.__contains__('message'):
-            return self.queryset.filter(message_id=self.request.query_params.get('message'))
-        else:
-            return self.queryset
+        qs = super(McpReportViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
+        return qs
 
 class SpamAssassinRuleViewSet(viewsets.ModelViewSet):
     queryset = SpamAssassinRule.objects.all()
@@ -207,3 +226,11 @@ class TransportLogViewSet(viewsets.ModelViewSet):
     serializer_class = TransportLogSerializer
     model = TransportLog
     permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        qs = super(TransportLogViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains]
+        qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
+        return qs

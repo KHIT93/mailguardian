@@ -14,7 +14,20 @@ class ListEntry(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     from_address = models.CharField("From", max_length=511, blank=True, default="", db_index=True)
     to_address = models.CharField("To", max_length=511, blank=True, default="", db_index=True)
+    from_domain = models.CharField("From", max_length=255, blank=True, default="", db_index=True)
+    to_domain = models.CharField("To", max_length=255, blank=True, default="", db_index=True)
     listing_type = models.CharField(max_length=12, choices=(
         ('blacklisted', 'Blacklisted'),
         ('whitelisted', 'Whitelisted')
     ), db_index=True)
+
+    def save(self, *args, **kwargs):
+        if '@' in self.from_address:
+            self.from_domain = self.from_address.split('@')[:1]
+        else:
+            self.from_domain = self.from_address
+        if '@' in self.to_address:
+            self.to_domain = self.to_address.split('@')[:1]
+        else:
+            self.to_domain = self.to_address
+        super(ListEntry, self).save(*args, **kwargs)
