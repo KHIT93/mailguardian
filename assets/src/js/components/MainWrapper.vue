@@ -95,7 +95,9 @@
                 </div>
             </div>
             <div :class="{ 'pt-0 lg:pt-12' : !hide, 'pt-12': hide, 'w-full':!isLoggedIn, 'lg:w-4/5 xxl:w-5/6':isLoggedIn }">
-                <slot></slot>
+                <transition name="fade">
+                    <slot></slot>
+                </transition>
             </div>
         </div>
     </div>
