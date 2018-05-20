@@ -59,8 +59,8 @@ export default {
             this.$emit('destroy', domain);
         },
         getDomains() {
-            axios.get('/api/domains/').then(response => {
-                this.allDomains = response.data.results;
+            axios.get('/api/domains/all/').then(response => {
+                this.allDomains = response.data;
             }).catch(error => {
                 console.log(error);
             })

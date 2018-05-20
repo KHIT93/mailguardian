@@ -90,8 +90,8 @@ export default {
             axios.get('/api/users/'+qs).then(response => {
                 //this.users = response.data.results.splice(-1, 1);
                 this.users = response.data.results;
-                if (this.users.filter(u => u.username === "AnonymousUser")) {
-                    this.users = this.users.splice(-1, 1);
+                if (this.users.filter(u => u.email === "AnonymousUser")) {
+                    this.users = this.users.filter(u => u.email !== "AnonymousUser");
                 }
                 this.count = response.data.count;
                 this.current = response.data.current;

@@ -31,6 +31,8 @@ import DomainForm from '../pages/Admin/Domains/Form.vue';
 import MailScannerConfiguration from '../pages/Admin/MailscannerConfig/Index.vue';
 import MailScannerConfigurationForm from '../pages/Admin/MailscannerConfig/Form.vue';
 import Settings from '../pages/Admin/Settings/Index.vue';
+import PasswordReset from '../pages/PasswordReset/Index.vue';
+import PasswordResetConfirm from '../pages/PasswordReset/Confirm.vue';
 
 export default [
     { path: '/', component: Home, name: 'home' },
@@ -67,6 +69,9 @@ export default [
     { path: '/admin/mailscanner/configuration/add', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.add' },
     { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true },
     { path: '/admin/settings', component: Settings, name: 'admin.settings.index'},
+
+    { path: '/password-reset', component: PasswordReset, name: 'password.reset'},
+    { path: '/password-reset/confirm/:uid/:token/', component: PasswordResetConfirm, name: 'password.reset.confirm', props: true},
 
     /** Catchall route to display 404 page */
     { path: '*', component: NotFound, name: 'not_found' }

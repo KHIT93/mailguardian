@@ -2,7 +2,7 @@ from .models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .models import MailScannerConfiguration, Setting, AuditLog
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, AuditLogSerializer
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, AuditLogSerializer, ChangePasswordSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -22,6 +22,20 @@ class UserViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(User.objects.all(), pk=pk)
         serializer = DomainSerializer(user.domains.all(), many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(methods=['post'], detail=True, permission_classes=[IsAdminUser], url_path='change-password', url_name='user-change-password')
+    def post_user_change_password(self, request, pk=None):
+        user = get_object_or_404(User.objects.all(), pk=pk)
+        serializer = ChangePasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            if not user.check_password(serializer.data.get('old_password')):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            if not serializer.data.get('new_password1') == serializer.data.get('new_password2'):
+                return Response({"new_password1": ["The passwords do not match."], "new_password2": ["The passwords do not match."]}, status=status.HTTP_400_BAD_REQUEST)
+            user.set_password(serializer.data.get('new_password1'))
+            user.save()
+            return Response({}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MailScannerConfigurationViewSet(viewsets.ModelViewSet):

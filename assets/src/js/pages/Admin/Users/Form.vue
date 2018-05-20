@@ -23,6 +23,16 @@
                         <input v-model="form.last_name" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="last_name" id="last_name" type="text" placeholder="Doe">
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6 mt-4">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                            Password
+                        </label>
+                    </div>
+                    <div class="md:w-1/2">
+                        <button type="button" class="cursor-pointer underline" @click.prevent="show_password_modal = true">Change password</button>
+                    </div>
+                </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
@@ -57,6 +67,7 @@
                 </div>
             </form>
         </div>
+        <mw-change-password-modal @close="show_password_modal = false" @submit="show_password_modal = false" :show="show_password_modal" :user-id="entity.id"></mw-change-password-modal>
     </div>
 </template>
 
@@ -65,15 +76,18 @@ import { mapGetters, mapMutations } from 'vuex';
 import router from '../../../routing/router';
 import Form from '../../../classes/Form';
 import UserDomainTable from '../../../components/UserDomainTable.vue';
+import ChangePasswordModal from '../../../components/ChangePasswordModal.vue';
 export default {
     props: ['id'],
     components: {
-        'mw-user-domains': UserDomainTable
+        'mw-user-domains': UserDomainTable,
+        'mw-change-password-modal': ChangePasswordModal
     },
     data: () => {
         return {
             entity: {},
-            form: {}
+            form: {},
+            show_password_modal: false
         }
     },
     mounted() {
@@ -115,6 +129,7 @@ export default {
             });
         },
         submit() {
+            this.form.domains = this.form.domains.map(domain => domain.url);
             if (this.id) {
                 this.update();
             }
@@ -143,7 +158,7 @@ export default {
         destroy() {
             this.form.delete('/api/users/'+this.entity.id+'/').then(data => {
                 console.log(data);
-                this.notify(this.createNotification('User deleted', `The user ${data.email} has been deleted`, 'success'));
+                this.notify(this.createNotification('User deleted', `The user ${this.entity.email} has been deleted`, 'success'));
                 router.push('/admin/users');
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
