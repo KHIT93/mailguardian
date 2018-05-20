@@ -15,7 +15,7 @@
             <mw-wrapper v-cloak>
                 {% block content %}{% endblock %}
             </mw-wrapper>
-            
+            <portal-target name="modals"></portal-target>
             <div class="fixed pin z-50 bg-smoke-light fade" :class="{ 'hidden' : !loading }">
                 <div class="loader" style="top:50%; right:50%;">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="stroke-current h-10 w-10">
@@ -29,6 +29,8 @@
                 </div>
             </div>
         </div>
+        {% block scripts %}
         <script src="{% static 'js/app.js' %}" defer></script>
+        {% endblock %}
     </body>
 </html>
