@@ -108,21 +108,22 @@ const app = new Vue({
     store,
     components,
     mounted() {
-        if (!this.$route.path.startsWith('/password-reset')) {
-            this.checkSession().then(() => {
+        this.checkSession();
+        // if (!this.$route.path.startsWith('/password-reset')) {
+        //     this.checkSession().then(() => {
 
-                if (this.user.id) {
-                    console.log('Getting current user');
-                }
-                else {
-                    console.log('Redirecting to login');
-                    router.push('/login');
-                }
-            }).catch(() => {
-                console.log('Redirecting to login');
-                router.push('/login');
-            });
-        }
+        //         if (this.user.id) {
+        //             console.log('Getting current user');
+        //         }
+        //         else {
+        //             console.log('Redirecting to login');
+        //             router.push('/login');
+        //         }
+        //     }).catch(() => {
+        //         console.log('Redirecting to login');
+        //         router.push('/login');
+        //     });
+        // }
     },
     methods: {
         ...mapActions(['checkSession', 'getCurrentUser']),

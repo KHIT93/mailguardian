@@ -30,7 +30,7 @@ export default {
                 if(response.status == 403) {
                     commit('setIsLoggedIn', false);
                     commit('setCurrentUser', {});
-                    router.push('/login');
+                    //router.push('/login');
                 }
                 else if(response.status == 200) {
                     commit('setIsLoggedIn', true);
