@@ -19,8 +19,8 @@ class ListEntryViewSet(viewsets.ModelViewSet):
                 )
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
-        qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        domains = [domain.name for domain in self.request.user.domains.all()]
+        qs = qs.filter(to_domain__in=domains)
         return qs
 
 class BlacklistEntryViewSet(ListEntryViewSet):

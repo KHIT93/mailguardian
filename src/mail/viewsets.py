@@ -145,7 +145,7 @@ class HeaderViewSet(viewsets.ModelViewSet):
         qs = super(HeaderViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
 
@@ -159,7 +159,7 @@ class SpamReportViewSet(viewsets.ModelViewSet):
         qs = super(SpamReportViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
 
@@ -173,7 +173,7 @@ class RblReportViewSet(viewsets.ModelViewSet):
         qs = super(RblReportViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
 
@@ -187,7 +187,7 @@ class MailscannerReportViewSet(viewsets.ModelViewSet):
         qs = super(MailscannerReportViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
 
@@ -201,7 +201,7 @@ class McpReportViewSet(viewsets.ModelViewSet):
         qs = super(McpReportViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
 
@@ -231,6 +231,6 @@ class TransportLogViewSet(viewsets.ModelViewSet):
         qs = super(TransportLogViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
