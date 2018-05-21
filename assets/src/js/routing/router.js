@@ -8,9 +8,8 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     let result = {};
     window.axios.post('/api/current-user/').then(response => {
-        result = response;
         if (to.matched.some(record => record.meta.requiresAuth)) {
-            if (result.status == 403 && to.path != '/login') {
+            if (response.status == 403 && to.path != '/login') {
                 next({
                     path: '/login'
                 });
@@ -20,19 +19,19 @@ router.beforeEach(async (to, from, next) => {
             }
         }
         else if(to.matched.some(record => record.meta.requiresDomainAdmin)) {
-            if (result.status == 403 && !result.data.user.is_domain_admin) {
-                next(from);
+            if (response.status == 403 && !response.data.user.is_domain_admin) {
+                next({ path: '/403', replace:false });
             }
             else {
-                next({ path: '/403', replace:false });
+                next();
             }
         }
         else if(to.matched.some(record => record.meta.requiresAdmin)) {
-            if (result.status == 403 && !result.data.user.is_staff) {
-                next(from);
+            if (response.status == 403 && !response.data.user.is_staff) {
+                next({ path: '/403', replace:false });
             }
             else {
-                next({ path: '/403', replace:false });
+                next();
             }
         }
         else {
