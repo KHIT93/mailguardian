@@ -4,7 +4,7 @@ from .models import ListEntry
 class ListEntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ListEntry
-        fields = ('id', 'url', 'from_address', 'to_address', 'listing_type')
+        fields = ('id', 'url', 'from_address', 'to_address', 'to_domain', 'listing_type')
         
     # def validate_from_address(self, value):
     #     if '@' in value:
