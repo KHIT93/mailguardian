@@ -351,6 +351,7 @@
 </template>
 <script>
 import MessageActions from '../../components/MessageActions.vue';
+import router from '../../routing/router';
 import { mapMutations, mapGetters } from 'vuex';
 export default {
     props: ['uuid'],
@@ -374,55 +375,66 @@ export default {
             axios.get('/api/messages/' + this.uuid + '/').then(response => {
                 this.message = response.data;
             }).catch(error => {
-                console.error(error);
-                this.notify(this.createNotification('An error occurred while getting the message details', `${error}`, 'error'));
+                if (error.response.status == 404) {
+                    router.push({ name: 'not_found' });
+                }
+                else if (error.response.status == 403) {
+                    router.push({ name: 'access_denied' });
+                }
             })
         },
         getMessageHeaders() {
             axios.get('/api/messages/' + this.uuid + '/headers/').then(response => {
                 this.headers = response.data;
             }).catch(error => {
-                console.error(error);
-                this.notify(this.createNotification('An error occurred whle getting the message headers', `${error}`, 'error'));
+                if (error.response.status !== 404) {
+                    this.notify(this.createNotification('An error occurred whle getting the message headers', `${error}`, 'error'));
+                }
             })
         },
         getSpamReport() {
             axios.get('/api/messages/' + this.uuid + '/spam-report/').then(response => {
                 this.spamreport = response.data;
             }).catch(error => {
-                console.error(error);
-                this.notify(this.createNotification('An error occurred while getting the spam report', `${error}`, 'error'));
+                if (error.response.status !== 404) {
+                    this.notify(this.createNotification('An error occurred while getting the spam report', `${error}`, 'error'));
+                }
             })
         },
         getRblReport() {
             axios.get('/api/messages/' + this.uuid + '/rbl-report/').then(response => {
                 this.rblreport = response.data;
             }).catch(error => {
-                console.error(error);
-                this.notify(this.createNotification('An error occurred while getting the RBL report', `${error}`, 'error'));
+                if (error.response.status !== 404) {
+                    this.notify(this.createNotification('An error occurred while getting the RBL report', `${error}`, 'error'));
+                }
             })
         },
         getMcpReport() {
             axios.get('/api/messages/' + this.uuid + '/mcp-report/').then(response => {
                 this.mcpreport = response.data;
             }).catch(error => {
-                console.error(error);
-                this.notify(this.createNotification('An error occurred while getting the MCP report', `${error}`, 'error'));
+                if (error.response.status !== 404) {
+                    this.notify(this.createNotification('An error occurred while getting the MCP report', `${error}`, 'error'));
+                }
             })
         },
         getMailscannerReport() {
             axios.get('/api/messages/' + this.uuid + '/mailscanner-report/').then(response => {
                 this.mailscanner_report = response.data;
             }).catch(error => {
-                console.error(error);
-                this.notify(this.createNotification('An error occurred while getting the Mailscanning report', `${error}`, 'error'));
+                if (error.response.status !== 404) {
+                    this.notify(this.createNotification('An error occurred while getting the Mailscanning report', `${error}`, 'error'));
+                }
             })
         },
         getTransportLog() {
             axios.get('/api/messages/'+this.uuid+'/transport-log/').then(response => {
                 this.transport_log = response.data;
             }).catch(error => {
-                this.notify(this.createNotification('An error occurred while getting the Transport log', `${error}`, 'error'));
+                if (error.response.status !== 404) {
+                    this.notify(this.createNotification('An error occurred while getting the Transport log', `${error}`, 'error'));
+                }
             });
         },
         showMessage() {
@@ -435,7 +447,9 @@ export default {
                 axios.get('/api/messages/' + this.uuid + '/contents/').then(response => {
                     this.message_contents = response.data.message_contents;
                 }).catch(error => {
-                    this.notify(this.createNotification('An error occurred while getting the message contents', `${error}`, 'error'));
+                    if (error.response.status !== 404) {
+                        this.notify(this.createNotification('An error occurred while getting the message contents', `${error}`, 'error'));
+                    }
                 });
             }
             else {

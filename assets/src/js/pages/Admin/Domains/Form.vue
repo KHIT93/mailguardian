@@ -115,7 +115,12 @@ export default {
                     allowed_accounts: response.data.allowed_accounts,
                 });
             }).catch(error => {
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                if (error.response.status == 404) {
+                    router.push({ name: 'not_found' });
+                }
+                else if (error.response.status == 403) {
+                    router.push({ name: 'access_denied' });
+                }
             });
         },
         submit() {

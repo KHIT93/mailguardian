@@ -93,6 +93,13 @@ export default {
                     value: response.data.value,
                     filepath: response.data.filepath,
                 });
+            }).catch(error => {
+                if (error.response.status == 404) {
+                    router.push({ name: 'not_found' });
+                }
+                else if (error.response.status == 403) {
+                    router.push({ name: 'access_denied' });
+                }
             })
         },
         get_filepaths() {
