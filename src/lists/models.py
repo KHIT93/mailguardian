@@ -9,7 +9,7 @@ class ListEntry(models.Model):
             models.Index(fields=['from_address', 'listing_type']),
             models.Index(fields=['to_address', 'listing_type']),
         ]
-        unique_together = ('from_address', 'to_address', 'listing_type')
+        unique_together = ('from_address', 'to_address', 'to_domain', 'listing_type')
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     from_address = models.CharField("From", max_length=511, blank=True, default="", db_index=True)
@@ -21,12 +21,6 @@ class ListEntry(models.Model):
     ), db_index=True)
 
     def save(self, *args, **kwargs):
-        if '@' in self.from_address:
-            self.from_domain = self.from_address.split('@')[:1]
-        else:
-            self.from_domain = self.from_address
         if '@' in self.to_address:
             self.to_domain = self.to_address.split('@')[:1]
-        else:
-            self.to_domain = self.to_address
         super(ListEntry, self).save(*args, **kwargs)
