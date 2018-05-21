@@ -122,15 +122,15 @@ export default {
                     is_staff: response.data.is_staff,
                     is_domain_admin: response.data.is_domain_admin,
                     domains: []
-                }).catch(error => {
-                    if (error.response.status == 404) {
-                        router.push({ name: 'not_found' });
-                    }
-                    else if (error.response.status == 403) {
-                        router.push({ name: 'access_denied' });
-                    }
-                });
-            })
+                })
+            }).catch(error => {
+                if (error.response.status == 404) {
+                    router.push({ name: 'not_found' });
+                }
+                else if (error.response.status == 403) {
+                    router.push({ name: 'access_denied' });
+                }
+            });
             axios.get('/api/users/'+this.id+'/domains/').then(response => {
                 this.form.domains = response.data;
             });
