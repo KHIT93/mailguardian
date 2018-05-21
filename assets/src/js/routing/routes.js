@@ -2,6 +2,7 @@
  * Import Vue components to use for Vue-Router
  */
 import NotFound from '../pages/NotFound.vue';
+import AccessDenied from '../pages/AccessDenied.vue';
 import Home from '../pages/Home.vue';
 import Login from '../pages/Login.vue';
 import Messages from '../pages/Messages/Index.vue';
@@ -56,23 +57,26 @@ export default [
     { path: '/reports/top-recipient-domains-by-volume', component: ReportTopRecipientDomainsByVolume, name: 'reports.messages.recipient.domains.volume', meta: { requiresAuth: true } },
 
     { path: '/tools', component: Tools, name: 'tools.index', meta: { requiresAuth: true } },
-    { path: '/tools/mailqueue', component: Mailqueue, name: 'tools.mailqueue', meta: { requiresAuth: true } },
-    { path: '/tools/sa-status', component: SpamAssassinUpdateStatus, name: 'tools.sa.status', meta: { requiresAuth: true } },
+    { path: '/tools/mailqueue', component: Mailqueue, name: 'tools.mailqueue', meta: { requiresAdmin: true } },
+    { path: '/tools/sa-status', component: SpamAssassinUpdateStatus, name: 'tools.sa.status', meta: { requiresAdmin: true } },
 
-    { path: '/admin/domains', component: Domains, name: 'admin.domains.index', meta: { requiresAuth: true } },
-    { path: '/admin/domains/add', component: DomainForm, name: 'admin.domains.add', meta: { requiresAuth: true } },
-    { path: '/admin/domains/:id', component: DomainForm, name: 'admin.domains.edit', props: true, meta: { requiresAuth: true } },
-    { path: '/admin/users', component: Users, name: 'admin.users.index', meta: { requiresAuth: true } },
-    { path: '/admin/users/add', component: UserForm, name: 'admin.users.add', meta: { requiresAuth: true } },
-    { path: '/admin/users/:id', component: UserForm, name: 'admin.users.edit', props: true, meta: { requiresAuth: true } },
-    { path: '/admin/mailscanner/configuration', component: MailScannerConfiguration, name: 'admin.mailscanner.configuration.index', meta: { requiresAuth: true } },
-    { path: '/admin/mailscanner/configuration/add', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.add', meta: { requiresAuth: true } },
-    { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true, meta: { requiresAuth: true } },
-    { path: '/admin/settings', component: Settings, name: 'admin.settings.index', meta: { requiresAuth: true } },
+    { path: '/admin/domains', component: Domains, name: 'admin.domains.index', meta: { requiresAdmin: true } },
+    { path: '/admin/domains/add', component: DomainForm, name: 'admin.domains.add', meta: { requiresAdmin: true } },
+    { path: '/admin/domains/:id', component: DomainForm, name: 'admin.domains.edit', props: true, meta: { requiresAdmin: true } },
+    { path: '/admin/users', component: Users, name: 'admin.users.index', meta: { requiresDomainAdmin: true } },
+    { path: '/admin/users/add', component: UserForm, name: 'admin.users.add', meta: { requiresDomainAdmin: true } },
+    { path: '/admin/users/:id', component: UserForm, name: 'admin.users.edit', props: true, meta: { requiresDomainAdmin: true } },
+    { path: '/admin/mailscanner/configuration', component: MailScannerConfiguration, name: 'admin.mailscanner.configuration.index', meta: { requiresAdmin: true } },
+    { path: '/admin/mailscanner/configuration/add', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.add', meta: { requiresAdmin: true } },
+    { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true, meta: { requiresAdmin: true } },
+    { path: '/admin/settings', component: Settings, name: 'admin.settings.index', meta: { requiresAdmin: true } },
 
     { path: '/password-reset', component: PasswordReset, name: 'password.reset'},
     { path: '/password-reset/confirm/:uid/:token/', component: PasswordResetConfirm, name: 'password.reset.confirm', props: true},
 
+    /** Route to handle 'Access Denied' errors */
+    { path: '/403', component: AccessDenied, name: 'access_denied' },
+    
     /** Catchall route to display 404 page */
     { path: '*', component: NotFound, name: 'not_found' }
 ]
