@@ -90,53 +90,56 @@
             <div class="md:w-1/2 p-2 bg-white border md:rounded shadow mb-2 md:mb-0 md:ml-1">
                 <h2 class="font-normal text-lg text-center">Reports</h2>
                 <hr>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/messages">See all messages</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/message-operations">Perform message operations</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/messages-by-date">Total messages by date</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/messages-per-hour">Messages per hour in the last 24 hours</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-mail-relays">Top 10 mail relays</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-senders-by-quantity">Top 10 senders by quantity</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-senders-by-volume">Top 10 senders by volume</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-recipients-by-quantity">Top 10 recipients by quantity</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-recipients-by-volume">Top 10 recipients by volume</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-sender-domains-by-quantity">Top 10 sender domains by quantity</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-sender-domains-by-volume">Top 10 sender domains by volume</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-recipient-domains-by-quantity">Top 10 recipient domains by quantity</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/top-recipient-domains-by-volume">Top 10 recipient domains by volume</router-link>
-                </div>
-                <!-- <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/sa-score-distribution">SpamAssassin score distribution</router-link>
-                </div>
-                <div class="hover:bg-grey-lighter text-sm">
-                    <router-link to="/reports/sa-rule-hits">Spam rule hits</router-link>
-                </div> -->
-                <div class="hover:bg-grey-lighter text-sm" v-if="user.is_staff">
-                    <router-link to="/admin/audit-log">Audit Log</router-link>
+                <div v-if="message_count == 0"><p class="text-grey text-sm text-center">There are no messages that match your query</p></div>
+                <div v-else>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/messages">See all messages</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/message-operations">Perform message operations</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/messages-by-date">Total messages by date</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/messages-per-hour">Messages per hour in the last 24 hours</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-mail-relays">Top 10 mail relays</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-senders-by-quantity">Top 10 senders by quantity</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-senders-by-volume">Top 10 senders by volume</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-recipients-by-quantity">Top 10 recipients by quantity</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-recipients-by-volume">Top 10 recipients by volume</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-sender-domains-by-quantity">Top 10 sender domains by quantity</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-sender-domains-by-volume">Top 10 sender domains by volume</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-recipient-domains-by-quantity">Top 10 recipient domains by quantity</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/top-recipient-domains-by-volume">Top 10 recipient domains by volume</router-link>
+                    </div>
+                    <!-- <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/sa-score-distribution">SpamAssassin score distribution</router-link>
+                    </div>
+                    <div class="hover:bg-grey-lighter text-sm">
+                        <router-link to="/reports/sa-rule-hits">Spam rule hits</router-link>
+                    </div> -->
+                    <div class="hover:bg-grey-lighter text-sm" v-if="user.is_staff">
+                        <router-link to="/admin/audit-log">Audit Log</router-link>
+                    </div>
                 </div>
             </div>
         </div>
