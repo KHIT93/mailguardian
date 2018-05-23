@@ -2,6 +2,7 @@
     <div class="justify-center flex pt-8">
         <div class="w-full max-w-sm">
             <form @submit.prevent="submit" class="bg-white shadow-md sm:rounded px-8 pt-6 pb-8 mb-4" method="POST">
+                <mw-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Error during login', message: form.errors.get('non_field_errors'), type: 'error' }"></mw-notification>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/3">
                     <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
@@ -9,7 +10,8 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="username" id="username" type="text" placeholder="JaneDoe@example.com">
+                        <input v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="username" id="username" type="text" placeholder="JaneDoe@example.com" required>
+                        <p class="text-sm text-red pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -19,7 +21,8 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.password" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="password" id="password" type="password" placeholder="******************">
+                        <input v-model="form.password" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="password" id="password" type="password" placeholder="******************" required>
+                        <p class="text-sm text-red pt-1" v-if="form.errors.has('password')">{{ form.errors.get('password') }}</p>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse items-center justify-between">
@@ -52,6 +55,7 @@
     import { mapGetters } from 'vuex';
     import router from '../routing/router';
     import Form from '../classes/Form';
+    import Notification from '../components/Notification.vue';
     export default {
         data: () => {
             return {
@@ -61,6 +65,9 @@
                 }),
                 loading: false
             }
+        },
+        components: {
+            'mw-notification': Notification
         },
         mounted() {
             if(this.isLoggedIn) {
@@ -76,7 +83,7 @@
                 this.form.post('/rest-auth/login/').then(response => {
                     window.location.href = '/';
                 }).catch(error => {
-                    console.log(error.response);
+                    this.loading = false;
                 })
             }
         }
