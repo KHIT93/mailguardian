@@ -16,7 +16,6 @@ class SummaryApiView(APIView):
         filters = request.data
         response_data = {}
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.all(), filters, request.user)
-        print(qs.query)
         try:
             response_data = {
                 'latest': qs.latest().date,

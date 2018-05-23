@@ -12,7 +12,6 @@ class MessageQuerySetFilter(QuerySetFilter):
         allow_from_filter = False
         allow_to_filter = False
         if user.is_domain_admin:
-            print('The user is a domain administrator for one or more domains and can therefore view any record assigned to these domains')
             if 'to_address' in filters or 'to_domain' in filters:
                 if ('to_address' in filters and filters['to_address']['value'].split('@')[-1] in domains) or ('to_domain' in filters and filters['to_domain']['value'] in domains):
                     allow_to_filter = True
@@ -28,7 +27,6 @@ class MessageQuerySetFilter(QuerySetFilter):
             else:
                 qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
         else:
-            print('The user is a regular authenticated application user and can therefore only view messages to/from their own email address')
             if ('to_address' in filters and filters['to_address']['value'] != user.email) or 'to_domain' in filters:
                 allow_to_filter = True
                 allow_from_filter = False
