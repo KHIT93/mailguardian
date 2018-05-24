@@ -11,6 +11,7 @@ from django.contrib.auth.models import PermissionsMixin
 from domains.models import Domain
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.core.mail import send_mail
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -95,9 +96,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Return the short name for the user."""
         return self.first_name
 
-    # def email_user(self, subject, message, from_email=None, **kwargs):
-    #     """Send an email to this user."""
-    #     send_mail(subject, message, from_email, [self.email], **kwargs)
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """Send an email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)
 
 class MailScannerConfiguration(models.Model):
     class Meta:
