@@ -198,8 +198,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Django-Premailer
-BASE_URL = 'https://' + APP_HOSTNAME if SECURE_SSL_REDIRECT else 'http://' + APP_HOSTNAME
-PREMAILER_OPTIONS = dict(base_url=BASE_URL, remove_classes=True)
+PREMAILER_OPTIONS = dict(remove_classes=True)
 
 #MailWare specific settings
 TMP_DIR = MAILWARE_ENV.get('hostconfig.tmp_dir', '/tmp')
