@@ -1,0 +1,44 @@
+{% extends 'mailware/_layouts/master.html' %}
+
+{% block content %}
+<table align="center" width="100%" cellpadding="0" cellspacing="0" class="text-center mb-4">
+    <tr>
+        <td>
+            <h2 class="mb-2">Quarantine Report</h2>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Please find below your Quarantine Report for the last {{ period }} day(s).<br/>We have quarantined {{ message_count }} messages and listed them below. All messages will be kept in quarantine for {{ retention_days }} day(s)
+        </td>
+    </tr>
+</table>
+<table class="table" align="center" width="100%" cellpadding="0" cellspacing="0">
+    <tr class="font-bold bg-grey">
+        <td>Recieved</td>
+        <td>From</td>
+        <td>To</td>
+        <td>Subject</td>
+        <td>Reason</td>
+        <td>Actions</td>
+    </tr>
+    {% for message in messages %}
+    <tr>
+        <td>{{ message.timestamp }}</td>
+        <td>{{ message.from_address }}</td>
+        <td>{{ message.to_address }}</td>
+        <td>{{ message.subject}}</td>
+        <td>
+            {% if message.is_spam %}Spam{% endif %}
+            {% if message.is_mcp %}MCP{% endif %}
+            {% if message.infected %}Infected{% endif %}
+            {% if message.is_rbl_listed %}RBL listed{% endif %}
+            {% if message.blacklisted %}Blacklisted{% endif %}
+        </td>
+        <td>
+            <a href="{{ protocol }}://{{ domain }}/#/messages/{{message.id}}">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

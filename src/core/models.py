@@ -67,6 +67,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    daily_quarantine_report = models.BooleanField(default=True)
+    weekly_quarantine_report = models.BooleanField(default=False)
+    monthly_quarantine_report = models.BooleanField(default=False)
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
