@@ -28,8 +28,8 @@ SECRET_KEY = 'kri^w&+#rz=dh-ll&opl7lo1k4-t#(q9psg#v9q5+4=pu7_3v='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILWARE_ENV.get("debug", False)
-
-ALLOWED_HOSTS = MAILWARE_ENV.get("hosts", [])
+APP_HOSTNAME = MAILWARE_ENV.get("hostname", None)
+ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'guardian',
+    'django_premailer',
     'core',
     'frontend',
     'domains',
@@ -166,6 +167,9 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(ASSETS_DIR, "dist")
 
+# Force secure connection
+# https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-SECURE_SSL_REDIRECT
+SECURE_SSL_REDIRECT = not DEBUG
 
 # REST Framework configuration
 # http://www.django-rest-framework.org/#example
@@ -193,6 +197,9 @@ AUTHENTICATION_BACKENDS = (
     'guardian.backends.ObjectPermissionBackend',
 )
 
+# Django-Premailer
+PREMAILER_OPTIONS = dict(remove_classes=True)
+
 #MailWare specific settings
 TMP_DIR = MAILWARE_ENV.get('hostconfig.tmp_dir', '/tmp')
 MTA = MAILWARE_ENV.get('mta', 'postfix')
@@ -215,3 +222,13 @@ SA_PREF = MAILWARE_ENV.get('hostconfig.sa_pref_file', MAILSCANNER_CONFIG_DIR+'/s
 RECORD_RETENTION = MAILWARE_ENV.get('retention.records', 60)
 AUDIT_RETENTION = MAILWARE_ENV.get('retention.audit', 60)
 QUARANTINE_RETENTION = MAILWARE_ENV.get('retention.quarantine', 60)
+
+# Branding
+BRAND_NAME = MAILWARE_ENV.get('brand.name', 'Mailware')
+BRAND_TAGLINE = MAILWARE_ENV.get('brand.tagline', 'Securing your email')
+BRAND_LOGO = MAILWARE_ENV.get('brand.logo', '')
+
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = '033f0cb2132bb9'
+EMAIL_HOST_PASSWORD = 'c774c2396846ac'
+EMAIL_PORT = '2525'
