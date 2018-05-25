@@ -33,5 +33,5 @@
         "audit":60,
         "quarantine":60
     },
-    "mta": "sendmail"
+    "mta": "postfix"
 }
