@@ -1,8 +1,6 @@
 {
     "debug": true,
-    "hosts": [
-        "localhost"
-    ],
+    "hostname": "localhost",
     "database": {
         "name": "mailware",
         "user": "mailware",
@@ -33,5 +31,10 @@
         "audit":60,
         "quarantine":60
     },
-    "mta": "postfix"
+    "mta": "postfix",
+    "branding": {
+        "name": "Mailware",
+        "tagline": "Securing your email",
+        "logo": ""
+    }
 }
