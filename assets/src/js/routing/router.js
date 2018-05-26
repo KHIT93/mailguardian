@@ -7,9 +7,42 @@ const router = new VueRouter({
 });
 router.beforeEach(async (to, from, next) => {
     let result = {};
-    window.axios.post('/api/current-user/').then(response => {
-        if (to.matched.some(record => record.meta.requiresAuth)) {
-            if (response.status == 403 && to.path != '/login') {
+    let whitelisted = [
+        '/password-reset'
+    ];
+    if (!whitelisted.includes(to.path)) {
+        window.axios.post('/api/current-user/').then(response => {
+            if (to.matched.some(record => record.meta.requiresAuth)) {
+                if (response.status == 403 && to.path != '/login') {
+                    next({
+                        path: '/login'
+                    });
+                }
+                else {
+                    next();
+                }
+            }
+            else if(to.matched.some(record => record.meta.requiresDomainAdmin)) {
+                if (response.status == 403 && !response.data.user.is_domain_admin) {
+                    next({ path: '/403', replace:false });
+                }
+                else {
+                    next();
+                }
+            }
+            else if(to.matched.some(record => record.meta.requiresAdmin)) {
+                if (response.status == 403 && !response.data.user.is_staff) {
+                    next({ path: '/403', replace:false });
+                }
+                else {
+                    next();
+                }
+            }
+            else {
+                next();
+            }
+        }).catch(error => {
+            if (error.response.status == 403 && to.path != '/login') {
                 next({
                     path: '/login'
                 });
@@ -17,36 +50,11 @@ router.beforeEach(async (to, from, next) => {
             else {
                 next();
             }
-        }
-        else if(to.matched.some(record => record.meta.requiresDomainAdmin)) {
-            if (response.status == 403 && !response.data.user.is_domain_admin) {
-                next({ path: '/403', replace:false });
-            }
-            else {
-                next();
-            }
-        }
-        else if(to.matched.some(record => record.meta.requiresAdmin)) {
-            if (response.status == 403 && !response.data.user.is_staff) {
-                next({ path: '/403', replace:false });
-            }
-            else {
-                next();
-            }
-        }
-        else {
-            next();
-        }
-    }).catch(error => {
-        if (error.response.status == 403 && to.path != '/login') {
-            next({
-                path: '/login'
-            });
-        }
-        else {
-            next();
-        }
-    })
+        })
+    }
+    else {
+        next();
+    }
     
 });
 export default router;
