@@ -203,6 +203,7 @@ PREMAILER_OPTIONS = dict(remove_classes=True)
 #MailWare specific settings
 TMP_DIR = MAILWARE_ENV.get('hostconfig.tmp_dir', '/tmp')
 MTA = MAILWARE_ENV.get('mta', 'postfix')
+MTA_LOGFILE = MAILWARE_ENV.get("hostconfig.mta_logfile", "/var/log/maillog")
 SENDMAIL_BIN = MAILWARE_ENV.get('hostconfig.sendmail_bin', '/usr/sbin/sendmail')
 
 #MailScanner settings
@@ -227,8 +228,3 @@ QUARANTINE_RETENTION = MAILWARE_ENV.get('retention.quarantine', 60)
 BRAND_NAME = MAILWARE_ENV.get('brand.name', 'Mailware')
 BRAND_TAGLINE = MAILWARE_ENV.get('brand.tagline', 'Securing your email')
 BRAND_LOGO = MAILWARE_ENV.get('brand.logo', '')
-
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = '033f0cb2132bb9'
-EMAIL_HOST_PASSWORD = 'c774c2396846ac'
-EMAIL_PORT = '2525'
