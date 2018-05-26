@@ -205,6 +205,7 @@ TMP_DIR = MAILWARE_ENV.get('hostconfig.tmp_dir', '/tmp')
 MTA = MAILWARE_ENV.get('mta', 'postfix')
 MTA_LOGFILE = MAILWARE_ENV.get("hostconfig.mta_logfile", "/var/log/maillog")
 SENDMAIL_BIN = MAILWARE_ENV.get('hostconfig.sendmail_bin', '/usr/sbin/sendmail')
+AUDIT_LOGGING = MAILWARE_ENV.get('audit_log', True)
 
 #MailScanner settings
 MAILSCANNER_BIN = MAILWARE_ENV.get("hostconfig.mailscanner_bin", '/usr/sbin/MailScanner')
