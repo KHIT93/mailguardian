@@ -17,7 +17,7 @@ class DomainViewSet(viewsets.ModelViewSet):
         qs = super(DomainViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains]
+        domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(name__in=domains)
         return qs
 
