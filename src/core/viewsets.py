@@ -9,27 +9,34 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from domains.serializers import DomainSerializer
+from .permissions import IsDomainAdminOrStaff
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsDomainAdminOrStaff,)
     model = User
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAdminUser], url_path='domains', url_name='user-domains')
+    def get_queryset(self):
+        qs = super(UserViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        domains = [domain.name for domain in self.request.user.domains.all()]
+        qs = qs.filter(domains__name__in=domains).distinct()
+        return qs
+
+    @action(methods=['get'], detail=True, permission_classes=[IsDomainAdminOrStaff], url_path='domains', url_name='user-domains')
     def get_user_domains(self, request, pk=None):
         user = get_object_or_404(User.objects.all(), pk=pk)
         serializer = DomainSerializer(user.domains.all(), many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(methods=['post'], detail=True, permission_classes=[IsAdminUser], url_path='change-password', url_name='user-change-password')
+    @action(methods=['post'], detail=True, permission_classes=[IsDomainAdminOrStaff], url_path='change-password', url_name='user-change-password')
     def post_user_change_password(self, request, pk=None):
         user = get_object_or_404(User.objects.all(), pk=pk)
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
-            if not user.check_password(serializer.data.get('old_password')):
-                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
             if not serializer.data.get('new_password1') == serializer.data.get('new_password2'):
                 return Response({"new_password1": ["The passwords do not match."], "new_password2": ["The passwords do not match."]}, status=status.HTTP_400_BAD_REQUEST)
             user.set_password(serializer.data.get('new_password1'))
