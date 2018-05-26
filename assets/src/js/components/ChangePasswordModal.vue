@@ -1,7 +1,7 @@
 <template>
     <mw-modal @close="cancel" @submit="submit" :show="show" modal-title="Change password">
         <form @submit.prevent="submit">
-            <div class="md:flex md:items-center mb-6 mt-4">
+            <div class="md:flex md:items-center mb-6 mt-4" v-if="userId">
                 <div class="md:w-1/3">
                     <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
                         Current password*
