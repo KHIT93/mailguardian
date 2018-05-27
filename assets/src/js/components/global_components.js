@@ -25,6 +25,8 @@ import PlaylistAddCheckmarkIcon from '../icons/PlaylistAddCheckmarkIcon.vue';
 import SecurityIcon from '../icons/SecurityIcon.vue';
 import SettingsIcon from '../icons/SettingsIcon.vue';
 import WidgetsIcon from '../icons/WidgetsIcon.vue';
+import NavigateBefore from '../icons/NavigateBefore.vue';
+import NavigateNext from '../icons/NavigateNext.vue';
 
 Vue.component('mw-modal', Modal);
 
@@ -50,6 +52,8 @@ Vue.component('mw-playlist-add-checkmark-icon', PlaylistAddCheckmarkIcon);
 Vue.component('mw-security-icon', SecurityIcon);
 Vue.component('mw-settings-icon', SettingsIcon);
 Vue.component('mw-widgets-icon', WidgetsIcon);
+Vue.component('mw-navigate-before-icon', NavigateBefore);
+Vue.component('mw-navigate-next-icon', NavigateNext);
 
 export default {
     'mw-wrapper': MainWrapper,
