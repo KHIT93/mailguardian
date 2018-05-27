@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from auditlog.registry import auditlog
+from django.conf import settings
 
 class ListEntry(models.Model):
     class Meta:
@@ -24,3 +26,6 @@ class ListEntry(models.Model):
         if '@' in self.to_address:
             self.to_domain = self.to_address.split('@')[:1]
         super(ListEntry, self).save(*args, **kwargs)
+
+if settings.AUDIT_LOGGING:
+    auditlog.register(ListEntry)

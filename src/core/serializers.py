@@ -1,8 +1,9 @@
 from .models import User
 from rest_framework import serializers
-from .models import MailScannerConfiguration, Setting, AuditLog
+from .models import MailScannerConfiguration, Setting
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
+from auditlog.models import LogEntry as AuditLog
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,7 +30,11 @@ class SettingsSerializer(serializers.HyperlinkedModelSerializer):
 class AuditLogSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = AuditLog
-        fields = ('id', 'url', 'user', 'ip_address', 'timestamp', 'module', 'action', 'message')
+        fields = ('id', 'url', 'module', 'object_pk', 'object_id', 'object_repr', 'action', 'changes', 'actor_id', 'remote_addr', 'timestamp', 'additional_data')
+    module = serializers.SerializerMethodField()
+
+    def get_module(self, obj):
+        return obj.content_type.app_label + ':' + obj.content_type.model
 
 class ChangePasswordSerializer(serializers.Serializer):
     """

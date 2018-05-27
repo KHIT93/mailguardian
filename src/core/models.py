@@ -12,6 +12,7 @@ from domains.models import Domain
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
+from auditlog.registry import auditlog
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -165,13 +166,7 @@ class Setting(models.Model):
     def __str__(self):
         return str(self.key)
 
-class AuditLog(models.Model):
-    class Meta:
-        ordering = ('-timestamp',)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, related_name='user', on_delete=models.SET_NULL, blank=True, null=True, db_index=True)
-    ip_address = models.GenericIPAddressField("IP Address", null=True, db_index=True)
-    timestamp = models.DateTimeField(db_index=True)
-    module = models.CharField(max_length=255, db_index=True)
-    action = models.CharField(max_length=255, db_index=True)
-    message = models.TextField()
+if settings.AUDIT_LOGGING:
+    auditlog.register(User)
+    auditlog.register(MailScannerConfiguration)
+    auditlog.register(Setting)

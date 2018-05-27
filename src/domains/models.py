@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from auditlog.registry import auditlog
+from django.conf import settings
 
 # https://gist.github.com/solusipse/7ed8e1da104baaee3f05
 
@@ -30,3 +32,6 @@ class Domain(models.Model):
 #     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 #     domain = models.CharField(max_length=128, unique=True)
 #     transport = models.CharField(max_length=128)
+
+if settings.AUDIT_LOGGING:
+    auditlog.register(Domain)

@@ -1,8 +1,8 @@
 from .models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .models import MailScannerConfiguration, Setting, AuditLog
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, AuditLogSerializer, ChangePasswordSerializer
+from .models import MailScannerConfiguration, Setting
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from domains.serializers import DomainSerializer
 from .permissions import IsDomainAdminOrStaff
+from auditlog.models import LogEntry as AuditLog
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
