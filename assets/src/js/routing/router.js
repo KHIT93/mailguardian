@@ -10,7 +10,7 @@ router.beforeEach(async (to, from, next) => {
     let whitelisted = [
         '/password-reset'
     ];
-    if (!whitelisted.includes(to.path)) {
+    if (!whitelisted.some(w => to.path.startsWith(w))) {
         window.axios.post('/api/current-user/').then(response => {
             if (to.matched.some(record => record.meta.requiresAuth)) {
                 if (response.status == 403 && to.path != '/login') {
