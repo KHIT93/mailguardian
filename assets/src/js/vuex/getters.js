@@ -20,5 +20,8 @@ export default {
     },
     notifications(state) {
         return state.notifications;
+    },
+    getWizardPayload(state) {
+        return state.wizard.payload;
     }
 }

@@ -132,5 +132,8 @@ export default {
                 field_type: 'boolean'
             }
         }
+    },
+    wizard: {
+        payload: null
     }
 }

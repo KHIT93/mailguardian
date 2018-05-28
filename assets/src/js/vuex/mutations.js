@@ -44,5 +44,8 @@ export default {
         else {
             state.notifications.filter(n => n.persistent == false).shift();
         }
+    },
+    setWizardPayload(state, payload = null) {
+        state.wizard.payload = payload;
     }
 }

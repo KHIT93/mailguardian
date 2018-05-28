@@ -8,7 +8,8 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     let result = {};
     let whitelisted = [
-        '/password-reset'
+        '/password-reset',
+        '/setup'
     ];
     if (!whitelisted.some(w => to.path.startsWith(w))) {
         window.axios.post('/api/current-user/').then(response => {

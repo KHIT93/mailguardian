@@ -35,6 +35,8 @@ import Settings from '../pages/Admin/Settings/Index.vue';
 import PasswordReset from '../pages/PasswordReset/Index.vue';
 import PasswordResetConfirm from '../pages/PasswordReset/Confirm.vue';
 
+import SetupIndex from '../setup/Index.vue';
+
 export default [
     { path: '/', component: Home, name: 'home', meta: { requiresAuth: true } },
     { path: '/login', component: Login, name: 'login', meta: { requiresAuth: false } },
@@ -73,6 +75,9 @@ export default [
 
     { path: '/password-reset', component: PasswordReset, name: 'password.reset'},
     { path: '/password-reset/confirm/:uid/:token/', component: PasswordResetConfirm, name: 'password.reset.confirm', props: true},
+
+    /** Routing for initial setup wizard */
+    { path: '/setup', component: SetupIndex, name: 'setup.index' },
 
     /** Route to handle 'Access Denied' errors */
     { path: '/403', component: AccessDenied, name: 'access_denied' },
