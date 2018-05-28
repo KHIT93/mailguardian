@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_premailer',
     'core',
     'frontend',
+    'setup_wizard',
     'domains',
     'mail',
     'lists',
@@ -64,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'setup_wizard.middleware.ApplicationInstalled',
     'auditlog.middleware.AuditlogMiddleware',
 ]
 
