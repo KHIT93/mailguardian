@@ -886,7 +886,7 @@ module.exports = {
   modules: {
     appearance: [],
     backgroundAttachment: false,
-    backgroundColors: ['hover', 'active'],
+    backgroundColors: ['responsive', 'hover', 'active'],
     backgroundPosition: false,
     backgroundRepeat: false,
     backgroundSize: false,
