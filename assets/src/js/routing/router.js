@@ -11,6 +11,22 @@ router.beforeEach(async (to, from, next) => {
         '/password-reset',
         '/setup'
     ];
+    window.axios.post('/api/installed/').then(response => {
+        if (response.status == 204) {
+            if (to.path != '/setup') {
+                next({ path: '/setup' });
+            }
+        }
+        else if(response.status == 200) {
+            if (to.path == '/setup') {
+                next({ path: '/' });
+            }
+        }
+        else {
+            next();
+        }
+        return;
+    })
     if (!whitelisted.some(w => to.path.startsWith(w))) {
         window.axios.post('/api/current-user/').then(response => {
             if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -54,6 +70,7 @@ router.beforeEach(async (to, from, next) => {
         })
     }
     else {
+        
         next();
     }
     
