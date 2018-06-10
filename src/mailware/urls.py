@@ -25,7 +25,7 @@ from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView, MessagesPerHourApiView, TopSendersByQuantityApiView, TopSendersByVolumeApiView, TopRecipientsByQuantityApiView, TopRecipientsByVolumeApiView, TopSenderDomainsByQuantityApiView, TopSenderDomainsByVolumeApiView, TopRecipientDomainsByQuantityApiView, TopRecipientDomainsByVolumeApiView
 from domains.viewsets import DomainViewSet
-from setup_wizard.views import LicenseAPIView, InstalledAPIView
+from setup_wizard.views import LicenseAPIView, InstalledAPIView, InitializeDatabaseAPIView
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -67,6 +67,7 @@ urlpatterns = [
     path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
     path('api/license/', LicenseAPIView.as_view()),
     path('api/installed/', InstalledAPIView.as_view()),
+    path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
     # this url is used to generate email content
     re_path(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         TemplateView.as_view(template_name="password_reset_confirm.html"),
