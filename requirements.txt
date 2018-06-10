@@ -22,14 +22,14 @@ Jinja2==2.10
 lxml==4.2.1
 Markdown==2.6.11
 MarkupSafe==1.0
-premailer==3.2.0
+premailer==3.0.0
 psycopg2==2.7.4
 pycparser==2.18
 pymailq==0.9.0
-python-dateutil==2.7.3
+python-dateutil==2.6.0
 pytz==2018.4
 requests==2.18.4
 six==1.11.0
 typing==3.6.4
 uritemplate==3.0.0
-urllib3==1.23
+urllib3==1.21.1
