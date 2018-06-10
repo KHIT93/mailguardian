@@ -11,7 +11,10 @@ class MessageQuerySetFilter(QuerySetFilter):
         domains = [domain.name for domain in user.domains.all()]
         allow_from_filter = False
         allow_to_filter = False
-        if user.is_domain_admin:
+        if user.is_staff:
+            allow_from_filter = True
+            allow_to_filter = True
+        elif user.is_domain_admin:
             if 'to_address' in filters or 'to_domain' in filters:
                 if ('to_address' in filters and filters['to_address']['value'].split('@')[-1] in domains) or ('to_domain' in filters and filters['to_domain']['value'] in domains):
                     allow_to_filter = True
@@ -38,7 +41,7 @@ class MessageQuerySetFilter(QuerySetFilter):
             else:
                 qs = qs.filter(Q(from_address=user.email) | Q(to_address=user.email))
 
-        if 'from_address' in filters and (user.is_staff or allow_from_filter):
+        if 'from_address' in filters and allow_from_filter:
             if filters['from_address']['operator'] == '=':
                 qs = qs.filter(from_address__iexact=filters['from_address']['value'])
             elif filters['from_address']['operator'] == '<>':
@@ -46,7 +49,7 @@ class MessageQuerySetFilter(QuerySetFilter):
             elif filters['from_address']['operator'] == 'icontains':
                 qs = qs.filter(from_address__icontains=filters['from_address']['value'])
         
-        if 'from_domain' in filters and (user.is_staff or allow_from_filter):
+        if 'from_domain' in filters and allow_from_filter:
             if filters['from_domain']['operator'] == '=':
                 qs = qs.filter(from_domain__iexact=filters['from_domain']['value'])
             elif filters['from_domain']['operator'] == '<>':
@@ -54,7 +57,7 @@ class MessageQuerySetFilter(QuerySetFilter):
             elif filters['from_domain']['operator'] == 'icontains':
                 qs = qs.filter(from_domain__icontains=filters['from_domain']['value'])
         
-        if 'to_address' in filters and (user.is_staff or allow_to_filter):
+        if 'to_address' in filters and allow_to_filter:
             if filters['to_address']['operator'] == '=':
                 qs = qs.filter(to_address__iexact=filters['to_address']['value'])
             elif filters['to_address']['operator'] == '<>':
@@ -62,7 +65,7 @@ class MessageQuerySetFilter(QuerySetFilter):
             elif filters['to_address']['operator'] == 'icontains':
                 qs = qs.filter(to_address__icontains=filters['to_address']['value'])
         
-        if 'to_domain' in filters and (user.is_staff or allow_to_filter):
+        if 'to_domain' in filters and allow_to_filter:
             if filters['to_domain']['operator'] == '=':
                 qs = qs.filter(to_domain__iexact=filters['to_domain']['value'])
             elif filters['to_domain']['operator'] == '<>':
