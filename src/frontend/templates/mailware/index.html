@@ -3,7 +3,7 @@
 {% block content %}
 <div id="app">
     <mw-notifications></mw-notifications>
-    <mw-wrapper v-cloak>
+    <mw-wrapper v-cloak app-name="{{ app_name }}">
         <router-view v-cloak>{% csrf_token %}</router-view>
     </mw-wrapper>
     <portal-target name="modals"></portal-target>

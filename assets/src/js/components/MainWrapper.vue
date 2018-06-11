@@ -12,7 +12,7 @@
                             </div>
                         </div>
                         <div class="w-1/2 lg:w-auto text-center text-white text-xl font-medium">
-                            MailWare
+                            {{appName}}
                         </div>
                         <div class="hidden md:block md:w-2/3">
                             <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-grey-dark"/>
@@ -106,6 +106,7 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
+    props: ['appName', 'appLogo'],
     data: () => {
         return {
             hide: true,

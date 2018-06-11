@@ -233,6 +233,6 @@ AUDIT_RETENTION = MAILWARE_ENV.get('retention.audit', 60)
 QUARANTINE_RETENTION = MAILWARE_ENV.get('retention.quarantine', 60)
 
 # Branding
-BRAND_NAME = MAILWARE_ENV.get('brand.name', 'Mailware')
-BRAND_TAGLINE = MAILWARE_ENV.get('brand.tagline', 'Securing your email')
-BRAND_LOGO = MAILWARE_ENV.get('brand.logo', '')
+BRAND_NAME = MAILWARE_ENV.get('branding.name', 'Mailware')
+BRAND_TAGLINE = MAILWARE_ENV.get('branding.tagline', 'Securing your email')
+BRAND_LOGO = MAILWARE_ENV.get('branding.logo', '')

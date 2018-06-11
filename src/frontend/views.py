@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.conf import settings
 from django.db import connection
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,6 +11,9 @@ import datetime
 # Create your views here.
 class IndexTemplateView(TemplateView):
     template_name = "mailware/index.html"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'app_name': settings.BRAND_NAME, 'app_logo': settings.BRAND_LOGO})
 
 class DashboardApiView(APIView):
     permission_classes = (IsAuthenticated,)
