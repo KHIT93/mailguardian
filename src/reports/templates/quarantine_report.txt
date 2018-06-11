@@ -1,4 +1,4 @@
-{% extends 'mailware/_layouts/plaintext.html' %}
+{% extends 'mailguardian/_layouts/plaintext.html' %}
 
 {% block content %}
 Quarantine Report

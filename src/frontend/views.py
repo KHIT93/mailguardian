@@ -10,7 +10,7 @@ import datetime
 
 # Create your views here.
 class IndexTemplateView(TemplateView):
-    template_name = "mailware/index.html"
+    template_name = "mailguardian/index.html"
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'app_name': settings.BRAND_NAME, 'app_logo': settings.BRAND_LOGO})

@@ -46,7 +46,7 @@
                 </div>
                 </form>
             </div>
-            <mw-mailscanner-configuration-table :list="config" @next="next" @previous="previous" @saved="get(query, file)"></mw-mailscanner-configuration-table>
+            <mg-mailscanner-configuration-table :list="config" @next="next" @previous="previous" @saved="get(query, file)"></mg-mailscanner-configuration-table>
         </div>
     </div>
 </template>
@@ -62,7 +62,7 @@ export default {
         }
     },
     components: {
-        'mw-mailscanner-configuration-table': MailScannerConfigurationTable
+        'mg-mailscanner-configuration-table': MailScannerConfigurationTable
     },
     computed: {
         files() {

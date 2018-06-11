@@ -11,14 +11,14 @@
                 <tr v-for="domain in domains" :key="domain.id" v-if="domains.length > 0">
                     <td>{{ domain.name }}</td>
                     <td class="text-center">
-                        <button type="button" class="cursor-pointer" @click="destroy(domain)"><mw-delete-icon class="w-5 h-5"></mw-delete-icon></button>
+                        <button type="button" class="cursor-pointer" @click="destroy(domain)"><mg-delete-icon class="w-5 h-5"></mg-delete-icon></button>
                     </td>
                 </tr>
                 <tr v-if="form">
                     <td colspan="2">
                         <form @submit.prevent="add" class="flex justify-between">
                             <v-select class="w-5/6" v-model="form.domain" label="name" :options="allDomains"></v-select>
-                            <button type="submit" class="cursor-pointer text-center mx-auto"><mw-checkmark-icon class="w-5 h-5"></mw-checkmark-icon></button>
+                            <button type="submit" class="cursor-pointer text-center mx-auto"><mg-checkmark-icon class="w-5 h-5"></mg-checkmark-icon></button>
                         </form>
                     </td>                 
                 </tr>

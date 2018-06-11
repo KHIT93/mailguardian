@@ -13,7 +13,7 @@ server {
         proxy_connect_timeout 720s;
         proxy_send_timeout 720s;
 
-        ## Add Headers for MailWare proxy mode ##
+        ## Add Headers for MailGuardian proxy mode ##
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -22,9 +22,9 @@ server {
 
         ## SSL parameters ##
         ssl on;
-        ssl_certificate /home/mailware/cert/domain.tld.crt;
-        ssl_certificate_key /home/mailware/cert/domain.tld.key;
-        ssl_dhparam /home/mailware/cert/dhparam.pem;
+        ssl_certificate /home/mailguardian/cert/domain.tld.crt;
+        ssl_certificate_key /home/mailguardian/cert/domain.tld.key;
+        ssl_dhparam /home/mailguardian/cert/dhparam.pem;
         ssl_session_cache shared:SSL:50m;
         ssl_session_timeout 30m;
         ssl_protocols TLSv1.1 TLSv1.2;
@@ -35,17 +35,17 @@ server {
         access_log /var/log/nginx/domain.tld.access.log;
         error_log /var/log/nginx/domain.tld.error.log;
 
-        ## Redirect all MailWare traffic to the MailWare instance ##
+        ## Redirect all MailGuardian traffic to the MailGuardian instance ##
         location / {
                 include proxy_params;
-                proxy_pass http://unix:/home/mailware/app/run/mailware.sock;
+                proxy_pass http://unix:/home/mailguardian/app/run/mailguardian.sock;
         }
 
         location = /favicon.ico { access_log off; log_not_found off; }
 
         location /assets/ {
             autoindex on;
-            alias /home/mailware/app/assets/dist/;
+            alias /home/mailguardian/app/assets/dist/;
         }
         ## Define content types that can be gzipped and cached for better network performance ##
         gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript;

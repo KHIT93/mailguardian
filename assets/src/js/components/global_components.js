@@ -28,34 +28,34 @@ import WidgetsIcon from '../icons/WidgetsIcon.vue';
 import NavigateBefore from '../icons/NavigateBefore.vue';
 import NavigateNext from '../icons/NavigateNext.vue';
 
-Vue.component('mw-modal', Modal);
+Vue.component('mg-modal', Modal);
 
-Vue.component('mw-account-circle-icon', AccountCircleIcon);
-Vue.component('mw-block-icon', BlockIcon);
-Vue.component('mw-build-icon', BuildIcon);
-Vue.component('mw-checkmark-icon', CheckmarkIcon);
-Vue.component('mw-clear-icon', ClearIcon);
-Vue.component('mw-dashboard-icon', DashboardIcon);
-Vue.component('mw-delete-icon', DeleteIcon);
-Vue.component('mw-dns-icon', DnsIcon);
-Vue.component('mw-email-icon', EmailIcon);
-Vue.component('mw-exit-to-app-icon', ExitToAppIcon);
-Vue.component('mw-expand-less-icon', ExpandLessIcon);
-Vue.component('mw-expand-more-icon', ExpandMoreIcon);
-Vue.component('mw-exposure-icon', ExposureIcon);
-Vue.component('mw-import-contacts-icon', ImportContactsIcon);
-Vue.component('mw-insert-chart-icon', InsertChartIcon);
-Vue.component('mw-lock-icon', LockIcon);
-Vue.component('mw-menu-icon', MenuIcon);
-Vue.component('mw-people-icon', PeopleIcon);
-Vue.component('mw-playlist-add-checkmark-icon', PlaylistAddCheckmarkIcon);
-Vue.component('mw-security-icon', SecurityIcon);
-Vue.component('mw-settings-icon', SettingsIcon);
-Vue.component('mw-widgets-icon', WidgetsIcon);
-Vue.component('mw-navigate-before-icon', NavigateBefore);
-Vue.component('mw-navigate-next-icon', NavigateNext);
+Vue.component('mg-account-circle-icon', AccountCircleIcon);
+Vue.component('mg-block-icon', BlockIcon);
+Vue.component('mg-build-icon', BuildIcon);
+Vue.component('mg-checkmark-icon', CheckmarkIcon);
+Vue.component('mg-clear-icon', ClearIcon);
+Vue.component('mg-dashboard-icon', DashboardIcon);
+Vue.component('mg-delete-icon', DeleteIcon);
+Vue.component('mg-dns-icon', DnsIcon);
+Vue.component('mg-email-icon', EmailIcon);
+Vue.component('mg-exit-to-app-icon', ExitToAppIcon);
+Vue.component('mg-expand-less-icon', ExpandLessIcon);
+Vue.component('mg-expand-more-icon', ExpandMoreIcon);
+Vue.component('mg-exposure-icon', ExposureIcon);
+Vue.component('mg-import-contacts-icon', ImportContactsIcon);
+Vue.component('mg-insert-chart-icon', InsertChartIcon);
+Vue.component('mg-lock-icon', LockIcon);
+Vue.component('mg-menu-icon', MenuIcon);
+Vue.component('mg-people-icon', PeopleIcon);
+Vue.component('mg-playlist-add-checkmark-icon', PlaylistAddCheckmarkIcon);
+Vue.component('mg-security-icon', SecurityIcon);
+Vue.component('mg-settings-icon', SettingsIcon);
+Vue.component('mg-widgets-icon', WidgetsIcon);
+Vue.component('mg-navigate-before-icon', NavigateBefore);
+Vue.component('mg-navigate-next-icon', NavigateNext);
 
 export default {
-    'mw-wrapper': MainWrapper,
-    'mw-notifications': NotificationWrapper
+    'mg-wrapper': MainWrapper,
+    'mg-notifications': NotificationWrapper
 }

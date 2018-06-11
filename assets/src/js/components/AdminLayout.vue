@@ -2,7 +2,7 @@
     <div>
         <div class="lg:flex" v-if="user.is_staff">
             <div class="lg:w-1/4">
-                <mw-admin-menu></mw-admin-menu>
+                <mg-admin-menu></mg-admin-menu>
             </div>
             <div class="lg:w-3/4">
                 <div class="container mx-auto sm:px-2 pt-2 pb-8">
@@ -20,7 +20,7 @@ import AdminNavigation from './AdminNavigation.vue';
 import { mapGetters } from 'vuex';
 export default {
     components: {
-        'mw-admin-menu': AdminNavigation
+        'mg-admin-menu': AdminNavigation
     },
     computed: {
         ...mapGetters(['user'])

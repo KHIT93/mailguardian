@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody>
-                <mw-mailscanner-configuration-item :item="item" v-for="item in list.results" :key="item.id" @saved="saved()"></mw-mailscanner-configuration-item>
+                <mg-mailscanner-configuration-item :item="item" v-for="item in list.results" :key="item.id" @saved="saved()"></mg-mailscanner-configuration-item>
             </tbody>
         </table>
         <div class="inline-flex pt-2 rounded">
@@ -44,7 +44,7 @@ export default {
         }
     },
     components: {
-        'mw-mailscanner-configuration-item': MailScannerConfigurationItem
+        'mg-mailscanner-configuration-item': MailScannerConfigurationItem
     },
     methods: {
         previous() {

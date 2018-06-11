@@ -43,7 +43,7 @@
                 </div>
             </div>
             <!-- Chart.js graph here for showing message stats -->
-            <mw-dashboard-chart :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mw-dashboard-chart>
+            <mg-dashboard-chart :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mg-dashboard-chart>
         </div>
     </div>
 </template>
@@ -100,8 +100,8 @@
             }
         },
         components: {
-            'mw-modal': Modal,
-            'mw-dashboard-chart': DashboardChart
+            'mg-modal': Modal,
+            'mg-dashboard-chart': DashboardChart
         },
     }
 </script>

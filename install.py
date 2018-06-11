@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Placeholder for MailWare installation script
+# Placeholder for MailGuardian installation script
 #
 import os
 import sys
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     # If we can detect it, then we will ask questions to generate webserver and systemd service files
     # If we cannot detect it, then we show a warning and skip the steps regarding webserver and systemd
     if platform.system() != 'Linux':
-        print('Your operation system is not supported. MailWare can only run on Linux')
+        print('Your operation system is not supported. MailGuardian can only run on Linux')
         #exit()
     else:
         distro = platform.linux_distribution()
@@ -107,9 +107,9 @@ if __name__ == "__main__":
         print('We will now ask you a series of questions to properly configure the application for you')
         print('Do not worry, as we will not make any changes before all questions have been answered and confirmed by you')
         while APP_USER == '':
-            APP_USER = input('What is the username of the user running the Mailware application? ')
+            APP_USER = input('What is the username of the user running the MailGuardian application? ')
         # Next we need to ask some questions
-        # to generate the correct mailware-env.json
+        # to generate the correct mailguardian-env.json
         print('Available MTA\'s (Mail Transport Agent)')
         print('sendmail')
         print('postfix')
@@ -180,7 +180,7 @@ if __name__ == "__main__":
                 API_ONLY_MODE = True
         else:
             API_ONLY_MODE = False
-        mailware_env_contents = """
+        mailguardian_env_contents = """
             {{
                 "debug": false,
                 "database": {{
@@ -213,21 +213,21 @@ if __name__ == "__main__":
                 "mta": "{15}"
             }}
         """.format(DB_NAME, DB_USER, DB_PASS, DB_HOST, DB_PORT, TZ, SALEARN_BIN, MS_BIN, MS_CONF_DIR, MS_SHARED, MS_LIB, SA_RULES_DIR, RETENTION_DAYS, RETENTION_DAYS, RETENTION_DAYS, MTA)
-        print(mailware_env_contents)
+        print(mailguardian_env_contents)
         print('The above is the configuration file that we will save to %s' % '')
         print('After this point everything we do is commited to disk immediately')
         if input('Is this correct and can we continue? (Y/n').lower() == 'n':
             print('Installation will be aborted. Please rerun the installation script to try again')
             exit()
-        print('Writing configuration file %s' % APP_DIR + '/mailware-env.json')
-        CONF_FILE = open(APP_DIR + '/mailware-env.json', 'w')
-        CONF_FILE.write(mailware_env_contents)
+        print('Writing configuration file %s' % APP_DIR + '/mailguardian-env.json')
+        CONF_FILE = open(APP_DIR + '/mailguardian-env.json', 'w')
+        CONF_FILE.write(mailguiardian_env_contents)
         CONF_FILE.close()
         if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
             if os.geteuid() != 0:
                 print('You are not running the installation with root privileges. The script will now terminate')
                 exit()
-            APP_HOSTNAME = input('Please provide us with the hostname on which your MailWare instance will be accessible [%s]: ' % platform.node())
+            APP_HOSTNAME = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % platform.node())
             if APP_HOSTNAME == '' or APP_HOSTNAME is None:
                 APP_HOSTNAME = platform.node()
             if input('Would you like to enable HTTP/2 and SSL/TLS (HTTPS) encryption for this instance? (Y/n) ').lower() != 'y':
@@ -263,26 +263,26 @@ if __name__ == "__main__":
             NGINX_CONF = NGINX_TMPL.read()
             NGINX_TMPL.close()
             if HTTP_SECURE:
-                NGINX_CONF = NGINX_CONF.replace('/home/mailware/cert/domain.tld.crt', CERT_PATH).replace('/home/mailware/cert/domain.tld.key', PRIVKEY_PATH).replace('/home/mailware/cert/dhparam.pem', DHPARAM_PATH)
+                NGINX_CONF = NGINX_CONF.replace('/home/mailguardian/cert/domain.tld.crt', CERT_PATH).replace('/home/mailguardian/cert/domain.tld.key', PRIVKEY_PATH).replace('/home/mailguardian/cert/dhparam.pem', DHPARAM_PATH)
             else:
-                NGINX_CONF = NGINX_CONF.replace('listen 443 ssl http2;', '# listen 443 ssl http2;').replace('if ($scheme = "http") { set $redirect_https 1; }','# if ($scheme = "http") { set $redirect_https 1; }').replace('if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }', '# if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }').replace('if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }', '# if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }').replace('ssl on;','# ssl on;').replace('ssl_certificate /home/mailware/cert/domain.tld.crt;','# ssl_certificate /home/mailware/cert/domain.tld.crt;').replace('ssl_certificate_key /home/mailware/cert/domain.tld.key;','# ssl_certificate_key /home/mailware/cert/domain.tld.key;').replace('ssl_dhparam /home/mailware/cert/dhparam.pem;', '# ssl_dhparam /home/mailware/cert/dhparam.pem;').replace('ssl_session_cache shared:SSL:50m;','# ssl_session_cache shared:SSL:50m;').replace('ssl_session_timeout 30m;','# ssl_session_timeout 30m;').replace('ssl_protocols TLSv1.1 TLSv1.2;','# ssl_protocols TLSv1.1 TLSv1.2;').replace('ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";','# ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";').replace('ssl_prefer_server_ciphers on;','# ssl_prefer_server_ciphers on;')
-            NGINX_CONF = NGINX_CONF.replace('domain.tld', APP_HOSTNAME).replace('/home/mailware/app', APP_DIR)
+                NGINX_CONF = NGINX_CONF.replace('listen 443 ssl http2;', '# listen 443 ssl http2;').replace('if ($scheme = "http") { set $redirect_https 1; }','# if ($scheme = "http") { set $redirect_https 1; }').replace('if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }', '# if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }').replace('if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }', '# if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }').replace('ssl on;','# ssl on;').replace('ssl_certificate /home/mailguardian/cert/domain.tld.crt;','# ssl_certificate /home/mailguardian/cert/domain.tld.crt;').replace('ssl_certificate_key /home/mailguardian/cert/domain.tld.key;','# ssl_certificate_key /home/mailguardian/cert/domain.tld.key;').replace('ssl_dhparam /home/mailguardian/cert/dhparam.pem;', '# ssl_dhparam /home/mailguardian/cert/dhparam.pem;').replace('ssl_session_cache shared:SSL:50m;','# ssl_session_cache shared:SSL:50m;').replace('ssl_session_timeout 30m;','# ssl_session_timeout 30m;').replace('ssl_protocols TLSv1.1 TLSv1.2;','# ssl_protocols TLSv1.1 TLSv1.2;').replace('ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";','# ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";').replace('ssl_prefer_server_ciphers on;','# ssl_prefer_server_ciphers on;')
+            NGINX_CONF = NGINX_CONF.replace('domain.tld', APP_HOSTNAME).replace('/home/mailguardian/app', APP_DIR)
             NGINX_FILE = open(NGINX_PATH + APP_HOSTNAME + NGINX_EXTENSION, 'w')
             NGINX_FILE.write(NGINX_CONF)
             NGINX_FILE.close()
             # Generate systemd service unit file
-            SYSTEMD_TMPL = open(APP_DIR + '/examples/systemd/mailware.service', 'r')
+            SYSTEMD_TMPL = open(APP_DIR + '/examples/systemd/mailguardian.service', 'r')
             SYSTEMD_UNIT = SYSTEMD_TMPL.read()
-            SYSTEMD_UNIT = SYSTEMD_UNIT.replace('/home/mailware/app', APP_DIR).replace('mailware', APP_USER)
-            SYSTEMD_FILE = open(SYSTEMD_PATH + 'mailware.service', 'w')
+            SYSTEMD_UNIT = SYSTEMD_UNIT.replace('/home/mailguardian/app', APP_DIR).replace('mailguardian', APP_USER)
+            SYSTEMD_FILE = open(SYSTEMD_PATH + 'mailguardian.service', 'w')
             SYSTEMD_FILE.write(SYSTEMD_UNIT)
             SYSTEMD_FILE.close()
             # Reload systemd unit cache
             os.system(SYSTEMCTL_BIN + ' daemon-reload')
             # Enable systemd service units on startup
-            os.system(SYSTEMCTL_BIN + ' enable mailware.service')
-            if input('Should we start the MailWare services for you now? (Y/n) ').lower() == 'y':
-                # Ask systemd to start mailware.service and mailware-celery.service
-                os.system(SYSTEMCTL_BIN + ' start mailware.service')
+            os.system(SYSTEMCTL_BIN + ' enable mailguardian.service')
+            if input('Should we start the MailGuardian services for you now? (Y/n) ').lower() == 'y':
+                # Ask systemd to start mailguardian.service and mailguardian-celery.service
+                os.system(SYSTEMCTL_BIN + ' start mailguardian.service')
     print('The installation script has finished. Any errors that occurred during installation need to be fixed manually')
     print('Below is a list of files that we have created during the installation process. If you need to run the installation script again, then you can simply delete these files')

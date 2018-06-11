@@ -43,7 +43,7 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password1 = serializers.CharField(required=True)
     new_password2 = serializers.CharField(required=True)
 
-class MailwarePasswordResetSerializer(PasswordResetSerializer):
+class MailGuardianPasswordResetSerializer(PasswordResetSerializer):
     def save(self):
         request = self.context.get('request')
         # Set some values to trigger the send_email method.
@@ -51,7 +51,7 @@ class MailwarePasswordResetSerializer(PasswordResetSerializer):
             'use_https': request.is_secure(),
             'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
             'request': request,
-            'email_template_name': 'mailware/registration/password_reset_email.html'
+            'email_template_name': 'mailguardian/registration/password_reset_email.html'
         }
 
         opts.update(self.get_email_options())

@@ -7,7 +7,7 @@ from mail.models import Message
 from mail.serializers import MessageSerializer
 from .filters import MessageQuerySetFilter
 from .serializers import MessagesByDateSerializer, MessageRelaysSerializer, MessagesPerHourSerializer, TopSendersByQuantitySerializer, TopSendersByVolumeSerializer, TopRecipientsByQuantitySerializer, TopRecipientsByVolumeSerializer, TopSenderDomainsByQuantitySerializer, TopSenderDomainsByVolumeSerializer, TopRecipientDomainsByQuantitySerializer, TopRecipientDomainsByVolumeSerializer
-from mailware.pagination import PageNumberPaginationWithPageCount
+from mailguardian.pagination import PageNumberPaginationWithPageCount
 import json, datetime
 
 class SummaryApiView(APIView):

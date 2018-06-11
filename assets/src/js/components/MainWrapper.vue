@@ -8,7 +8,7 @@
                     <div class="flex items-center lg:justify-between py-2 md:py-0">
                         <div class="w-1/4 lg:hidden">
                             <div href="#" @click="hide = !hide">
-                                <mw-menu-icon class="w-8 h-8 text-white text-5xl"></mw-menu-icon>
+                                <mg-menu-icon class="w-8 h-8 text-white text-5xl"></mg-menu-icon>
                             </div>
                         </div>
                         <div class="w-1/2 lg:w-auto text-center text-white text-xl font-medium">
@@ -19,7 +19,7 @@
                         </div>
                         <div class="w-1/5 sm:w-auto sm:flex text-right h-full hover:text-white text-grey" title="Log out">
                             <div @click="logout">
-                                <mw-exit-to-app-icon class="w-6 h-6"></mw-exit-to-app-icon>
+                                <mg-exit-to-app-icon class="w-6 h-6"></mg-exit-to-app-icon>
                             </div>
                         </div>
                     </div>
@@ -33,61 +33,61 @@
                     <div class="">
                         <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-dashboard-icon class="w-6 h-6 mr-2"></mw-dashboard-icon>
+                                <mg-dashboard-icon class="w-6 h-6 mr-2"></mg-dashboard-icon>
                                 Dashboard
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/messages" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-email-icon class="w-6 h-6 mr-2"></mw-email-icon>
+                                <mg-email-icon class="w-6 h-6 mr-2"></mg-email-icon>
                                 Messages
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/lists" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-exposure-icon class="w-6 h-6 mr-2"></mw-exposure-icon>
+                                <mg-exposure-icon class="w-6 h-6 mr-2"></mg-exposure-icon>
                                 Lists
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/reports" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-insert-chart-icon class="w-6 h-6 mr-2"></mw-insert-chart-icon>
+                                <mg-insert-chart-icon class="w-6 h-6 mr-2"></mg-insert-chart-icon>
                                 Reports
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
                             <router-link to="/tools" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-build-icon class="w-6 h-6 mr-2"></mw-build-icon>
+                                <mg-build-icon class="w-6 h-6 mr-2"></mg-build-icon>
                                 Tools
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/users" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-people-icon class="w-6 h-6 mr-2"></mw-people-icon>
+                                <mg-people-icon class="w-6 h-6 mr-2"></mg-people-icon>
                                 Users
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/domains" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-dns-icon class="w-6 h-6 mr-2"></mw-dns-icon>
+                                <mg-dns-icon class="w-6 h-6 mr-2"></mg-dns-icon>
                                 Domains
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/mailscanner/configuration" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-email-icon class="w-6 h-6 mr-2"></mw-email-icon>
+                                <mg-email-icon class="w-6 h-6 mr-2"></mg-email-icon>
                                 MailScanner Configuration
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/mailscanner/rules" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-import-contacts-icon class="w-6 h-6 mr-2"></mw-import-contacts-icon>
+                                <mg-import-contacts-icon class="w-6 h-6 mr-2"></mg-import-contacts-icon>
                                 MailScanner Rules
                             </router-link>
                         </div>
                         <div class="flex -mb-px" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/settings" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
-                                <mw-settings-icon class="w-6 h-6 mr-2"></mw-settings-icon>
+                                <mg-settings-icon class="w-6 h-6 mr-2"></mg-settings-icon>
                                 Settings
                             </router-link>
                         </div>

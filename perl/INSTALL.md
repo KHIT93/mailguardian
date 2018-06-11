@@ -4,9 +4,9 @@ INSTALLATION INSTRUCTIONS
 
 Copy the following files in /etc/MailScanner/custom:
 
-Mailware.pm
+MailGuardian.pm
 SQLBlackWhiteList.pm
 SQLSpamSettings.pm
-MailwareConf.pm
+MailGuardianConf.pm
 
-Set database connection settings in MailwareConf.pm.
+Set database connection settings in MailGuardianConf.pm.

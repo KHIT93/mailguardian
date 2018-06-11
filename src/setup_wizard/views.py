@@ -29,8 +29,8 @@ class InstalledAPIView(APIView):
             return Response({}, 204)
         return Response({
             'django_version': '2.0.5',
-            'mailware_api_version': '1.0.0',
-            'mailware_version': '1.0.0'
+            'mailguardian_api_version': '1.0.0',
+            'mailguardian_version': '1.0.0'
         }, 200)
 
 class InitializeDatabaseAPIView(APIView):
@@ -57,12 +57,12 @@ class InitializeDatabaseAPIView(APIView):
             Setting.objects.update_or_create(key='quarantine.report.non_spam.hide', defaults={'key' : 'quarantine.report.non_spam.hide', 'value' : serializer.quarantine_report_non_spam_hide})
             Setting.objects.update_or_create(key='quarantine.report.subject', defaults={'key' : 'quarantine.report.subject', 'value' : serializer.quarantine_report_subject})
             response['createsettings'] = 'Initial settings have been configured'
-            # Last update mailware-env.json with the branding information of the application
-            with open(os.path.join(os.path.dirname(BASE_DIR), "mailware-env.json"), 'w') as f:
+            # Last update guardianware-env.json with the branding information of the application
+            with open(os.path.join(os.path.dirname(BASE_DIR), "mailguardian-env.json"), 'w') as f:
                 data = f.read()
-                data.replace('"name": "Mailware"', '"name": "{0}"'.format(serializer.branding_name))
+                data.replace('"name": "MailGuardian"', '"name": "{0}"'.format(serializer.branding_name))
                 data.replace('"tagline": "Securing your email"', '"tagline": "{0}"'.format(serializer.branding_tagline))
                 data.replace('"logo": ""', '"logo": "{0}"'.format(serializer.branding_logo))
                 f.write(data)
-                response['update_env'] = 'Environment file succesfully updated. Please run "sudo systemctl restat mailware.service"'
+                response['update_env'] = 'Environment file succesfully updated. Please run "sudo systemctl restat mailguardian.service"'
 

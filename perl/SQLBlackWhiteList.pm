@@ -1,9 +1,9 @@
 #
-# Mailware for MailScanner
+# MailGuardian for MailScanner
 # Copyright (C) 2003-2011  Steve Freegard (steve@freegard.name)
 # Copyright (C) 2011  Garrod Alwood (garrod.alwood@lorodoes.com)
 # Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
-# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailware/contributers.md)
+# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailguardian/contributers.md)
 #
 #   Custom Module SQLBlackWhiteList
 #
@@ -48,33 +48,33 @@ my ($wtime, $btime);
 my ($dbh);
 my ($sth);
 
-# Get database information from 00MailwareConf.pm
+# Get database information from MailGuardianConf.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailwareConf.pm';
+require $dirname.'/MailGuardianConf.pm';
 
-my ($db_name) = Mailware_get_db_name();
-my ($db_host) = Mailware_get_db_host();
-my ($db_user) = Mailware_get_db_user();
-my ($db_pass) = Mailware_get_db_password();
+my ($db_name) = MailGuardian_get_db_name();
+my ($db_host) = MailGuardian_get_db_host();
+my ($db_user) = MailGuardian_get_db_user();
+my ($db_pass) = MailGuardian_get_db_password();
 
-# Get refresh time from from 00MailwareConf.pm
-my ($bwl_refresh_time) =  Mailware_get_BWL_refresh_time();
+# Get refresh time from from MailGuardianConf.pm
+my ($bwl_refresh_time) =  MailGuardian_get_BWL_refresh_time();
 
 #
 # Initialise SQL spam whitelist and blacklist
 #
 sub InitSQLWhitelist {
-    MailScanner::Log::InfoLog("Mailware: Starting up Mailware SQL Whitelist");
+    MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Whitelist");
     my $entries = CreateList('whitelist', \%Whitelist);
-    MailScanner::Log::InfoLog("Mailware: Read %d whitelist entries", $entries);
+    MailScanner::Log::InfoLog("MailGuardian: Read %d whitelist entries", $entries);
     $wtime = time();
 }
 
 sub InitSQLBlacklist {
-    MailScanner::Log::InfoLog("Mailware: Starting up Mailware SQL Blacklist");
+    MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Blacklist");
     my $entries = CreateList('blacklist', \%Blacklist);
-    MailScanner::Log::InfoLog("Mailware: Read %d blacklist entries", $entries);
+    MailScanner::Log::InfoLog("MailGuardian: Read %d blacklist entries", $entries);
     $btime = time();
 }
 
@@ -84,7 +84,7 @@ sub InitSQLBlacklist {
 sub SQLWhitelist {
     # Do we need to refresh the data?
     if ((time() - $wtime) >= ($bwl_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("Mailware: Whitelist refresh time reached");
+        MailScanner::Log::InfoLog("MailGuardian: Whitelist refresh time reached");
         InitSQLWhitelist();
     }
     my ($message) = @_;
@@ -94,7 +94,7 @@ sub SQLWhitelist {
 sub SQLBlacklist {
     # Do we need to refresh the data?
     if ((time() - $btime) >= ($bwl_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("Mailware: Blacklist refresh time reached");
+        MailScanner::Log::InfoLog("MailGuardian: Blacklist refresh time reached");
         InitSQLBlacklist();
     }
     my ($message) = @_;
@@ -105,11 +105,11 @@ sub SQLBlacklist {
 # Close down the SQL whitelist and blacklist
 #
 sub EndSQLWhitelist {
-    MailScanner::Log::InfoLog("Mailware: Closing down Mailware SQL Whitelist");
+    MailScanner::Log::InfoLog("MailGuardian: Closing down MailGuardian SQL Whitelist");
 }
 
 sub EndSQLBlacklist {
-    MailScanner::Log::InfoLog("Mailware: Closing down Mailware SQL Blacklist");
+    MailScanner::Log::InfoLog("MailGuardian: Closing down MailGuardian SQL Blacklist");
 }
 
 sub CreateList {
@@ -121,12 +121,12 @@ sub CreateList {
         { PrintError => 0, AutoCommit => 1, RaiseError => 1}
     );
     if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
+        MailScanner::Log::WarnLog("MailGuardian: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
     $dbh->do('SET NAMES utf8mb4');
 
     # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
-    #MailScanner::Log::WarnLog("Mailware: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
+    #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
     
     # Remove old entries
     for (keys %$BlackWhite) {
@@ -144,7 +144,7 @@ sub CreateList {
         $count++;
     }
     # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
-    #MailScanner::Log::WarnLog("Mailware: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
+    #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
     
     # Close connections
     $sth->finish();

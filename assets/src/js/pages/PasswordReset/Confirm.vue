@@ -33,7 +33,7 @@
                                 <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animateTransform>
                             </circle>
                         </svg>
-                        <mw-checkmark-icon class="w-4 h-4 mr-1" v-else></mw-checkmark-icon>
+                        <mg-checkmark-icon class="w-4 h-4 mr-1" v-else></mg-checkmark-icon>
                         <span>Reset password</span>
                     </button>
                 </div>

@@ -2,7 +2,7 @@
     <div>
         <h1 class="text-2xl mb-2 text-center border-b pb-1">Welcome</h1>
         <p>
-            Thank you for choosing Mailware as your new platform for securing the email being delivered to, and sent from, your organisation.
+            Thank you for choosing MailGuardian as your new platform for securing the email being delivered to, and sent from, your organisation.
             <br/>We are happy to welcome you aboard
         </p>
         <p>

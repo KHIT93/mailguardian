@@ -1,7 +1,7 @@
-# Mailware
+# MailGuardian
 A Django-based RESTful SPA (Single Page Application) web GUI for MailScanner.
 
-Mailware is your choice no matter if you need a single instance MailScanner deployment for your internal business email services or if you are a commercial hosting company, looking for a modern, reliable and scalable solution for letting you, your staff and your customers easily manage their spam filter appliance.
+MailGuardian is your choice no matter if you need a single instance MailScanner deployment for your internal business email services or if you are a commercial hosting company, looking for a modern, reliable and scalable solution for letting you, your staff and your customers easily manage their spam filter appliance.
 
 ## Important notice
 
@@ -54,12 +54,12 @@ We recommend the following requirements for your hardware, regardless of whether
 
 ## Getting started
 
-Welcome to the Mailware documentation. We are glad that you have chosen our applicatin to manage your MailScanner deployment. We have made it unbelievably easy to deploy and manage your own professional spam filtering appliance.
+Welcome to the MailGuardian documentation. We are glad that you have chosen our applicatin to manage your MailScanner deployment. We have made it unbelievably easy to deploy and manage your own professional spam filtering appliance.
 For this to be as easy as possible, we have made the below instructions for the more technical parts of the deployment, to ensure that most people can follow along and get started.
 
 ### Prerequisites
 
-Before we start deployment of Mailware, we need to have some software installed on our system. This guide currently provides instructions for Debian 9 `Stretch`, but we will also provide commands for CentOS 7. In the meantime, you can refer to the above requirements for what to install.
+Before we start deployment of MailGuardian, we need to have some software installed on our system. This guide currently provides instructions for Debian 9 `Stretch`, but we will also provide commands for CentOS 7. In the meantime, you can refer to the above requirements for what to install.
 All commands asume that you are executing them as `root`
 
 This means that we will be installing the following applications:
@@ -119,22 +119,22 @@ chown root:mtagroup /etc/MailScanner/bayes
 chmod g+rws /etc/MailScanner/bayes
 ```
 
-### Installation of Mailware
+### Installation of MailGuardian
 
 #### Creating the system user
 
 Next, we will create a user, from which we will run our application
 
 ```
-adduser mailware
+adduser mailguardian
 ```
 
 Follow the onscreen prompt to complete the account creation and set a password.
 
-Next we need to assign the new `mailware` user to the `mtagroup`, so that we can read the message queue and perform operations on the queue
+Next we need to assign the new `mailguardian` user to the `mtagroup`, so that we can read the message queue and perform operations on the queue
 
 ```
-usermod -a -G mtagroup mailware
+usermod -a -G mtagroup mailguardian
 ```
 
 #### Installing CPAN modules
@@ -155,40 +155,40 @@ cpan -i SAVI
 
 #### Downloading the application
 
-Next we need to download the application from https://github.com/KHIT93/mailware/releases
+Next we need to download the application from https://github.com/KHIT93/mailguardian/releases
 
 You can choose to download the sources and then compile the frontend assets (CSS and JavaScript) yourself, or you can download a prebuilt package, where these things are already done. We will cover installation from the prebuilt package.
 
-Right click the link to the prebuilt package mailware-X.Y.Z.tar.gz and copy the link.
+Right click the link to the prebuilt package mailguardian-X.Y.Z.tar.gz and copy the link.
 
 Run the following commands to download and extract the application:
 
 ```
-su - mailware
-wget https://github.com/KHIT93/mailware/releases/download/X.Y.Z/mailware-X.Y.Z.tar.gz
-tar xvzf mailware-X.Y.Z.tar.gz
+su - mailguardian
+wget https://github.com/KHIT93/mailguardian/releases/download/X.Y.Z/mailguardian-X.Y.Z.tar.gz
+tar xvzf mailguardian-X.Y.Z.tar.gz
 ```
 
-This should now create a new folder called `mailware` inside `/home/mailware`
+This should now create a new folder called `mailguardian` inside `/home/mailguardian`
 
 #### Creating the Python Virtual Environment
 
 Now that we have downloaded the application, we need to transform the code into a virtual environment for `python` to use, so that any other `python` applications on the system are not affected by the dependencies of this application
 
 ```
-virtualenv -p python3 /home/mailware/mailware
+virtualenv -p python3 /home/mailguardian/mailguardian
 ```
 
 Once this completes, we need to enter the virtual environment and install the `python packages` that are required for the application to run
 
 ```
-cd /home/mailware/mailware
+cd /home/mailguardian/mailguardian
 source bin/activate
 ```
 
 Your prompt should now look something like this:
 ```
-(mailware) mailware@localhost:~/mailware$
+(mailguardian) mailguardian@localhost:~/mailguardian$
 ```
 
 Now we run `pip install -r requirements.txt` to install the necessary `python` packages and libraries that are required for the application to run.
@@ -202,7 +202,7 @@ You can install `gunicorn` with `pip install gunicorn`.
 Now that our virtual environment is configured and ready, we need to run `install.py` so that we can get the webserver configured and prepared the application for first start.
 The wizard that we start with `python install.py` will ask a series of questions regarding your server configuration and your usage of SSL/TLS certificates. We do this so that the application is secure by default and to support modern technologies like `HTTP/2`, We do therefore provide a prebuilt `systemd` unit file for running the application as service on your system as well as a `nginx` configuration for connecting the webserver to the `unix socket` provided by `gunicorn`.
 
-First run `deactivate` and the type `exit` to log out of the `mailware` account and then as `root` change to `home/mailware/mailware` and run `source bin/activate` and then run `python install.py` and follow the instructions to complete the initial steps of application deployment. As this generates some files and installs some applications, this process can take some time. As we generate a secure `Diffie–Hellman` key parameters of `4096` bits, this part alone can take up to 45 minutes and is a mandatory step, since we force the application to be secure by default.
+First run `deactivate` and the type `exit` to log out of the `mailguardian` account and then as `root` change to `home/mailguardian/mailguardian` and run `source bin/activate` and then run `python install.py` and follow the instructions to complete the initial steps of application deployment. As this generates some files and installs some applications, this process can take some time. As we generate a secure `Diffie–Hellman` key parameters of `4096` bits, this part alone can take up to 45 minutes and is a mandatory step, since we force the application to be secure by default.
 
 During exeuction of `install.py`, we will try to guess the hostname of the application and provide you with a URL. This URL will allow you to access the application from your favorite web browser and run the final steps of the installation.
 
@@ -220,7 +220,7 @@ TO-DO
 
 Once the application is fully configured, you need to copy some files to `/etc/postfix` and make some configuration changes to `/etc/postfix/main.cf`.
 
-Copy the `pgsql-transport.cf` from `/home/mailware/mailware/configuration/examples/postfix` to `/etc/postfix` with `cp /home/mailware/mailware/configuration/examples/postfix/pgsql-transport.cf /etc/postfix/pgsql-transport.cf`
+Copy the `pgsql-transport.cf` from `/home/mailguardian/mailguardian/configuration/examples/postfix` to `/etc/postfix` with `cp /home/mailguardian/mailguardian/configuration/examples/postfix/pgsql-transport.cf /etc/postfix/pgsql-transport.cf`
 
 Then add the following lines to the bottom of `/etc/postfix/main.cf`
 
@@ -237,25 +237,25 @@ At the moment, `postfix` should be delivering mail to `MailScanner`, which is sc
 
 We need to fix that, don't we?
 
-First copy `MailwareConf.pm` from `/home/mailware/mailware/perl` to `/usr/share/MailScanner/perl/custom`
+First copy `MailGuardianConf.pm` from `/home/mailguardian/mailguardian/perl` to `/usr/share/MailScanner/perl/custom`
 ```
-cp /home/mailware/mailware/perl/MailwareConf.pm /usr/share/MailScanner/perl/custom/MailwareConf.pm
+cp /home/mailguardian/mailguardian/perl/MailGuardianConf.pm /usr/share/MailScanner/perl/custom/MailGuardianConf.pm
 ```
 
-Next edit `/usr/share/MailScanner/perl/custom/MailwareConf.pm` to match your credentials for the PostgreSQL database.
+Next edit `/usr/share/MailScanner/perl/custom/MailGuardianConf.pm` to match your credentials for the PostgreSQL database.
 
 Then we need to create a link between the remaining files and MailScanner. The easiest way, so that you always have the latest version of the files, is to create a `symlink`.
 
 ```
-ln -s /home/mailware/mailware/perl/Mailware.pm /usr/share/MailScanner/perl/custom
-ln -s /home/mailware/mailware/perl/SQLBlackWhiteList.pm /usr/share/MailScanner/perl/custom
-ln -s /home/mailware/mailware/perl/SQLSpamSettings.pm /usr/share/MailScanner/perl/custom
+ln -s /home/mailguardian/mailguardian/perl/MailGuardian.pm /usr/share/MailScanner/perl/custom
+ln -s /home/mailguardian/mailguardian/perl/SQLBlackWhiteList.pm /usr/share/MailScanner/perl/custom
+ln -s /home/mailguardian/mailguardian/perl/SQLSpamSettings.pm /usr/share/MailScanner/perl/custom
 ```
 
 Next open `/etc/MailScanner/MailScanner.conf` and add/update the following settings:
 
 ```
-Always Looked Up Last = &MailwareLogging
+Always Looked Up Last = &MailGuardianLogging
 Run As User = postfix
 Run As Group = postfix
 Detailed Spam Report = yes

@@ -33,14 +33,14 @@
         <div class="sm:flex">
             <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 sm:mr-1">
                 <h2 class="font-normal text-center border-b">Whitelist</h2>
-                <mw-lists-table :list="whitelist" @next="next_whitelist" @previous="previous_whitelist" @confirmDelete="delete_entry_modal"></mw-lists-table>
+                <mg-lists-table :list="whitelist" @next="next_whitelist" @previous="previous_whitelist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
             <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 sm:ml-1">
                 <h2 class="font-normal text-center border-b">Blacklist</h2>
-                <mw-lists-table :list="blacklist" @next="next_blacklist" @previous="previous_blacklist" @confirmDelete="delete_entry_modal"></mw-lists-table>
+                <mg-lists-table :list="blacklist" @next="next_blacklist" @previous="previous_blacklist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
         </div>
-        <mw-modal @close="cancel_list" @submit="submit_list" :show="show_modal" :modal-title="'Add ' + form.listing_type + ' entry'">
+        <mg-modal @close="cancel_list" @submit="submit_list" :show="show_modal" :modal-title="'Add ' + form.listing_type + ' entry'">
             <form @submit.prevent="submit_list">
                 <div>
                     <div class="md:flex md:items-center mb-6">
@@ -134,10 +134,10 @@
                     </div>
                 </div>
             </form>
-        </mw-modal>
-        <mw-modal @close="delete_entry_no" @submit="delete_entry" submit-button-text="Yes" close-button-text="No" :show="delete_modal" modal-title="Delete entry?">
+        </mg-modal>
+        <mg-modal @close="delete_entry_no" @submit="delete_entry" submit-button-text="Yes" close-button-text="No" :show="delete_modal" modal-title="Delete entry?">
             <p>Are you sure that you want to delete the {{ entry_to_delete.listing_type }} entry from {{ entry_to_delete._from }} to {{ entry_to_delete._to }}?</p>
-        </mw-modal>
+        </mg-modal>
     </div>
 </template>
 <script>
@@ -147,8 +147,8 @@ import ListsTable from '../../components/ListsTable.vue';
 import Modal from '../../components/Modal.vue';
 export default {
     components: {
-        'mw-lists-table': ListsTable,
-        'mw-modal': Modal
+        'mg-lists-table': ListsTable,
+        'mg-modal': Modal
     },
     data: () => {
         return {

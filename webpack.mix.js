@@ -15,6 +15,6 @@ let tailwindcss = require('tailwindcss');
 mix.js('./assets/src/js/app.js', './assets/dist/js')
    .less('./assets/src/css/app.less', './assets/dist/css').options({
        postCss: [
-           tailwindcss('./mailware.js'),
+           tailwindcss('./mailguardian.js'),
        ]
    });

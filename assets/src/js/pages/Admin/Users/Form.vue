@@ -54,7 +54,7 @@
                 <div class="md:flex md:items-center mb-6" v-if="!form.is_staff">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <mw-user-domains :domains="form.domains" @submit="addDomain" @destroy="removeDomain"></mw-user-domains>
+                        <mg-user-domains :domains="form.domains" @submit="addDomain" @destroy="removeDomain"></mg-user-domains>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">
@@ -67,7 +67,7 @@
                 </div>
             </form>
         </div>
-        <mw-change-password-modal @close="show_password_modal = false" @submit="show_password_modal = false" :show="show_password_modal" :user-id="entity.id"></mw-change-password-modal>
+        <mg-change-password-modal @close="show_password_modal = false" @submit="show_password_modal = false" :show="show_password_modal" :user-id="entity.id"></mg-change-password-modal>
     </div>
 </template>
 
@@ -80,8 +80,8 @@ import ChangePasswordModal from '../../../components/ChangePasswordModal.vue';
 export default {
     props: ['id'],
     components: {
-        'mw-user-domains': UserDomainTable,
-        'mw-change-password-modal': ChangePasswordModal
+        'mg-user-domains': UserDomainTable,
+        'mg-change-password-modal': ChangePasswordModal
     },
     data: () => {
         return {

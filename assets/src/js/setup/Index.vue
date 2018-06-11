@@ -10,15 +10,15 @@
                     </div>
                     <div class="flex mr-2">
                         <button @click="previous" type="button" :disabled="currentStepIndex <= 0" :class="{ 'cursor-not-allowed bg-grey-light border-grey-light hover:bg-grey-light hover:border-grey-light': currentStepIndex <= 0, 'bg-grey-lighter hover:bg-grey border-grey-lighter hover:border-grey shadow': currentStepIndex > 0 }" class="flex-no-shrink text-sm border-4 text-black py-1 px-2 rounded mr-2">
-                            <mw-navigate-before-icon class="w-3 h-3"></mw-navigate-before-icon>
+                            <mg-navigate-before-icon class="w-3 h-3"></mg-navigate-before-icon>
                             Previous
                         </button>
                         <button @click="next" v-if="currentStepIndex < steps.length-1" type="button" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow" :class="{ 'cursor-not-allowed bg-blue-lighter border-blue-lighter hover:bg-blue-lighter hover:border-blue-lighter shadow-none': !steps[currentStepIndex].completed && currentStepIndex > 0 }" :disabled="!steps[currentStepIndex].completed && currentStepIndex > 0">
                             Next
-                            <mw-navigate-next-icon class="w-3 h-3"></mw-navigate-next-icon>
+                            <mg-navigate-next-icon class="w-3 h-3"></mg-navigate-next-icon>
                         </button>
                         <button v-else type="button" @click="finish" class="flex-no-shrink bg-green hover:bg-green-dark border-green hover:border-green-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
-                            <mw-checkmark-icon class="w-3 h-3"></mw-checkmark-icon>
+                            <mg-checkmark-icon class="w-3 h-3"></mg-checkmark-icon>
                             Finish
                         </button>
                     </div>

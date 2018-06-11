@@ -23,7 +23,7 @@
                                 <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animateTransform>
                             </circle>
                         </svg>
-                        <mw-email-icon class="w-4 h-4 mr-1" v-else></mw-email-icon>
+                        <mg-email-icon class="w-4 h-4 mr-1" v-else></mg-email-icon>
                         <span>Send confirmation email</span>
                     </button>
                 </div>

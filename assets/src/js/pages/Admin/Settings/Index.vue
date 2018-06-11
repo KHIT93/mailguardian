@@ -14,7 +14,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <mw-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mw-settings-item>
+                            <mg-settings-item :item="item" v-for="item in config.results" :key="item.id" @saved="get(search_query)"></mg-settings-item>
                         </tbody>
                     </table>
                 </div>
@@ -34,7 +34,7 @@ export default {
         }
     },
     components: {
-        'mw-settings-item': SettingsItem
+        'mg-settings-item': SettingsItem
     },
     computed: {
         ...mapGetters(['user'])

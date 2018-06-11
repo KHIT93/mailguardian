@@ -1,12 +1,12 @@
 <template>
-    <mw-message-list :messages="messages" :count="message_count" class="lg:px-4 pt-6 pb-8"></mw-message-list>
+    <mg-message-list :messages="messages" :count="message_count" class="lg:px-4 pt-6 pb-8"></mg-message-list>
 </template>
 <script>
 import { mapMutations } from 'vuex';
 import MessageList from '../../components/MessageList.vue';
 export default {
     components: {
-        'mw-message-list': MessageList
+        'mg-message-list': MessageList
     },
     data: () => {
         return {

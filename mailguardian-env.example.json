@@ -2,9 +2,9 @@
     "debug": true,
     "hostname": "localhost",
     "database": {
-        "name": "mailware",
-        "user": "mailware",
-        "password": "mailware",
+        "name": "mailguardian",
+        "user": "mailguardian",
+        "password": "mailguardian",
         "host": "localhost",
         "port": "5432",
         "options": {
@@ -35,7 +35,7 @@
     "audit_log": true,
     "mta": "postfix",
     "branding": {
-        "name": "Mailware",
+        "name": "MailGuardian",
         "tagline": "Securing your email",
         "logo": ""
     }

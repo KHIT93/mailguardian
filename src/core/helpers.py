@@ -1,6 +1,6 @@
 import os
 
-class MailWareConfiguration:
+class MailGuardianConfiguration:
     _configuration = {}
 
     def __init__(self, data, *args, **kwargs):

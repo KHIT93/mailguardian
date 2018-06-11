@@ -1,11 +1,11 @@
-{% extends 'mailware/layout.html' %}
+{% extends 'mailguardian/layout.html' %}
 
 {% block content %}
 <div id="app">
-    <mw-notifications></mw-notifications>
-    <mw-wrapper v-cloak app-name="{{ app_name }}">
+    <mg-notifications></mg-notifications>
+    <mg-wrapper v-cloak app-name="{{ app_name }}">
         <router-view v-cloak>{% csrf_token %}</router-view>
-    </mw-wrapper>
+    </mg-wrapper>
     <portal-target name="modals"></portal-target>
     <div class="fixed pin z-50 bg-smoke-light fade" :class="{ 'hidden' : !loading }">
         <div class="loader" style="top:50%; right:50%;">

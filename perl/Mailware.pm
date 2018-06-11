@@ -1,11 +1,11 @@
 #
-# Mailware for MailScanner
+# MailGuardian for MailScanner
 # Copyright (C) 2003-2011  Steve Freegard (steve@freegard.name)
 # Copyright (C) 2011  Garrod Alwood (garrod.alwood@lorodoes.com)
 # Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
-# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailware/contributers.md)
+# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailguardian/contributers.md)
 #
-#   Custom Module Mailware
+#   Custom Module MailGuardian
 #
 #   Version 1.0
 #
@@ -41,7 +41,7 @@ use Socket;
 use Encoding::FixLatin qw(fix_latin);
 use Digest::SHA1;
 
-# Uncommet the folloging line when debugging Mailware.pm
+# Uncommet the folloging line when debugging MailGuardian.pm
 #use Data::Dumper;
 
 use vars qw($VERSION);
@@ -60,22 +60,22 @@ my $server_port = 11553;
 my $timeout = 3600;
 my $ug = Data::UUID->new;
 
-# Get database information from MailwareConf.pm
+# Get database information from MailGuardianConf.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailwareConf.pm';
+require $dirname.'/MailGuardianConf.pm';
 
-my ($db_name) = Mailware_get_db_name();
-my ($db_host) = Mailware_get_db_host();
-my ($db_user) = Mailware_get_db_user();
-my ($db_pass) = Mailware_get_db_password();
+my ($db_name) = MailGuardian_get_db_name();
+my ($db_host) = MailGuardian_get_db_host();
+my ($db_user) = MailGuardian_get_db_user();
+my ($db_pass) = MailGuardian_get_db_password();
 
-sub InitMailwareLogging {
+sub InitMailGuardianLogging {
     my $pid = fork();
     if ($pid) {
         # MailScanner child process
         waitpid $pid, 0;
-        MailScanner::Log::InfoLog("Mailware: Started Mailware SQL Logging child");
+        MailScanner::Log::InfoLog("MailGuardian: Started MailGuardian SQL Logging child");
     } else {
         # New process
         # Detach from parent, make connections, and listen for requests
@@ -83,7 +83,7 @@ sub InitMailwareLogging {
         if (!fork()) {
             $SIG{HUP} = $SIG{INT} = $SIG{PIPE} = $SIG{TERM} = $SIG{ALRM} = \&ExitLogging;
             alarm $timeout;
-            $0 = "Mailware SQL";
+            $0 = "MailGuardian SQL";
             InitConnection();
             ListenForMessages();
         }
@@ -109,7 +109,7 @@ sub InitConnection {
         { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
     );
     if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: Unable to initialise database connection: %s", $DBI::errstr);
+        MailScanner::Log::WarnLog("MailGuardian: Unable to initialise database connection: %s", $DBI::errstr);
     }
     # $dbh->do('SET NAMES utf8mb4');
 }
@@ -134,7 +134,7 @@ sub ListenForMessages {
         alarm $timeout;
         # Make sure we"re only receiving local connections
         if ($dotted_quad ne "127.0.0.1") {
-            MailScanner::Log::WarnLog("Mailware: Error: unexpected connection from %s", $dotted_quad);
+            MailScanner::Log::WarnLog("MailGuardian: Error: unexpected connection from %s", $dotted_quad);
             close CLIENT;
             next;
         }
@@ -155,7 +155,7 @@ sub ListenForMessages {
 
         # Check to make sure DB connection is still valid
         InitConnection unless $dbh->ping;
-        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date, released) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Error: %s", $DBI::errstr);
+        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, quarantined, infected, size, mailq_id, is_mcp, mcp_score, date, released) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Error: %s", $DBI::errstr);
         # Log message
         my $message_id = $ug->create_str();
         my $header_id = $ug->create_str();
@@ -202,18 +202,18 @@ sub ListenForMessages {
         );
         
         # Uncomment this row for debugging
-        #MailScanner::Log::InfoLog("Mailware: $message_id: Mailware SQL inserted row");
+        #MailScanner::Log::InfoLog("MailGuardian: $message_id: MailGuardian SQL inserted row");
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_mail) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id}: Mailware SQL Cannot insert row: %s", $sth_mail->errstr);
+            MailScanner::Log::WarnLog("MailGuardian: $$message{id}: MailGuardian SQL Cannot insert row: %s", $sth_mail->errstr);
         } else {
-            MailScanner::Log::InfoLog("Mailware: $$message{id}: Logged to Mailware SQL");
+            MailScanner::Log::InfoLog("MailGuardian: $$message{id}: Logged to MailGuardian SQL");
         }
 
         # Uncomment this row for debugging
-        #MailScanner::Log::InfoLog("Mailware: $$message{id}: Mailware SQL Before storing headers");
-        my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Headers Error: %s", $DBI::errstr);        
+        #MailScanner::Log::InfoLog("MailGuardian: $$message{id}: MailGuardian SQL Before storing headers");
+        my $sth_headers = $dbh->prepare("INSERT INTO mail_headers (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Headers Error: %s", $DBI::errstr);        
         # Log Message Headers
         $sth_headers->execute(
             $header_id,
@@ -222,16 +222,16 @@ sub ListenForMessages {
         );
 
         # Uncomment this row for debugging
-        #MailScanner::Log::InfoLog("Mailware: $$message{id}: Mailware SQL After storing headers");
+        #MailScanner::Log::InfoLog("MailGuardian: $$message{id}: MailGuardian SQL After storing headers");
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_headers) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id} Headers: Mailware SQL Cannot insert row: %s", $sth_headers->errstr);
+            MailScanner::Log::WarnLog("MailGuardian: $$message{id} Headers: MailGuardian SQL Cannot insert row: %s", $sth_headers->errstr);
         } else {
-            MailScanner::Log::InfoLog("Mailware: $$message{id} Headers: Logged to Mailware SQL");
+            MailScanner::Log::InfoLog("MailGuardian: $$message{id} Headers: Logged to MailGuardian SQL");
         }
 
-        my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MailScanner Report Error: %s", $DBI::errstr);
+        my $sth_report = $dbh->prepare("INSERT INTO mail_mailscannerreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message MailScanner Report Error: %s", $DBI::errstr);
         # Log Message MailScanner Report
         $sth_report->execute(
             $report_id,
@@ -241,12 +241,12 @@ sub ListenForMessages {
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_report) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id} MailScanner Report: Mailware SQL Cannot insert row: %s", $sth_report->errstr);
+            MailScanner::Log::WarnLog("MailGuardian: $$message{id} MailScanner Report: MailGuardian SQL Cannot insert row: %s", $sth_report->errstr);
         } else {
-            MailScanner::Log::InfoLog("Mailware: $$message{id} MailScanner Report: Logged to Mailware SQL");
+            MailScanner::Log::InfoLog("MailGuardian: $$message{id} MailScanner Report: Logged to MailGuardian SQL");
         }
 
-        my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("Mailware: Message MCP Report Error: %s", $DBI::errstr);
+        my $sth_mcp = $dbh->prepare("INSERT INTO mail_mcpreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message MCP Report Error: %s", $DBI::errstr);
         # Log Message MCP Report
         $sth_mcp->execute(
             $mcp_id,
@@ -256,12 +256,12 @@ sub ListenForMessages {
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_mcp) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id} MCP Report: Mailware SQL Cannot insert row: %s", $sth_mcp->errstr);
+            MailScanner::Log::WarnLog("MailGuardian: $$message{id} MCP Report: MailGuardian SQL Cannot insert row: %s", $sth_mcp->errstr);
         } else {
-            MailScanner::Log::InfoLog("Mailware: $$message{id} MCP Report: Logged to Mailware SQL");
+            MailScanner::Log::InfoLog("MailGuardian: $$message{id} MCP Report: Logged to MailGuardian SQL");
         }
 
-        my $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("Mailware: Message RBL Report Error: %s", $DBI::errstr);
+        my $sth_rbl = $dbh->prepare("INSERT INTO mail_rblreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message RBL Report Error: %s", $DBI::errstr);
         # Log Message RBL Report
         $sth_rbl->execute(
             $rbl_id,
@@ -271,12 +271,12 @@ sub ListenForMessages {
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_rbl) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id} RBL Report: Mailware SQL Cannot insert row: %s", $sth_rbl->errstr);
+            MailScanner::Log::WarnLog("MailGuardian: $$message{id} RBL Report: MailGuardian SQL Cannot insert row: %s", $sth_rbl->errstr);
         } else {
-            MailScanner::Log::InfoLog("Mailware: $$message{id} RBL Report: Logged to Mailware SQL");
+            MailScanner::Log::InfoLog("MailGuardian: $$message{id} RBL Report: Logged to MailGuardian SQL");
         }
 
-        my $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("Mailware: Message Spam Report Error: %s", $DBI::errstr);
+        my $sth_spam = $dbh->prepare("INSERT INTO mail_spamreport (id, contents, message_id) VALUES (?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Spam Report Error: %s", $DBI::errstr);
         # Log Message SPAM Report
         $sth_spam->execute(
             $spam_id,
@@ -286,9 +286,9 @@ sub ListenForMessages {
 
         # This doesn't work in the event we have no connection by now ?
         if (!$sth_spam) {
-            MailScanner::Log::WarnLog("Mailware: $$message{id} SPAM Report: Mailware SQL Cannot insert row: %s", $sth_spam->errstr);
+            MailScanner::Log::WarnLog("MailGuardian: $$message{id} SPAM Report: MailGuardian SQL Cannot insert row: %s", $sth_spam->errstr);
         } else {
-            MailScanner::Log::InfoLog("Mailware: $$message{id} SPAM Report: Logged to Mailware SQL");
+            MailScanner::Log::InfoLog("MailGuardian: $$message{id} SPAM Report: Logged to MailGuardian SQL");
         }
 
         #$dbh->commit();
@@ -300,7 +300,7 @@ sub ListenForMessages {
     }
 }
 
-sub EndMailwareLogging {
+sub EndMailGuardianLogging {
     # Tell server to shut down.  Another child will start a new server
     # if we are here due to old age instead of administrative intervention
     socket(TO_SERVER, PF_INET, SOCK_STREAM, getprotobyname("tcp"));
@@ -311,7 +311,7 @@ sub EndMailwareLogging {
     close TO_SERVER;
 }
 
-sub MailwareLogging {
+sub MailGuardianLogging {
     my ($message) = @_;
 
     # Don't bother trying to do an insert if no message is passed-in
@@ -336,7 +336,7 @@ sub MailwareLogging {
     $subject =~ s/\r/ /g;  # and no CR characters
 
     # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
-    #MailScanner::Log::WarnLog("Mailware: Debug: var subject: %s", Dumper($subject));
+    #MailScanner::Log::WarnLog("MailGuardian: Debug: var subject: %s", Dumper($subject));
 
     # Get rid of control chars and tidy-up SpamAssassin report
     my $spamreport = $message->{spamreport};
@@ -388,8 +388,8 @@ sub MailwareLogging {
         $text =~ s/\t/ /g;  # and no TAB characters
         $text =~ s/\r/ /g;  # and no CR characters
 
-        # Uncommet the folloging line when debugging Mailware.pm
-        #MailScanner::Log::WarnLog("Mailware: Debug: VAR text: %s", Dumper($text));
+        # Uncommet the folloging line when debugging MailGuardian.pm
+        #MailScanner::Log::WarnLog("MailGuardian: Debug: VAR text: %s", Dumper($text));
 
         push (@report_array, $text);
     }
@@ -397,8 +397,8 @@ sub MailwareLogging {
     # Sanitize reports
     my $reports = join(",", @report_array);
 
-    # Uncommet the folloging line when debugging Mailware.pm
-    #MailScanner::Log::WarnLog("Mailware: DEBUG: var reports: %s", Dumper($reports));
+    # Uncommet the folloging line when debugging MailGuardian.pm
+    #MailScanner::Log::WarnLog("MailGuardian: DEBUG: var reports: %s", Dumper($reports));
 
     # Fix the $message->{clientip} for later versions of Exim
     # where $message->{clientip} contains ip.ip.ip.ip.port
@@ -473,12 +473,12 @@ sub MailwareLogging {
         my $addr = sockaddr_in($server_port, $loop);
         connect(TO_SERVER, $addr) and last;
         # Failed to connect - kick off new child, wait, and try again
-        InitMailwareLogging();
+        InitMailGuardianLogging();
         sleep 5;
     }
 
     # Pass data to server process
-    MailScanner::Log::InfoLog("Mailware: Logging message $msg{id} to SQL");
+    MailScanner::Log::InfoLog("MailGuardian: Logging message $msg{id} to SQL");
     print TO_SERVER $p;
     print TO_SERVER "END\n";
     close TO_SERVER;

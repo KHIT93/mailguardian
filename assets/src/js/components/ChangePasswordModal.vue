@@ -1,5 +1,5 @@
 <template>
-    <mw-modal @close="cancel" @submit="submit" :show="show" modal-title="Change password">
+    <mg-modal @close="cancel" @submit="submit" :show="show" modal-title="Change password">
         <form @submit.prevent="submit">
             <div class="md:flex md:items-center mb-6 mt-4" v-if="userId">
                 <div class="md:w-1/3">
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </form>
-    </mw-modal>
+    </mg-modal>
 </template>
 
 <script>
@@ -50,7 +50,7 @@ export default {
         }
     },
     components: {
-        'mw-modal': Modal
+        'mg-modal': Modal
     },
     methods: {
         submit() {

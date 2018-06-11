@@ -1,6 +1,6 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule, TransportLog
 from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, SpamAssassinRuleSerializer, TransportLogSerializer
-from mailware.pagination import PageNumberPaginationWithPageCount
+from mailguardian.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import action

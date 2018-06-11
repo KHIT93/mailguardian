@@ -32,9 +32,9 @@
             </div>
 
         </div>
-        <mw-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message">
+        <mg-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message">
             {{ message_contents }}
-        </mw-modal>
+        </mg-modal>
     </div>
 </template>
 

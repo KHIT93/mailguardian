@@ -136,11 +136,11 @@ export default {
             form: new Form({
                 admin_email: '',
                 admin_password: '',
-                branding_name: 'Mailware',
+                branding_name: 'MailGuardian',
                 branding_tagline: 'Securing your email',
                 branding_logo: '',
                 quarantine_report_from: '',
-                quarantine_report_subject: 'Mailware Quarantine Report',
+                quarantine_report_subject: 'MailGuardian Quarantine Report',
                 quarantine_report_daily: false,
                 quarantine_report_non_spam_hide: true
             })

@@ -1,12 +1,12 @@
 [Unit]
-Description=Mailware gunicorn daemon
+Description=MailGuardian gunicorn daemon
 After=network.target
 
 [Service]
-User=mailware
+User=mailguardian
 Group=mtagroup
-WorkingDirectory=/home/mailware/app/src
-ExecStart=/home/mailware/app/bin/gunicorn --log-file /var/log/mailware/app.log --log-level info --workers 4 --bind unix:/home/mailware/app/run/mailware.sock mailware.wsgi:application
+WorkingDirectory=/home/mailguardian/app/src
+ExecStart=/home/mailguardian/app/bin/gunicorn --log-file /var/log/mailguardian/app.log --log-level info --workers 4 --bind unix:/home/mailguardian/app/run/mailguardian.sock mailguardian.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

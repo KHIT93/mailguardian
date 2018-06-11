@@ -1,6 +1,6 @@
 <template>
     <div class="absolute pin-r pin-b z-10" v-cloak>
-        <mw-notification v-for="item in notifications" :notification="item" :key="item.id"></mw-notification>
+        <mg-notification v-for="item in notifications" :notification="item" :key="item.id"></mg-notification>
     </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
         }
     },
     components: {
-        'mw-notification': Notification
+        'mg-notification': Notification
     },
     computed: {
         ...mapGetters(['notifications'])

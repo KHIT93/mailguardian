@@ -2,7 +2,7 @@
     <div class="justify-center flex pt-8">
         <div class="w-full max-w-sm">
             <form @submit.prevent="submit" class="bg-white shadow-md sm:rounded px-8 pt-6 pb-8 mb-4" method="POST">
-                <mw-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Error during login', message: form.errors.get('non_field_errors'), type: 'error' }"></mw-notification>
+                <mg-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Error during login', message: form.errors.get('non_field_errors'), type: 'error' }"></mg-notification>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/3">
                     <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
@@ -33,7 +33,7 @@
                                 <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animateTransform>
                             </circle>
                         </svg>
-                        <mw-lock-icon class="w-4 h-4 mr-1" v-else></mw-lock-icon>
+                        <mg-lock-icon class="w-4 h-4 mr-1" v-else></mg-lock-icon>
                         <span>Sign In</span>
                     </button>
                     <router-link class="inline-block align-baseline text-sm text-blue hover:text-blue-darker" to="/password-reset">
@@ -42,7 +42,7 @@
                 </div>
             </form>
             <p class="text-center text-grey text-xs">
-                &copy;2018 MailWare (@KHIT93). All rights reserved.
+                &copy;2018 MailGuardian (@KHIT93). All rights reserved.
             </p>
         </div>
     </div>
@@ -64,7 +64,7 @@
             }
         },
         components: {
-            'mw-notification': Notification
+            'mg-notification': Notification
         },
         mounted() {
             if(this.isLoggedIn) {

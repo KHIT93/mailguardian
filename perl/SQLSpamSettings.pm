@@ -1,9 +1,9 @@
 #
-# Mailware for MailScanner
+# MailGuardian for MailScanner
 # Copyright (C) 2003-2011  Steve Freegard (steve@freegard.name)
 # Copyright (C) 2011  Garrod Alwood (garrod.alwood@lorodoes.com)
 # Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
-# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailware/contributers.md)
+# Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailguardian/contributers.md)
 #
 #   Custom Module SQLSpamSettings
 #
@@ -52,18 +52,18 @@ my (%LowSpamScores, %HighSpamScores);
 my (%ScanList);
 my ($sstime, $hstime, $nstime);
 
-# Get database information from 00MailwareConf.pm
+# Get database information from MailGuardianConf.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailwareConf.pm';
+require $dirname.'/MailGuardianConf.pm';
 
-my ($db_name) = Mailware_get_db_name();
-my ($db_host) = Mailware_get_db_host();
-my ($db_user) = Mailware_get_db_user();
-my ($db_pass) = Mailware_get_db_password();
+my ($db_name) = MailGuardian_get_db_name();
+my ($db_host) = MailGuardian_get_db_host();
+my ($db_user) = MailGuardian_get_db_user();
+my ($db_pass) = MailGuardian_get_db_password();
 
-# Get refresh time from from 00MailwareConf.pm
-my ($ss_refresh_time) =  Mailware_get_SS_refresh_time();
+# Get refresh time from from MailGuardianConf.pm
+my ($ss_refresh_time) =  MailGuardian_get_SS_refresh_time();
 
 # Check MySQL version
 sub CheckSQLVersion {
@@ -72,7 +72,7 @@ sub CheckSQLVersion {
         { PrintError => 0, AutoCommit => 1, RaiseError => 1}
     );
     if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: SQLSpamSettings:: Unable to initialise database connection: %s", $DBI::errstr);
+        MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: Unable to initialise database connection: %s", $DBI::errstr);
     }
     $SQLversion = $dbh->{mysql_serverversion};
     $dbh->disconnect;
@@ -85,21 +85,21 @@ sub CheckSQLVersion {
 sub InitSQLSpamScores
 {
     my ($entries) = CreateScoreList('spamscore', \%LowSpamScores);
-    MailScanner::Log::InfoLog("Mailware: SQLSpamSettings:: Read %d Spam entries", $entries);
+    MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d Spam entries", $entries);
     $sstime = time();
 }
 
 sub InitSQLHighSpamScores
 {
     my $entries = CreateScoreList('highspamscore', \%HighSpamScores);
-    MailScanner::Log::InfoLog("Mailware: SQLSpamSettings:: Read %d high Spam entries", $entries);
+    MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d high Spam entries", $entries);
     $hstime = time();
 }
 
 sub InitSQLNoScan
 {
     my $entries = CreateNoScanList('noscan', \%ScanList);
-    MailScanner::Log::InfoLog("Mailware: SQLSpamSettings:: Read %d No Spam Scan entries", $entries);
+    MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d No Spam Scan entries", $entries);
     $nstime = time();
 }
 
@@ -110,7 +110,7 @@ sub SQLSpamScores
 {
     # Do we need to refresh the data?
     if ((time() - $sstime) >= ($ss_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("Mailware: SQLSpamScores refresh time reached");
+        MailScanner::Log::InfoLog("MailGuardian: SQLSpamScores refresh time reached");
         InitSQLSpamScores();
     }
     my ($message) = @_;
@@ -122,7 +122,7 @@ sub SQLHighSpamScores
 {
     # Do we need to refresh the data?
     if ((time() - $hstime) >= ($ss_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("Mailware: SQLHighSpamScores refresh time reached");
+        MailScanner::Log::InfoLog("MailGuardian: SQLHighSpamScores refresh time reached");
         InitSQLHighSpamScores();
     }
     my ($message) = @_;
@@ -134,7 +134,7 @@ sub SQLNoScan
 {
     # Do we need to refresh the data?
     if ((time() - $nstime) >= ($ss_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("Mailware: SQLNoScan refresh time reached");
+        MailScanner::Log::InfoLog("MailGuardian: SQLNoScan refresh time reached");
         InitSQLNoScan();
     }
     my ($message) = @_;
@@ -147,17 +147,17 @@ sub SQLNoScan
 #
 sub EndSQLSpamScores
 {
-    MailScanner::Log::InfoLog("Mailware: SQLSpamSettings:: Closing down Mailware SQL Spam Scores");
+    MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Closing down MailGuardian SQL Spam Scores");
 }
 
 sub EndSQLHighSpamScores
 {
-    MailScanner::Log::InfoLog("Mailware: SQLSpamSettings:: Closing down Mailware SQL High Spam Scores");
+    MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Closing down MailGuardian SQL High Spam Scores");
 }
 
 sub EndSQLNoScan
 {
-    MailScanner::Log::InfoLog("Mailware: SQLSpamSettings:: Closing down Mailware SQL No Scan");
+    MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Closing down MailGuardian SQL No Scan");
 }
 
 # Read the list of users that have defined their own Spam Score value. Also
@@ -172,7 +172,7 @@ sub CreateScoreList
         { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
     );
     if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
+        MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
     $sql = "SELECT username, $type FROM auth_user WHERE $type > 0";
@@ -205,7 +205,7 @@ sub CreateNoScanList
         { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
     );
     if (!$dbh) {
-        MailScanner::Log::WarnLog("Mailware: SQLSpamSettings::CreateNoScanList::: Unable to initialise database connection: %s", $DBI::errstr);
+        MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings::CreateNoScanList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
     $sql = "SELECT username, $type FROM auth_user WHERE $type > 0";
