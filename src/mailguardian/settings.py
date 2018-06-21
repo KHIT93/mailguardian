@@ -106,6 +106,30 @@ DATABASES = {
     }
 }
 
+# Make sure that we override the databse settings when running Travis/GitLab CI
+if 'TRAVIS' in os.environ or 'GITLAB_CI' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.postgresql',
+            'NAME':     'travisci',
+            'USER':     'postgres',
+            'PASSWORD': '',
+            'HOST':     'localhost',
+            'PORT':     '',
+        }
+    }
+elif 'GITLAB_CI' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.postgresql',
+            'NAME':     'ci',
+            'USER':     'postgres',
+            'PASSWORD': 'postgres',
+            'HOST':     'postgres',
+            'PORT':     '5432',
+        }
+    }
+
 # Caching
 # https://docs.djangoproject.com/en/2.0/topics/cache/#database-caching
 if DEBUG:
