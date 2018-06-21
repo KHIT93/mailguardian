@@ -66,14 +66,14 @@ my ($bwl_refresh_time) =  MailGuardian_get_BWL_refresh_time();
 #
 sub InitSQLWhitelist {
     MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Whitelist");
-    my $entries = CreateList('whitelist', \%Whitelist);
+    my $entries = CreateList('whitelisted', \%Whitelist);
     MailScanner::Log::InfoLog("MailGuardian: Read %d whitelist entries", $entries);
     $wtime = time();
 }
 
 sub InitSQLBlacklist {
     MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Blacklist");
-    my $entries = CreateList('blacklist', \%Blacklist);
+    my $entries = CreateList('blacklisted', \%Blacklist);
     MailScanner::Log::InfoLog("MailGuardian: Read %d blacklist entries", $entries);
     $btime = time();
 }
@@ -123,7 +123,6 @@ sub CreateList {
     if (!$dbh) {
         MailScanner::Log::WarnLog("MailGuardian: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
-    $dbh->do('SET NAMES utf8mb4');
 
     # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
     #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
@@ -175,7 +174,7 @@ sub LookupList {
         push (@subdomains, "*.".$subdom);
     }
 
-    @keys = ('default');
+    @keys = ('*');
     @todomain = @{$message->{todomain}};
     @to = @{$message->{to}};
     foreach $toAdd (@to) {
@@ -214,7 +213,7 @@ sub LookupList {
         return 1 if $BlackWhite->{$i}{$ip2c};
         return 1 if $BlackWhite->{$i}{$ip1};
         return 1 if $BlackWhite->{$i}{$ip1c};
-        return 1 if $BlackWhite->{$i}{'default'};
+        return 1 if $BlackWhite->{$i}{'*'};
         foreach (@subdomains) {
             return 1 if $BlackWhite->{$i}{$_};
         }
