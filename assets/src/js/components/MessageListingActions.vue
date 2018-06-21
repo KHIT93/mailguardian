@@ -58,10 +58,10 @@ export default {
     },
     methods: {
         blacklist_modal() {
-            listing_modal('blacklisted');
+            listing_modal('blacklist');
         },
         whitelist_modal() {
-            listing_modal('whitelisted');
+            listing_modal('whitelist');
         },
         listing_modal(listing_type) {
             

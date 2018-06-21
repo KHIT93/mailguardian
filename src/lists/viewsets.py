@@ -24,7 +24,7 @@ class ListEntryViewSet(viewsets.ModelViewSet):
         return qs
 
 class BlacklistEntryViewSet(ListEntryViewSet):
-    queryset = ListEntry.objects.filter(listing_type='blacklisted')
+    queryset = ListEntry.objects.filter(listing_type='blacklist')
 
 class WhitelistEntryViewSet(ListEntryViewSet):
-    queryset = ListEntry.objects.filter(listing_type='whitelisted')
+    queryset = ListEntry.objects.filter(listing_type='whitelist')
