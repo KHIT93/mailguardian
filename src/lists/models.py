@@ -18,8 +18,8 @@ class ListEntry(models.Model):
     to_address = models.CharField("To", max_length=511, blank=True, default="", db_index=True)
     to_domain = models.CharField("To", max_length=255, null=True, blank=True, default="", db_index=True)
     listing_type = models.CharField(max_length=12, choices=(
-        ('blacklist', 'Blacklisted'),
-        ('whitelist', 'Whitelisted')
+        ('blacklisted', 'Blacklisted'),
+        ('whitelisted', 'Whitelisted')
     ), db_index=True)
 
     def save(self, *args, **kwargs):

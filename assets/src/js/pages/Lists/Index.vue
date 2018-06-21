@@ -244,11 +244,11 @@ export default {
             this.search_query = null;
         },
         show_blacklist_modal() {
-            this.form.listing_type = 'blacklist'
+            this.form.listing_type = 'blacklisted'
             this.show_modal = true;
         },
         show_whitelist_modal() {
-            this.form.listing_type = 'whitelist'
+            this.form.listing_type = 'whitelisted'
             this.show_modal = true;
         },
         submit_list() {
