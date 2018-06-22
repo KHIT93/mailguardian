@@ -37,10 +37,16 @@ export default {
                     commit('setCurrentUser', response.data);
                 }
                 commit('toggleLoading');
+                resolve();
             }).catch(error => {
                 commit('toggleLoading');
                 reject();
             })
         })
+    },
+    getSettings({commit, state}) {
+        axios.get('/api/settings/').then(response => {
+            commit('setSettings', response.data.results);
+        });
     }
 }

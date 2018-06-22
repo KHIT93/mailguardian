@@ -108,10 +108,10 @@ const app = new Vue({
     store,
     components,
     mounted() {
-        this.checkSession();
+        this.checkSession().then(() => this.getSettings());
     },
     methods: {
-        ...mapActions(['checkSession', 'getCurrentUser']),
+        ...mapActions(['checkSession', 'getCurrentUser', 'getSettings']),
         ...mapMutations(['toggleLoading' ,'notify'])
     },
     computed: {

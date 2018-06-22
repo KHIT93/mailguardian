@@ -47,5 +47,10 @@ export default {
     },
     setWizardPayload(state, payload = null) {
         state.wizard.payload = payload;
+    },
+    setSettings(state, payload = null) {
+        payload.forEach((setting) => {
+            state.settings[setting.key] = setting.value;
+        });
     }
 }

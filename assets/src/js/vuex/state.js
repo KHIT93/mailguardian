@@ -135,5 +135,6 @@ export default {
     },
     wizard: {
         payload: null
-    }
+    },
+    settings: {}
 }
