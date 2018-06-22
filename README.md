@@ -268,6 +268,11 @@ Incoming Work Permissions = 0660
 Quarantine User = postfix
 Quarantine Group = mtagroup
 Quarantine Permissions = 0644
+Is Definitely Not Spam = &SQLWhitelist
+Is Definitely Spam = &SQLBlacklist
+Use SpamAssassin = &SQLNoScan
+Required SpamAssassin Score = &SQLSpamScores
+High SpamAssassin Score = &SQLHighSpamScores
 ```
 
 Next we configure the `Bayesian` Database by adding/updating the following in `/etc/MailScanner/spamassassin.conf`

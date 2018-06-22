@@ -71,6 +71,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     daily_quarantine_report = models.BooleanField(default=False)
     weekly_quarantine_report = models.BooleanField(default=False)
     monthly_quarantine_report = models.BooleanField(default=False)
+    custom_spam_score = models.FloatField(default=5.0)
+    custom_spam_highscore = models.FloatField(default=15.0)
+    skip_scan = models.BooleanField(default=False)
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -47,7 +47,6 @@ $VERSION = substr q$Revision: 1.0 $, 10;
 use DBI;
 my ($dbh);
 my ($sth);
-my ($SQLversion);
 my (%LowSpamScores, %HighSpamScores);
 my (%ScanList);
 my ($sstime, $hstime, $nstime);
@@ -61,44 +60,33 @@ my ($db_name) = MailGuardian_get_db_name();
 my ($db_host) = MailGuardian_get_db_host();
 my ($db_user) = MailGuardian_get_db_user();
 my ($db_pass) = MailGuardian_get_db_password();
+my ($ss_score) = 5;       # Define a high default spam score, so that we do not accidently mark mail as spam when something is wrong
+my ($ss_high_score) = 15;  # Define a high default high spam score, so that we do not accidently mark mail as hig spam when something is wrong
+my ($ss_scan) = 1;          # Make sure that we always scan mail, so that users are still protected when the database is offline
 
 # Get refresh time from from MailGuardianConf.pm
 my ($ss_refresh_time) =  MailGuardian_get_SS_refresh_time();
-
-# Check MySQL version
-sub CheckSQLVersion {
-    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
-        $db_user, $db_pass,
-        { PrintError => 0, AutoCommit => 1, RaiseError => 1}
-    );
-    if (!$dbh) {
-        MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: Unable to initialise database connection: %s", $DBI::errstr);
-    }
-    $SQLversion = $dbh->{mysql_serverversion};
-    $dbh->disconnect;
-    return $SQLversion
-}
 
 #
 # Initialise the arrays with the users Spam settings
 #
 sub InitSQLSpamScores
 {
-    my ($entries) = CreateScoreList('spamscore', \%LowSpamScores);
+    my ($entries) = CreateScoreList('custom_spam_score', \%LowSpamScores);
     MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d Spam entries", $entries);
     $sstime = time();
 }
 
 sub InitSQLHighSpamScores
 {
-    my $entries = CreateScoreList('highspamscore', \%HighSpamScores);
+    my $entries = CreateScoreList('custom_spam_highscore', \%HighSpamScores);
     MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d high Spam entries", $entries);
     $hstime = time();
 }
 
 sub InitSQLNoScan
 {
-    my $entries = CreateNoScanList('noscan', \%ScanList);
+    my $entries = CreateNoScanList('skip_scan', \%ScanList);
     MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d No Spam Scan entries", $entries);
     $nstime = time();
 }
@@ -142,6 +130,32 @@ sub SQLNoScan
     return $noscan;
 }
 
+sub SQLDefaultScore
+{
+    my ($sql);
+
+    $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
+        $db_user, $db_pass,
+        { PrintError => 0, AutoCommit => 1, RaiseError => 1 }
+    );
+    if (!$dbh) {
+        MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
+    }
+
+    $sql = "SELECT value, $type FROM core_settings WHERE key='mail.spamassassin.score'";
+    $sth = $dbh->prepare($sql);
+    $sth->execute;
+    $sth->bind_columns(undef, \$ss_score);
+    $sql = "SELECT value, $type FROM core_settings WHERE key='mail.spamassassin.highscore'";
+    $sth = $dbh->prepare($sql);
+    $sth->execute;
+    $sth->bind_columns(undef, \$ss_high_score);
+
+    # Close connections
+    $sth->finish();
+    $dbh->disconnect();
+}
+
 #
 # Close down Spam Settings lists
 #
@@ -164,6 +178,7 @@ sub EndSQLNoScan
 # read the domain defaults and the system defaults (defined by the admin user).
 sub CreateScoreList
 {
+    SQLDefaultScore();
     my ($type, $UserList) = @_;
     my ($sql, $username, $count);
 
@@ -175,7 +190,7 @@ sub CreateScoreList
         MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
-    $sql = "SELECT username, $type FROM auth_user WHERE $type > 0";
+    $sql = "SELECT email AS username, $type FROM core_user WHERE $type > 0";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$username, \$type);
@@ -208,7 +223,7 @@ sub CreateNoScanList
         MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings::CreateNoScanList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
-    $sql = "SELECT username, $type FROM auth_user WHERE $type > 0";
+    $sql = "SELECT email AS username, $type FROM core_user WHERE $type = true";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$username, \$type);
@@ -253,8 +268,9 @@ sub LookupScoreList
     # value to just let the email through.
     return $LowHigh->{$to} if $LowHigh->{$to};
     return $LowHigh->{$todomain} if $LowHigh->{$todomain};
-    return $LowHigh->{"admin"} if $LowHigh->{"admin"};
 
+    # There are no Spam scores to return for the given account, so we use the default system values.
+    return $ss_score if $ss_score;
     # There are no Spam scores to return if we made it this far, so let the email through.
     return 999;
 }

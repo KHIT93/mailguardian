@@ -51,6 +51,51 @@
                         </label>
                     </div>
                 </div>
+
+                <div class="md:flex md:items-center mb-2">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <h3 class="border-b pb-1">Spam settings</h3>
+                    </div>
+                </div>
+
+                <div class="md:flex md:items-center mb-6">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="username">
+                            <input v-model="form.skip_scan" class="mr-2" type="checkbox" />
+                            <span class="text-sm">Do not scan email for this user</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                            Spam score 
+                        </label>
+                    </div>
+                    <div class="md:w-1/2 md:inline-flex">
+                        <input v-model="form.custom_spam_score" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="custom_spam_score" id="custom_spam_score" type="text" placeholder="Doe">
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                            High Spam score 
+                        </label>
+                    </div>
+                    <div class="md:w-1/2 md:inline-flex">
+                        <input v-model="form.custom_spam_highscore" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="custom_spam_highscore" id="custom_spam_highscore" type="text" placeholder="Doe">
+                    </div>
+                </div>
+
+                <div class="md:flex md:items-center mb-1" v-if="!form.is_staff">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <h3>Domains</h3>
+                    </div>
+                </div>
+
                 <div class="md:flex md:items-center mb-6" v-if="!form.is_staff">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
@@ -102,6 +147,9 @@ export default {
                 last_name: '',
                 is_staff: false,
                 is_domain_admin: false,
+                custom_spam_score: 5.0,
+                custom_spam_highscore: 15.0,
+                skip_scan: false,
                 domains: []
             });
         }
@@ -121,6 +169,9 @@ export default {
                     last_name: response.data.last_name,
                     is_staff: response.data.is_staff,
                     is_domain_admin: response.data.is_domain_admin,
+                    custom_spam_score: response.data.custom_spam_score,
+                    custom_spam_highscore: response.data.custom_spam_highscore,
+                    skip_scan: response.data.skip_scan,
                     domains: []
                 })
             }).catch(error => {

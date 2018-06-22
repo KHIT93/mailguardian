@@ -1,12 +1,6 @@
 <template>
     <div class="">
         <table class="table text-sm">
-            <thead>
-                <tr>
-                    <th>Domain</th>
-                    <th></th>
-                </tr>
-            </thead>
             <tbody>
                 <tr v-for="domain in domains" :key="domain.id" v-if="domains.length > 0">
                     <td>{{ domain.name }}</td>
