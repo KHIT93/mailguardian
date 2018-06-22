@@ -61,7 +61,7 @@ export default {
                 this.toggleLoading();            
             }).catch(error => {
                 this.toggleLoading();
-            });                ;
+            });
         },
         async search() {
             await this.get(this.search_query);
