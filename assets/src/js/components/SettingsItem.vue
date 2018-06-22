@@ -53,7 +53,8 @@ export default {
         async submit() {
             this.saving = true;
             await this.form.patch('/api/settings/'+this.item.id+'/').then(data => {
-                this.notify(this.createNotification('Settings saved', `The setting ${data.key} has been saved`, 'success'));                
+                this.notify(this.createNotification('Settings saved', `The setting ${data.key} has been saved`, 'success'));
+                this.setSetting(data);
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));                
             });
@@ -61,7 +62,7 @@ export default {
             this.editing = false;
             this.$emit('saved');
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setSetting'])
     }
 }
 </script>

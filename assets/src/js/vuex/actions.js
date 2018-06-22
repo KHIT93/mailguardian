@@ -46,7 +46,7 @@ export default {
     },
     getSettings({commit, state}) {
         axios.get('/api/settings/').then(response => {
-            commit('setSettings', response.data.results);
+            response.data.results.forEach(setting => commit('setSetting', setting));
         });
     }
 }
