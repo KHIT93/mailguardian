@@ -127,7 +127,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         # to resend the message for the intended
         # recipient or an alternate recipient
         # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS FILEPATH_TO_MESSAGE 2>&1
-        command = "sudo {0} -i -f {1} {2} {3} 2>&1".format(settings.SENDMAIL_BIN, "", message.to_address, message.file_path())
+        command = "sudo {0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, message.from_address, message.to_address, message.file_path())
         output = subprocess.check_output(command, shell=True)
         message.released = True
         message.save()
