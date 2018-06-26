@@ -98,19 +98,13 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=True, permission_classes=[IsAuthenticated], url_path='action', url_name='message-action')
     def post_action(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
-        data = request.data['data']
         action = request.data['action']
-        if not isinstance(data, list):
-            data = [data]
-        # At this point we should pass the message(s) to Celery for processing
-        # and return a response to the client
-        for message in data:
-            if action == "spam":
-                return self._spam(message)
-            if action == "ham":
-                return self._ham(message)
-            if action == "release":
-                return self._release(message)
+        if action == "spam":
+            return self._spam(message)
+        if action == "ham":
+            return self._ham(message)
+        if action == "release":
+            return self._release(message)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     def _spam(self, message):
