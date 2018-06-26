@@ -132,7 +132,7 @@ sub CreateList {
         delete $BlackWhite->{$_};
     }
     
-    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type=$type";
+    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type='$type'";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$to_address, \$from_address);
