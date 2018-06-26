@@ -142,11 +142,11 @@ sub SQLDefaultScore
         MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
-    $sql = "SELECT value, $type FROM core_settings WHERE key='mail.spamassassin.score'";
+    $sql = "SELECT value FROM core_settings WHERE key='mail.spamassassin.score'";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$ss_score);
-    $sql = "SELECT value, $type FROM core_settings WHERE key='mail.spamassassin.highscore'";
+    $sql = "SELECT value FROM core_settings WHERE key='mail.spamassassin.highscore'";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$ss_high_score);
