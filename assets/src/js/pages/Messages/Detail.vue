@@ -2,7 +2,7 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="bg-white border sm:rounded shadow p-2">
             <h2 class="border-b">Details for message <em>{{ uuid }}</em></h2>
-            <mg-message-actions @view="showMessage" class="border-b" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
+            <mg-message-actions @view="showMessage" @release="release" class="border-b" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
             <div class="sm:flex">
                 <div class="sm:w-1/2 sm:border-r border-b">
                     <div class="flex hover:bg-grey-lighter text-sm">
@@ -342,7 +342,7 @@
                     </table>
                 </div>
             </div>
-            <mg-message-actions @view="showMessage" class="border-t" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
+            <mg-message-actions @view="showMessage" @release="release" class="border-t" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
             <mg-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message" v-if="message.queue_file_exists">
                 {{ message_contents }}
             </mg-modal>
@@ -470,6 +470,13 @@ export default {
             }).then(response => {
                 console.log(response.data);
                 this.notify(this.createNotification('Entry created', `A ${response.data.listing_type} entry has been created`, 'success'));
+            }).catch(error => {
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            });
+        },
+        release() {
+            axios.post(`/api/messages/${this.uuid}/action/`, { 'action': 'release'}).then(response => {
+                this.notify(this.createNotification('Message release', `The message has been release from quarantine and should be delivered soon`, 'success'));
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
