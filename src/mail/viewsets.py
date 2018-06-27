@@ -113,25 +113,26 @@ class MessageViewSet(viewsets.ModelViewSet):
         # needed to learn the message as a spam message
         command = "sudo {0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
         output = subprocess.check_output(command, shell=True)
-        return Response({command:output}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
     
     def _ham(self, message):
         # Here we need to call salear and the parameters
         # needed to learn the message as not harmful
         command = "sudo {0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
         output = subprocess.check_output(command, shell=True)
-        return Response({command:output}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
 
     def _release(self, message):
         # Here we need to instruct the local MTA
         # to resend the message for the intended
         # recipient or an alternate recipient
         # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS FILEPATH_TO_MESSAGE 2>&1
-        command = "sudo {0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, message.from_address, message.to_address, message.file_path())
+        sender = Setting.objects.first(key='mail.release.sender')
+        command = "{0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, sender.value, message.to_address, message.file_path())
         output = subprocess.check_output(command, shell=True)
         message.released = True
         message.save()
-        return Response({command:output}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
 
 class HeaderViewSet(viewsets.ModelViewSet):
     queryset = Headers.objects.all()
