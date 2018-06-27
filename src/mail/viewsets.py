@@ -111,14 +111,14 @@ class MessageViewSet(viewsets.ModelViewSet):
     def _spam(self, message):
         # Here we need to call salearn and pass the parameters
         # needed to learn the message as a spam message
-        command = "sudo {0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
+        command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
         output = subprocess.check_output(command, shell=True)
         return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
     
     def _ham(self, message):
         # Here we need to call salear and the parameters
         # needed to learn the message as not harmful
-        command = "sudo {0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
+        command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
         output = subprocess.check_output(command, shell=True)
         return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
 
