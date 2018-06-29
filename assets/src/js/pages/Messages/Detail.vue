@@ -475,21 +475,21 @@ export default {
             });
         },
         release() {
-            axios.post(`/api/messages/${this.uuid}/action/`, { 'action': 'release'}).then(response => {
+            axios.post('/api/messages/release/', { 'messages': [this.uuid]}).then(response => {
                 this.notify(this.createNotification('Message release', `The message has been release from quarantine and should be delivered soon`, 'success'));
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         spam() {
-            axios.post(`/api/messages/${this.uuid}/action/`, { 'action': 'spam'}).then(response => {
+            axios.post('/api/messages/mark-spam/', { 'messages': [this.uuid]}).then(response => {
                 this.notify(this.createNotification('Message marked as spam', `The message has been marked as spam in our system. In the future you should recieve less messages like this`, 'success'));
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         nonspam() {
-            axios.post(`/api/messages/${this.uuid}/action/`, { 'action': 'ham'}).then(response => {
+            axios.post('/api/messages/mark-nonspam/', { 'messages': [this.uuid]}).then(response => {
                 this.notify(this.createNotification('Message marked as nonspam', `The message has been marked as not being harmful in our system. In the future you should recieve messages like this`, 'success'));
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));

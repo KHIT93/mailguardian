@@ -129,7 +129,7 @@ export default {
         },
         mark_spam() {
             this.toggleLoading();
-            axios.post('/api/message-actions/', {action: 'spam', data: this.selectedMessages}).then(response => {
+            axios.post('/api/messages/mark-spam/', { 'messages': this.selectedMessages}).then(response => {
                 this.toggleLoading();
                 this.get();
             }).catch(error => {
@@ -139,7 +139,7 @@ export default {
         },
         mark_non_spam() {
             this.toggleLoading();
-            axios.post('/api/message-actions/', {action: 'ham', data: this.selectedMessages}).then(response => {
+            axios.post('/api/messages/mark-nonspam/', { 'messages': this.selectedMessages}).then(response => {
                 this.toggleLoading();
                 this.get();
             }).catch(error => {
@@ -149,7 +149,7 @@ export default {
         },
         release_messages() {
             this.toggleLoading();
-            axios.post('/api/message-actions/', {action: 'release', data: this.selectedMessages}).then(response => {
+            axios.post('/api/messages/release/', { 'messages': this.selectedMessages}).then(response => {
                 this.toggleLoading();
                 this.get();
             }).catch(error => {

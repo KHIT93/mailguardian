@@ -96,7 +96,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = PostqueueStoreSerializer({ 'mails':store.mails, 'loaded_at':store.loaded_at })
         return Response(serializer.data)
 
-    @action(methods=['post'], detail=True, permission_classes=[IsAuthenticated], url_path='action', url_name='message-action')
+    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='action', url_name='message-action')
     def post_action(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         action = request.data['action']
@@ -108,31 +108,67 @@ class MessageViewSet(viewsets.ModelViewSet):
             return self._release(message)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-    def _spam(self, message):
-        # Here we need to call salearn and pass the parameters
-        # needed to learn the message as a spam message
-        command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
-        output = subprocess.check_output(command, shell=True)
-        return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
-    
-    def _ham(self, message):
-        # Here we need to call salear and the parameters
-        # needed to learn the message as not harmful
-        command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
-        output = subprocess.check_output(command, shell=True)
-        return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
-
-    def _release(self, message):
+    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='release', url_name='message-action-release')
+    def post_action_release(self, request):
+        if not 'messages' in request.data:
+            return Response({'error': 'No messages to process'}, status=status.HTTP_400_BAD_REQUEST)
         # Here we need to instruct the local MTA
         # to resend the message for the intended
         # recipient or an alternate recipient
-        # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS FILEPATH_TO_MESSAGE 2>&1
+        # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
+        response = []
         sender = Setting.objects.first(key='mail.release.sender')
-        command = "{0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, sender.value, message.to_address, message.file_path())
-        output = subprocess.check_output(command, shell=True)
-        message.released = True
-        message.save()
-        return Response({'command':command, 'output':output}, status=status.HTTP_200_OK)
+        for message_id in request.data['messages']:
+            try:
+                message = Message.objects.first(id=message_id)
+                command = "{0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, sender.value, message.to_address, message.file_path())
+                output = subprocess.check_output(command, shell=True)
+                message.released = True
+                message.save()
+                response.append({ 'id':message_id, 'command': command, 'output': output })
+            except Exception as e:
+                response.append({'id': message_id, 'error': e})
+        return Response({ 'result': response }, status=status.HTTP_200_OK)
+
+    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-spam', url_name='message-action-mark-spam')
+    def post_action_spam(self, request):
+        if not 'messages' in request.data:
+            return Response({'error': 'No messages to process'}, status=status.HTTP_400_BAD_REQUEST)
+        # Here we need to instruct the local MTA
+        # to resend the message for the intended
+        # recipient or an alternate recipient
+        # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
+        response = []
+        sender = Setting.objects.first(key='mail.release.sender')
+        for message_id in request.data['messages']:
+            try:
+                message = Message.objects.first(id=message_id)
+                command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
+                output = subprocess.check_output(command, shell=True)
+                response.append({ 'id':message_id, 'command': command, 'output': output })
+            except Exception as e:
+                response.append({'id': message_id, 'error': e})
+        return Response({ 'result': response }, status=status.HTTP_200_OK)
+
+    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-nonspam', url_name='message-action-mark-nonspam')
+    def post_action_nonspam(self, request):
+        if not 'messages' in request.data:
+            return Response({'error': 'No messages to process'}, status=status.HTTP_400_BAD_REQUEST)
+        # Here we need to instruct the local MTA
+        # to resend the message for the intended
+        # recipient or an alternate recipient
+        # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
+        response = []
+        sender = Setting.objects.first(key='mail.release.sender')
+        for message_id in request.data['messages']:
+            try:
+                message = Message.objects.first(id=message_id)
+                command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
+                output = subprocess.check_output(command, shell=True)
+                response.append({ 'id':message_id, 'command': command, 'output': output })
+            except Exception as e:
+                response.append({'id': message_id, 'error': e})
+        return Response({ 'result': response }, status=status.HTTP_200_OK)
 
 class HeaderViewSet(viewsets.ModelViewSet):
     queryset = Headers.objects.all()
