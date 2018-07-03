@@ -13,6 +13,9 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
 from auditlog.registry import auditlog
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -173,3 +176,8 @@ if settings.AUDIT_LOGGING:
     auditlog.register(User)
     auditlog.register(MailScannerConfiguration)
     auditlog.register(Setting)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
