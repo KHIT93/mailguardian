@@ -4,6 +4,7 @@ from .models import MailScannerConfiguration, Setting
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
+from django_celery_results.models import TaskResult
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -56,3 +57,8 @@ class MailGuardianPasswordResetSerializer(PasswordResetSerializer):
 
         opts.update(self.get_email_options())
         self.reset_form.save(**opts)
+
+class TaskResultSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TaskResult
+        fields = ('task_id', 'task_name', 'task_args', 'task_kwargs', 'status', 'content_type', 'content_encoding', 'result', 'date_done', 'traceback', 'hidden', 'meta')

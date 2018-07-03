@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
@@ -129,6 +130,9 @@ elif 'GITLAB_CI' in os.environ:
             'PORT':     '5432',
         }
     }
+
+CELERY_BROKER_URL = 'sqla+postgresql://{0}:{1}@{2}/{3}'.format(DATABASES['default']['USER'], DATABASES['default']['PASSWORD'], DATABASES['default']['HOST'], DATABASES['default']['NAME'])
+CELERY_RESULT_BACKEND = 'django-db'
 
 # Caching
 # https://docs.djangoproject.com/en/2.0/topics/cache/#database-caching
