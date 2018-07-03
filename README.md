@@ -332,6 +332,21 @@ During deployment of the server for the webinterface `install.py` will ask your 
 
 For the `MailScanner` nodes you would also reply `Y` to the multiserver deployment option in `install.py`, but reply `n` for the web frontend.
 
+#### Programmatically generate authentication tokens
+You can programmatically generate authentication tokens, if you do not have one for a given user.
+Run `python src/manage.py shell` and then execute this code to generate tokens for users that do currently not have one
+
+```
+from core.models import User
+from rest_framework.authtoken.models import Token
+
+users = User.objects.all()
+for user in users:
+    token, created = Token.objects.get_or_create(user=user)
+    print(user.username, token.key)
+
+```
+
 ## Congratulations!
 
 We would like to congratulate you on completing the setup and configuration of our application and wish you the best of luck with the usage.
