@@ -26,9 +26,11 @@ import Tools from '../pages/Tools/Index.vue';
 import Mailqueue from '../pages/Tools/Mailqueue.vue';
 import SpamAssassinUpdateStatus from '../pages/Tools/SpamAssassinUpdateStatus.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
+import DomainForm from '../pages/Admin/Domains/Form.vue';
 import Users from '../pages/Admin/Users/Index.vue';
 import UserForm from '../pages/Admin/Users/Form.vue';
-import DomainForm from '../pages/Admin/Domains/Form.vue';
+import Hosts from '../pages/Admin/Hosts/Index.vue';
+import HostForm from '../pages/Admin/Hosts/Form.vue';
 import MailScannerConfiguration from '../pages/Admin/MailscannerConfig/Index.vue';
 import MailScannerConfigurationForm from '../pages/Admin/MailscannerConfig/Form.vue';
 import Settings from '../pages/Admin/Settings/Index.vue';
@@ -68,6 +70,9 @@ export default [
     { path: '/admin/users', component: Users, name: 'admin.users.index', meta: { requiresDomainAdmin: true } },
     { path: '/admin/users/add', component: UserForm, name: 'admin.users.add', meta: { requiresDomainAdmin: true } },
     { path: '/admin/users/:id', component: UserForm, name: 'admin.users.edit', props: true, meta: { requiresDomainAdmin: true } },
+    { path: '/admin/hosts', component: Hosts, name: 'admin.users.index', meta: { requiresAdmin: true } },
+    { path: '/admin/hosts/add', component: HostForm, name: 'admin.users.add', meta: { requiresDomainAdmin: true } },
+    { path: '/admin/hosts/:id', component: HostForm, name: 'admin.users.edit', props: true, meta: { requiresDomainAdmin: true } },
     { path: '/admin/mailscanner/configuration', component: MailScannerConfiguration, name: 'admin.mailscanner.configuration.index', meta: { requiresAdmin: true } },
     { path: '/admin/mailscanner/configuration/add', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.add', meta: { requiresAdmin: true } },
     { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true, meta: { requiresAdmin: true } },

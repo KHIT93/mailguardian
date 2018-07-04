@@ -19,7 +19,7 @@ from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
-from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet
+from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet, MailScannerHostViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, SpamAssassinRuleViewSet, TransportLogViewSet
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
@@ -43,38 +43,43 @@ router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
+router.register(r'hosts', MailScannerHostViewSet)
 router.register(r'settings', SettingsViewSet)
 router.register(r'audit-log', AuditLogViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
-    path('api/current-user/', CurrentUserView.as_view()),
-    path('api/', include(router.urls)),
-    path('api/dashboard/', DashboardApiView.as_view()),
-    path('api/reports/summary/', SummaryApiView.as_view()),
-    path('api/reports/messages/', MessageListApiView.as_view()),
-    path('api/reports/messages-by-date/', MessagesByDateApiView.as_view()),
-    path('api/reports/top-mail-relays/', TopMailRelaysApiView.as_view()),
-    path('api/reports/messages-per-hour/', MessagesPerHourApiView.as_view()),
-    path('api/reports/top-senders-by-quantity/', TopSendersByQuantityApiView.as_view()),
-    path('api/reports/top-senders-by-volume/', TopSendersByVolumeApiView.as_view()),
-    path('api/reports/top-recipients-by-quantity/', TopRecipientsByQuantityApiView.as_view()),
-    path('api/reports/top-recipients-by-volume/', TopRecipientsByVolumeApiView.as_view()),
-    path('api/reports/top-sender-domains-by-quantity/', TopSenderDomainsByQuantityApiView.as_view()),
-    path('api/reports/top-sender-domains-by-volume/', TopSenderDomainsByVolumeApiView.as_view()),
-    path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
-    path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
-    path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
-    path('api/license/', LicenseAPIView.as_view()),
-    path('api/installed/', InstalledAPIView.as_view()),
-    path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
-    # this url is used to generate email content
-    re_path(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        TemplateView.as_view(template_name="password_reset_confirm.html"),
-        name='password_reset_confirm'),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api/', include(router.urls))
 ]
+
+if not settings.API_ONLY:
+    urlpatterns += [
+        path('api/current-user/', CurrentUserView.as_view()),
+        path('api/dashboard/', DashboardApiView.as_view()),
+        path('api/reports/summary/', SummaryApiView.as_view()),
+        path('api/reports/messages/', MessageListApiView.as_view()),
+        path('api/reports/messages-by-date/', MessagesByDateApiView.as_view()),
+        path('api/reports/top-mail-relays/', TopMailRelaysApiView.as_view()),
+        path('api/reports/messages-per-hour/', MessagesPerHourApiView.as_view()),
+        path('api/reports/top-senders-by-quantity/', TopSendersByQuantityApiView.as_view()),
+        path('api/reports/top-senders-by-volume/', TopSendersByVolumeApiView.as_view()),
+        path('api/reports/top-recipients-by-quantity/', TopRecipientsByQuantityApiView.as_view()),
+        path('api/reports/top-recipients-by-volume/', TopRecipientsByVolumeApiView.as_view()),
+        path('api/reports/top-sender-domains-by-quantity/', TopSenderDomainsByQuantityApiView.as_view()),
+        path('api/reports/top-sender-domains-by-volume/', TopSenderDomainsByVolumeApiView.as_view()),
+        path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
+        path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
+        path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
+        path('api/license/', LicenseAPIView.as_view()),
+        path('api/installed/', InstalledAPIView.as_view()),
+        path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
+        # this url is used to generate email content
+        re_path(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+            TemplateView.as_view(template_name="password_reset_confirm.html"),
+            name='password_reset_confirm'),
+        path('rest-auth/', include('rest_auth.urls')),
+        path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    ]
 
 if settings.DEBUG:
     urlpatterns += [

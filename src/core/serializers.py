@@ -1,6 +1,5 @@
-from .models import User
 from rest_framework import serializers
-from .models import MailScannerConfiguration, Setting
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
@@ -62,3 +61,8 @@ class TaskResultSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TaskResult
         fields = ('task_id', 'task_name', 'task_args', 'task_kwargs', 'status', 'content_type', 'content_encoding', 'result', 'date_done', 'traceback', 'hidden', 'meta')
+
+class MailScannerHostSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = MailScannerHost
+        fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls')

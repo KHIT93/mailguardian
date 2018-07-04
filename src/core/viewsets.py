@@ -1,8 +1,7 @@
-from .models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .models import MailScannerConfiguration, Setting
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -82,3 +81,9 @@ class AuditLogViewSet(viewsets.ModelViewSet):
     serializer_class = AuditLogSerializer
     permission_classes = (IsAdminUser,)
     model = AuditLog
+
+class MailScannerHostViewSet(viewsets.ModelViewSet):
+    queryset = MailScannerHost.objects.all()
+    serializer_class = MailScannerHostSerializer
+    permission_classes = (IsAdminUser,)
+    model = MailScannerHost

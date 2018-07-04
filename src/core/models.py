@@ -172,10 +172,20 @@ class Setting(models.Model):
     def __str__(self):
         return str(self.key)
 
+class MailScannerHost(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    hostname = models.CharField(max_length=255)
+    ip_address = models.GenericIPAddressField("IP Address")
+    use_tls = models.BooleanField("Use TLS", default=True)
+
+    def __str__(self):
+        return '{0} ({1})'.format(self.hostname, self.ip_address)
+
 if settings.AUDIT_LOGGING:
     auditlog.register(User)
     auditlog.register(MailScannerConfiguration)
     auditlog.register(Setting)
+    auditlog.register(MailScannerHost)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

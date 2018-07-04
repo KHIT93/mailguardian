@@ -9,10 +9,12 @@ from rest_framework.response import Response
 from email.message import EmailMessage
 from pymailq.store import PostqueueStore
 from django.conf import settings
-from core.models import Setting
+from core.models import Setting, MailScannerHost
 import datetime
 from django.db.models import Q
 import subprocess
+import requests, json
+from rest_framework.authtoken.models import Token
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -96,18 +98,6 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = PostqueueStoreSerializer({ 'mails':store.mails, 'loaded_at':store.loaded_at })
         return Response(serializer.data)
 
-    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='action', url_name='message-action')
-    def post_action(self, request, pk=None):
-        message = get_object_or_404(self.get_queryset(), pk=pk)
-        action = request.data['action']
-        if action == "spam":
-            return self._spam(message)
-        if action == "ham":
-            return self._ham(message)
-        if action == "release":
-            return self._release(message)
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
-
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='release', url_name='message-action-release')
     def post_action_release(self, request):
         if not 'messages' in request.data:
@@ -116,19 +106,42 @@ class MessageViewSet(viewsets.ModelViewSet):
         # to resend the message for the intended
         # recipient or an alternate recipient
         # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
+        
         response = []
         sender = Setting.objects.first(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.first(id=message_id)
-                command = "{0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, sender.value, message.to_address, message.file_path())
-                output = subprocess.check_output(command, shell=True)
-                message.released = True
-                message.save()
-                response.append({ 'id':message_id, 'command': command, 'output': output })
+                if message.released:
+                    response.append({'id': message_id, 'error': 'This message has already been released'})
+                elif settings.APP_HOSTNAME == message.mailscanner_hostname:
+                    command = "{0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, sender.value, message.to_address, message.file_path())
+                    output = subprocess.check_output(command, shell=True)
+                    message.released = True
+                    message.save()
+                    response.append({ 'id':message_id, 'command': command, 'output': output })
+                elif not settings.API_ONLY:
+                    token = Token.objects.first(user=request.user)
+                    host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                    protocol = 'https' if host.use_tls else 'http'
+                    url = '{0}://{1}/api/messages/release/'.format(protocol, host.hostname)
+                    headers = {
+                        'Content-Type' : 'application/json',
+                        'Authorization' : 'Token {0}'.format(token.key)
+                    }
+                    result = requests.post(url, data=[message_id], headers=headers)
+                    data = json.loads(result.content.decode('utf-8'))
+                    if 'error' in data:
+                        response.append({'id': data.id, 'error': data.error})
+                    else:
+                        response.append({'id': data.id, 'command': data.command, 'output': data.output})
+                else:
+                    response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
             except Exception as e:
                 response.append({'id': message_id, 'error': e})
+            
         return Response({ 'result': response }, status=status.HTTP_200_OK)
+        
 
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-spam', url_name='message-action-mark-spam')
     def post_action_spam(self, request):
@@ -143,9 +156,27 @@ class MessageViewSet(viewsets.ModelViewSet):
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.first(id=message_id)
-                command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
-                output = subprocess.check_output(command, shell=True)
-                response.append({ 'id':message_id, 'command': command, 'output': output })
+                if settings.APP_HOSTNAME == message.mailscanner_hostname:
+                    command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
+                    output = subprocess.check_output(command, shell=True)
+                    response.append({ 'id':message_id, 'command': command, 'output': output })
+                elif not settings.API_ONLY:
+                    token = Token.objects.first(user=request.user)
+                    host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                    protocol = 'https' if host.use_tls else 'http'
+                    url = '{0}://{1}/api/messages/mark-spam/'.format(protocol, host.hostname)
+                    headers = {
+                        'Content-Type' : 'application/json',
+                        'Authorization' : 'Token {0}'.format(token.key)
+                    }
+                    result = requests.post(url, data=[message_id], headers=headers)
+                    data = json.loads(result.content.decode('utf-8'))
+                    if 'error' in data:
+                        response.append({'id': data.id, 'error': data.error})
+                    else:
+                        response.append({'id': data.id, 'command': data.command, 'output': data.output})
+                else:
+                    response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
             except Exception as e:
                 response.append({'id': message_id, 'error': e})
         return Response({ 'result': response }, status=status.HTTP_200_OK)
@@ -163,9 +194,27 @@ class MessageViewSet(viewsets.ModelViewSet):
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.first(id=message_id)
-                command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
-                output = subprocess.check_output(command, shell=True)
-                response.append({ 'id':message_id, 'command': command, 'output': output })
+                if settings.APP_HOSTNAME == message.mailscanner_hostname:
+                    command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
+                    output = subprocess.check_output(command, shell=True)
+                    response.append({ 'id':message_id, 'command': command, 'output': output })
+                elif not settings.API_ONLY:
+                    token = Token.objects.first(user=request.user)
+                    host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                    protocol = 'https' if host.use_tls else 'http'
+                    url = '{0}://{1}/api/messages/mark-spam/'.format(protocol, host.hostname)
+                    headers = {
+                        'Content-Type' : 'application/json',
+                        'Authorization' : 'Token {0}'.format(token.key)
+                    }
+                    result = requests.post(url, data=[message_id], headers=headers)
+                    data = json.loads(result.content.decode('utf-8'))
+                    if 'error' in data:
+                        response.append({'id': data.id, 'error': data.error})
+                    else:
+                        response.append({'id': data.id, 'command': data.command, 'output': data.output})
+                else:
+                    response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
             except Exception as e:
                 response.append({'id': message_id, 'error': e})
         return Response({ 'result': response }, status=status.HTTP_200_OK)

@@ -242,6 +242,7 @@ MTA = MAILGUARDIAN_ENV.get('mta', 'postfix')
 MTA_LOGFILE = MAILGUARDIAN_ENV.get("hostconfig.mta_logfile", "/var/log/maillog")
 SENDMAIL_BIN = MAILGUARDIAN_ENV.get('hostconfig.sendmail_bin', '/usr/sbin/sendmail')
 AUDIT_LOGGING = MAILGUARDIAN_ENV.get('audit_log', True)
+API_ONLY = MAILGUARDIAN_ENV.get('api_only_mode', False)
 
 #MailScanner settings
 MAILSCANNER_BIN = MAILGUARDIAN_ENV.get("hostconfig.mailscanner_bin", '/usr/sbin/MailScanner')
