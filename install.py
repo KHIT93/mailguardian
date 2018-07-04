@@ -6,6 +6,7 @@ import os
 import sys
 import platform
 import pytz
+import json
 
 def which(program):
     def is_exe(fpath):
@@ -36,18 +37,22 @@ if __name__ == "__main__":
     NGINX_PATH = None
     NGINX_EXTENSION = ''
     PKG_MGR = None
-    OPENSSL_BIN = '/usr/bin/openssl'
-    NGINX_BIN = '/usr/sbin/nginx'
-    SYSTEMCTL_BIN = '/usr/bin/systemctl'
-    APP_USER = ''
-    MTA = None
-    MS_CONF_DIR = None
-    MS_BIN = None
-    MS_LIB = None
-    MS_SHARED = None
-    SALEARN_BIN = None
-    SA_RULES_DIR = None
-    RETENTION_DAYS = None
+    OPENSSL_BIN = which('openssl')
+    NGINX_BIN = which('nginx')
+    SYSTEMCTL_BIN = which('systemctl')
+    APP_USER = 'mailguardian'
+    MTA = 'postfix'
+    MTA_LOG = "/var/log/mail.log"
+    MS_CONF_DIR = '/etc/MailScanner'
+    MS_BIN = which('MailScanner')
+    MS_LIB = '/usr/lib/MailScanner'
+    MS_SHARED = '/usr/share/MailScanner'
+    MS_QUARANTINE_DIR = "/var/spool/MailScanner/quarantine"
+    SALEARN_BIN = which('salearn')
+    SA_BIN = which('spamassassin')
+    SA_RULES_DIR = '/var/lib/spamassassin'
+    SENDMAIL_BIN = which('sendmail')
+    RETENTION_DAYS = 60
     DB_HOST = None
     DB_USER = None
     DB_PASS = None
@@ -69,18 +74,18 @@ if __name__ == "__main__":
     else:
         distro = platform.linux_distribution()
         if distro[0] == 'CentOS Linux':
-            PKG_MGR = '/usr/bin/yum'
+            PKG_MGR = which('yum')
             if int(distro[1].replace('.', '')) >= 730000:
                 NGINX_PATH = '/etc/nginx/conf.d/'
                 NGINX_EXTENSION = '.conf'
         elif distro[0] == 'debian':
-            PKG_MGR = '/usr/bin/apt'
+            PKG_MGR = which('apt')
             if int(distro[1].replace('.', '')) >= 90:
                 NGINX_PATH = '/etc/nginx/sites-enabled/'
             else:
                 print('Your version of Debian is not supported')
         elif distro[0] == 'Ubuntu':
-            PKG_MGR = '/usr/bin/apt'
+            PKG_MGR = which('apt')
             if int(distro[1].replace('.', '')) >= 1604:
                 NGINX_PATH = '/etc/nginx/sites-enabled/'
             else:
@@ -94,7 +99,7 @@ if __name__ == "__main__":
          exit()
     else:
         if os.geteuid() != 0:
-            print('You need to run the installation script as root. With root elevation, we are unable to configure the system for you')
+            print('You need to run the installation script as root. Without root elevation, we are unable to configure the system for you')
             print('You can still continue the execution of the installation script, but choose to leave out the parts that require root elevation')
             if input('Do you want to skip steps that require root elevation and allow the script to continue? (y/N) ').lower() == 'y':
                 print('We will continue execution but skip the parts that require root elevation')
@@ -106,56 +111,57 @@ if __name__ == "__main__":
                 exit()
         print('We will now ask you a series of questions to properly configure the application for you')
         print('Do not worry, as we will not make any changes before all questions have been answered and confirmed by you')
-        while APP_USER == '':
-            APP_USER = input('What is the username of the user running the MailGuardian application? ')
+        APP_USER_INPUT = input('What is the username of the user running the MailGuardian application? [{0}] '.format(APP_USER))
+        if APP_USER_INPUT != '' or APP_USER_INPUT is not None:
+            APP_USER = APP_USER_INPUT
         # Next we need to ask some questions
         # to generate the correct mailguardian-env.json
         print('Available MTA\'s (Mail Transport Agent)')
         print('sendmail')
         print('postfix')
         print('exim')
-        MTA = input('Which MTA do you want to use? [postfix] ')
-        if MTA == '' or MTA is None:
-            MTA = 'postfix'
-        MS_CONF_DIR = input('Where are your MailScanner configuration files located? [/etc/MailScanner/] ')
-        if MS_CONF_DIR == '' or MS_CONF_DIR is None:
-            MS_CONF_DIR = '/etc/MailScanner/'
-        MS_BIN = input('Please specify the full path to the MailScanner executable file/binary? [/usr/sbin/MailScanner] ')
-        if MS_BIN == '' or MS_BIN is None:
-            MS_BIN = '/usr/sbin/MailScanner'
-        MS_LIB = input('Where are the MailScanner application libraries located? [/usr/lib/MailScanner/] ')
-        if MS_LIB == '' or MS_LIB is None:
-            MS_LIB = '/usr/lib/MailScanner/'
-        MS_SHARED = input('Please let us know where your MailScanner shared resources are located [/usr/share/MailScanner/] ')
-        if MS_SHARED == '' or MS_SHARED is None:
-            MS_SHARED = '/usr/share/MailScanner/'
-        SALEARN_BIN = input('To correctly handle SPAM, could you please let us know where your \'salearn\' binary is located? [/usr/bin/salearn] ')
-        if SALEARN_BIN == '' or SALEARN_BIN is None:
-            SALEARN_BIN = '/usr/bin/salearn'
-        SA_RULES_DIR = input('Please type in the location of your SpamAssassin rules configuration [/usr/share/spamassassin/] ')
-        if SA_RULES_DIR == '' or SA_RULES_DIR is None:
-            SA_RULES_DIR = '/usr/share/spamassassin/'
+        MTA_INPUT = input('Which MTA do you want to use? [{0}] '.format(MTA))
+        if MTA_INPUT == '' or MTA_INPUT is None:
+            MTA = MTA_INPUT
+        MS_CONF_DIR_INPUT = input('Where are your MailScanner configuration files located? [{0}] '.format(MS_CONF_DIR))
+        if MS_CONF_DIR_INPUT != '' or MS_CONF_DIR_INPUT is not None:
+            MS_CONF_DIR = MS_CONF_DIR_INPUT
+        MS_BIN_INPUT = input('Please specify the full path to the MailScanner executable file/binary? [{0}] '.format(MS_BIN))
+        if MS_BIN_INPUT != '' or MS_BIN_INPUT is not None:
+            MS_BIN = MS_BIN_INPUT
+        MS_LIB_INPUT = input('Where are the MailScanner application libraries located? [{0}] '.format(MS_LIB))
+        if MS_LIB_INPUT != '' or MS_LIB_INPUT is not None:
+            MS_LIB = MS_LIB_INPUT
+        MS_SHARED_INPUT = input('Please let us know where your MailScanner shared resources are located [{0}] '.format(MS_SHARED))
+        if MS_SHARED_INPUT 1= '' or MS_SHARED_INPUT is not None:
+            MS_SHARED = MS_SHARED_INPUT
+        SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'salearn\' binary is located? [{0}] '.format(SALEARN_BIN))
+        if SALEARN_BIN_INPUT != '' or SALEARN_BIN_INPUT is not None:
+            SALEARN_BIN = SALEARN_BIN_INPUT
+        SA_RULES_DIR_INPUT = input('Please type in the location of your SpamAssassin rules configuration [{0}] '.format(SA_RULES_DIR))
+        if SA_RULES_DIR_INPUT != '' or SA_RULES_DIR_INPUT is not None:
+            SA_RULES_DIR = SA_RULES_DIR_INPUT
         #while not isinstance(str(RETENTION_DAYS), int):
-        RETENTION_DAYS = input('As your system will use quite a bit of space, could you please let us know how many days you want us to keep data in the system? [60] ')
-        if RETENTION_DAYS == '' or RETENTION_DAYS is None:
-            RETENTION_DAYS = 60
+        RETENTION_DAYS_INPUT = input('As your system will use quite a bit of space, could you please let us know how many days you want us to keep data in the system? [{0}] '.format(RETENTION_DAYS))
+        if RETENTION_DAYS_INPUT != '' or RETENTION_DAYS_INPUT is not None:
+            RETENTION_DAYS = RETENTION_DAYS_INPUT
         print('Next we need to get access to the database')
         while DB_HOST is None:
             DB_HOST = input('Please provide us the hostname of your PostgreSQL database server [localhost]: ')
             if DB_HOST == '':
                 DB_HOST = 'localhost'
         while DB_USER is None:
-            DB_USER = input('Please provide us the username of the PostgreSQL user that has access to the database: ')
+            DB_USER = input('Please provide us the username of the PostgreSQL user that has access to the database [mailguardian]: ')
             if DB_USER == '':
-                DB_USER = None
+                DB_USER = 'mailguardian'
         while DB_PASS is None:
             DB_PASS = input('Please provide us the password for the PostgreSQL user specified above: ')
             if DB_PASS == '':
                 DB_PASS = None
         while DB_NAME is None:
-            DB_NAME = input('Please provide us the name of the PostgreSQL database: ')
+            DB_NAME = input('Please provide us the name of the PostgreSQL database [mailguardian]: ')
             if DB_NAME == '':
-                DB_NAME = None
+                DB_NAME = 'mailguardian'
         DB_PORT = input('Please provide us the TCP port on which PostgreSQL is listening. To use the default port, just press. Otherwise input the port: ')
         if DB_PORT == '' or DB_PORT is None:
             DB_PORT = 5432
@@ -165,10 +171,11 @@ if __name__ == "__main__":
             DB_SSL = False
         # Next we configure the timezone settings
         print('Please provide us with your timezone. This is usually the same as you chose during installation of your operating system. It is usually typed as Region/City. Fx. US/Eastern or Europe/Berlin')
-        TZ = input('Please type in your timezone. To get a list of available timezones type ?. To use UTC, just press [Enter] ')
+        TZ = input('Please type in your timezone. To get a list of available timezones type ?. To use UTC, just press Enter: ')
         if TZ == '?':
             for timezone in pytz.all_timezones:
                 print(timezone)
+            TZ = input('Please type in your timezone. To get a list of available timezones type ?. To use UTC, just press Enter: ')
         if TZ == '' or TZ is None:
             TZ = 'UTC'
         # Next choose your language (Only languages that are available for the application will be displayed)
@@ -180,39 +187,49 @@ if __name__ == "__main__":
                 API_ONLY_MODE = True
         else:
             API_ONLY_MODE = False
-        mailguardian_env_contents = """
-            {{
-                "debug": false,
-                "database": {{
-                    "name": "{0}",
-                    "user": "{1}",
-                    "password": "{2}",
-                    "host": "{3}",
-                    "port": "{4}",
-                    "options": {{
-                        "sslmode": "require"
-                    }}
-                }},
-                "language_code": "en-us",
-                "time_zone": "{5}",
-                "api_only_mode": false,
-                "hostconfig": {{
-                    "salearn_bin":"{6}",
-                    "mailscanner_bin":"{7}",
-                    mailscanner_config_dir": "{8}",
-                    "mailscanner_share_dir": "{9}",
-                    "mailscanner_lib_dir": "{10}",
-                    "tmp_dir":"/tmp",
-                    "sa_rules_dir":"{11}"
-                }},
-                "retention": {{
-                    "records":{12},
-                    "audit":{13},
-                    "quarantine":{14}
-                }},
-                "mta": "{15}"
-            }}
-        """.format(DB_NAME, DB_USER, DB_PASS, DB_HOST, DB_PORT, TZ, SALEARN_BIN, MS_BIN, MS_CONF_DIR, MS_SHARED, MS_LIB, SA_RULES_DIR, RETENTION_DAYS, RETENTION_DAYS, RETENTION_DAYS, MTA)
+        env_contents = {
+            "debug": False,
+            "hostname": APP_HOSTNAME,
+            "database": {
+                "name": DB_NAME,
+                "user": DB_USER,
+                "password": DB_PASS,
+                "host": DB_HOST,
+                "port": DB_PORT,
+                "options": {
+                    "sslmode": "require" if DB_SSL else "prefer"
+                },
+                "language_code": "en_us",
+                "time_zone": TZ,
+                "api_only_mode": API_ONLY_MODE,
+                "hostconfig": {
+                    "salearn_bin": SALEARN_BIN,
+                    "sa_bin": SA_BIN,
+                    "mailscanner_bin": MS_BIN,
+                    "mailscanner_config_dir": MS_CONF_DIR,
+                    "mailscanner_share_dir": MS_SHARED,
+                    "mailscanner_lib_dir": MS_LIB,
+                    "tmp_dir": "/tmp",
+                    "sa_rules_dir": SA_RULES_DIR,
+                    "sendmail_bin": SENDMAIL_BIN,
+                    "mailscanner_quarantine_dir": MS_QUARANTINE_DIR,
+                    "mta_logfile": MTA_LOG
+                },
+                "retention": {
+                    "records": RETENTION_DAYS,
+                    "audit": RETENTION_DAYS,
+                    "quarantine": RETENTION_DAYS
+                },
+                "audit_log": True,
+                "mta": MTA,
+                "branding": {
+                    "name": "MailGuardian",
+                    "tagline": "Securing your email",
+                    "logo": ""
+                }
+            }
+        }
+        mailguardian_env_contents = json.JSONEncoder.encode(env_contents)
         print(mailguardian_env_contents)
         print('The above is the configuration file that we will save to %s' % '')
         print('After this point everything we do is commited to disk immediately')
@@ -221,7 +238,7 @@ if __name__ == "__main__":
             exit()
         print('Writing configuration file %s' % APP_DIR + '/mailguardian-env.json')
         CONF_FILE = open(APP_DIR + '/mailguardian-env.json', 'w')
-        CONF_FILE.write(mailguiardian_env_contents)
+        CONF_FILE.write(mailguardian_env_contents)
         CONF_FILE.close()
         if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
             if os.geteuid() != 0:
