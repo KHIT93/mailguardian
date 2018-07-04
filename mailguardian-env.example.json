@@ -16,7 +16,7 @@
     "api_only_mode": false,
     "hostconfig": {
         "salearn_bin":"/usr/bin/salearn",
-        "sa_bin": "/usr/bin/spamassassin",
+        "sa_bin": "/usr/local/bin/spamassassin",
         "mailscanner_bin":"/usr/sbin/MailScanner",
         "mailscanner_config_dir": "/etc/MailScanner",
         "mailscanner_share_dir": "/usr/share/MailScanner",
@@ -25,7 +25,7 @@
         "sa_rules_dir":"/usr/share/spamassassin",
         "sendmail_bin":"/usr/sbin/sendmail",
         "mailscanner_quarantine_dir": "/var/spool/MailScanner/quarantine",
-        "mta_logfile": "/var/log/maillog"
+        "mta_logfile": "/var/log/mail.log"
     },
     "retention": {
         "records":60,
