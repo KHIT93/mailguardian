@@ -133,7 +133,7 @@ if __name__ == "__main__":
         if MS_LIB_INPUT != '' or MS_LIB_INPUT is not None:
             MS_LIB = MS_LIB_INPUT
         MS_SHARED_INPUT = input('Please let us know where your MailScanner shared resources are located [{0}] '.format(MS_SHARED))
-        if MS_SHARED_INPUT 1= '' or MS_SHARED_INPUT is not None:
+        if MS_SHARED_INPUT != '' or MS_SHARED_INPUT is not None:
             MS_SHARED = MS_SHARED_INPUT
         SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'salearn\' binary is located? [{0}] '.format(SALEARN_BIN))
         if SALEARN_BIN_INPUT != '' or SALEARN_BIN_INPUT is not None:
@@ -229,7 +229,7 @@ if __name__ == "__main__":
                 }
             }
         }
-        mailguardian_env_contents = json.JSONEncoder.encode(env_contents)
+        mailguardian_env_contents = json.dumps(env_contents)
         print(mailguardian_env_contents)
         print('The above is the configuration file that we will save to %s' % '')
         print('After this point everything we do is commited to disk immediately')
