@@ -101,22 +101,17 @@ chmod +x install.sh
 
 The installer will ask you some questions and mostly you can just accept the defaults, unless you know what are doing. The only question where we need to choose something else is during the question where we are asked what `MTA` to use. Here we need to make sure that we choose the number corresponding to `postfix`.
 
-Once the installation has finished, we need to configure the filesystem with the correct permissions. We can do this with the following commands:
-
-```
-chown -R postfix:mtagroup /var/spool/MailScanner/spamassassin
-chown -R postfix:postfix /var/spool/MailScanner/incoming
-chown -R postfix:postfix /var/spool/MailScanner/quarantine
-chmod -R g+r /var/spool/postfix/{hold,incoming}
-```
-
-Next we add some additional folders and then we can get started on actually installing and configuring our application to run.
+Once the installation has finished, we need to configure the filesystem with the correct permissions, as well as add some folders. We can do this with the following commands:
 
 ```
 mkdir -p /var/spool/MailScanner/spamassassin/
 mkdir /etc/MailScanner/bayes
 chown root:mtagroup /etc/MailScanner/bayes
 chmod g+rws /etc/MailScanner/bayes
+chown -R postfix:mtagroup /var/spool/MailScanner/spamassassin
+chown -R postfix:postfix /var/spool/MailScanner/incoming
+chown -R postfix:postfix /var/spool/MailScanner/quarantine
+chmod -R g+r /var/spool/postfix/{hold,incoming}
 ```
 
 ### Installation of MailGuardian
@@ -150,7 +145,6 @@ cpan -i DBD::Pg
 cpan -i Encoding::FixLatin
 cpan -i Digest::SHA1
 cpan -i Mail::ClamAV
-cpan -i SAVI
 ```
 
 #### Downloading the application
