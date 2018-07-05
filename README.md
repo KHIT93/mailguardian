@@ -76,7 +76,7 @@ First we install what we can from the official Debian `repositories`:
 
 ```
 apt install sudo wget postfix-pgsql python3 python3-setuptools libpq-dev nginx ca-certificates openssl libpng-dev
-easy_install virtualenv pip
+easy_install3 virtualenv pip
 ```
 
 This will install most of the things that we need. Next we will add the official `PostgreSQL` repo to get the latest version of `PostgreSQL 10`
