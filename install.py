@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
-        exit()
+        #exit()
     # Get the current directory of this script to determine the path to use for hte systemd unit file templates
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     else:
         print('Your Linux distribution or version is not supported')
         print(distro)
-        exit()
+        #exit()
 
     if input('Did you run \'pip install -r requirements.txt\' to before you started the installation scrpt (y/N) ').lower() == 'n':
         print('Please relaunch this script after running \'pip install -r requirements.txt\' ')
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
     while True:
         APP_USER_INPUT = input('What is the username of the user running the MailGuardian application? [{0}] '.format(APP_USER))
-        if APP_USER_INPUT != '' or APP_USER_INPUT is not None:
+        if APP_USER_INPUT != '' and APP_USER_INPUT is not None:
             APP_USER = APP_USER_INPUT
             break
         elif APP_USER != '' or APP_USER is not None:
@@ -119,10 +119,10 @@ if __name__ == "__main__":
 
     while True:
         RETENTION_DAYS_INPUT = input('As your system will use quite a bit of space, could you please let us know how many days you want us to keep data in the system? [{0}] '.format(RETENTION_DAYS))
-        if RETENTION_DAYS_INPUT != '' or RETENTION_DAYS_INPUT is not None:
+        if RETENTION_DAYS_INPUT != '' and RETENTION_DAYS_INPUT is not None:
             RETENTION_DAYS = RETENTION_DAYS_INPUT
             break
-        elif RETENTION_DAYS != '' or RETENTION_DAYS is not None:
+        elif RETENTION_DAYS != '' and RETENTION_DAYS is not None:
             break
     
     print('Next we need to get access to the database')
@@ -163,8 +163,8 @@ if __name__ == "__main__":
                 TZ = TZ_INPUT
                 break
     
-    APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % platform.node())
-    if APP_HOSTNAME_INPUT != '' or APP_HOSTNAME_INPUT is not None:
+    APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % APP_HOSTNAME)
+    if APP_HOSTNAME_INPUT != '' and APP_HOSTNAME_INPUT is not None:
         APP_HOSTNAME = APP_HOSTNAME_INPUT
     
     if input('Would you like to enable HTTP/2 and SSL/TLS (HTTPS) encryption for this instance? (Y/n) ').lower() != 'y':
@@ -185,28 +185,28 @@ if __name__ == "__main__":
         print('postfix')
         print('exim')
         MTA_INPUT = input('Which MTA do you want to use? [{0}] '.format(MTA))
-        if MTA_INPUT == '' or MTA_INPUT is None:
+        if MTA_INPUT == '' and MTA_INPUT is None:
             MTA = MTA_INPUT
         MS_CONF_DIR_INPUT = input('Where are your MailScanner configuration files located? [{0}] '.format(MS_CONF_DIR))
-        if MS_CONF_DIR_INPUT != '' or MS_CONF_DIR_INPUT is not None:
+        if MS_CONF_DIR_INPUT != '' and MS_CONF_DIR_INPUT is not None:
             MS_CONF_DIR = MS_CONF_DIR_INPUT
         MS_BIN_INPUT = input('Please specify the full path to the MailScanner executable file/binary? [{0}] '.format(MS_BIN))
-        if MS_BIN_INPUT != '' or MS_BIN_INPUT is not None:
+        if MS_BIN_INPUT != '' and MS_BIN_INPUT is not None:
             MS_BIN = MS_BIN_INPUT
         MS_LIB_INPUT = input('Where are the MailScanner application libraries located? [{0}] '.format(MS_LIB))
-        if MS_LIB_INPUT != '' or MS_LIB_INPUT is not None:
+        if MS_LIB_INPUT != '' and MS_LIB_INPUT is not None:
             MS_LIB = MS_LIB_INPUT
         MS_SHARED_INPUT = input('Please let us know where your MailScanner shared resources are located [{0}] '.format(MS_SHARED))
-        if MS_SHARED_INPUT != '' or MS_SHARED_INPUT is not None:
+        if MS_SHARED_INPUT != '' and MS_SHARED_INPUT is not None:
             MS_SHARED = MS_SHARED_INPUT
         SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'salearn\' binary is located? [{0}] '.format(SALEARN_BIN))
-        if SALEARN_BIN_INPUT != '' or SALEARN_BIN_INPUT is not None:
+        if SALEARN_BIN_INPUT != '' and SALEARN_BIN_INPUT is not None:
             SALEARN_BIN = SALEARN_BIN_INPUT
         SA_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'spamassassin\' binary is located? [{0}] '.format(SA_BIN_INPUT))
-        if SA_BIN_INPUT != '' or SA_BIN_INPUT is not None:
+        if SA_BIN_INPUT != '' and SA_BIN_INPUT is not None:
             SA_BIN = SA_BIN_INPUT
         SA_RULES_DIR_INPUT = input('Please type in the location of your SpamAssassin rules configuration [{0}] '.format(SA_RULES_DIR))
-        if SA_RULES_DIR_INPUT != '' or SA_RULES_DIR_INPUT is not None:
+        if SA_RULES_DIR_INPUT != '' and SA_RULES_DIR_INPUT is not None:
             SA_RULES_DIR = SA_RULES_DIR_INPUT
 
     env_contents = {
@@ -279,7 +279,7 @@ if __name__ == "__main__":
     print('Location of the MailScanner Quarantine: {0}'.format(MS_QUARANTINE_DIR))
     print('MTA (Mail Transport Agent): {0}'.format(MTA))
     print('Location of your MTA logfile: {0}'.format(MTA_LOG))
-    print('Retention policy: Store for {0} day(s)'.format(APP_HOSTNAME))
+    print('Retention policy: Store for {0} day(s)'.format(RETENTION_DAYS))
 
     print('The above will be saved in the configuration file that we will located at {0}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
     print('After this point everything we do is commited to disk immediately')
