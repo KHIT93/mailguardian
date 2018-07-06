@@ -2,7 +2,7 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, pytz, json
+import os, sys, platform, pytz, json, pwd, grp
 from src.core.helpers import which
 
 if __name__ == "__main__":
@@ -306,7 +306,7 @@ if __name__ == "__main__":
     print('Writing configuration file {0}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
     with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'w') as f:
         f.write(mailguardian_env_contents)
-    os.chown(os.path.join(APP_DIR, 'mailguardian-env.json'), APP_USER, APP_USER)
+    os.chown(os.path.join(APP_DIR, 'mailguardian-env.json'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     os.system('clear')
     if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
         if os.geteuid() != 0:
@@ -339,13 +339,13 @@ if __name__ == "__main__":
                 print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
                 # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
                 os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
-                os.chown(PRIVKEY_PATH, APP_USER, APP_USER)
-                os.chown(CSR_PATH, APP_USER, APP_USER)
+                os.chown(PRIVKEY_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+                os.chown(CSR_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
             os.system('clear')
             print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
             print('Please note that this step can take up to 30 minutes to complete')
             os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
-            os.chown(DHPARAM_PATH, APP_USER, APP_USER)
+            os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
         # Store the nginx configuration file for the application
         with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
             conf = t.read()
