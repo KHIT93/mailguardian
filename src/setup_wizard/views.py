@@ -7,9 +7,10 @@ from django.db import connection
 import os
 from .permissions import ApplicationNotInstalled
 from .serializers import InitialDataSerializer
-from core.models import User, Setting
+from core.models import User, Setting, MailScannerHost
 from django.core.management import call_command
 from io import StringIO
+import django
 
 # Create your views here.
 class LicenseAPIView(APIView):
@@ -27,10 +28,14 @@ class InstalledAPIView(APIView):
         table_names = connection.introspection.get_table_list(cursor)
         if len(table_names) == 0:
             return Response({}, 204)
+        host_count = MailScannerHost.objects.count()
+        multi_node = True if host_count > 0 else False
         return Response({
-            'django_version': '2.0.5',
+            'django_version': django.VERSION,
             'mailguardian_api_version': '1.0.0',
-            'mailguardian_version': '1.0.0'
+            'mailguardian_version': '1.0.0',
+            'mailguardian_multi_node': multi_node,
+            'mailguardian_host': settings.APP_HOSTNAME
         }, 200)
 
 class InitializeDatabaseAPIView(APIView):
