@@ -18,6 +18,7 @@ router.beforeEach(async (to, from, next) => {
             }
         }
         else if(response.status == 200) {
+            window.mailguardian = response.data;
             if (to.path == '/setup') {
                 next({ path: '/' });
             }
