@@ -162,7 +162,7 @@ export default {
             if (this.getWizardPayload instanceof Form) {
                 this.loading = true;
                 this.error = false;
-                this.getWizardPayload.post('/api/setup/install').then(response => {
+                this.getWizardPayload.post('/api/setup/install/').then(response => {
                     this.setWizardPayload(null);
                     this.$emit('complete', { completed: true, action: 'auto' });
                 }).catch(error => {
