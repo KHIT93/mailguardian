@@ -1,5 +1,7 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule, TransportLog
 from rest_framework import serializers
+import requests
+from django.conf import settings
 
 # Serializers define the API representation.
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
@@ -36,7 +38,22 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
     is_clean = serializers.SerializerMethodField()
 
     def get_queue_file_exists(self, obj):
-        return obj.queue_file_exists()
+        if settings.API_ONLY and message.mailscanner_hostname == settings.APP_HOSTNAME:
+            try:
+                token = Token.objects.first(user=request.user)
+                host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                protocol = 'https' if host.use_tls else 'http'
+                url = '{0}://{1}/api/messages/release/'.format(protocol, host.hostname)
+                headers = {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : 'Token {0}'.format(token.key)
+                }
+                result = requests.post(url, data=[message_id], headers=headers)
+                data = json.loads(result.content.decode('utf-8'))
+            except:
+                pass
+        else:
+            return obj.queue_file_exists()
     
     def get_mailq_path(self, obj):
         return obj.file_path()

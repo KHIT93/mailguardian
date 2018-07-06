@@ -45,6 +45,11 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = MessageContentsSerializer(data)
         return Response(serializer.data)
 
+    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='file-exists', url_name='message-queue-file-exists')
+    def get_file_exists(self, request, pk=None):
+        message = get_object_or_404(self.get_queryset(), pk=pk)
+        return Response({'message_id': pk, 'file_exists': message.queue_file_exists()})
+
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
     def get_message_transport_logs(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
