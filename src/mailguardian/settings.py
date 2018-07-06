@@ -208,6 +208,7 @@ SECURE_SSL_REDIRECT = not DEBUG
 
 # REST Framework configuration
 # http://www.django-rest-framework.org/#example
+REST_RENDERERS = ('rest_framework.renderers.JSONRenderer','rest_framework.renderers.BrowsableAPIRenderer',) if DEBUG else ('rest_framework.renderers.JSONRenderer',)
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -219,7 +220,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication'
     ),
     'DEFAULT_PAGINATION_CLASS': 'mailguardian.pagination.PageNumberPaginationWithPageCount',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
+    'DEFAULT_RENDERER_CLASSES': (
+        REST_RENDERERS
+    )
 }
 
 REST_AUTH_SERIALIZERS = {
