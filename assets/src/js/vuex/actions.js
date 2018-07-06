@@ -48,5 +48,12 @@ export default {
         axios.get('/api/settings/').then(response => {
             response.data.results.forEach(setting => commit('setSetting', setting));
         });
+    },
+    getAppInfo({commit, state}) {
+        axios.post('/api/installed/', {}).then(response => {
+            if (response.status == 200) {
+                commit('setAppInfo', response.data);
+            }
+        })
     }
 }

@@ -23,5 +23,8 @@ export default {
     },
     getWizardPayload(state) {
         return state.wizard.payload;
+    },
+    app_info(state) {
+        return state.app_info;
     }
 }

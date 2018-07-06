@@ -50,5 +50,8 @@ export default {
     },
     setSetting(state, payload = null) {
         state.settings[payload.key] = payload.value;
+    },
+    setAppInfo(state, payload) {
+        state.app_info = payload;
     }
 }

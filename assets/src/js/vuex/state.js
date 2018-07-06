@@ -136,5 +136,6 @@ export default {
     wizard: {
         payload: null
     },
-    settings: {}
+    settings: {},
+    app_info: {}
 }
