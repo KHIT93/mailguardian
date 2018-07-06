@@ -234,35 +234,35 @@ if __name__ == "__main__":
             "port": DB_PORT,
             "options": {
                 "sslmode": "require" if DB_SSL else "prefer"
-            },
-            "language_code": "en_us",
-            "time_zone": TZ,
-            "api_only_mode": API_ONLY_MODE,
-            "hostconfig": {
-                "salearn_bin": SALEARN_BIN,
-                "sa_bin": SA_BIN,
-                "mailscanner_bin": MS_BIN,
-                "mailscanner_config_dir": MS_CONF_DIR,
-                "mailscanner_share_dir": MS_SHARED,
-                "mailscanner_lib_dir": MS_LIB,
-                "tmp_dir": "/tmp",
-                "sa_rules_dir": SA_RULES_DIR,
-                "sendmail_bin": SENDMAIL_BIN,
-                "mailscanner_quarantine_dir": MS_QUARANTINE_DIR,
-                "mta_logfile": MTA_LOG
-            },
-            "retention": {
-                "records": RETENTION_DAYS,
-                "audit": RETENTION_DAYS,
-                "quarantine": RETENTION_DAYS
-            },
-            "audit_log": True,
-            "mta": MTA,
-            "branding": {
-                "name": "MailGuardian",
-                "tagline": "Securing your email",
-                "logo": ""
             }
+        }
+        "language_code": "en_us",
+        "time_zone": TZ,
+        "api_only_mode": API_ONLY_MODE,
+        "hostconfig": {
+            "salearn_bin": SALEARN_BIN,
+            "sa_bin": SA_BIN,
+            "mailscanner_bin": MS_BIN,
+            "mailscanner_config_dir": MS_CONF_DIR,
+            "mailscanner_share_dir": MS_SHARED,
+            "mailscanner_lib_dir": MS_LIB,
+            "tmp_dir": "/tmp",
+            "sa_rules_dir": SA_RULES_DIR,
+            "sendmail_bin": SENDMAIL_BIN,
+            "mailscanner_quarantine_dir": MS_QUARANTINE_DIR,
+            "mta_logfile": MTA_LOG
+        },
+        "retention": {
+            "records": RETENTION_DAYS,
+            "audit": RETENTION_DAYS,
+            "quarantine": RETENTION_DAYS
+        },
+        "audit_log": True,
+        "mta": MTA,
+        "branding": {
+            "name": "MailGuardian",
+            "tagline": "Securing your email",
+            "logo": ""
         }
     }
     mailguardian_env_contents = json.dumps(env_contents)
