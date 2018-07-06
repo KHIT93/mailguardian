@@ -6,7 +6,7 @@ import os, sys, platform, pytz, json
 from src.core.helpers import which
 
 if __name__ == "__main__":
-    print(chr(27) + "[2J")
+    os.system('clear')
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     if input('Did you run \'pip install -r requirements.txt\' to before you started the installation scrpt (y/N) ').lower() == 'n':
         print('Please relaunch this script after running \'pip install -r requirements.txt\' ')
         exit()
-    print(chr(27) + "[2J")
+    os.system('clear')
     if os.geteuid() != 0:
         print('You need to run the installation script as root. Without root elevation, we are unable to configure the system for you')
         print('You can still continue the execution of the installation script, but choose to leave out the parts that require root elevation')
@@ -107,12 +107,12 @@ if __name__ == "__main__":
         else:
             print('Please run the script again as root or with sudo, to elevate execution')
             exit()
-    print(chr(27) + "[2J")
+    os.system('clear')
     print('We will now ask you a series of questions to properly configure the application for you')
     print('Do not worry, as we will not make any changes before all questions have been answered and confirmed by you')
 
     while True:
-        print(chr(27) + "[2J")
+        os.system('clear')
         APP_USER_INPUT = input('What is the username of the user running the MailGuardian application? [{0}] '.format(APP_USER))
         if APP_USER_INPUT != '' and APP_USER_INPUT is not None:
             APP_USER = APP_USER_INPUT
@@ -121,14 +121,14 @@ if __name__ == "__main__":
             break
 
     while True:
-        print(chr(27) + "[2J")
+        os.system('clear')
         RETENTION_DAYS_INPUT = input('As your system will use quite a bit of space, could you please let us know how many days you want us to keep data in the system? [{0}] '.format(RETENTION_DAYS))
         if RETENTION_DAYS_INPUT != '' and RETENTION_DAYS_INPUT is not None:
             RETENTION_DAYS = RETENTION_DAYS_INPUT
             break
         elif RETENTION_DAYS != '' and RETENTION_DAYS is not None:
             break
-    print(chr(27) + "[2J")
+    os.system('clear')
     print('Next we need to get access to the database')
 
     while DB_HOST == '' or DB_HOST is None:
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     if input('Does you PostgreSQL server support SSL (Y/n) '.lower() == 'n'):
         DB_SSL = False
     # Next we configure the timezone settings
-    print(chr(27) + "[2J")
+    os.system('clear')
     print('Please provide us with your timezone. This is usually the same as you chose during installation of your operating system. It is usually typed as Region/City. Fx. US/Eastern or Europe/Berlin')
     while True:
         TZ_INPUT = input('Please type in your timezone. To get a list of available timezones type \'?\': ')
@@ -168,14 +168,14 @@ if __name__ == "__main__":
             if TZ_INPUT in pytz.all_timezones:
                 TZ = TZ_INPUT
                 break
-    print(chr(27) + "[2J")
+    os.system('clear')
     APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % APP_HOSTNAME)
     if APP_HOSTNAME_INPUT != '' and APP_HOSTNAME_INPUT is not None:
         APP_HOSTNAME = APP_HOSTNAME_INPUT
     
     if input('Would you like to enable HTTP/2 and SSL/TLS (HTTPS) encryption for this instance? (Y/n) ').lower() != 'y':
         HTTP_SECURE = False
-    print(chr(27) + "[2J")
+    os.system('clear')
     if input('Should this server be part of a configuration that contains multiple servers? (y/N) ').lower() == 'y':
         MULTI_NODE = True
         print(chr(13))
@@ -185,7 +185,7 @@ if __name__ == "__main__":
             API_ONLY_MODE = True
     else:
         API_ONLY_MODE = False
-    print(chr(27) + "[2J")
+    os.system('clear')
     if not MULTI_NODE or API_ONLY_MODE:
         print('Available MTA\'s (Mail Transport Agent)')
         print('sendmail')
@@ -194,35 +194,35 @@ if __name__ == "__main__":
         MTA_INPUT = input('Which MTA do you want to use? [{0}] '.format(MTA))
         if MTA_INPUT == '' and MTA_INPUT is None:
             MTA = MTA_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         MS_CONF_DIR_INPUT = input('Where are your MailScanner configuration files located? [{0}] '.format(MS_CONF_DIR))
         if MS_CONF_DIR_INPUT != '' and MS_CONF_DIR_INPUT is not None:
             MS_CONF_DIR = MS_CONF_DIR_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         MS_BIN_INPUT = input('Please specify the full path to the MailScanner executable file/binary? [{0}] '.format(MS_BIN))
         if MS_BIN_INPUT != '' and MS_BIN_INPUT is not None:
             MS_BIN = MS_BIN_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         MS_LIB_INPUT = input('Where are the MailScanner application libraries located? [{0}] '.format(MS_LIB))
         if MS_LIB_INPUT != '' and MS_LIB_INPUT is not None:
             MS_LIB = MS_LIB_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         MS_SHARED_INPUT = input('Please let us know where your MailScanner shared resources are located [{0}] '.format(MS_SHARED))
         if MS_SHARED_INPUT != '' and MS_SHARED_INPUT is not None:
             MS_SHARED = MS_SHARED_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'salearn\' binary is located? [{0}] '.format(SALEARN_BIN))
         if SALEARN_BIN_INPUT != '' and SALEARN_BIN_INPUT is not None:
             SALEARN_BIN = SALEARN_BIN_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         SA_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'spamassassin\' binary is located? [{0}] '.format(SA_BIN_INPUT))
         if SA_BIN_INPUT != '' and SA_BIN_INPUT is not None:
             SA_BIN = SA_BIN_INPUT
-        print(chr(27) + "[2J")
+        os.system('clear')
         SA_RULES_DIR_INPUT = input('Please type in the location of your SpamAssassin rules configuration [{0}] '.format(SA_RULES_DIR))
         if SA_RULES_DIR_INPUT != '' and SA_RULES_DIR_INPUT is not None:
             SA_RULES_DIR = SA_RULES_DIR_INPUT
-    print(chr(27) + "[2J")
+    os.system('clear')
     env_contents = {
         "debug": False,
         "hostname": APP_HOSTNAME,
@@ -302,19 +302,19 @@ if __name__ == "__main__":
     if input('Are the above settings correct and can we continue? (Y/n) ').lower() == 'n':
         print('Installation has been aborted. Please rerun the installation script to try again')
         exit()
-    print(chr(27) + "[2J")
+    os.system('clear')
     print('Writing configuration file {0}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
     with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'w') as f:
         f.write(mailguardian_env_contents)
     os.chown(os.path.join(APP_DIR, 'mailguardian-env.json'), APP_USER, APP_USER)
-    print(chr(27) + "[2J")
+    os.system('clear')
     if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
         if os.geteuid() != 0:
             print('You are not running the installation with root privileges. The script will now terminate')
             exit()
         if HTTP_SECURE:
             if input('Would you like us to automatically generate a LetsEncrypt certificate for you? (Y/n) ').lower() == 'y':
-                print(chr(27) + "[2J")
+                os.system('clear')
                 # Check if certbot is installed and if not, then we install it
                 if not which('certbot'):
                     os.system(PKG_MGR + ' install certbot -y')
@@ -326,7 +326,7 @@ if __name__ == "__main__":
                 print("0 6,18 * * * python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew")
                 print('This will make sure that we try to renew your LetsEncrypt Certificate twice a day and random minutes')
             elif input('Do you want to use an existing certificate? (y/N) ').lower() == 'y':
-                print(chr(27) + "[2J")
+                os.system('clear')
                 PRIVKEY_PATH_INPUT = input('Please provide us the path to your SSL/TLS private key [{0}]: '.format(PRIVKEY_PATH))
                 if PRIVKEY_PATH_INPUT != '' or PRIVKEY_PATH_INPUT is not None:
                     PRIVKEY_PATH = PRIVKEY_PATH_INPUT
@@ -335,13 +335,13 @@ if __name__ == "__main__":
                 if CERT_PATH_INPUT != '' or CERT_PATH_INPUT is not None:
                     CERT_PATH = CERT_PATH_INPUT
             else:
-                print(chr(27) + "[2J")
+                os.system('clear')
                 print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
                 # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
                 os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
                 os.chown(PRIVKEY_PATH, APP_USER, APP_USER)
                 os.chown(CSR_PATH, APP_USER, APP_USER)
-            print(chr(27) + "[2J")
+            os.system('clear')
             print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
             print('Please note that this step can take up to 30 minutes to complete')
             os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
@@ -368,9 +368,9 @@ if __name__ == "__main__":
 
         # Enable systemd service unit on startup
         os.system(SYSTEMCTL_BIN + ' enable mailguardian.service')
-        print(chr(27) + "[2J")
+        os.system('clear')
         if input('Should we start the MailGuardian services for you now? (Y/n) ').lower() == 'y':
             os.system(SYSTEMCTL_BIN + ' start mailguardian.service')
-    print(chr(27) + "[2J")
+    os.system('clear')
     print('The installation script has finished. Any errors that occurred during installation need to be fixed manually')
     print('You can now access MailGuardian and perform the last steps of the setup here: {0}://{1}'.format('https' if HTTP_SECURE else 'http', APP_HOSTNAME))
