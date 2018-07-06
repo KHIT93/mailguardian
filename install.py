@@ -359,7 +359,7 @@ if __name__ == "__main__":
         # Store the systemd unit file
         with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
             conf = t.read()
-            conf = conf.replace('/home/mailguardian/app', APP_DIR).replace('mailguardian', APP_USER)
+            conf = conf.replace('/home/mailguardian/mailguardian', APP_DIR).replace('mailguardian', APP_USER)
             with open(os.path.join(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
                 f.write(conf)
         os.system('mkdir -p {0}'.format(os.path.joint('var', 'log', 'mailguardian')))

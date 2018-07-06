@@ -38,7 +38,7 @@ server {
         ## Redirect all MailGuardian traffic to the MailGuardian instance ##
         location / {
                 include proxy_params;
-                proxy_pass http://unix:/home/mailguardian/app/run/mailguardian.sock;
+                proxy_pass http://unix:/home/mailguardian/mailguardian/run/mailguardian.sock;
         }
 
         location = /favicon.ico { access_log off; log_not_found off; }

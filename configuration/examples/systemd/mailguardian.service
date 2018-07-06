@@ -5,8 +5,8 @@ After=network.target
 [Service]
 User=mailguardian
 Group=mtagroup
-WorkingDirectory=/home/mailguardian/app/src
-ExecStart=/home/mailguardian/app/bin/gunicorn --log-file /var/log/mailguardian/app.log --log-level info --workers 4 --bind unix:/home/mailguardian/app/run/mailguardian.sock mailguardian.wsgi:application
+WorkingDirectory=/home/mailguardian/mailguardian/src
+ExecStart=/home/mailguardian/mailguardian/bin/gunicorn --log-file /var/log/mailguardian/app.log --log-level info --workers 4 --bind unix:/home/mailguardian/mailguardian/run/mailguardian.sock mailguardian.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
