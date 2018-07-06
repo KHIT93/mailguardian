@@ -120,7 +120,7 @@ export default {
             this.form.delete('/api/hosts/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Host deleted', `The Host ${data.name} has been deleted`, 'success'));
-                router.push('/admin/users');
+                router.push('/admin/hosts');
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
