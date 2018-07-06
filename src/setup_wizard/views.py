@@ -43,7 +43,7 @@ class InitializeDatabaseAPIView(APIView):
     permission_classes = (ApplicationNotInstalled,)
     def post(self, request):
         serializer = InitialDataSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             response = {
                 'migrate': '',
                 'createsuperuser': '',
