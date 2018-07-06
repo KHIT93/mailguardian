@@ -13,7 +13,7 @@ if __name__ == "__main__":
         exit()
     # Get the current directory of this script to determine the path to use for hte systemd unit file templates
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
-
+    
     # Define some paths needed later
     SYSTEMD_PATH = '/lib/systemd/system/'
     NGINX_PATH = None
@@ -235,7 +235,7 @@ if __name__ == "__main__":
             "options": {
                 "sslmode": "require" if DB_SSL else "prefer"
             }
-        }
+        },
         "language_code": "en_us",
         "time_zone": TZ,
         "api_only_mode": API_ONLY_MODE,
@@ -343,7 +343,7 @@ if __name__ == "__main__":
             print('Please note that this step can take up to 30 minutes to complete')
             os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
         # Store the nginx configuration file for the application
-        with open(os.path.join(APP_DIR, '/examples/nginx/domain.tld'), 'r') as t:
+        with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
             conf = t.read()
             if HTTP_SECURE:
                 conf = conf.replace('/home/mailguardian/cert/domain.tld.crt', CERT_PATH).replace('/home/mailguardian/cert/domain.tld.key', PRIVKEY_PATH).replace('/home/mailguardian/cert/dhparam.pem', DHPARAM_PATH)
@@ -353,7 +353,7 @@ if __name__ == "__main__":
                 f.write(conf)
 
         # Store the systemd unit file
-        with open(os.path.join(APP_DIR, '/examples/systemd/mailguardian.service'), 'r') as t:
+        with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
             conf = t.read()
             conf = conf.replace('/home/mailguardian/app', APP_DIR).replace('mailguardian', APP_USER)
             with open(os.path.join(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
