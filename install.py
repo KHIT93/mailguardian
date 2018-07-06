@@ -27,10 +27,6 @@ if __name__ == "__main__":
     CONFIGURE_SYSTEMD = True
     CONFIGURE_CERTBOT = True
     HTTP_SECURE = True
-    PRIVKEY_PATH = APP_DIR + '/' + APP_HOSTNAME + '.key'
-    CSR_PATH = APP_DIR + '/' + APP_HOSTNAME + '.csr'
-    CERT_PATH = APP_DIR + '/' + APP_HOSTNAME + '.crt'
-    DHPARAM_PATH = APP_DIR + '/dhparam.pem'
 
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = platform.node()
@@ -43,6 +39,10 @@ if __name__ == "__main__":
     DB_PORT = None
     DB_SSL = True
     TZ = None
+    PRIVKEY_PATH = APP_DIR + '/' + APP_HOSTNAME + '.key'
+    CSR_PATH = APP_DIR + '/' + APP_HOSTNAME + '.csr'
+    CERT_PATH = APP_DIR + '/' + APP_HOSTNAME + '.crt'
+    DHPARAM_PATH = APP_DIR + '/dhparam.pem'
 
     # Stuff related to mulit-node configurations
     MULTI_NODE = False
