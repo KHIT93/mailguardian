@@ -45,7 +45,7 @@ server {
 
         location /assets/ {
             autoindex on;
-            alias /home/mailguardian/app/assets/dist/;
+            alias /home/mailguardian/mailguardian/assets/dist/;
         }
         ## Define content types that can be gzipped and cached for better network performance ##
         gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript;
