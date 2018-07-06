@@ -164,7 +164,7 @@ if __name__ == "__main__":
                 break
     
     APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % platform.node())
-    if APP_HOSTNAME_INPUT != '' or APP_HOSTNAME is not None:
+    if APP_HOSTNAME_INPUT != '' or APP_HOSTNAME_INPUT is not None:
         APP_HOSTNAME = APP_HOSTNAME_INPUT
     
     if input('Would you like to enable HTTP/2 and SSL/TLS (HTTPS) encryption for this instance? (Y/n) ').lower() != 'y':
