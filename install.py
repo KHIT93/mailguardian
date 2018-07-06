@@ -303,9 +303,10 @@ if __name__ == "__main__":
         print('Installation has been aborted. Please rerun the installation script to try again')
         exit()
     print(chr(27) + "[2J")
-    print('Writing configuration file %s' % APP_DIR + '/mailguardian-env.json')
-    with open(APP_DIR + '/mailguardian-env.json', 'w') as f:
+    print('Writing configuration file {0}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
+    with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'w') as f:
         f.write(mailguardian_env_contents)
+    os.chown(os.path.join(APP_DIR, 'mailguardian-env.json'), APP_USER, APP_USER)
     print(chr(27) + "[2J")
     if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
         if os.geteuid() != 0:
@@ -338,10 +339,13 @@ if __name__ == "__main__":
                 print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
                 # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
                 os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
+                os.chown(PRIVKEY_PATH, APP_USER, APP_USER)
+                os.chown(CSR_PATH, APP_USER, APP_USER)
             print(chr(27) + "[2J")
             print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
             print('Please note that this step can take up to 30 minutes to complete')
             os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
+            os.chown(DHPARAM_PATH, APP_USER, APP_USER)
         # Store the nginx configuration file for the application
         with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
             conf = t.read()
