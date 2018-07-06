@@ -46,6 +46,8 @@ We recommend the following requirements for your hardware, regardless of whether
 - Postfix 3.10+ with `pgsql` driver
 - Nginx 1.10+ or Apache 2.4+ with `HTTP/2` support
 - `sudo` installed and configured on your system
+- EPEL repository for CentOS
+- Stretch Backports for Debian
 
 ### Optional requirements
 
