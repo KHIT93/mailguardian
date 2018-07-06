@@ -202,10 +202,6 @@ if DEBUG:
 else:
     STATIC_ROOT = os.path.join(ASSETS_DIR, "dist")
 
-# Force secure connection
-# https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-SECURE_SSL_REDIRECT
-SECURE_SSL_REDIRECT = not DEBUG
-
 # REST Framework configuration
 # http://www.django-rest-framework.org/#example
 REST_RENDERERS = ('rest_framework.renderers.JSONRenderer','rest_framework.renderers.BrowsableAPIRenderer',) if DEBUG else ('rest_framework.renderers.JSONRenderer',)
