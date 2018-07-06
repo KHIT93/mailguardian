@@ -65,4 +65,4 @@ class TaskResultSerializer(serializers.HyperlinkedModelSerializer):
 class MailScannerHostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MailScannerHost
-        fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls')
+        fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls', 'priority')

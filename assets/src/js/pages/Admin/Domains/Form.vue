@@ -41,6 +41,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6" v-if="multi_node">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                            Receive type
+                        </label>
+                    </div>
+                    <div class="md:w-1/2 md:inline-flex">
+                        <div class="relative">
+                            <select v-model="form.receive_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <option value="">Select Receive type</option>
+                                <option value="load_balanced">Balance between nodes</option>
+                                <option value="failover">Use the primary node and fail over if unavailable</option>
+                            </select>
+                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
@@ -48,6 +67,46 @@
                             <input v-model="form.active" class="mr-2" type="checkbox" />
                             <span class="text-sm">This domain is active</span>
                         </label>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mb-6" v-if="entity.active">
+                    <div class="md:w-1/6"></div>
+                    <div class="md:w-3/5 bg-grey-lighter p-1">
+                        <h3 class="text-center p-1">DNS Configuration</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="!hosts.length">
+                                    <td>{{entity.name}}</td>
+                                    <td>MX</td>
+                                    <td>10</td>
+                                    <td>{{app_info.mailguardian_host}}test</td>
+                                </tr>
+                                <tr v-else v-for="host in hosts" :key="host.id">
+                                    <td>{{entity.name}}</td>
+                                    <td>MX</td>
+                                    <td>{{ entity.receive_type == 'load_balanced' ? 10 : host.priority }}</td>
+                                    <td>{{host.hostname}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4 class="text-center p-1 border-b">BIND Zone file example</h4>
+                        <samp class="text-center">
+                            <p v-if="!hosts.length">
+                                {{entity.name}}. IN MX 10 {{app_info.mailguardian_host}}
+                            </p>
+                            <p v-else v-for="host in hosts" :key="host.id">
+                                {{entity.name}}. IN MX {{ entity.receive_type == 'load_balanced' ? 10 : host.priority}} {{host.hostname}}
+                            </p>
+                        </samp>
+
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -82,7 +141,8 @@ export default {
     data: () => {
         return {
             entity: {},
-            form: {}
+            form: {},
+            hosts: []
         }
     },
     mounted() {
@@ -95,12 +155,17 @@ export default {
                 destination: '',
                 relay_type: '',
                 active: '',
-                allowed_accounts: null
+                allowed_accounts: null,
+                receive_type: 'failover'
             });
         }
+        this.getHosts();
     },
     computed: {
-        ...mapGetters(['user'])
+        multi_node() {
+            return this.app_info.mailguardian_multi_node;
+        },
+        ...mapGetters(['user', 'app_info'])
     },
     methods: {
         get() {
@@ -113,6 +178,7 @@ export default {
                     relay_type: response.data.relay_type,
                     active: response.data.active,
                     allowed_accounts: response.data.allowed_accounts,
+                    receive_type: response.data.receive_type
                 });
             }).catch(error => {
                 if (error.response.status == 404) {
@@ -122,6 +188,11 @@ export default {
                     router.push({ name: 'access_denied' });
                 }
             });
+        },
+        getHosts() {
+            axios.get('/api/hosts/').then(response => {
+                this.hosts = response.data.results;
+            })
         },
         submit() {
             if (this.id) {
@@ -153,7 +224,7 @@ export default {
             this.form.delete('/api/domains/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Domain deleted', `The domain ${data.name} has been deleted`, 'success'));
-                router.push('/admin/users');
+                router.push('/admin/domains');
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });

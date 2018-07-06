@@ -19,6 +19,10 @@ class Domain(models.Model):
     catchall = models.BooleanField(default=False)
     # For commercial use in order to limit the number of recipient mailboxes that can be created
     allowed_accounts = models.IntegerField(default=-1)
+    receive_type = models.CharField(max_length=12, choices=(
+        ('load_balanced', 'Load balancing'),
+        ('failover', 'Failover')
+    ), default="failover")
 
     def __str__(self):
         return self.name
