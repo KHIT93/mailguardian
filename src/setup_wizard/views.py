@@ -9,9 +9,10 @@ import os
 from .permissions import ApplicationNotInstalled
 from .serializers import InitialDataSerializer
 from core.models import User, Setting, MailScannerHost
+from core.serializers import UserSerializer
 from django.core.management import call_command
 from io import StringIO
-import django
+import django, json
 
 # Create your views here.
 class LicenseAPIView(APIView):
@@ -55,21 +56,23 @@ class InitializeDatabaseAPIView(APIView):
             call_command('migrate', stdout=output)
             response['migrate'] = output.getvalue()
             # Next create a superuser based on the admin_email and admin_password values
-            user = User.objects.create_superuser(serializer.admin_email, serializer.admin_password)
-            response['createsuperuser'] = user
+            user = User.objects.create_superuser(serializer.data['admin_email'], serializer.data['admin_password'])
+            response['createsuperuser'] = UserSerializer(user, context={'request': request}).data
             # Next create initial core.models.Setting entries based on the remaining data provided by the user
-            Setting.objects.update_or_create(key='quarantine.report.daily', defaults={'key' : 'quarantine.report.daily', 'value' : serializer.quarantine_report_daily})
-            Setting.objects.update_or_create(key='quarantine.report.from', defaults={'key' : 'quarantine.report.from', 'value' : serializer.quarantine_report_from})
-            Setting.objects.update_or_create(key='quarantine.report.non_spam.hide', defaults={'key' : 'quarantine.report.non_spam.hide', 'value' : serializer.quarantine_report_non_spam_hide})
-            Setting.objects.update_or_create(key='quarantine.report.subject', defaults={'key' : 'quarantine.report.subject', 'value' : serializer.quarantine_report_subject})
+            Setting.objects.update_or_create(key='quarantine.report.daily', defaults={'key' : 'quarantine.report.daily', 'value' : serializer.data['quarantine_report_daily']})
+            Setting.objects.update_or_create(key='quarantine.report.from', defaults={'key' : 'quarantine.report.from', 'value' : serializer.data['quarantine_report_from']})
+            Setting.objects.update_or_create(key='quarantine.report.non_spam.hide', defaults={'key' : 'quarantine.report.non_spam.hide', 'value' : serializer.data['quarantine_report_non_spam_hide']})
+            Setting.objects.update_or_create(key='quarantine.report.subject', defaults={'key' : 'quarantine.report.subject', 'value' : serializer.data['quarantine_report_subject']})
             response['createsettings'] = 'Initial settings have been configured'
             # Last update guardianware-env.json with the branding information of the application
-            with open(os.path.join(os.path.dirname(BASE_DIR), "mailguardian-env.json"), 'w') as f:
+            data = ''
+            with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'r') as f:
                 data = f.read()
-                data.replace('"name": "MailGuardian"', '"name": "{0}"'.format(serializer.branding_name))
-                data.replace('"tagline": "Securing your email"', '"tagline": "{0}"'.format(serializer.branding_tagline))
-                data.replace('"logo": ""', '"logo": "{0}"'.format(serializer.branding_logo))
+            data.replace('"name": "MailGuardian"', '"name": "{0}"'.format(serializer.data['branding_name']))
+            data.replace('"tagline": "Securing your email"', '"tagline": "{0}"'.format(serializer.data['branding_tagline']))
+            data.replace('"logo": ""', '"logo": "{0}"'.format(serializer.data['branding_logo']))
+            with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'w') as f:
                 f.write(data)
-                response['update_env'] = 'Environment file succesfully updated. Please run "sudo systemctl restat mailguardian.service"'
+            response['update_env'] = 'Environment file succesfully updated. Please run "sudo systemctl restat mailguardian.service"'
             return Response(response, status=status.HTTP_200_OK)
 
