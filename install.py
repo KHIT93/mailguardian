@@ -363,7 +363,7 @@ if __name__ == "__main__":
             conf = conf.replace('/home/mailguardian/mailguardian', APP_DIR).replace('mailguardian', APP_USER)
             with open(os.path.join(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
                 f.write(conf)
-        os.system('mkdir -p {0}'.format(os.path.joint('var', 'log', 'mailguardian')))
+        os.system('mkdir -p {0}'.format(os.path.join('var', 'log', 'mailguardian')))
         os.system('touch {0}'.format(os.path.join('var', 'log', 'mailguardian', 'app.log')))
         os.chown(os.path.join('var', 'log', 'mailguardian', 'app.log'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
         # Reload systemd unit cache
