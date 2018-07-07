@@ -211,7 +211,14 @@ That is it. Now you can access the application from your favorite web browser.
 
 #### Initial setup in the browser
 
-TO-DO
+Once the installation script, `install.py`, has completed, it is time to perform the final steps of the setup and create our application administrator account. To perform the final steps and start using the application, please visit the URL given at the end of the installation script.
+Once you visit the given URL, you will automatically be redirected to the setup screen.
+
+Complete the setup wizard and then log in to the application.
+
+As you will not be able to process any mail without valid domains, you need to go to the `Domains` menu item and create your first domain.
+
+That's it. Once you have completed the remaining steps in this setup guide, you will be able to receive/process e-mail for the created domain(s).
 
 #### Configuration of postfix
 
