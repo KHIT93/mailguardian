@@ -215,7 +215,7 @@ if __name__ == "__main__":
         if SALEARN_BIN_INPUT != '' and SALEARN_BIN_INPUT is not None:
             SALEARN_BIN = SALEARN_BIN_INPUT
         os.system('clear')
-        SA_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'spamassassin\' binary is located? [{0}] '.format(SA_BIN_INPUT))
+        SA_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'spamassassin\' binary is located? [{0}] '.format(SA_BIN))
         if SA_BIN_INPUT != '' and SA_BIN_INPUT is not None:
             SA_BIN = SA_BIN_INPUT
         os.system('clear')
