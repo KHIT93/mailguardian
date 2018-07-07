@@ -142,6 +142,7 @@ This next step is quite easy, as we need to install some `perl modules` using `C
 cpan -i CPAN
 cpan -i Data::Dumper
 cpan -i Data::UUID
+cpan -i HTTP::Date
 cpan -i DBI
 cpan -i DBD::Pg
 cpan -i Encoding::FixLatin
