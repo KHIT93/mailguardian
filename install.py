@@ -59,7 +59,7 @@ if __name__ == "__main__":
     MS_LIB = '/usr/lib/MailScanner'
     MS_SHARED = '/usr/share/MailScanner'
     MS_QUARANTINE_DIR = "/var/spool/MailScanner/quarantine"
-    SALEARN_BIN = which('salearn')
+    SALEARN_BIN = which('sa-learn')
     SA_BIN = which('spamassassin')
     SA_RULES_DIR = '/var/lib/spamassassin'
     SENDMAIL_BIN = which('sendmail')
@@ -211,7 +211,7 @@ if __name__ == "__main__":
         if MS_SHARED_INPUT != '' and MS_SHARED_INPUT is not None:
             MS_SHARED = MS_SHARED_INPUT
         os.system('clear')
-        SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'salearn\' binary is located? [{0}] '.format(SALEARN_BIN))
+        SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'sa-learn\' binary is located? [{0}] '.format(SALEARN_BIN))
         if SALEARN_BIN_INPUT != '' and SALEARN_BIN_INPUT is not None:
             SALEARN_BIN = SALEARN_BIN_INPUT
         os.system('clear')
@@ -282,7 +282,7 @@ if __name__ == "__main__":
         print('Node type: Multi-node installation (Web interface node)')
     else:
         print('Node type: Single-node installation')
-    print('Location of \'salearn\' binary: {0}'.format(SALEARN_BIN))
+    print('Location of \'sa-learn\' binary: {0}'.format(SALEARN_BIN))
     print('Location of \'spamassassin\' binary: {0}'.format(SA_BIN))
     print('Location of \'MailScanner\' binary: {0}'.format(MS_BIN))
     print('Location of MailScanner configuration files: {0}'.format(MS_CONF_DIR))
