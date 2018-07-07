@@ -221,11 +221,20 @@ Copy the `pgsql-transport.cf` from `/home/mailguardian/mailguardian/configuratio
 Then add the following lines to the bottom of `/etc/postfix/main.cf`
 
 ```
+header_checks = regexp:/etc/postfix/header_checks
 relay_domains = proxy:pgsql:/etc/postfix/pgsql-transport.cf
 transport_maps = proxy:pgsql:/etc/postfix/pgsql-transport.cf
 ```
 
-Next edit `/etc/postfix/pgsql-transport.cf` to match the credentials for your `PostgreSQL` installation and corresponding database. Then restart `postfix` with `systemct restart postfix`
+Next edit `/etc/postfix/pgsql-transport.cf` to match the credentials for your `PostgreSQL` installation and corresponding database.
+
+Finally create `/etc/postfix/header_checks` and insert this into the file:
+
+```
+/^Received:/ HOLD
+```
+
+Then restart `postfix` with `systemct restart postfix`
 
 #### Configuration of MailScanner
 
@@ -269,7 +278,13 @@ Is Definitely Spam = &SQLBlacklist
 Use SpamAssassin = &SQLNoScan
 Required SpamAssassin Score = &SQLSpamScores
 High SpamAssassin Score = &SQLHighSpamScores
+Incoming Queue Dir = /var/spool/postfix/hold
+Outgoing Queue Dir = /var/spool/postfix/incoming
+MTA = postfix
+SpamAssassin User State Dir = /var/spool/MailScanner/spamassassin
 ```
+
+Next we need to enable `MailScanner`, so that the server will actually start doing some work. Edit `/etc/MailScanner/defaults`and set `run_mailscanner=0` to `run_mailscanner=1` 
 
 Next we configure the `Bayesian` Database by adding/updating the following in `/etc/MailScanner/spamassassin.conf`
 
