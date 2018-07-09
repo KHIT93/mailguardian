@@ -1,8 +1,7 @@
 from django_extensions.management.jobs import MonthlyJob
-from mail.models import Setting
-from core.models import User
+from core.models import User, Setting
 from django.conf import settings
-from .email_reports import QuarantinedEmailReport
+from reports.email_reports import QuarantinedEmailReport
 from datetime import datetime
 from calendar import monthrange
 

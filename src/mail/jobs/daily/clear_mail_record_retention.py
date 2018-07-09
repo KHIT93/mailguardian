@@ -1,5 +1,5 @@
 from django_extensions.management.jobs import DailyJob
-from .models import Message
+from mail.models import Message
 from datetime import datetime, timedelta
 from django.conf import settings
 

@@ -1,5 +1,5 @@
-from mail.models import Message, Setting
-from core.models import User
+from mail.models import Message
+from core.models import User, Setting
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string, get_template
 from datetime import datetime, timedelta
