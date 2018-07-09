@@ -20,12 +20,13 @@ from django.views.generic import TemplateView
 from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
 from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet, MailScannerHostViewSet
-from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, SpamAssassinRuleDescriptionViewSet, TransportLogViewSet
+from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, TransportLogViewSet
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
 from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView, MessagesPerHourApiView, TopSendersByQuantityApiView, TopSendersByVolumeApiView, TopRecipientsByQuantityApiView, TopRecipientsByVolumeApiView, TopSenderDomainsByQuantityApiView, TopSenderDomainsByVolumeApiView, TopRecipientDomainsByQuantityApiView, TopRecipientDomainsByVolumeApiView
 from domains.viewsets import DomainViewSet
 from setup_wizard.views import LicenseAPIView, InstalledAPIView, InitializeDatabaseAPIView
+from spamassassin.viewsets import RuleDescriptionViewSet, RuleViewSet
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -38,7 +39,8 @@ router.register(r'rbl-reports', RblReportViewSet)
 router.register(r'mcp-reports', McpReportViewSet)
 router.register(r'mailscanner-reports', MailscannerReportViewSet)
 router.register(r'transport-logs', TransportLogViewSet)
-router.register(r'sa-rule-descriptions', SpamAssassinRuleDescriptionViewSet)
+router.register(r'sa-rules', RuleViewSet)
+router.register(r'sa-rule-descriptions', RuleDescriptionViewSet)
 router.register(r'blacklist', BlacklistEntryViewSet)
 router.register(r'whitelist', WhitelistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)

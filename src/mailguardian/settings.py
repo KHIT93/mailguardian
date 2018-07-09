@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'setup_wizard',
     'domains',
     'mail',
+    'spamassassin',
     'lists',
     'reports',
 ]
@@ -243,6 +244,7 @@ MTA_LOGFILE = MAILGUARDIAN_ENV.get("hostconfig.mta_logfile", "/var/log/maillog")
 SENDMAIL_BIN = MAILGUARDIAN_ENV.get('hostconfig.sendmail_bin', '/usr/sbin/sendmail')
 AUDIT_LOGGING = MAILGUARDIAN_ENV.get('audit_log', True)
 API_ONLY = MAILGUARDIAN_ENV.get('api_only_mode', False)
+CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), "configuration")
 
 #MailScanner settings
 MAILSCANNER_BIN = MAILGUARDIAN_ENV.get("hostconfig.mailscanner_bin", '/usr/sbin/MailScanner')
