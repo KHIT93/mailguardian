@@ -9,7 +9,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <v-select class="w-5/6" v-model="form.name" label="name" :options="availableRules"></v-select>
+                        <v-select class="w-5/6" v-model="form.name" :options="availableRules"></v-select>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -45,7 +45,7 @@ export default {
         return {
             entity: {},
             form: {},
-            availableRules: []
+            availableRuleObjects: []
         }
     },
     mounted() {
@@ -61,6 +61,15 @@ export default {
         this.getAvailableRules();
     },
     computed: {
+        availableRules() {
+            let available =  this.availableRuleObjects.map((obj, index) => {
+                return obj.key;
+            })
+            if (!available.includes(this.entity.name)) {
+                available.push(this.entity.name);
+            }
+            return available;
+        },
         ...mapGetters(['user'])
     },
     methods: {
@@ -83,7 +92,7 @@ export default {
         },
         getAvailableRules() {
             axios.get('/api/sa-rule-descriptions/available/').then(response => {
-                this.availableRules = response.data;
+                this.availableRuleObjects = response.data;
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
@@ -100,7 +109,7 @@ export default {
             this.form.post('/api/sa-rules/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('SpamAssassin Rule created', `The SpamAssassin Rule ${data.name} has been created`, 'success'));
-                router.push('/admin/spamassasin/rules');
+                router.push('/admin/spamassassin/rules');
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });

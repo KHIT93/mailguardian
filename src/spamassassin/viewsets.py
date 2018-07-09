@@ -39,6 +39,6 @@ class RuleDescriptionViewSet(viewsets.ModelViewSet):
     def get_available(self, request):
         current_rules = [rule.name for rule in Rule.objects.all()]
         qs = self.get_queryset()
-        qs.filter(~Q(key__in=current_rules))
+        qs = qs.filter(~Q(key__in=current_rules))
         serializer = RuleDescriptionSerializer(qs, many=True, context={'request': request})
         return Response(serializer.data)
