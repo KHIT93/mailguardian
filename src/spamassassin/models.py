@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-import re, uuid
+import re, uuid, subprocess
 
 # Create your models here.
 class Rule(models.Model):
