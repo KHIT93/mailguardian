@@ -1,4 +1,5 @@
 from .models import RuleDescription, Rule
+from core.models import Setting
 from .serializers import RuleDescriptionSerializer, RuleSerializer
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
