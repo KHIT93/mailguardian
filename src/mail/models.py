@@ -116,7 +116,7 @@ class Headers(models.Model):
     message = models.OneToOneField('Message', on_delete=models.CASCADE, unique=True)
     contents = models.TextField(null=True, blank=True)
 
-class SpamAssassinRule(models.Model):
+class SpamAssassinRuleDescription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     key = models.CharField(max_length=255, unique=True)
     value = models.TextField(blank=True, null=True)

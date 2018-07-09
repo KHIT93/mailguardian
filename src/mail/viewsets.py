@@ -1,5 +1,5 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule, TransportLog
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, SpamAssassinRuleSerializer, TransportLogSerializer
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRuleDescription, TransportLog
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, SpamAssassinRuleDescriptionSerializer, TransportLogSerializer
 from mailguardian.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -294,16 +294,16 @@ class McpReportViewSet(viewsets.ModelViewSet):
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
 
-class SpamAssassinRuleViewSet(viewsets.ModelViewSet):
-    queryset = SpamAssassinRule.objects.all()
-    serializer_class = SpamAssassinRuleSerializer
-    model = SpamAssassinRule
+class SpamAssassinRuleDescriptionViewSet(viewsets.ModelViewSet):
+    queryset = SpamAssassinRuleDescription.objects.all()
+    serializer_class = SpamAssassinRuleDescriptionSerializer
+    model = SpamAssassinRuleDescription
     permission_classes = (IsAdminUser,)
 
     @action(methods=['post'], detail=False, permission_classes=[IsAdminUser], url_path='sync', url_name='sa-rule-descriptions-sync')
     def post_sync_rule_descriptions(self, request):
         try:
-            sa = SpamAssassinRule()
+            sa = SpamAssassinRuleDescription()
             sa.sync_files()
             Setting.objects.update_or_create(key='sa.last_updated', defaults={'value':str(datetime.datetime.now())})
         except Exception as e:

@@ -1,4 +1,4 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRule, TransportLog
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, SpamAssassinRuleDescription, TransportLog
 from rest_framework import serializers
 import requests
 from django.conf import settings
@@ -180,9 +180,9 @@ class PostqueueStoreSerializer(serializers.Serializer):
     class Meta:
         fields = ('mails', 'loaded_at')
 
-class SpamAssassinRuleSerializer(serializers.HyperlinkedModelSerializer):
+class SpamAssassinRuleDescriptionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = SpamAssassinRule
+        model = SpamAssassinRuleDescription
         fields = ('id', 'url', 'key', 'value')
 
 class TransportLogSerializer(serializers.HyperlinkedModelSerializer):
