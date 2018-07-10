@@ -148,6 +148,9 @@ cpan -i DBD::Pg
 cpan -i Encoding::FixLatin
 cpan -i Digest::SHA1
 cpan -i Mail::ClamAV
+cpan -i Mail::SpamAssassin::Plugin::SPF
+cpan -i Mail::SpamAssassin::Plugin::URIDNSBL
+cpan -i Mail::SpamAssassin::Plugin::DNSEval
 ```
 
 #### Downloading the application
