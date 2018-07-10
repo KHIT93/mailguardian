@@ -1,5 +1,6 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog
 from rest_framework import serializers
+from spamassassin.models import RuleDescription
 import requests
 from django.conf import settings
 
@@ -106,7 +107,7 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
                         key, value = r.split(' ')
                         description = ''
                         try:
-                            description = SpamAssassinRule.objects.filter(key=key).first().value
+                            description = RuleDescription.objects.filter(key=key).first().value
                         except:
                             description = ''
                         report[key] = { 'value' : value, 'description': description }
