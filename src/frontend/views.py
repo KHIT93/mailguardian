@@ -25,7 +25,7 @@ class DashboardApiView(APIView):
         # today = '2017-11-17'
         # interval = ['2017-11-17 21:00:00', '2017-11-17 22:00:00']
         today = datetime.date.today()
-        interval = [datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=1)]
+        interval = [datetime.date.today(), datetime.date.today()]
         if 'interval' in request.POST:
             if request.POST['interval'] == 'last_hour':
                 interval = [datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=1)]
