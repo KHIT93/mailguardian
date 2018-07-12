@@ -73,6 +73,10 @@ Vue.filter('byte_display', value => {
     }
 });
 
+Vue.filter('ago', value => {
+    return moment(value).fromNow();
+})
+
 Vue.mixin({
     methods: {
         createNotification(title, message, type='info', persistent=false) {
@@ -87,12 +91,13 @@ Vue.mixin({
 })
 
 /**
- * Next, we define some constants to keep track of special
- * API endpoints that are used across multiple components
+ * Next, we define some constants to translate
+ * specific numeric values into text
  */
 
-const VIEW_MESSAGE_ENDPOINT = '';
-const MESSAGE_ACTIONS_ENDPOINT = '/api/message-actions/';
+const AUDIT_ACTION_CREATE = {'key': 0, 'value': 'Create'};
+const AUDIT_ACTION_UPDATE = {'key': 1, 'value': 'Update'};
+const AUDIT_ACTION_DELETE = {'key': 2, 'value': 'Delete'};
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

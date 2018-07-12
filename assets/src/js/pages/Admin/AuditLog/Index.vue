@@ -6,18 +6,20 @@
                     <tr>
                         <th>Timestamp</th>
                         <th>Module</th>
+                        <th>Record ID</th>
                         <th>Action</th>
-                        <th>Message</th>
+                        <th>By</th>
                         <th>IP Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="entry in log" :key="entry.id">
-                        <td>{{ entry.timestamp }}</td>
+                    <tr v-for="entry in log" :key="entry.id" @click="detail(entry.id)">
+                        <td>{{ entry.timestamp | ago }}</td>
                         <td>{{ entry.module }}</td>
-                        <td>{{ entry.action }}</td>
-                        <td>{{ entry.message }}</td>
-                        <td>{{ entry.ip_address }}</td>
+                        <td>{{ entry.object_pk }}</td>
+                        <td>{{ entry.action_name }}</td>
+                        <td>{{ entry.actor_email }}</td>
+                        <td>{{ entry.remote_addr }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -26,6 +28,7 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex';
+import router from '../../../routing/router';
 export default {
     data: () => {
         return {
@@ -34,6 +37,9 @@ export default {
     },
     computed: {
         ...mapGetters(['user'])
+    },
+    mounted() {
+        this.get()
     },
     methods: {
         get(query = null, page = null) {
@@ -50,6 +56,9 @@ export default {
             axios.get('/api/audit-log/'+qs).then(response => {
                 this.log = response.data.results;
             });
+        },
+        detail(id) {
+            router.push('/admin/audit-log/'+id);
         },
         ...mapMutations(['toggleLoading', 'notify'])
     }

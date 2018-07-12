@@ -4,6 +4,7 @@ from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
 from django_celery_results.models import TaskResult
+import json
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -30,11 +31,34 @@ class SettingsSerializer(serializers.HyperlinkedModelSerializer):
 class AuditLogSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = AuditLog
-        fields = ('id', 'url', 'module', 'object_pk', 'object_id', 'object_repr', 'action', 'changes', 'actor_id', 'remote_addr', 'timestamp', 'additional_data')
+        fields = ('id', 'url', 'module', 'object_pk', 'object_id', 'object_repr', 'action', 'action_name', 'changes', 'actor_id', 'actor_email', 'remote_addr', 'timestamp', 'additional_data')
     module = serializers.SerializerMethodField()
+    actor_email = serializers.SerializerMethodField()
+    changes = serializers.SerializerMethodField()
+    action_name = serializers.SerializerMethodField()
 
     def get_module(self, obj):
         return obj.content_type.app_label + ':' + obj.content_type.model
+
+    def get_actor_email(self, obj):
+        return obj.actor.email if obj.actor else 'System'
+    
+    def get_changes(self, obj):
+        return json.loads(obj.changes)
+
+    def get_action_name(self, obj):
+        if obj.action == 0:
+            return 'Create'
+        elif obj.action == 1:
+            if 'last_login' in self.get_changes(obj) and obj.content_type.model == 'user':
+                return 'Login'
+            elif 'password' in self.get_changes(obj) and obj.content_type.model == 'user':
+                return 'Change password'
+            elif 'released' in self.get_changes(obj) and self.get_changes(obj).released[1] == True and obj.content_type == 'message':
+                return 'Message released'
+            return 'Update'
+        elif obj.action == 2:
+            return 'Delete'
 
 class ChangePasswordSerializer(serializers.Serializer):
     """
