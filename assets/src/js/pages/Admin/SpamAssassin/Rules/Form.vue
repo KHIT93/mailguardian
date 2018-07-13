@@ -65,7 +65,7 @@ export default {
             let available =  this.availableRuleObjects.map((obj, index) => {
                 return obj.key;
             })
-            if (!available.includes(this.entity.name)) {
+            if (this.id && !available.includes(this.entity.name)) {
                 available.push(this.entity.name);
             }
             return available;
