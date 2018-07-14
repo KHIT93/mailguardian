@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-def update_create_settings_0008(apps, schema_editor):
+def update_create_settings_0012(apps, schema_editor):
     Setting = apps.get_model('core', 'Setting')
     # Create settings added to the database as part of the features introduced with this version
     Setting.objects.filter(key='quarantine.report.days').delete()
