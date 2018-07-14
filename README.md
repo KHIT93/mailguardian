@@ -212,6 +212,23 @@ To ensure that our configurations are correct and that all certificate files are
 
 That is it. Now you can access the application from your favorite web browser.
 
+#### Configure application cron jobs
+
+`MailGuardian` relies on some scheduled tasks to operate correctly and stay optimized. You can either manually enter these in the `crontab` or you can the application do it for you with `python src/manage.py setup_cron`. The automated method using the `setup_cron` command will try to do it correctly, but might still get it wrong if you have a special configuration or some other software on your server.
+
+First get the full path to your `python` executable in your `virtualenv` by activating it, if not already done using `source bin/activate`, and run `which python`. You should get something like `/home/mailguardian/mailguardian/bin/python`
+
+To add the cron jobs manually you need to enter these lines in `crontab -e`
+
+```
+@hourly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs hourly
+@daily /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs daily
+@weekly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs weekly
+@monthly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs monthly
+```
+
+This will make it run at the system predefined settings for each job. If you wish to customize when the cron jobs are running, please see the section about `Custom cron job timing`.sx
+
 #### Initial setup in the browser
 
 Once the installation script, `install.py`, has completed, it is time to perform the final steps of the setup and create our application administrator account. To perform the final steps and start using the application, please visit the URL given at the end of the installation script.
@@ -326,7 +343,14 @@ Then run `MailScanner --lint` to make sure that MailScanner is also working as e
 
 Lastly restart `MailScanner` with `systemctl restart mailscanner`
 
-#### Configure cron-job for LetsEncrypt renewal
+## Congratulations!
+
+We would like to congratulate you on completing the setup and configuration of our application and wish you the best of luck with the usage.
+If you find any issues with the application, have requests for feature or find a security problem, please do not hesitate to create an issue here on GitHub and we will get back to you
+
+## Extras
+
+### Configure cron-job for LetsEncrypt renewal
 
 As our installation script does not have the appropriate access rights to create a cron-job as `root` during installation, you need to create this manually.
 
@@ -338,7 +362,7 @@ Run `crontab -e` as `root` to open the cron-job list for `root`. Then paste in t
 
 Then save and exit
 
-#### Deploying multiserver
+### Deploying multiserver
 
 The application supports deployment in a mulitserver configuration, where mutliple servers form the technical platform. An example could be something like this:
 
@@ -354,7 +378,7 @@ During deployment of the server for the webinterface `install.py` will ask your 
 
 For the `MailScanner` nodes you would also reply `Y` to the multiserver deployment option in `install.py`, but reply `n` for the web frontend.
 
-#### Programmatically generate authentication tokens
+### Programmatically generate authentication tokens
 You can programmatically generate authentication tokens, if you do not have one for a given user.
 Run `python src/manage.py shell` and then execute this code to generate tokens for users that do currently not have one
 
@@ -369,7 +393,67 @@ for user in users:
 
 ```
 
-## Congratulations!
+### Custom cronjob timing
+If you for some reason, wish to customize when your cronjobs run, you just need to replace the magic `@interval` with the normal cron syntax.
 
-We would like to congratulate you on completing the setup and configuration of our application and wish you the best of luck with the usage.
-If you find any issues with the application, have requests for feature or find a security problem, please do not hesitate to create an issue here on GitHub and we will get back to you
+This is the crontab you have if you have followed the installation guide:
+
+```
+@hourly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs hourly
+@daily /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs daily
+@weekly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs weekly
+@monthly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs monthly
+```
+
+Let us now change the hourly cronjob to run at 5th minute of every hour, which means that it would run at 01:05AM, 02:05AM, 03:05AM etc. instead of running 01:00AM, 02:00AM, 03:00AM etc.
+Change this:
+
+```
+@hourly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs hourly
+```
+
+To this:
+
+```
+5 * * * * /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs hourly
+```
+
+Next let us change the daily cron job to run at 03:00 AM instead of the default 00:00AM.
+Change this:
+
+```
+@daily /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs daily
+```
+
+To this:
+
+```
+0 3 * * * /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs daily
+```
+
+While we are at it, let us also change the weekly cronjob to run at 04:00AM every week on sundays.
+Change this:
+
+```
+@weekly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs weekly
+```
+
+To this:
+
+```
+0 4 * * 0 /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs weekly
+```
+
+Finally, let us reschedule the monthly cron job for running at 01:00AM the first day in every month:
+
+Change this:
+
+```
+@monthly /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs monthly
+```
+
+To this:
+
+````
+0 4 * */1 * /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs monthly
+```
