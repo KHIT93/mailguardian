@@ -8,6 +8,7 @@
                         <th>To</th>
                         <th class="hidden md:table-cell">Subject</th>
                         <th>Recieved</th>
+                        <th v-if="app_info.mailguardian_multi_node">Recieved on</th>
                         <th class="hidden md:table-cell">Status</th>
                     </tr>
                 </thead>
@@ -22,6 +23,7 @@
                         <td>{{ item.to_address }}</td>
                         <td class="hidden md:table-cell">{{ item.subject }}</td>
                         <td>{{ item.timestamp }}</td>
+                        <td v-if="app_info.mailguardian_multi_node">{{ item.mailscanner_hostname }}</td>
                         <td class="hidden md:table-cell">
                             <span v-if="item.is_clean">Clean</span>
                             <template v-else>
@@ -49,7 +51,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['loading'])
+        ...mapGetters(['loading', 'app_info'])
     },
     methods: {
         details(id) {
