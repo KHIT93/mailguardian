@@ -1,4 +1,4 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog, SmtpRelay
 from rest_framework import serializers
 from spamassassin.models import RuleDescription
 import requests
@@ -185,3 +185,8 @@ class TransportLogSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TransportLog
         fields = ('id', 'url', 'message_id', 'timestamp', 'transport_host', 'transport_type', 'relay_host', 'dsn', 'dsn_message', 'delay')
+
+class SmtpRelaySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = SmtpRelay
+        fields = ('id', 'url', 'id', 'ip_address', 'active', 'comment')

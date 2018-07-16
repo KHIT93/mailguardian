@@ -31,6 +31,8 @@ import Users from '../pages/Admin/Users/Index.vue';
 import UserForm from '../pages/Admin/Users/Form.vue';
 import Hosts from '../pages/Admin/Hosts/Index.vue';
 import HostForm from '../pages/Admin/Hosts/Form.vue';
+import SmtpRelays from '../pages/Admin/SmtpRelays/Index.vue';
+import SmtpRelayForm from '../pages/Admin/SmtpRelays/Form.vue';
 import SpamAssassinRules from '../pages/Admin/SpamAssassin/Rules/Index.vue';
 import SpamAssassinRuleForm from '../pages/Admin/SpamAssassin/Rules/Form.vue';
 import MailScannerConfiguration from '../pages/Admin/MailscannerConfig/Index.vue';
@@ -77,6 +79,10 @@ export default [
     { path: '/admin/hosts', component: Hosts, name: 'admin.hosts.index', meta: { requiresAdmin: true } },
     { path: '/admin/hosts/add', component: HostForm, name: 'admin.hosts.add', meta: { requiresDomainAdmin: true } },
     { path: '/admin/hosts/:id', component: HostForm, name: 'admin.hosts.edit', props: true, meta: { requiresDomainAdmin: true } },
+
+    { path: '/admin/smtp-relays', component: SmtpRelays, name: 'admin.smtp-relays.index', meta: { requiresAdmin: true } },
+    { path: '/admin/smtp-relays/add', component: SmtpRelayForm, name: 'admin.smtp-relays.add', meta: { requiresDomainAdmin: true } },
+    { path: '/admin/smtp-relays/:id', component: SmtpRelayForm, name: 'admin.smtp-relays.edit', props: true, meta: { requiresDomainAdmin: true } },
 
     { path: '/admin/spamassassin/rules', component: SpamAssassinRules, name: 'admin.spamassassin.rules.index', meta: { requiresAdmin: true } },
     { path: '/admin/spamassassin/rules/add', component: SpamAssassinRuleForm, name: 'admin.spamassassin.rules.add', meta: { requiresAdmin: true } },

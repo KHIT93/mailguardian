@@ -256,6 +256,14 @@ transport_maps = proxy:pgsql:/etc/postfix/pgsql-transport.cf
 
 Next edit `/etc/postfix/pgsql-transport.cf` to match the credentials for your `PostgreSQL` installation and corresponding database.
 
+If you wish to also allow SMTP relays, you can copy `home/mailguardian/mailguardian/configuration/examples/postfix/pgsql-mynetworks.cf` to `/etc/postfix/pgsql-mynetworks.cf` and edit the `PostgreSQL` credentials and corresponding database as well.
+
+Then add this to your `/etc/postfix/main.cf` on the same line as `mynetworks = ...`
+
+```
+, proxy:pgsql:/etc/postfix/pgsql-mynetworks.cf
+```
+
 Finally create `/etc/postfix/header_checks` and insert this into the file:
 
 ```

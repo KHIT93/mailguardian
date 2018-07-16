@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.conf import settings
+from auditlog.registry import auditlog
 import os, datetime, subprocess
 
 # Create your models here.
@@ -129,3 +130,13 @@ class TransportLog(models.Model):
     dsn = models.CharField(max_length=255, db_index=True)
     dsn_message = models.TextField(db_index=True)
     delay = models.DurationField()
+
+class SmtpRelay(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ip_address = models.GenericIPAddressField("IP Address", db_index=True)
+    active = models.BooleanField(default=0)
+    comment = models.TextField()
+
+if settings.AUDIT_LOGGING:
+    auditlog.register(Message)
+    auditlog.register(SmtpRelay)

@@ -1,5 +1,5 @@
-from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, TransportLogSerializer
+from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog, SmtpRelay
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, TransportLogSerializer, SmtpRelaySerializer
 from mailguardian.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -309,3 +309,9 @@ class TransportLogViewSet(viewsets.ModelViewSet):
         domains = [domain.name for domain in self.request.user.domains.all()]
         qs = qs.filter(Q(message__from_domain__in=domains) | Q(message__to_domain__in=domains))
         return qs
+
+class SmtpRelayViewSet(viewsets.ModelViewSet):
+    queryset = SmtpRelay.objects.all()
+    serializer_class = SmtpRelaySerializer
+    model = SmtpRelay
+    permission_classes = (IsAdminUser,)

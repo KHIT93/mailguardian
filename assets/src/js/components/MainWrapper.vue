@@ -80,6 +80,12 @@
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/smtp-relays" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                                <mg-verified-user-icon class="w-6 h-6 mr-2"></mg-verified-user-icon>
+                                SMTP Relays
+                            </router-link>
+                        </div>
+                        <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/mailscanner/configuration" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
                                 <mg-email-icon class="w-6 h-6 mr-2"></mg-email-icon>
                                 MailScanner Configuration

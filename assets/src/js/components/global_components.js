@@ -28,6 +28,7 @@ import WidgetsIcon from '../icons/WidgetsIcon.vue';
 import NavigateBefore from '../icons/NavigateBefore.vue';
 import NavigateNext from '../icons/NavigateNext.vue';
 import DeviceHub from '../icons/DeviceHubIcon.vue';
+import VerifiedUserIcon from '../icons/VerifiedUser.vue';
 
 Vue.component('mg-modal', Modal);
 
@@ -56,6 +57,7 @@ Vue.component('mg-widgets-icon', WidgetsIcon);
 Vue.component('mg-navigate-before-icon', NavigateBefore);
 Vue.component('mg-navigate-next-icon', NavigateNext);
 Vue.component('mg-device-hub-icon', DeviceHub);
+Vue.component('mg-verified-user-icon', VerifiedUserIcon);
 
 export default {
     'mg-wrapper': MainWrapper,
