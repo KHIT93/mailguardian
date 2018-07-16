@@ -133,7 +133,7 @@ class TransportLog(models.Model):
 
 class SmtpRelay(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ip_address = models.GenericIPAddressField("IP Address", db_index=True)
+    ip_address = models.CharField("IP Address", max_length=255, db_index=True)
     hostname = models.CharField(max_length=255, db_index=True, default='')
     active = models.BooleanField(default=0)
     comment = models.TextField()
