@@ -189,4 +189,4 @@ class TransportLogSerializer(serializers.HyperlinkedModelSerializer):
 class SmtpRelaySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SmtpRelay
-        fields = ('id', 'url', 'id', 'ip_address', 'active', 'comment')
+        fields = ('id', 'url', 'ip_address', 'hostname', 'active', 'comment')

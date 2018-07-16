@@ -13,6 +13,16 @@
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="hostname">
+                            Hostname*
+                        </label>
+                    </div>
+                    <div class="md:w-1/2">
+                        <input v-model="form.hostname" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="hostname" id="hostname" type="text" placeholder="mail.example.com" required>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
                         <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="active">
@@ -63,6 +73,7 @@ export default {
         else {
             this.form = new Form({
                 ip_address: '',
+                hostname: '',
                 active: false,
                 comment: ''
             });
@@ -78,6 +89,7 @@ export default {
                 this.form = new Form({
                     id: response.data.id,
                     ip_address: response.data.ip_address,
+                    hostname: response.data.hostname,
                     active: response.data.active,
                     comment: response.data.comment
                 });

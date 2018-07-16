@@ -8,6 +8,7 @@
                     <thead>
                         <tr>
                             <th>IP Address</th>
+                            <th>Hostname</th>
                             <th>Active</th>
                             <th>Comment</th>
                         </tr>
@@ -18,6 +19,7 @@
                         </tr>
                         <tr v-for="item in smtp_relays" :key="item.id" v-else @click="edit(item.id)">
                             <td>{{ item.ip_address }}</td>
+                            <td>{{ item.hostname }}</td>
                             <td>
                                 <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
                                     <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': item.active, 'bg-red': !item.active }" >
