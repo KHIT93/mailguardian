@@ -42,6 +42,7 @@ import AuditLogIndex from '../pages/Admin/AuditLog/Index.vue';
 import AuditLogDetail from '../pages/Admin/AuditLog/Detail.vue';
 import PasswordReset from '../pages/PasswordReset/Index.vue';
 import PasswordResetConfirm from '../pages/PasswordReset/Confirm.vue';
+import Profile from '../pages/Profile.vue';
 
 import SetupIndex from '../setup/Index.vue';
 
@@ -94,6 +95,8 @@ export default [
     { path: '/admin/settings', component: Settings, name: 'admin.settings.index', meta: { requiresAdmin: true } },
     { path: '/admin/audit-log', component: AuditLogIndex, name: 'reports.auditlog.index', meta: { requiresAdmin: true } },
     { path: '/admin/audit-log/:id', component: AuditLogDetail, name: 'reports.auditlog.detail', props: true, meta: { requiresAdmin: true } },
+
+    { path: '/profile', component: Profile, name:'profile.index', meta: { requiresAuth: true }},
 
     { path: '/password-reset', component: PasswordReset, name: 'password.reset'},
     { path: '/password-reset/confirm/:uid/:token/', component: PasswordResetConfirm, name: 'password.reset.confirm', props: true},

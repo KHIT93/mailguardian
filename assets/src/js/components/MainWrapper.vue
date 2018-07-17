@@ -17,8 +17,11 @@
                         <div class="hidden md:block md:w-2/3">
                             <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-grey-dark"/>
                         </div>
-                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full hover:text-white text-grey" title="Log out">
-                            <div @click="logout">
+                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full text-grey" title="Log out">
+                            <router-link to="/profile" class="text-grey hover:text-white pr-2">
+                                <mg-account-circle-icon class="w-6 h-6"></mg-account-circle-icon>
+                            </router-link>
+                            <div class="hover:text-white cursor-pointer" @click="logout">
                                 <mg-exit-to-app-icon class="w-6 h-6"></mg-exit-to-app-icon>
                             </div>
                         </div>

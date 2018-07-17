@@ -9,6 +9,11 @@ class CurrentUserView(APIView):
         serializer = UserSerializer(request.user, context={'request': request})
         return Response(serializer.data)
 
+    def patch(self, request):
+        serializer = UserSerializer(request.user, data=request.data, context={'request': request}, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
     def get_permissions(self):
         return (IsAuthenticated()),
 
