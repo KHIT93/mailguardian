@@ -27,22 +27,39 @@ import router from './routing/router';
 
 window.axios = axios;
 
-window.axios.defaults.headers.common['X-CSRFToken'] = Cookies.get('csrftoken');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+// window.axios.defaults.headers.common['X-CSRFToken'] = Cookies.get('csrftoken');
+// window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+window.axios.interceptors.request.use(request => {
+    if(process.env.NODE_ENV != "production") {
+        console.log('Starting Request', request);
+    }
+    if (!request.url.includes('github')) {
+        request.headers['X-CSRFToken'] = Cookies.get('csrftoken');
+        request.headers['X-Requested-With'] = 'XMLHttpRequest';
+    }
+    return request;
+});
+window.axios.interceptors.response.use(response => {
+    if(process.env.NODE_ENV != "production") {
+        console.log('Response for previous request to ' + response.request.responseURL + ': ', response);
+    }
+    return response;
+});
 
  /**
   * Debug code for logging AJAX calls to the console
   */
-if(process.env.NODE_ENV != "production") {
-    window.axios.interceptors.request.use(request => {
-        console.log('Starting Request', request);
-        return request;
-    });
-    window.axios.interceptors.response.use(response => {
-        console.log('Response for previous request to ' + response.request.responseURL + ': ', response);
-        return response;
-    });
-}
+// if(process.env.NODE_ENV != "production") {
+//     window.axios.interceptors.request.use(request => {
+//         console.log('Starting Request', request);
+//         return request;
+//     });
+//     window.axios.interceptors.response.use(response => {
+//         console.log('Response for previous request to ' + response.request.responseURL + ': ', response);
+//         return response;
+//     });
+// }
 
 /**
  * Global helper method to perform redirection inside the application
