@@ -10,7 +10,7 @@ import json
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'url', 'email', 'is_staff', 'is_domain_admin', 'is_active', 'first_name', 'last_name', 'full_name', 'date_joined', 'domains', 'custom_spam_score', 'custom_spam_highscore', 'skip_scan')
+        fields = ('id', 'url', 'email', 'is_staff', 'is_domain_admin', 'is_active', 'first_name', 'last_name', 'full_name', 'date_joined', 'domains', 'daily_quarantine_report', 'weekly_quarantine_report', 'monthly_quarantine_report', 'custom_spam_score', 'custom_spam_highscore', 'skip_scan')
 
     full_name = serializers.SerializerMethodField()
     # mailuser = MailUserSerializer(many=False, read_only=True)

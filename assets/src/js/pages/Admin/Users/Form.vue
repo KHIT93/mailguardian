@@ -62,6 +62,36 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
+                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
+                            <input v-model="form.daily_quarantine_report" class="mr-2" type="checkbox" />
+                            <span class="text-sm">Send daily quarantine reports</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="md:flex md:items-center mb-6">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
+                            <input v-model="form.weekly_quarantine_report" class="mr-2" type="checkbox" />
+                            <span class="text-sm">Send weekly quarantine reports</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="md:flex md:items-center mb-6">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
+                            <input v-model="form.monthly_quarantine_report" class="mr-2" type="checkbox" />
+                            <span class="text-sm">Send monthly quarantine reports</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="md:flex md:items-center mb-6">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
                         <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="username">
                             <input v-model="form.skip_scan" class="mr-2" type="checkbox" />
                             <span class="text-sm">Do not scan email for this user</span>
@@ -150,7 +180,10 @@ export default {
                 custom_spam_score: 5.0,
                 custom_spam_highscore: 15.0,
                 skip_scan: false,
-                domains: []
+                domains: [],
+                daily_quarantine_report: false,
+                weekly_quarantine_report: false,
+                monthly_quarantine_report: false
             });
         }
     },
@@ -172,7 +205,10 @@ export default {
                     custom_spam_score: response.data.custom_spam_score,
                     custom_spam_highscore: response.data.custom_spam_highscore,
                     skip_scan: response.data.skip_scan,
-                    domains: []
+                    domains: [],
+                    daily_quarantine_report: response.data.daily_quarantine_report,
+                    weekly_quarantine_report: response.data.weekly_quarantine_report,
+                    monthly_quarantine_report: response.data.monthly_quarantine_report
                 })
             }).catch(error => {
                 if (error.response.status == 404) {
