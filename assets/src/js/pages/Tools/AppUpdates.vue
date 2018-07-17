@@ -68,15 +68,18 @@ export default {
     },
     methods: {
         getReleases() {
+            this.updates_loading = true;
             axios.get('https://api.github.com/repos/khit93/mailguardian/releases').then(response => {
                 let all = response.data;
                 let current = all.filter(release => {
                     return release.name == this.app_info.mailguardian_version;
                 })[0];
-                console.log(current);
                 this.releases = all.filter(release => {
                     return release.created_at > current.created_at;
                 });
+                this.updates_loading = false;
+            }).catch(error => {
+                this.updates_loading = false;
             });
         },
         ...mapMutations(['toggleLoading'])
