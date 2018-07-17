@@ -34,8 +34,8 @@ class InstalledAPIView(APIView):
         multi_node = True if host_count > 0 else False
         return Response({
             'django_version': django.VERSION,
-            'mailguardian_api_version': '1.0.0',
-            'mailguardian_version': '1.0.0',
+            'mailguardian_api_version': settings.APP_VERSION,
+            'mailguardian_version': settings.APP_VERSION,
             'mailguardian_multi_node': multi_node,
             'mailguardian_host': settings.APP_HOSTNAME
         }, 200)
