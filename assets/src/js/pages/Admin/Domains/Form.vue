@@ -4,7 +4,7 @@
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="name">
                             Name*
                         </label>
                     </div>
@@ -14,23 +14,23 @@
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="destination">
                             Destination*
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.destination" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="name" id="name" type="text" placeholder="mail.example.com" required>
+                        <input v-model="form.destination" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="relay_type">
                             Relay type
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
                         <div class="relative">
-                            <select v-model="form.relay_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                            <select v-model="form.relay_type" name="relay_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
                                 <option value="">Select relay type</option>
                                 <option value="smtp">Deliver to my email server (SMTP)</option>
                                 <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
@@ -43,13 +43,13 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="multi_node">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="receive_type">
                             Receive type
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
                         <div class="relative">
-                            <select v-model="form.receive_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                            <select v-model="form.receive_type" name="receive_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
                                 <option value="">Select Receive type</option>
                                 <option value="load_balanced">Balance between nodes</option>
                                 <option value="failover">Use the primary node and fail over if unavailable</option>
@@ -63,8 +63,8 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="username">
-                            <input v-model="form.active" class="mr-2" type="checkbox" />
+                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="active">
+                            <input v-model="form.active" class="mr-2" type="checkbox" name="active" />
                             <span class="text-sm">This domain is active</span>
                         </label>
                     </div>
@@ -111,12 +111,12 @@
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="allowed_accounts">
                             Allowed accounts*
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.allowed_accounts" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="name" id="name" type="number" required min="-1">
+                        <input v-model="form.allowed_accounts" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

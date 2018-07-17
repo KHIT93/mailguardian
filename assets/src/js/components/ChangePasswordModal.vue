@@ -3,7 +3,7 @@
         <form @submit.prevent="submit">
             <div class="md:flex md:items-center mb-6 mt-4" v-if="userId">
                 <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="old_password">
                         Current password*
                     </label>
                 </div>
@@ -13,7 +13,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="new_password1">
                         New password*
                     </label>
                 </div>
@@ -23,7 +23,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="new_password2">
                         Confirm new password*
                     </label>
                 </div>

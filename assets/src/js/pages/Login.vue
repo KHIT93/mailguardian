@@ -5,12 +5,12 @@
                 <mg-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Error during login', message: form.errors.get('non_field_errors'), type: 'error' }"></mg-notification>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="username">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
                         Email
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="username" id="username" type="text" placeholder="JaneDoe@example.com" required>
+                        <input v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>

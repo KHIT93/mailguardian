@@ -36,7 +36,7 @@
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
                         <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="use_tls">
-                            <input v-model="form.use_tls" class="mr-2" type="checkbox" />
+                            <input v-model="form.use_tls" class="mr-2" type="checkbox" name="use_tls" />
                             <span class="text-sm">Communicate with this host using SSL/TLS encryption</span>
                         </label>
                     </div>

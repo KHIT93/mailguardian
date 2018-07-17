@@ -6,7 +6,7 @@
                 <p class="text-center mb-4">Please choose your new password for the application</p>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="new_password1">
                         New Password
                     </label>
                     </div>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="new_password2">
                         Confirm Password
                     </label>
                     </div>
