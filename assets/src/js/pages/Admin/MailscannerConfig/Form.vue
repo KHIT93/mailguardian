@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
@@ -9,7 +9,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.key" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="key" id="key" type="text" required>
+                        <input v-model="form.key" class="form-input" name="key" id="key" type="text" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -19,7 +19,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.value" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="value" id="value" type="text">
+                        <input v-model="form.value" class="form-input" name="value" id="value" type="text">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -31,18 +31,18 @@
                     <div class="md:w-1/2 md:inline-flex">
                         <div v-if="form.id" class="text-grey-light">{{ form.filepath }}</div>
                         <div class="relative" v-else>
-                            <select v-model="form.filepath" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                            <select v-model="form.filepath" class="form-select">
                                 <option value="">-- Select file --</option>
                                 <option v-for="f in filepaths" :key="f.filepath" :value="f.filepath">{{ f.filepath }}</option>
                             </select>
-                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                            <div class="form-select-icon">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">
-                    <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button type="submit" class="btn btn-blue shadow">
                         Submit
                     </button>
                     <button v-if="id" @click="destroy" type="button" class="mr-1 flex-no-shrink bg-red hover:bg-red-dark border-red hover:border-red-dark text-sm border-4 text-white py-1 px-2 rounded shadow">

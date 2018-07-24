@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
@@ -9,7 +9,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.hostname" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="hostname" id="hostname" type="text" placeholder="mailnode-01.example.com" required>
+                        <input v-model="form.hostname" class="form-input" name="hostname" id="hostname" type="text" placeholder="mailnode-01.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -19,7 +19,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.ip_address" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1" required>
+                        <input v-model="form.ip_address" class="form-input" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -29,7 +29,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.priority" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="priority" id="priority" type="number" placeholder="10" required>
+                        <input v-model="form.priority" class="form-input" name="priority" id="priority" type="number" placeholder="10" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">
-                    <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button type="submit" class="btn btn-blue shadow">
                         Submit
                     </button>
                     <button v-if="id" @click="destroy" type="button" class="mr-1 flex-no-shrink bg-red hover:bg-red-dark border-red hover:border-red-dark text-sm border-4 text-white py-1 px-2 rounded shadow">

@@ -1,7 +1,7 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="sm:flex">
-            <div class="bg-white border sm:rounded shadow min-w-full table-wrapper">
+            <div class="card min-w-full table-wrapper">
                 <table class="table text-sm">
                     <thead>
                         <tr>

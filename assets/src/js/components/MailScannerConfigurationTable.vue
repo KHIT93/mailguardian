@@ -14,7 +14,7 @@
             </tbody>
         </table>
         <div class="inline-flex pt-2 rounded">
-            <button @click="previous" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-l" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : list.current == 1}">
+            <button @click="previous" class="btn rounded-none rounded-l" :class="{'select-none cursor-not-allowed btn-grey-lightest' : list.current == 1, 'btn-grey-light' : list.current != 1}">
                 Prev
             </button>
             <!-- <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4">
@@ -26,7 +26,7 @@
             <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4">
                 3
             </button> -->
-            <button @click="next" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-r" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : list.current == list.page_count}">
+            <button @click="next" class="btn rounded-none rounded-r" :class="{'select-none cursor-not-allowed btn-grey-lightest' : list.current == list.page_count, 'btn-grey-light' : list.current != list.page_count}">
                 Next
             </button>
         </div>

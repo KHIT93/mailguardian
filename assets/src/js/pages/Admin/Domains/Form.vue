@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
@@ -9,7 +9,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.name" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="name" id="name" type="text" placeholder="example.com" required>
+                        <input v-model="form.name" class="form-input" name="name" id="name" type="text" placeholder="example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -19,7 +19,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.destination" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
+                        <input v-model="form.destination" class="form-input" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,12 +30,12 @@
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
                         <div class="relative">
-                            <select v-model="form.relay_type" name="relay_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                            <select v-model="form.relay_type" name="relay_type" class="form-select">
                                 <option value="">Select relay type</option>
                                 <option value="smtp">Deliver to my email server (SMTP)</option>
                                 <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
                             </select>
-                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                            <div class="form-select-icon">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
                         </div>
@@ -49,12 +49,12 @@
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
                         <div class="relative">
-                            <select v-model="form.receive_type" name="receive_type" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                            <select v-model="form.receive_type" name="receive_type" class="form-select">
                                 <option value="">Select Receive type</option>
                                 <option value="load_balanced">Balance between nodes</option>
                                 <option value="failover">Use the primary node and fail over if unavailable</option>
                             </select>
-                            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                            <div class="form-select-icon">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
                         </div>
@@ -116,11 +116,11 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.allowed_accounts" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
+                        <input v-model="form.allowed_accounts" class="form-input" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">
-                    <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button type="submit" class="btn btn-blue shadow">
                         Submit
                     </button>
                     <button v-if="id" @click="destroy" type="button" class="mr-1 flex-no-shrink bg-red hover:bg-red-dark border-red hover:border-red-dark text-sm border-4 text-white py-1 px-2 rounded shadow">

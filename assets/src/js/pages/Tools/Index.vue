@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <div v-if="user.is_staff">
                 <h2 class="border-b p-1">Admin tools</h2>
                 <ul class="border-b pt-2 pb-3">

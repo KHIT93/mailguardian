@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="bg-white border sm:rounded shadow">
+        <div class="card">
             <div class="flex flex-row-reverse p-2 bg-grey-lightest">
                 <div class="mt-2">
                     <button @click="get(interval)" type="button" class="bg-blue hover:bg-blue-dark no-underline text-white font-semibold py-2 px-4 border border-blue hover:border-bleu-dark text-sm rounded">Refresh</button>

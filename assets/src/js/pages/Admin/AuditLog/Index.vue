@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2 table-wrapper">
+        <div class="card p-2 table-wrapper">
             <table class="table text-sm cursor-pointer break-words">
                 <thead>
                     <tr>

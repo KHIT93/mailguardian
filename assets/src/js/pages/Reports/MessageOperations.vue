@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="container mx-auto px-4">
-            <div class="bg-white border sm:rounded shadow table-wrapper">
+            <div class="card table-wrapper">
                 <table class="table text-sm cursor-pointer break-words">
                     <thead>
                         <tr>

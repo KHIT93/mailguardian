@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <h2 class="border-b">Details for message <em>{{ uuid }}</em></h2>
             <mg-message-actions @view="showMessage" @release="release" @spam="spam" @nonspam="nonspam" class="border-b" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
             <div class="sm:flex">
@@ -12,7 +12,7 @@
                             </div>
                             <div class="pt-2">
                                 <div class="pb-1">
-                                    <button @click="createListing(message.from_address, message.to_address, 'whitelisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.from_address, message.to_address, 'whitelisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <defs>
@@ -29,7 +29,7 @@
                                 </div>
 
                                 <div>
-                                    <button @click="createListing(message.from_address, message.to_address, 'blacklisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.from_address, message.to_address, 'blacklisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M0 0h24v24H0z" fill="none"/>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="pt-2">
                                 <div class="pb-1">
-                                    <button @click="createListing(message.to_address, message.from_address, 'whitelisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.to_address, message.from_address, 'whitelisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                                 <defs>
@@ -88,7 +88,7 @@
                                 </div>
 
                                 <div>
-                                    <button @click="createListing(message.to_address, message.from_address, 'blacklisted')" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                                    <button @click="createListing(message.to_address, message.from_address, 'blacklisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                         <div class="inline-flex content-center">
                                             <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M0 0h24v24H0z" fill="none"/>

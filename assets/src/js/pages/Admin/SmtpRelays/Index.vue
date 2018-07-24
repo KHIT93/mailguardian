@@ -1,9 +1,9 @@
 <template>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <h2 class="font-normal text-center mb-2">Relay management</h2>
             <p>Here you can manage the hosts, which are allowed to send mail through your deployed node(s)</p>
-            <div class="bg-white border sm:rounded shadow table-wrapper">
+            <div class="card table-wrapper">
                 <table class="table text-sm">
                     <thead>
                         <tr>
@@ -33,15 +33,15 @@
                 </table>
             </div>
             <div class="inline-flex pt-2 rounded" v-if="page_count > 1">
-                <button @click="previous" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-l" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
+                <button @click="previous" class="btn rounded-none rounded-l" :class="{'select-none cursor-not-allowed btn-grey-lightest' : current == 1, 'btn-grey-light' : current != 1}">
                     Prev
                 </button>
-                <button @click="next" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded-r" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
+                <button @click="next" class="btn rounded-none rounded-r" :class="{'select-none cursor-not-allowed btn-grey-lightest' : current == page_count, 'btn-grey-light' : current != page_count}">
                     Next
                 </button>
             </div>
             <div class="mt-4 mb-2">
-                <router-link to="/admin/smtp-relays/add" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow no-underline">
+                <router-link to="/admin/smtp-relays/add" class="btn btn-blue shadow">
                     Add Relay
                 </router-link>
             </div>

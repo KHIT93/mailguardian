@@ -17,8 +17,8 @@
                         <div class="hidden md:block md:w-2/3">
                             <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-grey-dark"/>
                         </div>
-                        <div class="w-1/5 sm:w-auto sm:flex text-right h-full text-grey" title="Log out">
-                            <router-link to="/profile" class="text-grey hover:text-white pr-2">
+                        <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-grey" title="Log out">
+                            <router-link to="/profile" class="text-grey hover:text-white pr-3">
                                 <mg-account-circle-icon class="w-6 h-6"></mg-account-circle-icon>
                             </router-link>
                             <div class="hover:text-white cursor-pointer" @click="logout">
@@ -35,73 +35,73 @@
                 <div class="container mx-auto px-4">
                     <div class="">
                         <div class="flex -mb-px" @click="hideMenu()">
-                            <router-link to="/" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/" exact active-class="active" class="nav-link">
                                 <mg-dashboard-icon class="w-6 h-6 mr-2"></mg-dashboard-icon>
                                 Dashboard
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
-                            <router-link to="/messages" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/messages" active-class="active" class="nav-link">
                                 <mg-email-icon class="w-6 h-6 mr-2"></mg-email-icon>
                                 Messages
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
-                            <router-link to="/lists" exact active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/lists" exact active-class="active" class="nav-link">
                                 <mg-exposure-icon class="w-6 h-6 mr-2"></mg-exposure-icon>
                                 Lists
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
-                            <router-link to="/reports" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/reports" active-class="active" class="nav-link">
                                 <mg-insert-chart-icon class="w-6 h-6 mr-2"></mg-insert-chart-icon>
                                 Reports
                             </router-link>
                         </div>
                         <div class="flex -mb-px" @click="hideMenu()">
-                            <router-link to="/tools" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/tools" active-class="active" class="nav-link">
                                 <mg-build-icon class="w-6 h-6 mr-2"></mg-build-icon>
                                 Tools
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/users" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/users" active-class="active" class="nav-link">
                                 <mg-people-icon class="w-6 h-6 mr-2"></mg-people-icon>
                                 Users
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/domains" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/domains" active-class="active" class="nav-link">
                                 <mg-dns-icon class="w-6 h-6 mr-2"></mg-dns-icon>
                                 Domains
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/hosts" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/hosts" active-class="active" class="nav-link">
                                 <mg-device-hub-icon class="w-6 h-6 mr-2"></mg-device-hub-icon>
                                 Hosts
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/smtp-relays" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/smtp-relays" active-class="active" class="nav-link">
                                 <mg-verified-user-icon class="w-6 h-6 mr-2"></mg-verified-user-icon>
                                 SMTP Relays
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/mailscanner/configuration" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/mailscanner/configuration" active-class="active" class="nav-link">
                                 <mg-email-icon class="w-6 h-6 mr-2"></mg-email-icon>
                                 MailScanner Configuration
                             </router-link>
                         </div>
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/spamassassin/rules" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/spamassassin/rules" active-class="active" class="nav-link">
                                 <mg-import-contacts-icon class="w-6 h-6 mr-2"></mg-import-contacts-icon>
                                 SpamAssassin Rules
                             </router-link>
                         </div>
                         <div class="flex -mb-px" v-if="user.is_staff" @click="hideMenu()">
-                            <router-link to="/admin/settings" active-class="no-underline opacity-100 text-white lg:text-blue-dark flex items-center py-4 lg:py-2" class="no-underline text-white opacity-50 lg:opacity-100 lg:text-grey-dark flex items-center py-4 lg:py-2 border-b border-transparent hover:opacity-75">
+                            <router-link to="/admin/settings" active-class="active" class="nav-link">
                                 <mg-settings-icon class="w-6 h-6 mr-2"></mg-settings-icon>
                                 Settings
                             </router-link>

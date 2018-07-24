@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <form @submit.prevent="update">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
@@ -120,7 +120,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_score" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="custom_spam_score" id="custom_spam_score" type="number" placeholder="5.0">
+                        <input v-model="form.custom_spam_score" class="form-input" name="custom_spam_score" id="custom_spam_score" type="number" placeholder="5.0">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
@@ -130,12 +130,12 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_highscore" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="custom_spam_highscore" id="custom_spam_highscore" type="number" placeholder="15.0">
+                        <input v-model="form.custom_spam_highscore" class="form-input" name="custom_spam_highscore" id="custom_spam_highscore" type="number" placeholder="15.0">
                     </div>
                 </div>
 
                 <div class="flex flex-row-reverse border-t pt-2">
-                    <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button type="submit" class="btn btn-blue shadow">
                         Submit
                     </button>
                 </div>

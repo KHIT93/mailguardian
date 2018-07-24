@@ -13,7 +13,7 @@
                             <mg-navigate-before-icon class="w-3 h-3"></mg-navigate-before-icon>
                             Previous
                         </button>
-                        <button @click="next" v-if="currentStepIndex < steps.length-1" type="button" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow" :class="{ 'cursor-not-allowed bg-blue-lighter border-blue-lighter hover:bg-blue-lighter hover:border-blue-lighter shadow-none': !steps[currentStepIndex].completed && currentStepIndex > 0 }" :disabled="!steps[currentStepIndex].completed && currentStepIndex > 0">
+                        <button @click="next" v-if="currentStepIndex < steps.length-1" type="button" class="btn btn-blue shadow" :class="{ 'cursor-not-allowed bg-blue-lighter border-blue-lighter hover:bg-blue-lighter hover:border-blue-lighter shadow-none': !steps[currentStepIndex].completed && currentStepIndex > 0 }" :disabled="!steps[currentStepIndex].completed && currentStepIndex > 0">
                             Next
                             <mg-navigate-next-icon class="w-3 h-3"></mg-navigate-next-icon>
                         </button>

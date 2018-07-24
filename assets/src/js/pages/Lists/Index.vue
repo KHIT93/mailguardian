@@ -1,12 +1,12 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="sm:flex bg-white border sm:rounded shadow p-2 mb-2">
+        <div class="sm:flex card p-2 mb-2">
             <div class="sm:w-1/2">
                 <div class="p-2">
-                    <button @click="show_blacklist_modal" class="flex-no-shrink bg-black hover:bg-grey-darkest border-black hover:border-grey-darkest text-sm border-4 text-white py-1 px-2 rounded shadow" type="button">
+                    <button @click="show_blacklist_modal" class="btn btn-black shadow" type="button">
                         Add blacklist entry
                     </button>
-                    <button @click="show_whitelist_modal" class="flex-no-shrink bg-grey-lightest hover:bg-grey-lighter hover:border-grey-lighter border-grey-lightest text-sm border-4 text-black py-1 px-2 rounded shadow" type="button">
+                    <button @click="show_whitelist_modal" class="btn btn-grey-lightest shadow" type="button">
                         Add whitelist entry
                     </button>
                 </div>
@@ -16,12 +16,12 @@
                     <div class="flex text-sm items-center">
                         <div class="text-grey-darker w-3/4 md:w-5/6 p-2">
                             <div class="font-semibold">
-                                <input type="text" name="search" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" v-model="search_query" placeholder="Type something here..."/>
+                                <input type="text" name="search" class="form-input" v-model="search_query" placeholder="Type something here..."/>
                             </div>
                         </div>
                         <div class="text-grey-darker w-1/4 md:w-1/6 p-2">
                             <div class="">
-                                <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                                <button type="submit" class="btn btn-blue shadow">
                                     Search
                                 </button>
                             </div>
@@ -31,11 +31,11 @@
             </div>
         </div>
         <div class="sm:flex">
-            <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 sm:mr-1">
+            <div class="card sm:w-1/2 p-2 sm:mr-1">
                 <h2 class="font-normal text-center border-b">Whitelist</h2>
                 <mg-lists-table :list="whitelist" @next="next_whitelist" @previous="previous_whitelist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
-            <div class="bg-white border sm:rounded shadow sm:w-1/2 p-2 sm:ml-1">
+            <div class="card sm:w-1/2 p-2 sm:ml-1">
                 <h2 class="font-normal text-center border-b">Blacklist</h2>
                 <mg-lists-table :list="blacklist" @next="next_blacklist" @previous="previous_blacklist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
@@ -51,12 +51,12 @@
                         </div>
                         <div class="md:w-3/4">
                             <div class="relative">
-                                <select v-model="listing_choice_from" @change="from_reset" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <select v-model="listing_choice_from" @change="from_reset" class="form-select">
                                     <option value="">-- Select --</option>
                                     <option value="from_address">Senders email address or domain</option>
                                     <option value="from_ip_address">Senders IP-address</option>
                                 </select>
-                                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <div class="form-select-icon">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                         </label>
                     </div>
                     <div class="md:w-3/4">
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444">
+                        <input class="form-input" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444">
                     </div>
                 </div>
 
@@ -97,12 +97,12 @@
                         </div>
                         <div class="md:w-3/4">
                             <div class="relative">
-                                <select v-model="listing_choice_to" @change="to_reset" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <select v-model="listing_choice_to" @change="to_reset" class="form-select">
                                     <option value="">-- Select --</option>
                                     <option value="to_address">Recipients email address or domain</option>
                                     <option value="to_ip_address">Recipients IP-address</option>
                                 </select>
-                                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <div class="form-select-icon">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                 </div>
                             </div>
@@ -119,7 +119,7 @@
                     <div class="md:w-3/4 inline-flex">
                         <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="to" id="to_address" type="email" placeholder="JohnDoe">
                         <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com">                    
+                        <input class="form-input" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com">                    
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@
                         </label>
                     </div>
                     <div class="md:w-3/4">
-                        <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444">
+                        <input class="form-input" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444">
                     </div>
                 </div>
             </form>
@@ -174,7 +174,7 @@ export default {
         }
     },
     mounted() {
-        this.toggleLoading()
+        //this.toggleLoading()
         this.get();
     },
     computed: {
@@ -207,7 +207,9 @@ export default {
             }
             await this.get_whitelist(query);
             await this.get_blacklist(query);
-            this.toggleLoading();
+            if(this.loading) {
+                this.toggleLoading();
+            }
         },
         get_blacklist(query = null, page = null) {
             let qs = '';

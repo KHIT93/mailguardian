@@ -25,7 +25,7 @@ export default {
     },
     checkSession({commit, state}) {
         return new Promise((resolve, reject) => {
-            commit('toggleLoading');
+            //commit('toggleLoading');
             axios.post('/api/current-user/').then(response => {
                 if(response.status == 403) {
                     commit('setIsLoggedIn', false);
@@ -36,10 +36,10 @@ export default {
                     commit('setIsLoggedIn', true);
                     commit('setCurrentUser', response.data);
                 }
-                commit('toggleLoading');
+                //commit('toggleLoading');
                 resolve();
             }).catch(error => {
-                commit('toggleLoading');
+                //commit('toggleLoading');
                 reject();
             })
         })

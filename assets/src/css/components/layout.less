@@ -1,0 +1,23 @@
+.card {
+    @apply .bg-white .border .shadow .p-2;
+}
+
+@screen sm {
+    .card {
+        @apply .rounded;
+    }
+}
+
+.badge {
+    @apply .items-center .text-white .leading-none .flex;
+}
+
+.badge .badge-inner {
+    @apply .flex .rounded-full .uppercase .px-2 .py-1 .text-xs .font-bold;
+}
+
+@screen lg {
+    .badge {
+        @apply .rounded-full .inline-flex;
+    }
+}

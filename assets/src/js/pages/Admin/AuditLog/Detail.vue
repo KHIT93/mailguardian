@@ -1,6 +1,6 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
-        <div class="bg-white border sm:rounded shadow p-2">
+        <div class="card p-2">
             <h2 class="border-b">Details for log entry</h2>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">

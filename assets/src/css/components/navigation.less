@@ -1,0 +1,20 @@
+.nav-link {
+    @apply .no-underline .text-white .opacity-50 .flex .items-center .py-4 .border-b .border-transparent;
+}
+
+.nav-link:hover, .nav-link:focus {
+    @apply .opacity-75;
+}
+
+.nav-link.active {
+    @apply .no-underline .opacity-100 .text-white .flex .items-center .py-4;
+}
+
+@screen lg {
+    .nav-link {
+        @apply .text-grey-dark .py-2;
+    }
+    .nav-link.active {
+        @apply .text-blue-dark .py-2; 
+    }
+}

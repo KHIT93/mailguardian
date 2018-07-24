@@ -25,31 +25,31 @@
                         <hr>
                         <form @submit.prevent="add_filter">
                             <div class="relative">
-                                <select v-model="filter_form.filter" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <select v-model="filter_form.filter" class="form-select">
                                     <option value="">Select field to filter on</option>
                                     <option v-for="(value, key) in availableFilters" :key="key" :value="key">{{ key.replace('_', ' ') }}</option>
                                 </select>
-                                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <div class="form-select-icon">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                 </div>
                             </div>
                             <hr>
                             <div class="relative">
-                                <select v-model="filter_form.operator" class="block appearance-none w-full bg-grey-lighter hover:border-blue border border-grey-lighter text-grey-darker py-2 px-4">
+                                <select v-model="filter_form.operator" class="form-select">
                                     <option value="">Select filter operator</option>
                                     <option v-for="option in selectedFilterOptions.operators" :key="option.value" :value="option.value">{{ option.label }}</option>
                                 </select>
-                                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                                <div class="form-select-icon">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                                 </div>
                             </div>
                             <hr>
                             <div class="">
-                                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="value" v-model="filter_form.value" id="value" :type="selectedFilterType" placeholder="Value to filter by">
+                                <input class="form-input" name="value" v-model="filter_form.value" id="value" :type="selectedFilterType" placeholder="Value to filter by">
                             </div>
                             <hr>
                             <div class="flex flex-row-reverse">
-                                <button type="submit" class="flex-no-shrink bg-blue hover:bg-blue-dark border-blue hover:border-blue-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                                <button type="submit" class="btn btn-blue shadow">
                                     Add
                                 </button>
                             </div>

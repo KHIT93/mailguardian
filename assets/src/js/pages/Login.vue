@@ -10,7 +10,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
+                        <input v-model="form.email" class="form-input" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.password" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="password" id="password" type="password" placeholder="******************" required>
+                        <input v-model="form.password" class="form-input" name="password" id="password" type="password" placeholder="******************" required>
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('password')">{{ form.errors.get('password') }}</p>
                     </div>
                 </div>

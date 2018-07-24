@@ -4,62 +4,35 @@
  *
  * You can see the styles here:
  * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
- *
- * If using `postcss-import`, use this import instead:
- *
- * @import "tailwindcss/preflight";
  */
  @tailwind preflight;
 
- /**
-  * This injects any component classes registered by plugins.
-  *
-  * If using `postcss-import`, use this import instead:
-  *
-  * @import "tailwindcss/components";
-  */
+/**
+ * This injects any component classes registered by plugins.
+ */
  @tailwind components;
  
- /**
-  * Here you would add any of your custom component classes; stuff that you'd
-  * want loaded *before* the utilities so that the utilities could still
-  * override them.
-  *
-  * Example:
-  *
-  * .btn { ... }
-  * .form-input { ... }
-  *
-  * Or if using a preprocessor or `postcss-import`:
-  *
-  * @import "components/buttons";
-  * @import "components/forms";
-  */
- 
- /**
-  * This injects all of Tailwind's utility classes, generated based on your
-  * config file.
-  *
-  * If using `postcss-import`, use this import instead:
-  *
-  * @import "tailwindcss/utilities";
-  */
+/**
+ * This injects all of Tailwind's utility classes, generated based on your
+ * config file. It also injects any utility classes registered by plugins.
+ */
  @tailwind utilities;
  
- /**
-  * Here you would add any custom utilities you need that don't come out of the
-  * box with Tailwind.
-  *
-  * Example :
-  *
-  * .bg-pattern-graph-paper { ... }
-  * .skew-45 { ... }
-  *
-  * Or if using a preprocessor or `postcss-import`:
-  *
-  * @import "utilities/background-patterns";
-  * @import "utilities/skew-transforms";
-  */
+/**
+ * Use this directive to control where Tailwind injects the responsive
+ * variations of each utility.
+ *
+ * If omitted, Tailwind will append these classes to the very end of
+ * your stylesheet by default.
+ */
+ @tailwind screens;
+
+ @import "./components/layout";
+ @import "./components/navigation";
+ @import "./components/notifications";
+ @import "./components/tables";
+ @import "./components/buttons";
+ @import "./components/forms";
  
 [v-cloak] { display:none; }
 
@@ -68,59 +41,4 @@
   right: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-.table-wrapper {
-  @apply .overflow-x-auto .w-full .block;
-}
-
-.table {
-  @apply .w-full .max-w-full;
-}
-
-.table th {
-  @apply .p-2 .text-left;
-}
-
-.table tbody tr:hover {
-  @apply .bg-grey-lighter;
-}
-
-.table td {
-  @apply .border-t .p-2;
-}
-
-.notification {
-  @apply .border-t-4 .rounded-b .px-4 .py-3 .shadow-md .mb-2 .mr-2;
-}
-
-.notification-info {
-  @apply .bg-blue-lightest .border-blue .text-blue-darkest;
-}
-
-.notification-info .icon {
-  @apply .text-blue;
-}
-
-.notification-success {
-  @apply .bg-teal-lightest .border-teal .text-teal-darkest;
-}
-
-.notification-success .icon {
-  @apply .text-teal;
-}
-
-.notification-warning {
-  @apply .bg-orange-lightest .border-orange .text-orange-darkest;
-}
-
-.notification-warning .icon {
-  @apply .text-orange;
-}
-
-.notification-error {
-  @apply .bg-red-lightest .border-red .text-red-darkest;
-}
-
-.notification-error .icon {
-  @apply .text-red;
 }

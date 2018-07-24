@@ -12,7 +12,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input :disabled="loading" v-model="form.email" class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded w-full py-2 px-4 text-grey-darker" name="email" id="email" type="email" placeholder="john@example.com">
+                        <input :disabled="loading" v-model="form.email" class="form-input" name="email" id="email" type="email" placeholder="john@example.com">
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>
