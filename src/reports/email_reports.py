@@ -38,7 +38,8 @@ class QuarantinedEmailReport:
                 'retention_days': settings.QUARANTINE_RETENTION,
                 'domain': settings.APP_HOSTNAME if settings.APP_HOSTNAME else 'localhost',
                 'protocol': 'https' if settings.SECURE_SSL_REDIRECT else 'http',
-                'styles': styles
+                'styles': styles,
+                'show_all': self.show_all_messages
             }
             to_email = user.email
             plaintext = render_to_string('quarantine_report.txt', context)
