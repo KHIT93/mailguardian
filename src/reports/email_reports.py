@@ -26,7 +26,7 @@ class QuarantinedEmailReport:
         for user in queryset:
             messages = Message.objects.filter(date__gt=datetime.today() - timedelta(days=self.period+1), date__lt=datetime.today())
             messages = messages.filter(Q(from_address=user.email) | Q(to_address=user.email))
-            if self.show_all_messages:
+            if not self.show_all_messages:
                 messages = messages.filter(Q(is_spam=True) | Q(blacklisted=True) | Q(is_mcp=True) | Q(is_rbl_listed=True) | Q(infected=True))
             
             context = {
