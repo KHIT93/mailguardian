@@ -20,27 +20,29 @@ class IndexTemplateView(TemplateView):
 class DashboardApiView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
-        # We also need to add an option for changing the data interval
-        # when we refactor the UI
-        # today = '2017-11-17'
-        # interval = ['2017-11-17 21:00:00', '2017-11-17 22:00:00']
-        today = datetime.date.today()
-        interval = [datetime.date.today(), datetime.date.today()]
-        if 'interval' in request.POST:
-            if request.POST['interval'] == 'last_hour':
-                interval = [datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(hours=1)]
-            elif request.POST['interval'] == 'last_day':
-                interval = [datetime.datetime.now(), datetime.datetime.now() - datetime.timedelta(days=1)]
-            elif request.POST['interval'] == 'today':
-                interval = [datetime.date.today(), datetime.date.today()]
+        today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        interval = [today, today]
+        field = 'timestamp'
+        timefield = 'minute'
+        if 'interval' in request.data:
+            if request.data['interval'] == 'last_hour':
+                interval = [datetime.datetime.now() - datetime.timedelta(hours=1), datetime.datetime.now()]
+                field = 'timestamp'
+            elif request.data['interval'] == 'last_day':
+                interval = [datetime.datetime.now() - datetime.timedelta(days=1), datetime.datetime.now()]
+                field = 'timestamp'
+            elif request.data['interval'] == 'today':
+                interval = [today, today + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)]
+                field = 'timestamp'
+            else:
+                Response({'interval': 'Invalid interval has been specified'}, status=status.HTTP_400_BAD_REQUEST)
         result = None
         chart_data = []
         with connection.cursor() as cursor:
-            cursor.execute("select count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where timestamp between '{0}'::timestamptz and '{1}'::timestamptz".format(str(interval[0]), str(interval[1])))
+            cursor.execute("select count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where {field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz".format(field=field, fromdate=str(interval[0]), todate=str(interval[1])))
             result = cursor.fetchone()
-
         with connection.cursor() as cursor:
-            cursor.execute("select date_trunc('minute', timestamp) as time, count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where timestamp between '{0}'::timestamptz and '{1}'::timestamptz group by time".format(str(interval[0]), str(interval[1])))
+            cursor.execute("select date_trunc('{timefield}', timestamp) as time, count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where {field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz group by time order by time".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), timefield=timefield))
             chart_data = cursor.fetchall()
         
         data = {
