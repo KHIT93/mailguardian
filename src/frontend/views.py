@@ -23,7 +23,7 @@ class DashboardApiView(APIView):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
         interval = [today, today]
         field = 'timestamp'
-        timefield = 'minute'
+        timefield = 'hour'
         if 'interval' in request.data:
             if request.data['interval'] == 'last_hour':
                 interval = [datetime.datetime.now() - datetime.timedelta(hours=1), datetime.datetime.now()]
@@ -31,9 +31,11 @@ class DashboardApiView(APIView):
             elif request.data['interval'] == 'last_day':
                 interval = [datetime.datetime.now() - datetime.timedelta(days=1), datetime.datetime.now()]
                 field = 'timestamp'
+                timefield = 'hour'
             elif request.data['interval'] == 'today':
                 interval = [today, today + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)]
                 field = 'timestamp'
+                timefield = 'hour'
             else:
                 Response({'interval': 'Invalid interval has been specified'}, status=status.HTTP_400_BAD_REQUEST)
         result = None
