@@ -21,15 +21,18 @@ class DashboardApiView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        today = datetime.datetime.strptime('2018-05-05', '%Y-%m-%d')
         interval = [today, today]
         field = 'timestamp'
         timefield = 'hour'
         if 'interval' in request.data:
             if request.data['interval'] == 'last_hour':
-                interval = [datetime.datetime.now() - datetime.timedelta(hours=1), datetime.datetime.now()]
+                now = datetime.datetime.now()
+                interval = [now - datetime.timedelta(hours=1), now]
                 field = 'timestamp'
             elif request.data['interval'] == 'last_day':
-                interval = [datetime.datetime.now() - datetime.timedelta(days=1), datetime.datetime.now()]
+                now = datetime.datetime.now()
+                interval = [now - datetime.timedelta(days=1), now]
                 field = 'timestamp'
                 timefield = 'hour'
             elif request.data['interval'] == 'today':
