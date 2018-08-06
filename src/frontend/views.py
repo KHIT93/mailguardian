@@ -21,7 +21,6 @@ class DashboardApiView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        today = datetime.datetime.strptime('2018-05-05', '%Y-%m-%d')
         interval = [today, today]
         field = 'timestamp'
         timefield = 'hour'
