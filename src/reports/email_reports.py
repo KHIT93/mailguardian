@@ -26,7 +26,7 @@ class QuarantinedEmailReport:
         for user in queryset:
             messages = Message.objects.filter(date__gt=datetime.today() - timedelta(days=self.period+1), date__lt=datetime.today())
             messages = messages.filter(Q(from_address=user.email) | Q(to_address=user.email))
-            if self.show_all_messages:
+            if not self.show_all_messages:
                 messages = messages.filter(Q(is_spam=True) | Q(blacklisted=True) | Q(is_mcp=True) | Q(is_rbl_listed=True) | Q(infected=True))
             
             context = {
@@ -38,7 +38,8 @@ class QuarantinedEmailReport:
                 'retention_days': settings.QUARANTINE_RETENTION,
                 'domain': settings.APP_HOSTNAME if settings.APP_HOSTNAME else 'localhost',
                 'protocol': 'https' if settings.SECURE_SSL_REDIRECT else 'http',
-                'styles': styles
+                'styles': styles,
+                'show_all': self.show_all_messages
             }
             to_email = user.email
             plaintext = render_to_string('quarantine_report.txt', context)

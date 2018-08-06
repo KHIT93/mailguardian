@@ -2,9 +2,12 @@
 
 {% block content %}
 Quarantine Report
-
+{% if messages %}
 Please find below your Quarantine Report for the last {{ period }} day(s).
-We have quarantined {{ message_count }} messages and listed them below. All messages will be kept in quarantine for {{ retention_days }} day(s)
+We have {% if show_all %}processed{% else %}quarantined{% endif %} {{ message_count }} messages and listed them below. All quarantined messages will be kept for {{ retention_days }} day(s)
+{% else %}
+During the last {{ period }}, we did not find any messages that needed to be quarantined
+{% endif %}
 -----------------------------------------------
 
 {% for message in messages %}

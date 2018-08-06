@@ -7,7 +7,7 @@ class Job(WeeklyJob):
     help = 'Weekly job for sending weekly quarantine reports to users and administrators'
 
     def execute(self):
-        run_monthly = Setting.objects.filter(key='quarantine.report.weekly').get().value
+        run_weekly = Setting.objects.filter(key='quarantine.report.weekly').get().value
         host_count = MailScannerHost.objects.count()
         multi_node = True if host_count > 0 else False
         if run_weekly and (multi_node and not settings.API_ONLY):

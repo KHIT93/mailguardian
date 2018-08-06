@@ -8,11 +8,16 @@
         </td>
     </tr>
     <tr>
+        {% if messages %}
         <td>
-            Please find below your Quarantine Report for the last {{ period }} day(s).<br/>We have quarantined {{ message_count }} messages and listed them below. All messages will be kept in quarantine for {{ retention_days }} day(s)
+            Please find below your Quarantine Report for the last {{ period }} day(s).<br/>We have {% if show_all %}processed{% else %}quarantined{% endif %} {{ message_count }} messages and listed them below. All quarantined messages will be kept for {{ retention_days }} day(s)
         </td>
+        {% else %}
+        <td>During the last {{ period }}, we did not find any messages that needed to be quarantined</td>
+        {% endif %}
     </tr>
 </table>
+{% if messages %}
 <table class="table" align="center" width="100%" cellpadding="0" cellspacing="0">
     <tr class="font-bold bg-grey">
         <td>Recieved</td>
@@ -41,4 +46,5 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
 {% endblock %}
