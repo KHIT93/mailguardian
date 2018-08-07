@@ -5,7 +5,7 @@
                 <p>You are not authorized to view the mail queue</p>
             </div>
             <div v-else>
-                <p>The rules were last synchroized with the application on {{ last_updated }}.</p>
+                <p>The rules were last synchroized with the application {{ last_updated | ago }}.</p>
                 <button @click="sync" type="button" class="bg-blue hover:bg-blue-dark no-underline text-white font-semibold py-2 px-4 border border-blue hover:border-bleu-dark text-sm rounded">Synchronize rule descriptions</button>
             </div>
         </div>
