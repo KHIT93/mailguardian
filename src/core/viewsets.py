@@ -70,9 +70,9 @@ class SettingsViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='by-key', url_name='settings-by-key')
     def post_search_by_key(self, request, pk=None):
-        if not 'key' in request.POST:
+        if not 'key' in request.data:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-        entity = get_object_or_404(Setting, key=request.POST['key'])
+        entity = get_object_or_404(Setting, key=request.data['key'])
         serializer = SettingsSerializer(entity, context={'request': request})
         return Response(serializer.data)
 
