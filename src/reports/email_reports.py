@@ -15,7 +15,7 @@ class QuarantinedEmailReport:
 
     def __init__(self, show_all_messages, period, from_email=None, subject=None, *args, **kwargs):
         self.show_all_messages = show_all_messages
-        self.from_email = from_email if from_email else Setting.objects.filter(key='quarantine.report.from').get().value
+        self.from_email = '{0} <{1}>'.format(settings.BRAND_NAME, from_email if from_email else Setting.objects.filter(key='quarantine.report.from').get().value)
         self.subject = subject if subject else Setting.objects.filter(key='quarantine.report.subject').get().value
         self.period = period
 

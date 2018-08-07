@@ -29,7 +29,7 @@ SECRET_KEY = 'kri^w&+#rz=dh-ll&opl7lo1k4-t#(q9psg#v9q5+4=pu7_3v='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILGUARDIAN_ENV.get("debug", False)
 APP_HOSTNAME = MAILGUARDIAN_ENV.get("hostname", None)
-APP_VERSION = '1.0.0-rc.2'
+APP_VERSION = '1.0.0-rc.4'
 ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
 
 

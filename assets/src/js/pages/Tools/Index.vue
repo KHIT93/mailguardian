@@ -5,10 +5,10 @@
                 <h2 class="border-b p-1">Admin tools</h2>
                 <ul class="border-b pt-2 pb-3">
                     <li><router-link to="/tools/mailqueue">View mail queue</router-link></li>
-                    <li>Clear mail queue</li>
-                    <li>View job queue</li>
-                    <li>Clam AV Status</li>
-                    <li>GeoIP update status</li>
+                    <!-- <li>Clear mail queue</li> -->
+                    <!-- <li>View job queue</li> -->
+                    <!-- <li>Clam AV Status</li> -->
+                    <!-- <li>GeoIP update status</li> -->
                     <li><router-link to="/tools/sa-status">SpamAssassin rules status</router-link></li>
                     <li><router-link to="/tools/app-updates">Application update status</router-link></li>
                 </ul>

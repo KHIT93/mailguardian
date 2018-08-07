@@ -88,12 +88,12 @@
                                 SMTP Relays
                             </router-link>
                         </div>
-                        <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
+                        <!-- <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/mailscanner/configuration" active-class="active" class="nav-link">
                                 <mg-email-icon class="w-6 h-6 mr-2"></mg-email-icon>
                                 MailScanner Configuration
                             </router-link>
-                        </div>
+                        </div> -->
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/spamassassin/rules" active-class="active" class="nav-link">
                                 <mg-import-contacts-icon class="w-6 h-6 mr-2"></mg-import-contacts-icon>
