@@ -465,3 +465,6 @@ To this:
 ````
 0 4 * */1 * /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs monthly
 ```
+
+### Increasing the size limit for when message scan is skipped
+Change the `Max SpamAssassin Size` of `/etc/MailScanner/MailScanner.conf` and restart `MailScanner`
