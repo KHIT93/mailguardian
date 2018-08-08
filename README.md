@@ -462,7 +462,7 @@ Change this:
 
 To this:
 
-````
+```
 0 4 * */1 * /home/mailguardian/mailguardian/bin/python /home/mailguardian/mailguardian/src/manage.py runjobs monthly
 ```
 
