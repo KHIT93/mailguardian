@@ -42,11 +42,16 @@ class DashboardApiView(APIView):
                 Response({'interval': 'Invalid interval has been specified'}, status=status.HTTP_400_BAD_REQUEST)
         result = None
         chart_data = []
+        user_filter = ""
+        if request.user.is_domain_admin:
+            user_filter = ""
+        elif not request.user.is_domain_admin and not request.user.is_staff:
+            user_filter = " AND (from_address={0}' OR to_address='{0}')".format(request.user.email)
         with connection.cursor() as cursor:
-            cursor.execute("select count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where {field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz".format(field=field, fromdate=str(interval[0]), todate=str(interval[1])))
+            cursor.execute("select count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus from public.mail_message as m where m.{field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz{filter}".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), filter=user_filter))
             result = cursor.fetchone()
         with connection.cursor() as cursor:
-            cursor.execute("select date_trunc('{timefield}', timestamp) as time, count(id) as total, count(CASE WHEN is_spam THEN 1 END) as total_spam, count(CASE WHEN infected THEN 1 END) as total_virus from public.mail_message where {field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz group by time order by time".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), timefield=timefield))
+            cursor.execute("select date_trunc('{timefield}', m.timestamp) as time, count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus from public.mail_message as m where m.{field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz{filter} group by time order by time".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), timefield=timefield, filter=user_filter))
             chart_data = cursor.fetchall()
         
         data = {
