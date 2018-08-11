@@ -21,6 +21,7 @@ class DashboardApiView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+        today = datetime.datetime.strptime('2018-05-04', '%Y-%m-%d')
         interval = [today, today]
         field = 'timestamp'
         timefield = 'hour'
@@ -43,15 +44,18 @@ class DashboardApiView(APIView):
         result = None
         chart_data = []
         user_filter = ""
+        join = ""
         if request.user.is_domain_admin:
-            user_filter = ""
+            domain_ids = [domain.name for domain in request.user.domains]
+            join = " INNER JOIN public.domains_domain as d ON m.from_domain=d.name INNER JOIN public.domains_domain as d ON m.to_domain=d.name"
+            user_filter = " AND (from_domain IN ({0}) OR to_domain IN ({0})".format("','".join(domain_ids))
         elif not request.user.is_domain_admin and not request.user.is_staff:
-            user_filter = " AND (from_address={0}' OR to_address='{0}')".format(request.user.email)
+            user_filter = " AND (from_address='{0}' OR to_address='{0}')".format(request.user.email)
         with connection.cursor() as cursor:
-            cursor.execute("select count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus from public.mail_message as m where m.{field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz{filter}".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), filter=user_filter))
+            cursor.execute("SELECT count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus FROM public.mail_message as m{join} where m.{field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz{filter}".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), filter=user_filter, join=join))
             result = cursor.fetchone()
         with connection.cursor() as cursor:
-            cursor.execute("select date_trunc('{timefield}', m.timestamp) as time, count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus from public.mail_message as m where m.{field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz{filter} group by time order by time".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), timefield=timefield, filter=user_filter))
+            cursor.execute("SELECT date_trunc('{timefield}', m.timestamp) as time, count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus FROM public.mail_message{join} as m where m.{field} between '{fromdate}'::timestamptz and '{todate}'::timestamptz{filter} group by time order by time".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), timefield=timefield, filter=user_filter, join=join))
             chart_data = cursor.fetchall()
         
         data = {
