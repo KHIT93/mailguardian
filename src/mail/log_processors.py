@@ -43,4 +43,4 @@ class MtaLogProcessor:
                     new_id = None
 
 class PostfixLogProcessor(MtaLogProcessor):
-    process = 'postfix/smtp'
+    process = 'postfix/smtpd'
