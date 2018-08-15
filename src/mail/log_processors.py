@@ -1,12 +1,12 @@
 from django.conf import settings
 from .models import TransportLog, Message
 import re
+import datetime
 
 class MtaLogProcessor:
     process = None
-    delay = 'delay'
-    status = 'status'
-    regex = r'^(\S+[0-9]\-)(\S+)\s+(\d+)\s(\d+):(\d+):(\d+)\s(\S+)\s(\S+)\[(\d+)\]:\s(.+)'
+    delay = r'delay=(\d+\.\d+)'
+    status = r'status=(\S+)'
     logfile = ''
 
     def __init__(self, *args, **kwargs):
@@ -14,6 +14,7 @@ class MtaLogProcessor:
 
     def execute(self):
         if self.process:
+            matches = {}
             current_id = None
             new_id = None
             # Read the MTA logfile
@@ -23,24 +24,26 @@ class MtaLogProcessor:
                     search = r'^.*MailScanner.*: Requeue: (\S+\.\S+) to (\S+)\s'
                     match = re.findall(search, l)
                     if match:
-                        current_id = match[0]
-                        new_id = match[1]
-                        message = re.findall(self.regex, l)
-                        if message[7] == self.process:
-                            # Search the database to see if we can find an existing record and create it if necessary
-                            mail = Message.objects.filter(mailq_id=current_id).get()
-                            log = message[9]
-                            relay_host = re.findall(r'{0}=(\S+)'.format('relay'))
-                            relay_type = 'relay' if relay_host else ''
-                            delay = re.findall(r'{0}=(\S+),'.format(this.delay))
-                            transport_host = re.findall(r'[0-9]+\-\S+\s[0-9]+\s[0-9]+\:[0-9]+\:[0-9]+\s(\S+)')
-                            dsn = re.findall(r'dsn=(\S+),')
-                            dsn_message = re.findall(r'status=\S+\s\((.*)\)')
-                            obj, created = TransportLog.objects.get_or_create(message=mail, relay_host=relay_host, relay_type=relay_type, delay=delay, transport_host=transport_host, dsn=dsn, dsn_message=dsn_message)
-
+                        matches[match[0][1]] = match[0][0]
+                    mta_match = re.findall(self.process, l)
+                    if mta_match:
+                        queue_id = mta_match[0][2]
+                        relay_host = re.findall(r"\[(\d+\.\d+\.\d+\.\d+)\]", l)
+                        delay = re.findall(self.delay, l)
+                        dsn = re.findall(r'dsn=(\d+\.\d+\.\d+)', l)
+                        status = re.findall(self.status, l)
+                        dsn_message = re.findall(r'\((.+)\)', l)
+                        timestamp_match = re.findall(r'^(\S+)\s+(\d)\s+(\d+\:\d+\:\d+)', l)
+                        print(timestamp_match)
+                        try:
+                            message = Message.objects.filter(mailq_id=matches[queue_id]).first()
+                            timestamp = datetime.datetime.strptime('{0} {1} {2} {3}'.format(timestamp_match[0][0], timestamp_match[0][1], message.timestamp.year, timestamp_match[0][2]), '%b %d %Y %H:%M:%S')
+                            obj, created = TransportLog.objects.update_or_create(message=message, timestamp=str(timestamp), relay_host=relay_host[0], delay=delay[0], transport_host=settings.APP_HOSTNAME, dsn=dsn[0], dsn_message=dsn_message[0])
+                        except Exception as e:
+                            pass
                     # Clean up
                     current_id = None
                     new_id = None
 
 class PostfixLogProcessor(MtaLogProcessor):
-    process = 'postfix/smtpd'
+    process = r"(postfix/smtp)(\[\d+\])\:\s(\w+)"
