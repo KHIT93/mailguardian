@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 import datetime
+import logging
 
 # Create your views here.
 class IndexTemplateView(TemplateView):
@@ -44,7 +45,7 @@ class DashboardApiView(APIView):
         chart_data = []
         user_filter = ""
         join = ""
-        if request.user.is_domain_admin:
+        if request.user.is_domain_admin and not request.user.is_staff:
             domain_ids = [domain.name for domain in request.user.domains.all()]
             join = " INNER JOIN public.domains_domain as fd ON m.from_domain=fd.name INNER JOIN public.domains_domain as td ON m.to_domain=td.name"
             user_filter = " AND (m.from_domain IN ({0}) OR m.to_domain IN ({0}))".format("'" + "','".join(domain_ids) + "'")
