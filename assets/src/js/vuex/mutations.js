@@ -9,6 +9,9 @@ export default {
     toggleLoading(state) {
         state.loading = !state.loading;
     },
+    setLoading(state, value) {
+        state.loading = value;
+    },
     setFilter(state, { field, operator, value}) {
         state.report.filters[field] = { operator: operator, value: value };
     },
