@@ -67,10 +67,11 @@
             }
         },
         mounted() {
-            this.get();
+            this.get(this.interval);
         },
         methods: {
             get(interval = 'last_hour') {
+                this.interval = interval;
                 axios.post('/api/dashboard/', {'interval' : interval}).then(response => {
                     this.daily_total = response.data.daily_total;
                     this.daily_spam = response.data.daily_spam;
