@@ -173,7 +173,7 @@ export default {
             to: ''
         }
     },
-    mounted() {
+    created() {
         //this.toggleLoading()
         this.get();
     },

@@ -19,7 +19,7 @@ export default {
             checked: false
         }
     },
-    mounted() {
+    created() {
         axios.get('/api/license/').then(response => this.license = response.data).catch(error => this.license = error.response.data)
     },
     methods: {

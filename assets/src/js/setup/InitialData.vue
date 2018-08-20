@@ -146,7 +146,7 @@ export default {
             })
         }
     },
-    mounted() {
+    created() {
         if (this.getWizardPayload) {
             this.form = this.getWizardPayload;
         }

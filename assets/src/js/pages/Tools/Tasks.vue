@@ -50,7 +50,7 @@ export default {
         }
     },
     created() {
-
+        this.get();
     },
     computed: {
         ...mapGetters(['loading', 'app_info'])

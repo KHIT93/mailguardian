@@ -33,7 +33,7 @@ export default {
             senders: [],
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

@@ -77,7 +77,7 @@ export default {
             page_count: null
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

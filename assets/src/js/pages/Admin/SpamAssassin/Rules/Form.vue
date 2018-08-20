@@ -48,7 +48,7 @@ export default {
             availableRuleObjects: []
         }
     },
-    mounted() {
+    created() {
         if (this.id) {
             this.get();
         }

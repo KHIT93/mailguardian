@@ -69,7 +69,7 @@ export default {
             page_count: 1
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

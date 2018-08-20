@@ -67,7 +67,7 @@ export default {
             filepaths: []
         }
     },
-    mounted() {
+    created() {
         if (this.id) {
             this.get();
         }

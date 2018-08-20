@@ -497,7 +497,7 @@ export default {
         },
         ...mapMutations(['notify'])
     },
-    mounted() {
+    created() {
         this.getMessage().then(() => {
             this.getMessageHeaders();
             this.getSpamReport();

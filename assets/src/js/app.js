@@ -129,7 +129,7 @@ const app = new Vue({
     router,
     store,
     components,
-    mounted() {
+    created() {
         this.getAppInfo();
         this.checkSession().then(() => this.getSettings());
     },

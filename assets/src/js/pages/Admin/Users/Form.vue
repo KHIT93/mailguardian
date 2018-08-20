@@ -165,7 +165,7 @@ export default {
             show_password_modal: false
         }
     },
-    mounted() {
+    created() {
         if (this.id) {
             this.get();
         }

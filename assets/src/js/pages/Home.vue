@@ -66,7 +66,7 @@
                 interval: 'last_hour'
             }
         },
-        mounted() {
+        created() {
             this.get(this.interval);
         },
         methods: {

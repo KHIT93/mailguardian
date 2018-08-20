@@ -145,7 +145,7 @@ export default {
             hosts: []
         }
     },
-    mounted() {
+    created() {
         if (this.id) {
             this.get();
         }

@@ -42,7 +42,7 @@ export default {
             loaded_at: null
         }
     },
-    mounted() {
+    created() {
         if (this.user.is_staff) {
             this.get();
         }

@@ -164,7 +164,7 @@ export default {
             })
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

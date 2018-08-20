@@ -62,7 +62,7 @@ export default {
             previous_link: ''
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

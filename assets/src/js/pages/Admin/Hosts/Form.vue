@@ -66,7 +66,7 @@ export default {
             form: {}
         }
     },
-    mounted() {
+    created() {
         if (this.id) {
             this.get();
         }

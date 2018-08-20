@@ -42,7 +42,7 @@ export default {
             saving: false
         }
     },
-    mounted() {
+    created() {
         this.form = new Form({
             id: this.item.id,
             key: this.item.key,

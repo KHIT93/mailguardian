@@ -34,7 +34,7 @@ export default {
             dates: [],
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

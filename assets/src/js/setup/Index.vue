@@ -51,7 +51,7 @@ export default {
             currentStepIndex: 0,
         }
     },
-    mounted() {
+    created() {
         axios.post('/api/installed/').then(response => {
             if (response.status == 403) {
                 window.location.href = '/';

@@ -33,7 +33,7 @@ export default {
             allDomains: []
         }
     },
-    mounted() {
+    created() {
         this.getDomains();
     },
     methods: {

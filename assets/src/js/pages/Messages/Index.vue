@@ -15,7 +15,7 @@ export default {
             interval: null,
         }
     },
-    mounted() {
+    created() {
         this.getMessages();
         this.interval = setInterval(function () {
             this.getMessages();

@@ -77,7 +77,7 @@ export default {
         },
         ...mapGetters(['user'])
     },
-    mounted() {
+    created() {
         this.get();
     },
     methods: {

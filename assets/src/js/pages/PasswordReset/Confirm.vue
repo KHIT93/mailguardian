@@ -59,7 +59,7 @@ export default {
             loading: false
         }
     },
-    mounted() {
+    created() {
         this.form.uid = this.uid;
         this.form.token = this.token;
     },

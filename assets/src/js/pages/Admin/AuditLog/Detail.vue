@@ -95,7 +95,7 @@ export default {
             entry: []
         }
     },
-    mounted() {
+    created() {
         this.get()
     },
     methods: {

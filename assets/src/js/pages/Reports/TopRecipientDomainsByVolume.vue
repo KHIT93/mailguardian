@@ -34,7 +34,7 @@ export default {
             data: [],
         }
     },
-    mounted() {
+    created() {
         this.get();
     },
     computed: {

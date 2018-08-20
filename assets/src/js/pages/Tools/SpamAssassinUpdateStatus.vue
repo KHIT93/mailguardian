@@ -20,7 +20,7 @@ export default {
             last_updated: 'N/A'
         }
     },
-    mounted() {
+    created() {
         if (this.user.is_staff) {
             this.get();
         }
