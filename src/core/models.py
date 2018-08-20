@@ -16,6 +16,7 @@ from auditlog.registry import auditlog
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.contrib.postgres.fields import JSONField
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -182,11 +183,32 @@ class MailScannerHost(models.Model):
     def __str__(self):
         return '{0} ({1})'.format(self.hostname, self.ip_address)
 
+class ApplicationTask(models.Model):
+    task_status = (
+        ('QUEUED', _("queued")),
+        ('RUNNING', _("running")),
+        ('FAILED', _("failed")),
+        ('COMPLETED', _("completed")),
+    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    host = models.ForeignKey(MailScannerHost, on_delete=models.SET_NULL, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(null=True)
+    completed = models.DateTimeField(null=True)
+    status_code = models.CharField(choices=task_status, default='QUEUED', blank=True, max_length=255)
+    status_message = models.TextField(null=True, blank=True)
+    content_type = models.ForeignKey(to='contenttypes.ContentType', on_delete=models.CASCADE, related_name='+', verbose_name=_("content type"))
+    object_pk = models.CharField(db_index=True, max_length=255, verbose_name=_("object primary key"))
+    method = models.CharField(max_length=255, verbose_name=_("method"))
+    params = JSONField(blank=True, null=True, verbose_name=_("parameters"))
+
 if settings.AUDIT_LOGGING:
     auditlog.register(User)
     auditlog.register(MailScannerConfiguration)
     auditlog.register(Setting)
     auditlog.register(MailScannerHost)
+    auditlog.register(ApplicationTask)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

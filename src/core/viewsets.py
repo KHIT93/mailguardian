@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer, ApplicationTaskSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -87,3 +87,15 @@ class MailScannerHostViewSet(viewsets.ModelViewSet):
     serializer_class = MailScannerHostSerializer
     permission_classes = (IsAdminUser,)
     model = MailScannerHost
+
+class ApplicationTaskViewSet(viewsets.ModelViewSet):
+    queryset = ApplicationTask.objects.all()
+    serializer_class = ApplicationTaskSerializer
+    permission_classes = (IsAuthenticated,)
+    model = ApplicationTask
+
+    def get_queryset(self):
+        qs = super(ApplicationTaskViewSet, self).get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        return qs.filter(user=self.request.user)
