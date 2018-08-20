@@ -94,4 +94,12 @@ class MailScannerHostSerializer(serializers.HyperlinkedModelSerializer):
 class ApplicationTaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ApplicationTask
-        fields = ('id', 'url', 'user', 'host', 'created', 'updated', 'completed', 'status_code', 'status_message', 'content_type_id', 'object_pk', 'method', 'params')
+        fields = ('id', 'url', 'user_email', 'hostname', 'created', 'updated', 'completed', 'status_code', 'status_message', 'content_type_id', 'object_pk', 'method', 'params')
+    hostname = serializers.SerializerMethodField()
+    user_email = serializers.SerializerMethodField()
+
+    def get_hostname(self, obj):
+        return obj.host.name
+
+    def get_user_email(self, obj):
+        return obj.user.email

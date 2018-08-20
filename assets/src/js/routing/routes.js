@@ -24,6 +24,7 @@ import ReportTopRecipientDomainsByQuantity from '../pages/Reports/TopRecipientDo
 import ReportTopRecipientDomainsByVolume from '../pages/Reports/TopRecipientDomainsByVolume.vue';
 import Tools from '../pages/Tools/Index.vue';
 import Mailqueue from '../pages/Tools/Mailqueue.vue';
+import ToolsTasks from '../pages/Tools/Tasks.vue';
 import SpamAssassinUpdateStatus from '../pages/Tools/SpamAssassinUpdateStatus.vue';
 import AppUpdateStatus from '../pages/Tools/AppUpdates.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
@@ -70,6 +71,7 @@ export default [
 
     { path: '/tools', component: Tools, name: 'tools.index', meta: { requiresAuth: true } },
     { path: '/tools/mailqueue', component: Mailqueue, name: 'tools.mailqueue', meta: { requiresAdmin: true } },
+    { path: '/tools/tasks', component: ToolsTasks, name: 'tools.tasks', meta: { requiresAuth: true } },
     { path: '/tools/sa-status', component: SpamAssassinUpdateStatus, name: 'tools.sa.status', meta: { requiresAdmin: true } },
     { path: '/tools/app-updates', component: AppUpdateStatus, name: 'tools.app.updates', meta: { requiresAdmin: true } },
 
