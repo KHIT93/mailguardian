@@ -467,7 +467,7 @@ To this:
 ```
 
 ### Increasing the size limit for when message scan is skipped
-Change the `Max SpamAssassin Size` of `/etc/MailScanner/MailScanner.conf` and restart `MailScanner`
+Change the `Max SpamAssassin Size` and `Max Spam Check Size` of `/etc/MailScanner/MailScanner.conf` and restart `MailScanner`. Be careful not to set this to high, as bigger messages will increase the processing time for `SpamAssassin` when evaluating a large message.
 
 ### Transport log data is not populating on messages
 This is related to the permissions set on the mail log. Often these files are own by root and some administrative group.
