@@ -4,6 +4,7 @@
 #
 import os, sys, platform, pytz, json, pwd, grp
 from src.core.helpers import which
+from django.core.management.utils import get_random_secret_key
 
 if __name__ == "__main__":
     os.system('clear')
@@ -257,6 +258,7 @@ if __name__ == "__main__":
             "audit": RETENTION_DAYS,
             "quarantine": RETENTION_DAYS
         },
+        "app_key": get_random_secret_key(),
         "audit_log": True,
         "mta": MTA,
         "branding": {
