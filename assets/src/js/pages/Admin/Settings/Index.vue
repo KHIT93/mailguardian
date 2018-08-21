@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         get(query = null, page = null) {
-            this.toggleLoading();
+            this.setLoading(true);
             this.config = [];
             let qs = '';
             if (query) {
@@ -58,16 +58,16 @@ export default {
             }
             axios.get('/api/settings/'+qs).then(response => {
                 this.config = response.data;
-                this.toggleLoading();            
+                this.setLoading(false);
             }).catch(error => {
-                this.toggleLoading();
+                this.setLoading(false);
             });
         },
         async search() {
             await this.get(this.search_query);
             this.search_query = null;
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     }
 }
 </script>

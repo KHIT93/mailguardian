@@ -31,8 +31,10 @@ export default {
         get() {
             axios.post('/api/settings/by-key/', {'key': 'sa.last_updated'}).then(response => {
                 this.last_updated = response.data.value;
+                this.setLoadding(false);
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                this.setLoadding(false);
             });
         },
         sync() {
@@ -45,7 +47,7 @@ export default {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify', 'toggleLoading'])
+        ...mapMutations(['notify', 'toggleLoading', 'setLoading'])
     }
 }
 </script>

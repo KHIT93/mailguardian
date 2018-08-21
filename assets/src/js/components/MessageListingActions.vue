@@ -67,12 +67,12 @@ export default {
             
         },
         submit() {
-            this.toggleLoading();
+            this.setLoading(true);
             this.form.post('/api/lists/').then(data => {
-                this.toggleLoading();
+                this.setLoading(false);
             })
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['setLoading'])
     }
 }
 </script>

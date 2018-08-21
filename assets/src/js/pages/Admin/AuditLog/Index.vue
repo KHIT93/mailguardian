@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         get(query = null, page = null) {
+            this.setLoading(true);
             let qs = '';
             if (query) {
                 qs = '?search='+query;
@@ -55,12 +56,15 @@ export default {
             }
             axios.get('/api/audit-log/'+qs).then(response => {
                 this.log = response.data.results;
+                this.setLoading(false);
+            }).catch(error => {
+                this.setLoading(false);
             });
         },
         detail(id) {
             router.push('/admin/audit-log/'+id);
         },
-        ...mapMutations(['toggleLoading', 'notify'])
+        ...mapMutations(['setLoading', 'notify'])
     }
 }
 </script>

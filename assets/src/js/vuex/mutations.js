@@ -12,6 +12,9 @@ export default {
     setLoading(state, value) {
         state.loading = value;
     },
+    setInitializing(state, value) {
+        state.initializing = value;
+    },
     setFilter(state, { field, operator, value}) {
         state.report.filters[field] = { operator: operator, value: value };
     },

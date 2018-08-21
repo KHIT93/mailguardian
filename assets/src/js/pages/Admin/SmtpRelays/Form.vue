@@ -84,6 +84,7 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/smtp-relays/'+this.id+'/').then(response => {
                 this.entity = response.data;
                 this.form = new Form({
@@ -93,7 +94,9 @@ export default {
                     active: response.data.active,
                     comment: response.data.comment
                 });
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 if (error.response.status == 404) {
                     router.push({ name: 'not_found' });
                 }
@@ -111,33 +114,42 @@ export default {
             }
         },
         add() {
+            this.setLoading(true);
             this.form.post('/api/smtp-relays/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Relay created', `The Relay ${data.ip_address} has been created`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/smtp-relays');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         update() {
+            this.setLoading(true);
             this.form.put('/api/smtp-relays/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Relay updated', `The Relay ${data.ip_address} has been updated`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/smtp-relays');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         destroy() {
+            this.setLoading(true);
             this.form.delete('/api/smtp-relays/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Relay deleted', `The Relay ${data.ip_address} has been deleted`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/smtp-relays');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

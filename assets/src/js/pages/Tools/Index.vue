@@ -31,6 +31,9 @@ export default {
 
         }
     },
+    mounted() {
+        this.$store.commit('setLoading', false);
+    },
     computed: {
         ...mapGetters(['isLoggedIn', 'user', 'loading'])
     }

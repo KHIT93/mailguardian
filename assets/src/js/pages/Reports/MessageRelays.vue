@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         get() {
-            this.toggleLoading();
+            this.setLoading(true);
             (new Form(this.activeFilters)).post('/api/reports/top-mail-relays/').then(data => {
                 this.senders = data;
                 this.toggleLoading();
@@ -64,7 +64,7 @@ export default {
                 this.toggleLoading();
             });
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     }
 }
 </script>

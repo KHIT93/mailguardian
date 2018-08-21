@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         get() {
-            this.toggleLoading();
+            this.setLoading(true);
             axios.get('/api/messages/queue/').then(response => {
                 this.mails = response.data.mails;
                 this.loaded_at = response.data.loaded_at;
@@ -62,7 +62,7 @@ export default {
         moment(str) {
             return window.moment(str);
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     }
 }
 </script>

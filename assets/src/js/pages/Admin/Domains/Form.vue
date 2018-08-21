@@ -169,6 +169,7 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/domains/'+this.id+'/').then(response => {
                 this.entity = response.data;
                 this.form = new Form({
@@ -180,7 +181,9 @@ export default {
                     allowed_accounts: response.data.allowed_accounts,
                     receive_type: response.data.receive_type
                 });
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 if (error.response.status == 404) {
                     router.push({ name: 'not_found' });
                 }
@@ -190,9 +193,13 @@ export default {
             });
         },
         getHosts() {
+            this.setLoading(true);
             axios.get('/api/hosts/').then(response => {
                 this.hosts = response.data.results;
-            })
+                this.setLoading(false);
+            }).catch(error => {
+                this.setLoading(false);
+            });
         },
         submit() {
             if (this.id) {
@@ -203,33 +210,42 @@ export default {
             }
         },
         add() {
+            this.setLoading(true);
             this.form.post('/api/domains/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Domain created', `The domain ${data.name} has been created`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/domains');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         update() {
+            this.setLoading(true);
             this.form.put('/api/domains/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Domain updated', `The domain ${data.name} has been updated`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/domains');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         destroy() {
+            this.setLoading(true);
             this.form.delete('/api/domains/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Domain deleted', `The domain ${data.name} has been deleted`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/domains');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

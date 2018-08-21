@@ -64,6 +64,10 @@ export default {
                 this.pages = response.data.page_count;
                 this.currentPage = response.data.current;
                 this.count = response.data.count;
+                this.setLoadding(false);
+            }).catch(error => {
+                this.setLoadding(false);
+                console.log(error.response);
             })
         },
         next() {
@@ -71,7 +75,8 @@ export default {
         },
         previous() {
 
-        }
+        },
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

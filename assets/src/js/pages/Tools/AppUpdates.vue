@@ -62,6 +62,7 @@ export default {
         if (this.user.is_staff) {
             
         }
+        this.setLoading(false);
     },
     computed: {
         ...mapGetters(['isLoggedIn', 'user', 'loading', 'app_info'])
@@ -82,7 +83,7 @@ export default {
                 this.updates_loading = false;
             });
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['setLoading'])
     }
 }
 </script>

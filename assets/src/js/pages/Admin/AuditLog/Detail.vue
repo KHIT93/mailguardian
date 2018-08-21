@@ -100,13 +100,16 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/audit-log/'+this.id+'/').then(response => {
                 this.entry = response.data;
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['toggleLoading', 'notify'])
+        ...mapMutations(['setLoading', 'notify'])
     }
 }
 </script>

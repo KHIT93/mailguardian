@@ -25,6 +25,7 @@
 </template>
 <script>
 import Form from '../classes/Form';
+import { mapMutations } from 'vuex';
 export default {
     props: ['domains'],
     data: () => {
@@ -53,12 +54,16 @@ export default {
             this.$emit('destroy', domain);
         },
         getDomains() {
+            this.setLoading(true);
             axios.get('/api/domains/all/').then(response => {
                 this.allDomains = response.data;
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 console.log(error);
             })
-        }
+        },
+        ...mapMutations(['setLoading'])
     }
 }
 </script>

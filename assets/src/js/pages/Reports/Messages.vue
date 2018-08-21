@@ -55,11 +55,11 @@ export default {
     },
     methods: {
         get(page = null) {
+            this.setLoading(true);
             let qs = '';
             if (page) {
                 qs = '?page='+page;
             }
-            this.toggleLoading();
             (new Form(this.activeFilters)).post('/api/reports/messages/'+qs).then(data => {
                 this.messages = data.results;
                 this.message_count = data.count;
@@ -84,7 +84,7 @@ export default {
                 this.get(this.previous.split("?page=")[1]);
             }
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     }
 }
 </script>

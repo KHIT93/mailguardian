@@ -174,7 +174,6 @@ export default {
         }
     },
     created() {
-        //this.toggleLoading()
         this.get();
     },
     computed: {
@@ -201,17 +200,12 @@ export default {
         ...mapGetters(['loading'])
     },
     methods: {
-        async get(query = null) {
-            if(!this.loading) {
-                this.toggleLoading();
-            }
-            await this.get_whitelist(query);
-            await this.get_blacklist(query);
-            if(this.loading) {
-                this.toggleLoading();
-            }
+        get(query = null) {
+            this.get_whitelist(query);
+            this.get_blacklist(query);
         },
         get_blacklist(query = null, page = null) {
+            this.setLoading(true);
             let qs = '';
             if (query) {
                 qs = '?search='+query;
@@ -224,9 +218,13 @@ export default {
             }
             axios.get('/api/blacklist/'+qs).then(response => {
                 this.blacklist = response.data;
+                this.setLoading(false);
+            }).catch(error => {
+                this.setLoading(false);
             });
         },
         get_whitelist(query = null, page = null) {
+            this.setLoading(true);
             let qs = '';
             if (query) {
                 qs = '?search='+query;
@@ -239,6 +237,9 @@ export default {
             }
             axios.get('/api/whitelist/'+qs).then(response => {
                 this.whitelist = response.data;
+                this.setLoading(false);
+            }).catch(error => {
+                this.setLoading(false);
             });
         },
         async search() {
@@ -273,7 +274,7 @@ export default {
             this.delete_modal = true;
         },
         delete_entry() {
-            this.toggleLoading();
+            this.setLoading(true);
             axios.delete('/api/lists/'+this.entry_to_delete.id+'/').then(response => {
                 this.toggleLoading();
                 this.entry_to_delete = {};
@@ -319,7 +320,7 @@ export default {
             this.to_domain = '';
             this.to = '';
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     }
 }
 </script>

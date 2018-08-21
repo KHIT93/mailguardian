@@ -495,7 +495,7 @@ export default {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     },
     created() {
         this.getMessage().then(() => {
@@ -505,6 +505,7 @@ export default {
             this.getMcpReport();
             this.getMailscannerReport();
             this.getTransportLog();
+            this.setLoading(false);
         });
     },
     components: {

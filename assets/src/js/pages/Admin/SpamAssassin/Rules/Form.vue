@@ -74,6 +74,7 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/sa-rules/'+this.id+'/').then(response => {
                 this.entity = response.data;
                 this.form = new Form({
@@ -81,7 +82,9 @@ export default {
                     name: response.data.name,
                     score: response.data.score,
                 });
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 if (error.response.status == 404) {
                     router.push({ name: 'not_found' });
                 }
@@ -91,9 +94,12 @@ export default {
             });
         },
         getAvailableRules() {
+            this.setLoading(true);
             axios.get('/api/sa-rule-descriptions/available/').then(response => {
                 this.availableRuleObjects = response.data;
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
@@ -106,33 +112,42 @@ export default {
             }
         },
         add() {
+            this.setLoading(true);
             this.form.post('/api/sa-rules/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('SpamAssassin Rule created', `The SpamAssassin Rule ${data.name} has been created`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/spamassassin/rules');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         update() {
+            this.setLoading(true);
             this.form.put('/api/sa-rules/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('SpamAssassin Rule updated', `The SpamAssassin Rule ${data.name} has been updated`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/spamassassin/rules');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         destroy() {
+            this.setLoading(true);
             this.form.delete('/api/sa-rules/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('SpamAssassin Rule deleted', `The SpamAssassin Rule ${data.name} has been deleted`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/spamassassin/rules');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

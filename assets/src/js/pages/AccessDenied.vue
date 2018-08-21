@@ -14,7 +14,8 @@
 <script>
     export default {
         mounted() {
-            console.log('Access to this page has been denied.')
+            console.log('Access to this page has been denied.');
+            this.$store.commit('setLoading', false);
         }
     }
 </script>

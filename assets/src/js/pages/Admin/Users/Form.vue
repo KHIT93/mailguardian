@@ -192,6 +192,7 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/users/'+this.id+'/').then(response => {
                 this.entity = response.data;
                 this.form = new Form({
@@ -210,7 +211,9 @@ export default {
                     weekly_quarantine_report: response.data.weekly_quarantine_report,
                     monthly_quarantine_report: response.data.monthly_quarantine_report
                 })
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 if (error.response.status == 404) {
                     router.push({ name: 'not_found' });
                 }
@@ -219,7 +222,10 @@ export default {
                 }
             });
             axios.get('/api/users/'+this.id+'/domains/').then(response => {
+                this.setLoading(true);
                 this.form.domains = response.data;
+            }).catch(error => {
+                this.setLoading(false);
             });
         },
         submit() {
@@ -232,29 +238,38 @@ export default {
             }
         },
         add() {
+            this.setLoading(true);
             this.form.post('/api/users/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('User added', `The user ${data.email} has been added`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/users');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         update() {
+            this.setLoading(true);
             this.form.put('/api/users/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('User updated', `The user ${data.email} has been updated`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/users');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         destroy() {
+            this.setLoading(true);
             this.form.delete('/api/users/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('User deleted', `The user ${this.entity.email} has been deleted`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/users');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
@@ -264,7 +279,7 @@ export default {
         removeDomain(domain) {
             this.form.domains.splice(this.form.domains.findIndex(d => d === domain), 1);
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

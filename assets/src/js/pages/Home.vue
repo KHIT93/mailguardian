@@ -51,6 +51,7 @@
 <script>
     import Modal from '../components/Modal.vue';
     import DashboardChart from '../components/DashboardChart.vue';
+    import { mapMutations } from 'vuex';
     export default {
         data: () => {
             return {
@@ -67,6 +68,7 @@
             }
         },
         created() {
+            this.setLoading(false);
             this.get(this.interval);
         },
         methods: {
@@ -98,7 +100,8 @@
                         ]
                     }
                 });
-            }
+            },
+            ...mapMutations(['setLoading', 'toggleLoading'])
         },
         components: {
             'mg-modal': Modal,

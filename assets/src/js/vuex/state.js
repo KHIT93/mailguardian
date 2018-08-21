@@ -4,6 +4,7 @@ export default {
     isLoggedIn: false,
     user: {},
     loading: false,
+    initializing: false,
     notifications: [],
     csrftoken: Cookies.get('csrftoken'),
     report: {

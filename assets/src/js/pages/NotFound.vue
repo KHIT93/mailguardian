@@ -14,7 +14,8 @@
 <script>
     export default {
         mounted() {
-            console.log('Page not found.')
+            console.log('Page not found.');
+            this.$store.commit('setLoading', false);
         }
     }
 </script>

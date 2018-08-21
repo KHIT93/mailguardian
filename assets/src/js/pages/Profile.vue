@@ -171,6 +171,7 @@ export default {
                 custom_spam_score: response.data.custom_spam_score,
                 custom_spam_highscore: response.data.custom_spam_highscore
             });
+            this.setLoadding(false);
         });
     },
     computed: {
@@ -186,7 +187,7 @@ export default {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

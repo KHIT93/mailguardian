@@ -9,6 +9,9 @@ export default {
     loading(state) {
         return state.loading;
     },
+    initializing(state) {
+        return state.initializing;
+    },
     filters(state) {
         return state.report.filters;
     },

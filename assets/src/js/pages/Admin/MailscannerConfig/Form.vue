@@ -85,6 +85,7 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/mailscanner-configuration/'+this.id+'/').then(response => {
                 this.entity = response.data;
                 this.form = new Form({
@@ -93,7 +94,9 @@ export default {
                     value: response.data.value,
                     filepath: response.data.filepath,
                 });
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 if (error.response.status == 404) {
                     router.push({ name: 'not_found' });
                 }
@@ -117,33 +120,42 @@ export default {
             }
         },
         add() {
+            this.setLoading(true);
             this.form.post('/api/mailscanner-configuration/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Configuration option added', `The configuration option ${data.key} has been added`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/mailscanner-configuration');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         update() {
+            this.setLoading(true);
             this.form.put('/api/mailscanner-configuration/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Configuration option updated', `The configuration option ${data.key} has been updated`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/mailscanner-configuration');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         destroy() {
+            this.setLoading(true);
             this.form.delete('/api/mailscanner-configuration/'+this.entity.id+'/').then(data => {
                 console.log(data);
                 this.notify(this.createNotification('Configuration option deleted', `The configuration option ${data.key} has been deleted`, 'success'));
+                this.setLoading(false);
                 router.push('/admin/mailscanner-configuration');
             }).catch(error => {
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading'])
     }
 }
 </script>

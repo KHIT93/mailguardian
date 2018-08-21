@@ -82,7 +82,7 @@ export default {
     },
     methods: {
         get(query = null, file = null, page = null) {
-            this.toggleLoading();
+            this.setLoading(true);
             let qs = '';
             if (query) {
                 qs = '?search='+query;
@@ -106,7 +106,7 @@ export default {
             axios.get('/api/mailscanner-configuration/'+qs).then(response => {
                 this.config = response.data;
             });
-            this.toggleLoading();
+            this.setLoading(false);
         },
         next() {
             if (this.config.next) {
@@ -121,7 +121,7 @@ export default {
         async search() {
             await this.get(this.search_query,this.search_file);
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     }
 }
 </script>

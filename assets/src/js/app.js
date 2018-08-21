@@ -129,13 +129,15 @@ const app = new Vue({
     router,
     store,
     components,
-    created() {
-        this.getAppInfo();
-        this.checkSession().then(() => this.getSettings());
+    async created() {
+        this.setInitializing(true);
+        await this.getAppInfo();
+        await this.checkSession().then(() => this.getSettings());
+        this.setInitializing(false);
     },
     methods: {
         ...mapActions(['checkSession', 'getCurrentUser', 'getSettings', 'getAppInfo']),
-        ...mapMutations(['toggleLoading' ,'notify'])
+        ...mapMutations(['toggleLoading' ,'notify', 'setInitializing'])
     },
     computed: {
         ...mapGetters(['loading', 'isLoggedIn', 'user'])

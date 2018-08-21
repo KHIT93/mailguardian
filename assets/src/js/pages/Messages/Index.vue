@@ -23,14 +23,14 @@ export default {
     },
     methods: {
         getMessages() {
-            this.toggleLoading();
+            this.setLoading(true);
             axios.get('/api/messages/?page_size=50').then(response => {
                 this.messages = response.data.results;
                 this.message_count = response.data.count;
-                this.toggleLoading();
+                this.setLoading(false);
             })
         },
-        ...mapMutations(['toggleLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading'])
     },
     beforeDestroy() {
         clearInterval(this.interval);

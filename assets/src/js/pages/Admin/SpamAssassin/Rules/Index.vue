@@ -39,7 +39,7 @@
     </div>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import router from '../../../../routing/router';
 export default {
     data: () => {
@@ -59,6 +59,7 @@ export default {
     },
     methods: {
         get(query = null, page = null) {
+            this.setLoading(true);
             let qs = '';
             if (query) {
                 qs = '?search='+query;
@@ -74,6 +75,9 @@ export default {
                 this.count = response.data.count;
                 this.current = response.data.current;
                 this.page_count = response.data.page_count;
+                this.setLoading(false);
+            }).catch(error => {
+                this.setLoading(false);
             });
         },
         moment(str) {
@@ -89,7 +93,8 @@ export default {
         },
         edit(id) {
             router.push('/admin/spamassassin/rules/'+id);
-        }
+        },
+        ...mapMutations(['setLoading'])
     }
 }
 </script>

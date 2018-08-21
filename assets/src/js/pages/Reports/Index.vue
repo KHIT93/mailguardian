@@ -203,7 +203,7 @@ export default {
     },
     methods: {
         get() {
-            this.toggleLoading();
+            this.setLoading(true);
             (new Form(this.activeFilters)).post('/api/reports/summary/').then(data => {
                 this.dates.latest = data.latest;
                 this.dates.earliest = data.earliest;
@@ -229,7 +229,7 @@ export default {
             this.removeFilter(filter);
             this.get();
         },
-        ...mapMutations(['toggleLoading', 'resetFilters', 'setFilter', 'removeFilter'])
+        ...mapMutations(['toggleLoading', 'resetFilters', 'setFilter', 'removeFilter', 'setLoading'])
     }
 }
 </script>
