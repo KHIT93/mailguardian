@@ -32,6 +32,7 @@
         "audit":60,
         "quarantine":60
     },
+    "app_key": "",
     "audit_log": true,
     "mta": "postfix",
     "branding": {

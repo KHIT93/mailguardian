@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import json
 from core.helpers import MailGuardianConfiguration
+from django.core.management.utils import get_random_secret_key
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -24,7 +25,7 @@ MAILGUARDIAN_ENV = MailGuardianConfiguration(json.load(open(os.path.join(os.path
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kri^w&+#rz=dh-ll&opl7lo1k4-t#(q9psg#v9q5+4=pu7_3v='
+SECRET_KEY = MAILGUARDIAN_ENV.get('app_key', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILGUARDIAN_ENV.get("debug", False)
