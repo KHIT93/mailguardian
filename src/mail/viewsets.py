@@ -51,7 +51,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         file_exists = False
         data = None
         error = None
-        if settings.API_ONLY and message.mailscanner_hostname == settings.APP_HOSTNAME:
+        if message.mailscanner_hostname == settings.APP_HOSTNAME:
             try:
                 token = Token.objects.first(user=request.user)
                 host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
