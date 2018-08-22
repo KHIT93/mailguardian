@@ -56,7 +56,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 token = Token.objects.get(user=request.user)
                 host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
                 protocol = 'https' if host.use_tls else 'http'
-                url = '{0}://{1}/api/messages/release/'.format(protocol, host.hostname)
+                url = '{0}://{1}/api/messages/{2}/file-exists/'.format(protocol, host.hostname, pk)
                 headers = {
                     'Content-Type' : 'application/json',
                     'Authorization' : 'Token {0}'.format(token.key)
