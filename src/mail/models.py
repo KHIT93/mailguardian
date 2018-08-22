@@ -82,7 +82,8 @@ class Message(models.Model):
 
     def file_path(self):
         if self.mailq_id:
-            return os.path.join(settings.MAILSCANNER_QUARANTINE_DIR, str(self.date).replace('-',''), "nonspam", self.mailq_id)
+            folder = "nonspam" if not self.is_spam else "spam"
+            return os.path.join(settings.MAILSCANNER_QUARANTINE_DIR, str(self.date).replace('-',''), folder, self.mailq_id)
         else:
             return None
     
