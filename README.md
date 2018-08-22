@@ -480,3 +480,16 @@ Another option is to create a cronjob for `root`, so that the log synchronizatio
 ```
 
 The final option, which would be the most secure option, although a bit more complicated to configure, is to change the settings for `log rotation`. This would allow you to set the permissions of the log file when it is being rotated by the operating system and thereby allow you to set just enough permissions for allowing the `mailguardian` application user to read the logfile.
+
+### SMTP using STARTTLS
+Edit `/etc/postfix/main.cf` and add this:
+
+```
+smtpd_tls_security_level = may
+smtp_tls_security_level = may
+smtpd_tls_mandatory_protocols = !SSLv2,!SSLv3,!TLSv1
+smtp_tls_mandatory_protocols  = !SSLv2,!SSLv3,!TLSv1
+smtpd_tls_protocols           = !SSLv2,!SSLv3,!TLSv1
+smtp_tls_protocols            = !SSLv2,!SSLv3,!TLSv1
+smtpd_tls_exclude_ciphers     = aNULL, LOW, EXP, MEDIUM, ADH, AECDH, MD5, DSS, ECDSA, CAMELLIA128, 3DES, CAMELLIA256, RSA+AES, eNULL
+```
