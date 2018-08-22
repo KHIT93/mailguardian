@@ -51,25 +51,27 @@ class MessageViewSet(viewsets.ModelViewSet):
         file_exists = False
         data = None
         error = None
+        url = None
         if message.mailscanner_hostname != settings.APP_HOSTNAME:
-            try:
-                token = Token.objects.get(user=request.user)
-                host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
-                protocol = 'https' if host.use_tls else 'http'
-                url = '{0}://{1}/api/messages/{2}/file-exists/'.format(protocol, host.hostname, pk)
-                headers = {
-                    'Content-Type' : 'application/json',
-                    'Authorization' : 'Token {0}'.format(token.key)
-                }
-                result = requests.get(url, headers=headers)
-                data = json.loads(result.content.decode('utf-8'))
-                file_exists = data.file_exists
-            except Exception as e:
-                error = e
+            #try:
+            token = Token.objects.get(user=request.user)
+            host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
+            protocol = 'https' if host.use_tls else 'http'
+            url = '{0}://{1}/api/messages/{2}/file-exists/'.format(protocol, host.hostname, pk)
+            headers = {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Token {0}'.format(token.key)
+            }
+            result = requests.get(url, headers=headers)
+            data = json.loads(result.content.decode('utf-8'))
+            file_exists = data.file_exists
+            #except Exception as e:
+            #    error = e
         else:
             file_exists = message.queue_file_exists()
         return Response({
             'message_id': pk,
+            'url': url,
             'file_exists': file_exists,
             'filename': message.file_path(),
             'data_response': data,
