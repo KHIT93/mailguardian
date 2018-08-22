@@ -49,7 +49,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapMutations } from 'vuex';
     import router from '../routing/router';
     import Form from '../classes/Form';
     import Notification from '../components/Notification.vue';
@@ -70,6 +70,7 @@
             if(this.isLoggedIn) {
                 router.push('/');
             }
+            this.setLoading(false);
         },
         computed: {
             ...mapGetters(['isLoggedIn', 'csrftoken'])
@@ -82,7 +83,8 @@
                 }).catch(error => {
                     this.loading = false;
                 })
-            }
+            },
+            ...mapMutations(['setLoading'])
         }
     }
 </script>
