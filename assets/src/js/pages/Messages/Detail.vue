@@ -367,7 +367,8 @@ export default {
             show_modal: false,
             show_listing_modal: false,
             listing_type: '',
-            message_contents: ''
+            message_contents: '',
+            file_exists: false,
         }
     },
     methods: {
@@ -435,6 +436,13 @@ export default {
                 if (error.response.status !== 404) {
                     this.notify(this.createNotification('An error occurred while getting the Transport log', `${error}`, 'error'));
                 }
+            });
+        },
+        getQueueFileStatus() {
+            axios.get('/api/messages/'+this.uuid+'/file-exists/').then(response => {
+                this.file_exists = response.data.file_exists;
+            }).catch(error => {
+                console.log(error.response);
             });
         },
         showMessage() {
@@ -505,6 +513,7 @@ export default {
             this.getMcpReport();
             this.getMailscannerReport();
             this.getTransportLog();
+            this.getQueueFileStatus();
             this.setLoading(false);
         });
     },

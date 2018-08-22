@@ -48,7 +48,25 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='file-exists', url_name='message-queue-file-exists')
     def get_file_exists(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
-        return Response({'message_id': pk, 'file_exists': message.queue_file_exists()})
+        file_exists = False
+        if settings.API_ONLY and message.mailscanner_hostname == settings.APP_HOSTNAME:
+            try:
+                token = Token.objects.first(user=request.user)
+                host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                protocol = 'https' if host.use_tls else 'http'
+                url = '{0}://{1}/api/messages/release/'.format(protocol, host.hostname)
+                headers = {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : 'Token {0}'.format(token.key)
+                }
+                result = requests.post(url, data=[message_id], headers=headers)
+                data = json.loads(result.content.decode('utf-8'))
+                file_exists = data.file_exists
+            except:
+                pass
+        else:
+            file_exists = message.queue_file_exists()
+        return Response({'message_id': pk, 'file_exists': file_exists})
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
     def get_message_transport_logs(self, request, pk=None):
