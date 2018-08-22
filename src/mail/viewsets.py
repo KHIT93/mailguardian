@@ -53,8 +53,8 @@ class MessageViewSet(viewsets.ModelViewSet):
         error = None
         if message.mailscanner_hostname != settings.APP_HOSTNAME:
             try:
-                token = Token.objects.first(user=request.user)
-                host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                token = Token.objects.get(user=request.user)
+                host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
                 protocol = 'https' if host.use_tls else 'http'
                 url = '{0}://{1}/api/messages/release/'.format(protocol, host.hostname)
                 headers = {
