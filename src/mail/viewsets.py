@@ -49,6 +49,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     def get_file_exists(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         file_exists = False
+        data = None
         if settings.API_ONLY and message.mailscanner_hostname == settings.APP_HOSTNAME:
             try:
                 token = Token.objects.first(user=request.user)
@@ -66,7 +67,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 pass
         else:
             file_exists = message.queue_file_exists()
-        return Response({'message_id': pk, 'file_exists': file_exists})
+        return Response({'message_id': pk, 'file_exists': file_exists, 'filename': message.file_path(), 'data_response': data})
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
     def get_message_transport_logs(self, request, pk=None):
