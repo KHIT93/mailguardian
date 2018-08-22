@@ -61,7 +61,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                     'Content-Type' : 'application/json',
                     'Authorization' : 'Token {0}'.format(token.key)
                 }
-                result = requests.post(url, data=[message_id], headers=headers)
+                result = requests.get(url, headers=headers)
                 data = json.loads(result.content.decode('utf-8'))
                 file_exists = data.file_exists
             except Exception as e:
