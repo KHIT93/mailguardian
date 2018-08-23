@@ -15,7 +15,7 @@ class IndexTemplateView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if settings.API_ONLY:
-            return Response({}, status.HTTP_401_UNAUTHORIZED)
+            return render(request, "mailguardian/api_only.html", {'app_name': settings.BRAND_NAME, 'app_logo': settings.BRAND_LOGO})
         return render(request, self.template_name, {'app_name': settings.BRAND_NAME, 'app_logo': settings.BRAND_LOGO})
 
 class DashboardApiView(APIView):
