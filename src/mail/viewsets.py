@@ -71,11 +71,10 @@ class MessageViewSet(viewsets.ModelViewSet):
             file_exists = message.queue_file_exists()
         return Response({
             'message_id': pk,
-            'url': url,
             'file_exists': file_exists,
+            'raw': data,
             'filename': message.file_path(),
             'data_response': data,
-            'is_local': settings.API_ONLY and message.mailscanner_hostname == settings.APP_HOSTNAME,
             'error': error
         })
 
