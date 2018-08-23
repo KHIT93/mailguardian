@@ -2,7 +2,7 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <h2 class="border-b">Details for message <em>{{ uuid }}</em></h2>
-            <mg-message-actions @view="showMessage" @release="release" @spam="spam" @nonspam="nonspam" class="border-b" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
+            <mg-message-actions @view="showMessage" @release="release" @spam="spam" @nonspam="nonspam" class="border-b" :uuid="uuid" v-if="file_exists"></mg-message-actions>
             <div class="sm:flex">
                 <div class="sm:w-1/2 sm:border-r border-b">
                     <div class="flex hover:bg-grey-lighter text-sm">
@@ -342,8 +342,8 @@
                     </table>
                 </div>
             </div>
-            <mg-message-actions @view="showMessage" @release="release" @spam="spam" @nonspam="nonspam" class="border-t" :uuid="uuid" v-if="message.queue_file_exists"></mg-message-actions>
-            <mg-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message" v-if="message.queue_file_exists">
+            <mg-message-actions @view="showMessage" @release="release" @spam="spam" @nonspam="nonspam" class="border-t" :uuid="uuid" v-if="file_exists"></mg-message-actions>
+            <mg-modal @close="show_modal = false" :submit-button="false" :show="show_modal" modal-title="View message" v-if="file_exists">
                 {{ message_contents }}
             </mg-modal>
         </div>
