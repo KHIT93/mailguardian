@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, When, Case, IntegerField
 from mail.models import Message
 from mail.serializers import MessageSerializer
 from .filters import MessageQuerySetFilter
@@ -45,7 +45,7 @@ class MessagesByDateApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('date'), filters, request.user)
-        serializer = MessagesByDateSerializer(qs.annotate(Count('id')).order_by('date'), many=True)
+        serializer = MessagesByDateSerializer(qs.annotate(Count('id')).annotate(is_spam_count=Count(Case(When(is_spam=True, then=1)))).annotate(Sum('size')).annotate(infected_count=Count(Case(When(infected=True, then=1)))).order_by('date'), many=True)
         return Response(serializer.data, 200)
 
 class TopMailRelaysApiView(APIView):
@@ -53,7 +53,7 @@ class TopMailRelaysApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('client_ip'), filters, request.user)
-        serializer = MessageRelaysSerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
+        serializer = MessageRelaysSerializer(qs.annotate(Count('id')).annotate(is_spam_count=Count(Case(When(is_spam=True, then=1)))).annotate(Sum('size')).annotate(infected_count=Count(Case(When(infected=True, then=1)))).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class MessagesPerHourApiView(APIView):
@@ -69,7 +69,7 @@ class TopSendersByQuantityApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_address'), filters, request.user)
-        serializer = TopSendersByQuantitySerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
+        serializer = TopSendersByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSendersByVolumeApiView(APIView):
@@ -77,7 +77,7 @@ class TopSendersByVolumeApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_address'), filters, request.user)
-        serializer = TopSendersByVolumeSerializer(qs.annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
+        serializer = TopSendersByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientsByQuantityApiView(APIView):
@@ -85,7 +85,7 @@ class TopRecipientsByQuantityApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_address'), filters, request.user)
-        serializer = TopRecipientsByQuantitySerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
+        serializer = TopRecipientsByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientsByVolumeApiView(APIView):
@@ -93,7 +93,7 @@ class TopRecipientsByVolumeApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_address'), filters, request.user)
-        serializer = TopRecipientsByVolumeSerializer(qs.annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
+        serializer = TopRecipientsByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSenderDomainsByQuantityApiView(APIView):
@@ -101,7 +101,7 @@ class TopSenderDomainsByQuantityApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_domain'), filters, request.user)
-        serializer = TopSenderDomainsByQuantitySerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
+        serializer = TopSenderDomainsByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSenderDomainsByVolumeApiView(APIView):
@@ -109,7 +109,7 @@ class TopSenderDomainsByVolumeApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_domain'), filters, request.user)
-        serializer = TopSenderDomainsByVolumeSerializer(qs.annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
+        serializer = TopSenderDomainsByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientDomainsByQuantityApiView(APIView):
@@ -117,7 +117,7 @@ class TopRecipientDomainsByQuantityApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_domain'), filters, request.user)
-        serializer = TopRecipientDomainsByQuantitySerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
+        serializer = TopRecipientDomainsByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientDomainsByVolumeApiView(APIView):
@@ -125,5 +125,5 @@ class TopRecipientDomainsByVolumeApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_domain'), filters, request.user)
-        serializer = TopRecipientDomainsByVolumeSerializer(qs.annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
+        serializer = TopRecipientDomainsByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)

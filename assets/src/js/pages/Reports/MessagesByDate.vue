@@ -7,17 +7,29 @@
                         <tr>
                             <th>Date</th>
                             <th>Number of messages</th>
+                            <th>Clean</th>
+                            <th>Spam</th>
+                            <th>Infected</th>
+                            <th>Volume</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in dates" :key="item.date">
                             <td>{{ item.date }}</td>
                             <td>{{ item.id__count }}</td>
+                            <td>{{ clean_count(item) }} ({{ clean_pct(item) }}%)</td>
+                            <td>{{ item.is_spam_count }} ({{ spam_pct(item) }}%)</td>
+                            <td>{{ item.infected_count }} ({{ infected_pct(item) }}%)</td>
+                            <td>{{ item.size__sum | byte_display }}</td>
                         </tr>
                         <tr>
                         <tr class="font-extrabold border-t-2 text-base">
-                            <td>Total</td>
+                            <td>Total ({{ dates.length }} days)</td>
                             <td>{{ messageTotalCount }}</td>
+                            <td>{{ messageTotalClean }}</td>
+                            <td>{{ messageTotalSpam }}</td>
+                            <td>{{ messageTotalInfected }}</td>
+                            <td>{{ messageTotalSize | byte_display }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -51,6 +63,34 @@ export default {
             });
             return total;
         },
+        messageTotalClean() {
+            let clean = 0;
+            this.dates.forEach(item => {
+                clean += this.clean_count(item);
+            })
+            return clean;
+        },
+        messageTotalSpam() {
+            let total = 0;
+            this.dates.forEach(item => {
+                total += item.is_spam_count;
+            });
+            return total;
+        },
+        messageTotalInfected() {
+            let total = 0;
+            this.dates.forEach(item => {
+                total += item.infected_count;
+            });
+            return total;
+        },
+        messageTotalSize() {
+            let total = 0;
+            this.dates.forEach(item => {
+                total += item.size__sum;
+            });
+            return total;
+        },
         ...mapGetters(['filters'])
     },
     methods: {
@@ -64,6 +104,23 @@ export default {
                 console.log(error);
                 this.toggleLoading();
             });
+        },
+        clean_count(item) {
+            let count = 0;
+            count = item.id__count;
+            count -= item.is_spam_count;
+            count -= item.infected_count;
+            
+            return count;
+        },
+        clean_pct(item) {
+            return Math.round((this.clean_count(item) / item.id__count) * 100);
+        },
+        spam_pct(item) {
+            return Math.round((item.is_spam_count / item.id__count) * 100);
+        },
+        infected_pct(item) {
+            return Math.round((item.infected_count / item.id__count) * 100);
         },
         ...mapMutations(['toggleLoading', 'setLoading'])
     }

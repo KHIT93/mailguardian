@@ -7,17 +7,14 @@
                         <tr>
                             <th>Sender</th>
                             <th>Number of messages</th>
+                            <th>Volume</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in data" :key="item.date">
                             <td>{{ item.from_address }}</td>
                             <td>{{ item.id__count }}</td>
-                        </tr>
-                        <tr>
-                        <tr class="font-extrabold border-t-2 text-base">
-                            <td>Total</td>
-                            <td>{{ messageTotalCount }}</td>
+                            <td>{{ item.size__sum | byte_display }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -43,13 +40,6 @@ export default {
                 obj[key] = this.filters[key];
                 return obj;
             }, {})
-        },
-        messageTotalCount() {
-            let total = 0;
-            this.data.forEach(item => {
-                total += item.id__count;
-            });
-            return total;
         },
         ...mapGetters(['filters'])
     },

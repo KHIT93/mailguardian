@@ -7,16 +7,25 @@
                         <tr>
                             <th>Sender</th>
                             <th>Number of messages</th>
+                            <th>Spam</th>
+                            <th>Infected</th>
+                            <th>Volume</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in senders" :key="item.date">
                             <td>{{ item.client_ip }}</td>
                             <td>{{ item.id__count }}</td>
+                            <td>{{ item.is_spam_count }}</td>
+                            <td>{{ item.infected_count }}</td>
+                            <td>{{ item.size__sum | byte_display }}</td>
                         </tr>
                         <tr class="font-extrabold border-t-2 text-base">
                             <td>Total</td>
                             <td>{{ messageTotalCount }}</td>
+                            <td>{{ messageTotalSpam }}</td>
+                            <td>{{ messageTotalInfected }}</td>
+                            <td>{{ messageTotalSize | byte_display }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -47,6 +56,27 @@ export default {
             let total = 0;
             this.senders.forEach(item => {
                 total += item.id__count;
+            });
+            return total;
+        },
+        messageTotalSpam() {
+            let total = 0;
+            this.senders.forEach(item => {
+                total += item.is_spam_count;
+            });
+            return total;
+        },
+        messageTotalInfected() {
+            let total = 0;
+            this.senders.forEach(item => {
+                total += item.infected_count;
+            });
+            return total;
+        },
+        messageTotalSize() {
+            let total = 0;
+            this.senders.forEach(item => {
+                total += item.size__sum;
             });
             return total;
         },

@@ -6,18 +6,15 @@
                     <thead>
                         <tr>
                             <th>Recipient</th>
+                            <th>Number of messages</th>
                             <th>Summarized size</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in data" :key="item.date">
                             <td>{{ item.to_address }}</td>
-                            <td>{{ item.size__count | byte_display }}</td>
-                        </tr>
-                        <tr>
-                        <tr class="font-extrabold border-t-2 text-base">
-                            <td>Total</td>
-                            <td>{{ messageTotalCount | byte_display }}</td>
+                            <td>{{ item.id__count }}</td>
+                            <td>{{ item.size__sum | byte_display }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -44,18 +41,11 @@ export default {
                 return obj;
             }, {})
         },
-        messageTotalCount() {
-            let total = 0;
-            this.data.forEach(item => {
-                total += item.size__count;
-            });
-            return total;
-        },
         ...mapGetters(['filters'])
     },
     methods: {
         get() {
-            this.setLoading();
+            this.setLoading(true);
             (new Form(this.activeFilters)).post('/api/reports/top-recipients-by-volume/').then(data => {
                 this.data = data;
                 this.toggleLoading();
