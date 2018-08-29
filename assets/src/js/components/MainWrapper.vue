@@ -106,6 +106,12 @@
                                 Settings
                             </router-link>
                         </div>
+                        <div class="flex -mb-px" v-if="user.is_staff" @click="hideMenu()">
+                            <router-link to="/admin/notifications" active-class="active" class="nav-link">
+                                <mg-settings-icon class="w-6 h-6 mr-2"></mg-settings-icon>
+                                Notification Manager
+                            </router-link>
+                        </div>
                     </div>
                 </div>
             </div>

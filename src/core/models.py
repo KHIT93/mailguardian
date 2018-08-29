@@ -203,6 +203,20 @@ class ApplicationTask(models.Model):
     method = models.CharField(max_length=255, verbose_name=_("method"))
     params = JSONField(blank=True, null=True, verbose_name=_("parameters"))
 
+class ApplicationNotification(models.Model):
+    notification_types = [
+        ('dashboard', _('Dasboard')),
+        ('login', _('Login'))
+    ]
+    class Meta:
+        ordering = ('-id',)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=128)
+    body = models.TextField()
+    date_start = models.DateField()
+    date_end = models.DateField()
+    notification_type = models.CharField(choices=notification_types, max_length=20)
+
 if settings.AUDIT_LOGGING:
     auditlog.register(User)
     auditlog.register(MailScannerConfiguration)

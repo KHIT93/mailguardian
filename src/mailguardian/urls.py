@@ -19,7 +19,7 @@ from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
-from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet, MailScannerHostViewSet, ApplicationTaskViewSet
+from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet, MailScannerHostViewSet, ApplicationTaskViewSet, ApplicationNotificationViewSet
 from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, TransportLogViewSet, SmtpRelayViewSet
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
@@ -50,6 +50,7 @@ router.register(r'hosts', MailScannerHostViewSet)
 router.register(r'settings', SettingsViewSet)
 router.register(r'audit-log', AuditLogViewSet)
 router.register(r'tasks', ApplicationTaskViewSet)
+router.register(r'notifications', ApplicationNotificationViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),

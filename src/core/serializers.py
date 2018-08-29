@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
@@ -103,3 +103,8 @@ class ApplicationTaskSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_user_email(self, obj):
         return obj.user.email
+
+class ApplicationNotificationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ApplicationNotification
+        fields = ('id', 'url', 'title', 'body', 'date_start', 'date_end', 'notification_type')

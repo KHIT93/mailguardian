@@ -1,5 +1,8 @@
 <template>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
+        <div>
+            <mg-notification v-for="message in dashboard_notifications" :key="message.id" :notification="{ title: message.title, message: message.body, type: 'info' }"/>
+        </div>
         <div class="card">
             <div class="flex flex-row-reverse p-2 bg-grey-lightest">
                 <div class="mt-2">
@@ -50,6 +53,7 @@
 
 <script>
     import Modal from '../components/Modal.vue';
+    import AppNotification from '../components/Notification.vue';
     import DashboardChart from '../components/DashboardChart.vue';
     import { mapMutations } from 'vuex';
     export default {
@@ -66,11 +70,13 @@
                 },
                 chartheight: 150,
                 interval: 'last_hour',
+                dashboard_notifications: []
             }
         },
         created() {
-            this.setLoading(false);
+            this.setLoading(true);
             this.get(this.interval);
+            this.getNotifications();
         },
         methods: {
             get(interval = 'last_hour') {
@@ -106,13 +112,25 @@
                             }
                         ]
                     }
+                    this.setLoading(false);
+                }).catch(error => {
+                    this.setLoading(false);
+                });
+            },
+            getNotifications() {
+                this.setLoading(true);
+                axios.get('/api/notifications/dashboard/').then(response => {
+                    this.dashboard_notifications = response.data;
+                }).catch(error => {
+                    this.setLoading(false);
                 });
             },
             ...mapMutations(['setLoading', 'toggleLoading'])
         },
         components: {
             'mg-modal': Modal,
-            'mg-dashboard-chart': DashboardChart
+            'mg-dashboard-chart': DashboardChart,
+            'mg-notification': AppNotification
         },
     }
 </script>

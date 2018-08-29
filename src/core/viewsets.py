@@ -1,15 +1,17 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer, ApplicationTaskSerializer
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer, ApplicationTaskSerializer, ApplicationNotificationSerializer
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
 from domains.serializers import DomainSerializer
-from .permissions import IsDomainAdminOrStaff
+from .permissions import IsDomainAdminOrStaff, IsAdminUserOrReadOnly
 from auditlog.models import LogEntry as AuditLog
+from rest_framework.permissions import AllowAny
+import datetime
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -99,3 +101,19 @@ class ApplicationTaskViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             return qs
         return qs.filter(user=self.request.user)
+
+class ApplicationNotificationViewSet(viewsets.ModelViewSet):
+    queryset = ApplicationNotification.objects.all()
+    serializer_class = ApplicationNotificationSerializer
+    permission_classes = (IsAdminUserOrReadOnly,)
+    model = ApplicationNotification
+
+    @action(methods=['get'], detail=False, permission_classes=[AllowAny], url_path='login', url_name='login-notifications')
+    def get_login_notifications(self, request):
+        serializer = ApplicationNotificationSerializer(self.get_queryset().filter(notification_type='login', date_start__lte=datetime.datetime.now(), date_end__gte=datetime.datetime.now()), many=True, context={'request': request})
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='dashboard', url_name='dashboard-notifications')
+    def get_dashboard_notifications(self, request):
+        serializer = ApplicationNotificationSerializer(self.get_queryset().filter(notification_type='dashboard', date_start__lte=datetime.datetime.now(), date_end__gte=datetime.datetime.now()), many=True, context={'request': request})
+        return Response(serializer.data)

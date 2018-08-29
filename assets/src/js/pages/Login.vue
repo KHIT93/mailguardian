@@ -1,6 +1,9 @@
 <template>
     <div class="justify-center flex pt-8">
         <div class="w-full max-w-sm">
+            <div>
+                <mg-notification v-for="message in login_notifications" :key="message.id" :notification="{ title: message.title, message: message.body, type: 'info' }"/>
+            </div>
             <form @submit.prevent="submit" class="bg-white shadow-md sm:rounded px-8 pt-6 pb-8 mb-4" method="POST">
                 <mg-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Error during login', message: form.errors.get('non_field_errors'), type: 'error' }"></mg-notification>
                 <div class="md:flex md:items-center mb-6">
@@ -60,11 +63,22 @@
                     email: '',
                     password: ''
                 }),
-                loading: false
+                loading: false,
+                login_notifications: []
             }
         },
         components: {
             'mg-notification': Notification
+        },
+        created() {
+            if(this.isLoggedIn) {
+                router.push('/');
+            }
+            this.setLoading(false);
+            axios.get('/api/notifications/login/').then(response => {
+                this.login_notifications = response.data;
+            }).catch(error => {
+            });
         },
         mounted() {
             if(this.isLoggedIn) {

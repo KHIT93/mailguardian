@@ -39,6 +39,8 @@ import SpamAssassinRules from '../pages/Admin/SpamAssassin/Rules/Index.vue';
 import SpamAssassinRuleForm from '../pages/Admin/SpamAssassin/Rules/Form.vue';
 import MailScannerConfiguration from '../pages/Admin/MailscannerConfig/Index.vue';
 import MailScannerConfigurationForm from '../pages/Admin/MailscannerConfig/Form.vue';
+import Notifications from '../pages/Admin/Notifications/Index.vue';
+import NotificationForm from '../pages/Admin/Notifications/Form.vue';
 import Settings from '../pages/Admin/Settings/Index.vue';
 import AuditLogIndex from '../pages/Admin/AuditLog/Index.vue';
 import AuditLogDetail from '../pages/Admin/AuditLog/Detail.vue';
@@ -96,6 +98,11 @@ export default [
     { path: '/admin/mailscanner/configuration', component: MailScannerConfiguration, name: 'admin.mailscanner.configuration.index', meta: { requiresAdmin: true } },
     { path: '/admin/mailscanner/configuration/add', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.add', meta: { requiresAdmin: true } },
     { path: '/admin/mailscanner/configuration/:id', component: MailScannerConfigurationForm, name: 'admin.mailscanner.configuration.edit', props: true, meta: { requiresAdmin: true } },
+
+    { path: '/admin/notifications', component: Notifications, name: 'admin.notifications.index', meta: { requiresAdmin: true } },
+    { path: '/admin/notifications/add', component: NotificationForm, name: 'admin.notifications.add', meta: { requiresAdmin: true } },
+    { path: '/admin/notifications/:id', component: NotificationForm, name: 'admin.notifications.edit', props: true, meta: { requiresAdmin: true } },
+
     { path: '/admin/settings', component: Settings, name: 'admin.settings.index', meta: { requiresAdmin: true } },
     { path: '/admin/audit-log', component: AuditLogIndex, name: 'reports.auditlog.index', meta: { requiresAdmin: true } },
     { path: '/admin/audit-log/:id', component: AuditLogDetail, name: 'reports.auditlog.detail', props: true, meta: { requiresAdmin: true } },
