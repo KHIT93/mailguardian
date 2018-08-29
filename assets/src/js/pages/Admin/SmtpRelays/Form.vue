@@ -71,6 +71,7 @@ export default {
             this.get();
         }
         else {
+            this.setLoading(false);
             this.form = new Form({
                 ip_address: '',
                 hostname: '',
