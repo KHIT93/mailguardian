@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="sm:flex">
             <div class="card min-w-full table-wrapper">
@@ -22,6 +23,7 @@
             </div>
         </div>
     </div>
+</mg-page>
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';

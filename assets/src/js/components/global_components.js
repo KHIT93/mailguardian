@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Modal from './Modal.vue';
 import MainWrapper from './MainWrapper.vue';
 import NotificationWrapper from './NotificationWrapper.vue';
+import PageLoading from './PageLoading.vue';
 
 import AccountCircleIcon from '../icons/AccountCircleIcon.vue';
 import BlockIcon from '../icons/BlockIcon.vue';
@@ -58,6 +59,7 @@ Vue.component('mg-navigate-before-icon', NavigateBefore);
 Vue.component('mg-navigate-next-icon', NavigateNext);
 Vue.component('mg-device-hub-icon', DeviceHub);
 Vue.component('mg-verified-user-icon', VerifiedUserIcon);
+Vue.component('mg-page', PageLoading);
 
 export default {
     'mg-wrapper': MainWrapper,

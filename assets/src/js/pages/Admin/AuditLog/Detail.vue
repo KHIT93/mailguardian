@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <h2 class="border-b">Details for log entry</h2>
@@ -85,6 +86,7 @@
             </template>
         </div>
     </div>
+</mg-page>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex';

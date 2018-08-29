@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div>
             <mg-notification v-for="message in dashboard_notifications" :key="message.id" :notification="{ title: message.title, message: message.body, type: 'info' }"/>
@@ -49,6 +50,7 @@
             <mg-dashboard-chart :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mg-dashboard-chart>
         </div>
     </div>
+</mg-page>
 </template>
 
 <script>

@@ -1,5 +1,7 @@
 <template>
-    <mg-message-list :messages="messages" :count="message_count" class="lg:px-4 pt-6 pb-8"></mg-message-list>
+    <mg-page>
+        <mg-message-list :messages="messages" :count="message_count" class="lg:px-4 pt-6 pb-8"></mg-message-list>
+    </mg-page>
 </template>
 <script>
 import { mapMutations } from 'vuex';

@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
         <div class="card p-2">
             <form @submit.prevent="submit">
@@ -130,6 +131,7 @@
             </form>
         </div>
     </div>
+</mg-page>
 </template>
 
 <script>

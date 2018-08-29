@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="md:container mx-auto md:px-4 pt-6 pb-8 xxl:w-1/2">
         <div class="md:flex">
             <div class="w-full md:mr-1">
@@ -144,6 +145,7 @@
             </div>
         </div>
     </div>
+</mg-page>
 </template>
 
 <script>

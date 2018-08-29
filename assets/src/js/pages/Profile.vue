@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
         <div class="card p-2">
             <form @submit.prevent="update">
@@ -143,6 +144,7 @@
         </div>
         <mg-change-password-modal @close="show_password_modal = false" @submit="show_password_modal = false" :show="show_password_modal" :user-id="user.id"></mg-change-password-modal>
     </div>
+</mg-page>
 </template>
 
 <script>

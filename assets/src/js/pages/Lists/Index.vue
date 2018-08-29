@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="sm:flex card p-2 mb-2">
             <div class="sm:w-1/2">
@@ -139,6 +140,7 @@
             <p>Are you sure that you want to delete the {{ entry_to_delete.listing_type }} entry from {{ entry_to_delete._from }} to {{ entry_to_delete._to }}?</p>
         </mg-modal>
     </div>
+</mg-page>
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';

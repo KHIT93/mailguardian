@@ -1,4 +1,5 @@
 <template>
+<mg-page>
   <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <div v-if="!user.is_staff">
@@ -47,6 +48,7 @@
             </div>
         </div>
   </div>
+</mg-page>
 </template>
 
 <script>

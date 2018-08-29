@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
         <div class="card p-2">
             <h2 class="font-normal text-center mb-2">MailScanner Configuration</h2>
@@ -49,6 +50,7 @@
             <mg-mailscanner-configuration-table :list="config" @next="next" @previous="previous" @saved="get(query, file)"></mg-mailscanner-configuration-table>
         </div>
     </div>
+</mg-page>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex';

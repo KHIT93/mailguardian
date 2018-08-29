@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div>
         <div class="sm:container mx-auto px-4">
             <div class="flex justify-between" v-if="page_count > 1">
@@ -61,6 +62,7 @@
             </div>
         </div>
     </div>
+</mg-page>
 </template>
 <script>
 import { mapMutations, mapGetters } from 'vuex';

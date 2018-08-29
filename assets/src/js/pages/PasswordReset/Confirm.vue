@@ -1,4 +1,5 @@
 <template>
+<mg-page>
     <div class="justify-center flex pt-8">
         <div class="w-full max-w-md">
             <form @submit.prevent="submit" class="bg-white shadow-md sm:rounded px-8 pt-6 pb-8 mb-4" method="POST">
@@ -40,6 +41,7 @@
             </form>
         </div>
     </div>
+</mg-page>
 </template>
 
 <script>
