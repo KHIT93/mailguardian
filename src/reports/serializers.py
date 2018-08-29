@@ -17,6 +17,9 @@ class MessageRelaysSerializer(serializers.Serializer):
 class MessagesPerHourSerializer(serializers.Serializer):
     timestamp = serializers.CharField(max_length=255)
     id__count = serializers.IntegerField()
+    is_spam_count = serializers.IntegerField()
+    size__sum = serializers.FloatField()
+    infected_count = serializers.IntegerField()
 
 class TopSendersByQuantitySerializer(serializers.Serializer):
     from_address = serializers.CharField(max_length=255)

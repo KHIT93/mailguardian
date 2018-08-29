@@ -2,6 +2,7 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="sm:flex">
             <div class="card min-w-full table-wrapper">
+                <mg-bar-chart :chart-data="chart" :height="200" />
                 <table class="table text-sm">
                     <thead>
                         <tr>
@@ -22,7 +23,6 @@
                             <td>{{ item.infected_count }} ({{ infected_pct(item) }}%)</td>
                             <td>{{ item.size__sum | byte_display }}</td>
                         </tr>
-                        <tr>
                         <tr class="font-extrabold border-t-2 text-base">
                             <td>Total ({{ dates.length }} days)</td>
                             <td>{{ messageTotalCount }}</td>
@@ -40,10 +40,18 @@
 <script>
 import { mapMutations, mapGetters } from 'vuex';
 import Form from '../../classes/Form';
+import BarChart from '../../components/BarChart.vue';
 export default {
+    components: {
+        'mg-bar-chart': BarChart
+    },
     data: () => {
         return {
             dates: [],
+            chart: {
+                labels: [],
+                datasets: []
+            }
         }
     },
     created() {
@@ -98,6 +106,26 @@ export default {
             this.setLoading(true);
             (new Form(this.activeFilters)).post('/api/reports/messages-by-date/').then(data => {
                 this.dates = data;
+                this.chart = {
+                    labels: this.dates.map(item => item.date),
+                    datasets: [
+                        {
+                            label: 'Clean',
+                            backgroundColor: '#3490DC',
+                            data: this.dates.map(item => this.clean_count(item))
+                        },
+                        {
+                            label: 'Spam',
+                            backgroundColor: '#F9ACAA',
+                            data: this.dates.map(item => item.is_spam_count)
+                        },
+                        {
+                            label: 'Infected',
+                            backgroundColor: '#E3342F',
+                            data: this.dates.map(item => item.infected_count)
+                        }
+                    ]
+                }
                 this.toggleLoading();
             }).catch(error => {
                 //Handle error

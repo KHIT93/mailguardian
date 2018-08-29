@@ -61,7 +61,7 @@ class MessagesPerHourApiView(APIView):
     def post(self, request, format=None):
         filters = request.data
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('timestamp').filter(timestamp__range=[datetime.datetime.now() - datetime.timedelta(days=1), datetime.datetime.now()]), filters, request.user)
-        serializer = MessagesPerHourSerializer(qs.annotate(Count('id')).order_by('-id__count')[:10], many=True)
+        serializer = MessagesPerHourSerializer(qs.annotate(Count('id')).annotate(is_spam_count=Count(Case(When(is_spam=True, then=1)))).annotate(Sum('size')).annotate(infected_count=Count(Case(When(infected=True, then=1)))).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSendersByQuantityApiView(APIView):
