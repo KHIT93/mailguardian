@@ -86,8 +86,8 @@ export default {
                 this.count = response.data.count;
                 this.current = response.data.current;
                 this.page_count = response.data.page_count;
-                this.next = response.data.next;
-                this.previous = response.data.previous;
+                this.next_link = response.data.next;
+                this.previous_link = response.data.previous;
                 this.setLoading(false);
             }).catch(error => {
                 this.setLoading(false);
