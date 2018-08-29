@@ -61,7 +61,8 @@
                 daily_spam: 0,
                 daily_virus: 0,
                 chart: {
-                    'labels': []
+                    labels: [],
+                    datasets: []
                 },
                 chartheight: 150,
                 interval: 'last_hour'
@@ -80,22 +81,22 @@
                     this.daily_virus = response.data.daily_virus;
                     this.chartdata = response.data.chart_data;
                     this.chart = {
-                        labels: this.chartdata.map(m => m[0]),
+                        labels: (this.chartdata.length) ? this.chartdata.map(m => m[0]) : [],
                         datasets: [
                             {
                                 label: 'Messages',
                                 backgroundColor: '#3490DC',
-                                data: this.chartdata.map(m => m[1])
+                                data: (this.chartdata.length) ? this.chartdata.map(m => m[1]) : []
                             },
                             {
                                 label: 'Viruses',
                                 backgroundColor: '#E3342F',
-                                data: this.chartdata.map(m => m[3])
+                                data: (this.chartdata.length) ? this.chartdata.map(m => m[3]) : []
                             },
                             {
                                 label: 'Spam',
                                 backgroundColor: '#F9ACAA',
-                                data: this.chartdata.map(m => m[2])
+                                data: (this.chartdata.length) ? this.chartdata.map(m => m[2]) : []
                             }
                         ]
                     }
