@@ -65,7 +65,7 @@
                     datasets: []
                 },
                 chartheight: 150,
-                interval: 'last_hour'
+                interval: 'last_hour',
             }
         },
         created() {
@@ -81,21 +81,27 @@
                     this.daily_virus = response.data.daily_virus;
                     this.chartdata = response.data.chart_data;
                     this.chart = {
-                        labels: (this.chartdata.length) ? this.chartdata.map(m => m[0]) : [],
+                        labels: (this.chartdata.length) ? this.chartdata.map(m => moment(m[0]).format('HH:mm')) : [],
                         datasets: [
                             {
                                 label: 'Messages',
                                 backgroundColor: '#3490DC',
+                                lineTension: 0,
+                                radius: 0,
                                 data: (this.chartdata.length) ? this.chartdata.map(m => m[1]) : []
                             },
                             {
                                 label: 'Viruses',
                                 backgroundColor: '#E3342F',
+                                lineTension: 0,
+                                radius: 0,
                                 data: (this.chartdata.length) ? this.chartdata.map(m => m[3]) : []
                             },
                             {
                                 label: 'Spam',
                                 backgroundColor: '#F9ACAA',
+                                lineTension: 0,
+                                radius: 0,
                                 data: (this.chartdata.length) ? this.chartdata.map(m => m[2]) : []
                             }
                         ]
