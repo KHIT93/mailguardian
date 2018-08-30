@@ -28,12 +28,19 @@ class MtaLogProcessor:
                     mta_match = re.findall(self.process, l)
                     if mta_match:
                         queue_id = mta_match[0][2]
+                        print(queue_id)
                         relay_host = re.findall(r"\[(\d+\.\d+\.\d+\.\d+)\]", l)
+                        print(relay_host)
                         delay = re.findall(self.delay, l)
+                        print(delay)
                         dsn = re.findall(r'dsn=(\d+\.\d+\.\d+)', l)
+                        print(dsn)
                         status = re.findall(self.status, l)
+                        print(status)
                         dsn_message = re.findall(r'\((.+)\)', l)
+                        print(dsn_message)
                         timestamp_match = re.findall(r'^(\S+)\s+(\d)\s+(\d+\:\d+\:\d+)', l)
+                        print(timestamp_match)
                         try:
                             message = Message.objects.filter(mailq_id=matches[queue_id]).first()
                             timestamp = datetime.datetime.strptime('{0} {1} {2} {3}'.format(timestamp_match[0][0], timestamp_match[0][1], message.timestamp.year, timestamp_match[0][2]), '%b %d %Y %H:%M:%S')
