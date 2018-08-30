@@ -140,6 +140,6 @@ const app = new Vue({
         ...mapMutations(['toggleLoading' ,'notify', 'setInitializing'])
     },
     computed: {
-        ...mapGetters(['loading', 'isLoggedIn', 'user'])
+        ...mapGetters(['loading', 'isLoggedIn', 'user', 'initializing'])
     }
 });

@@ -10,7 +10,7 @@
                 </circle>
             </svg>
         </div>
-        <slot v-show="!loading"></slot>
+        <div v-show="!loading"><slot></slot></div>
     </div>
 </template>
 <script>
