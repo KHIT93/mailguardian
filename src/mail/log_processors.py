@@ -34,13 +34,12 @@ class MtaLogProcessor:
                         status = re.findall(self.status, l)
                         dsn_message = re.findall(r'\((.+)\)', l)
                         timestamp_match = re.findall(r'^(\S+)\s+(\d)\s+(\d+\:\d+\:\d+)', l)
-                        print(timestamp_match)
                         try:
                             message = Message.objects.filter(mailq_id=matches[queue_id]).first()
                             timestamp = datetime.datetime.strptime('{0} {1} {2} {3}'.format(timestamp_match[0][0], timestamp_match[0][1], message.timestamp.year, timestamp_match[0][2]), '%b %d %Y %H:%M:%S')
                             obj, created = TransportLog.objects.update_or_create(message=message, timestamp=str(timestamp), relay_host=relay_host[0], delay=delay[0], transport_host=settings.APP_HOSTNAME, dsn=dsn[0], dsn_message=dsn_message[0])
                         except Exception as e:
-                            pass
+                            print(e)
                     # Clean up
                     current_id = None
                     new_id = None
