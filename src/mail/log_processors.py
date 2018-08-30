@@ -39,7 +39,7 @@ class MtaLogProcessor:
                         print(status)
                         dsn_message = re.findall(r'\((.+)\)', l)
                         print(dsn_message)
-                        timestamp_match = re.findall(r'^(\S+)\s+(\d)\s+(\d+\:\d+\:\d+)', l)
+                        timestamp_match = re.findall(r'^(\S+)\s(\d+)\s(\d+\:\d+\:\d+)', l)
                         print(timestamp_match)
                         try:
                             message = Message.objects.filter(mailq_id=matches[queue_id]).first()
