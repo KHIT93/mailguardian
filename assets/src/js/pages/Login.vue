@@ -79,6 +79,7 @@
                 this.login_notifications = response.data;
             }).catch(error => {
             });
+            this.setInitializing(false);
         },
         mounted() {
             if(this.isLoggedIn) {
@@ -98,7 +99,7 @@
                     this.loading = false;
                 })
             },
-            ...mapMutations(['setLoading'])
+            ...mapMutations(['setLoading', 'setInitializing'])
         }
     }
 </script>
