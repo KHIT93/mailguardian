@@ -141,7 +141,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         sender = Setting.objects.get(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
-                message = Message.objects.first(id=message_id)
+                message = Message.objects.get(id=message_id)
                 if message.released:
                     response.append({'id': message_id, 'error': 'This message has already been released'})
                 elif settings.APP_HOSTNAME == message.mailscanner_hostname:
@@ -151,8 +151,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                     message.save()
                     response.append({ 'id':message_id, 'command': command, 'output': output })
                 elif not settings.API_ONLY:
-                    token = Token.objects.first(user=request.user)
-                    host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                    token = Token.objects.get(user=request.user)
+                    host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
                     protocol = 'https' if host.use_tls else 'http'
                     url = '{0}://{1}/api/messages/release/'.format(protocol, host.hostname)
                     headers = {
@@ -185,14 +185,14 @@ class MessageViewSet(viewsets.ModelViewSet):
         sender = Setting.objects.get(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
-                message = Message.objects.first(id=message_id)
+                message = Message.objects.get(id=message_id)
                 if settings.APP_HOSTNAME == message.mailscanner_hostname:
                     command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
                     output = subprocess.check_output(command, shell=True)
                     response.append({ 'id':message_id, 'command': command, 'output': output })
                 elif not settings.API_ONLY:
-                    token = Token.objects.first(user=request.user)
-                    host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                    token = Token.objects.get(user=request.user)
+                    host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
                     protocol = 'https' if host.use_tls else 'http'
                     url = '{0}://{1}/api/messages/mark-spam/'.format(protocol, host.hostname)
                     headers = {
@@ -223,14 +223,14 @@ class MessageViewSet(viewsets.ModelViewSet):
         sender = Setting.objects.get(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
-                message = Message.objects.first(id=message_id)
+                message = Message.objects.get(id=message_id)
                 if settings.APP_HOSTNAME == message.mailscanner_hostname:
                     command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
                     output = subprocess.check_output(command, shell=True)
                     response.append({ 'id':message_id, 'command': command, 'output': output })
                 elif not settings.API_ONLY:
-                    token = Token.objects.first(user=request.user)
-                    host = MailScannerHost.objects.first(hostname=message.mailscanner_hostname)
+                    token = Token.objects.get(user=request.user)
+                    host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
                     protocol = 'https' if host.use_tls else 'http'
                     url = '{0}://{1}/api/messages/mark-spam/'.format(protocol, host.hostname)
                     headers = {
