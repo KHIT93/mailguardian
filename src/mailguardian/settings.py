@@ -30,7 +30,7 @@ SECRET_KEY = MAILGUARDIAN_ENV.get('app_key', get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILGUARDIAN_ENV.get("debug", False)
 APP_HOSTNAME = MAILGUARDIAN_ENV.get("hostname", None)
-APP_VERSION = '1.1.0'
+APP_VERSION = '1.1.1'
 ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
 
 
