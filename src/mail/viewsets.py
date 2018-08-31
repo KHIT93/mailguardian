@@ -13,7 +13,7 @@ from core.models import Setting, MailScannerHost
 import datetime
 from django.db.models import Q
 import subprocess
-import requests, json
+import requests, json, types
 from rest_framework.authtoken.models import Token
 
 class MessageViewSet(viewsets.ModelViewSet):
@@ -139,6 +139,11 @@ class MessageViewSet(viewsets.ModelViewSet):
         
         response = []
         sender = Setting.objects.get(key='mail.release.sender')
+        recv_messages = []
+        if isinstance(request.data['messages'], list):
+            recv_messages = request.data['messages']
+        elif isinstance(request.data['message'], types.StringType):
+            recv_messages.append(request.data['messages'])
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.get(id=message_id)
@@ -159,8 +164,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                         'Content-Type' : 'application/json',
                         'Authorization' : 'Token {0}'.format(token.key)
                     }
-                    result = requests.post(url, data=[message_id], headers=headers)
-                    data = json.loads(result.content.decode('utf-8'))
+                    result = requests.post(url, json={ "messages": [message_id]}, headers=headers)
+                    data = result.json()
                     if 'error' in data:
                         response.append({'id': data.id, 'error': data.error})
                     else:
@@ -199,8 +204,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                         'Content-Type' : 'application/json',
                         'Authorization' : 'Token {0}'.format(token.key)
                     }
-                    result = requests.post(url, data=[message_id], headers=headers)
-                    data = json.loads(result.content.decode('utf-8'))
+                    result = requests.post(url, json={ "messages": [message_id]}, headers=headers)
+                    data = result.json()
                     if 'error' in data:
                         response.append({'id': data.id, 'error': data.error})
                     else:
@@ -237,8 +242,8 @@ class MessageViewSet(viewsets.ModelViewSet):
                         'Content-Type' : 'application/json',
                         'Authorization' : 'Token {0}'.format(token.key)
                     }
-                    result = requests.post(url, data={ messages: [message_id]}, headers=headers)
-                    data = json.loads(result.content.decode('utf-8'))
+                    result = requests.post(url, json={ "messages": [message_id]}, headers=headers)
+                    data = result.json()
                     if 'error' in data:
                         response.append({'id': data.id, 'error': data.error})
                     else:
