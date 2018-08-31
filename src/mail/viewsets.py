@@ -138,7 +138,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
         
         response = []
-        sender = Setting.objects.first(key='mail.release.sender')
+        sender = Setting.objects.get(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.first(id=message_id)
@@ -182,7 +182,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         # recipient or an alternate recipient
         # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
         response = []
-        sender = Setting.objects.first(key='mail.release.sender')
+        sender = Setting.objects.get(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.first(id=message_id)
@@ -220,7 +220,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         # recipient or an alternate recipient
         # sendmail -i -f REPLY_TO_ADDRESS TO_ADDRESS < FILEPATH_TO_MESSAGE 2>&1
         response = []
-        sender = Setting.objects.first(key='mail.release.sender')
+        sender = Setting.objects.get(key='mail.release.sender')
         for message_id in request.data['messages']:
             try:
                 message = Message.objects.first(id=message_id)
