@@ -6,7 +6,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from email.message import EmailMessage
+from email import policy
+from email.parser import BytesParser
 from pymailq.store import PostqueueStore
 from django.conf import settings
 from core.models import Setting, MailScannerHost
@@ -36,14 +37,46 @@ class MessageViewSet(viewsets.ModelViewSet):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         data = { 'message_id':message.id, 'mailq_id': message.mailq_id, 'message_contents': None }
         if message.queue_file_exists():
-            f = open(message.file_path())
-            m = EmailMessage()
-            m.set_content(f.read())
-            data['message_contents'] = m
-            f.close()
-        
-        serializer = MessageContentsSerializer(data)
-        return Response(serializer.data)
+            data = None
+            if message.mailscanner_hostname != settings.APP_HOSTNAME:
+                token = Token.objects.get(user=request.user)
+                host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
+                protocol = 'https' if host.use_tls else 'http'
+                url = '{0}://{1}/api/messages/{2}/contents/'.format(protocol, host.hostname, pk)
+                headers = {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : 'Token {0}'.format(token.key)
+                }
+                result = requests.get(url, headers=headers)
+                data = json.loads(result.content.decode('utf-8'))
+            else:
+                m = None
+                data = {
+                    'message': {
+                    'message_id': message.id,
+                    'mailq_id': message.mailq_id
+                    }
+                }
+                with open(message.file_path()) as fp:
+                    m = BytesParser(policy=policy.default).parse(fp)
+                simplest = m.get_body(preferencelist=('plain', 'html'))
+                richest = m.get_body()
+                data['message']['simple_type'] = "{0}/{1}".format(simplest['content-type'].maintype, simplest['content-type'].subtype)
+                data['message']['rich_type'] = "{0}/{1}".format(richest['content-type'].maintype, richest['content-type'].subtype)
+                if simplest['content-type'].subtype == 'html':
+                    data['message']['simple_version'] = ''
+                else:
+                    data['message']['simple_version'] = simplest
+                if richest['content-type'].subtype == 'html':
+                    data['message']['rich_version'] = richest
+                elif richest['content-type'].content_type == 'multipart/related':
+                    data['message']['rich_version'] = richest.get_body(preferencelist=('html'))
+                    data['message']['attachments'] = []
+                    for part in richest.iter_attachments():
+                        data['message']['attachments'].append(part.get_filename())
+                else:
+                    data['message']['rich_version'] = 'Preview unavailable'
+        return Response(data)
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='file-exists', url_name='message-queue-file-exists')
     def get_file_exists(self, request, pk=None):
