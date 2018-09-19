@@ -448,9 +448,7 @@ export default {
             });
         },
         showMessage() {
-            this.getMessageContents().then(() => {
-                this.show_modal = true;
-            })
+            router.push('/messages/'+this.uuid+'/content');
         },
         async getMessageContents() {
             if (this.message.queue_file_exists) {
