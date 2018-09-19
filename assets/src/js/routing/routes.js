@@ -115,9 +115,13 @@ export default [
     /** Routing for initial setup wizard */
     { path: '/setup', component: SetupIndex, name: 'setup.index' },
 
-    /** Route to handle 'Access Denied' errors */
-    { path: '/403', component: AccessDenied, name: 'access_denied' },
     
     /** Catchall route to display 404 page */
-    { path: '*', component: NotFound, name: 'not_found' }
+    { path: '*', component: NotFound, name: 'not_found' },
+
+    /** Catchall route to display 404 page */
+    { path: '*', component: NotFound, name: 'tech_error' },
+
+    /** Route to handle 'Access Denied' errors */
+    { path: '*', component: AccessDenied, name: 'access_denied' }
 ]
