@@ -45,12 +45,14 @@ window.axios.interceptors.response.use(response => {
         console.log('Response for previous request to ' + response.request.responseURL + ': ', response);
     }
     return response;
-}, error => {
-    if (!error.status)
-    {
-        console.log('Network or connection error. Showing error page')
-    }
-});
+}
+// ,error => {
+//     if (!error.status)
+//     {
+//         console.log('Network or connection error. Showing error page')
+//     }
+// }
+);
 
  /**
   * Debug code for logging AJAX calls to the console
