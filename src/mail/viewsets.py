@@ -200,9 +200,9 @@ class MessageViewSet(viewsets.ModelViewSet):
                     result = requests.post(url, json={ "messages": [message_id]}, headers=headers)
                     data = result.json()
                     if 'error' in data:
-                        response.append({'id': data.id, 'error': data.error})
+                        response.append({'id': data.result[0].id, 'error': data.result[0].error})
                     else:
-                        response.append({'id': data.id, 'command': data.command, 'output': data.output})
+                        response.append({'id': data.result[0].id, 'command': data.result[0].command, 'output': data.result[0].output})
                 else:
                     response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
             except Exception as e:
@@ -240,9 +240,9 @@ class MessageViewSet(viewsets.ModelViewSet):
                     result = requests.post(url, json={ "messages": [message_id]}, headers=headers)
                     data = result.json()
                     if 'error' in data:
-                        response.append({'id': data.id, 'error': data.error})
+                        response.append({'id': data.result[0].id, 'error': data.result[0].error})
                     else:
-                        response.append({'id': data.id, 'command': data.command, 'output': data.output})
+                        response.append({'id': data.result[0].id, 'command': data.result[0].command, 'output': data.result[0].output})
                 else:
                     response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
             except Exception as e:
@@ -278,9 +278,9 @@ class MessageViewSet(viewsets.ModelViewSet):
                     result = requests.post(url, json={ "messages": [message_id]}, headers=headers)
                     data = result.json()
                     if 'error' in data:
-                        response.append({'id': data.id, 'error': data.error})
+                        response.append({'id': data.result[0].id, 'error': data.result[0].error})
                     else:
-                        response.append({'id': data.id, 'command': data.command, 'output': data.output})
+                        response.append({'id': data.result[0].id, 'command': data.result[0].command, 'output': data.result[0].output})
                 else:
                     response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
             except Exception as e:
