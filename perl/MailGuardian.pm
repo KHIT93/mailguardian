@@ -71,23 +71,27 @@ my ($db_user) = MailGuardian_get_db_user();
 my ($db_pass) = MailGuardian_get_db_password();
 
 sub InitMailGuardianLogging {
-    my $pid = fork();
-    if ($pid) {
-        # MailScanner child process
-        waitpid $pid, 0;
-        MailScanner::Log::InfoLog("MailGuardian: Started MailGuardian SQL Logging child");
-    } else {
-        # New process
-        # Detach from parent, make connections, and listen for requests
-        POSIX::setsid();
-        if (!fork()) {
-            $SIG{HUP} = $SIG{INT} = $SIG{PIPE} = $SIG{TERM} = $SIG{ALRM} = \&ExitLogging;
-            alarm $timeout;
-            $0 = "MailGuardian SQL";
-            InitConnection();
-            ListenForMessages();
-        }
+    # Detect if MailScanner Milter is calling this custom function and do not spawn
+    # MSMilter uses the blacklists and whitelists, but not the logger
+    if ($0 !~ /MSMilter/) {
+        my $pid = fork();
+        if ($pid) {
+            # MailScanner child process
+            waitpid $pid, 0;
+            MailScanner::Log::InfoLog("MailWatch: Started MailGuardian SQL Logging child");
+        } else {
+            # New process
+            # Detach from parent, make connections, and listen for requests
+            POSIX::setsid();
+            if (!fork()) {
+                $SIG{HUP} = $SIG{INT} = $SIG{PIPE} = $SIG{TERM} = $SIG{ALRM} = \&ExitLogging;
+                alarm $timeout;
+                $0 = "MailGuardian SQL";
+                InitConnection();
+                ListenForMessages();
+            }
         exit;
+        }
     }
 }
 
