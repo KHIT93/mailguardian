@@ -92,11 +92,11 @@ export default {
             return window.moment(str);
         },
         next() {
-            page = this.next_link.split("?page=")[1];
+            let page = this.next_link.split("?page=")[1];
             this.get(this.search, page);
         },
         previous() {
-            page = this.previous_link.split("?page=")[1];
+            let page = this.previous_link.split("?page=")[1];
             this.get(this.search, page);
         },
         edit(id) {

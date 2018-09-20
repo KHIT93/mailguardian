@@ -58,7 +58,9 @@ export default {
             count: 0,
             search: null,
             current: 1,
-            page_count: 1
+            page_count: 1,
+            next_link: '',
+            prev_link: '',
         }
     },
     created() {
@@ -83,6 +85,8 @@ export default {
             axios.get('/api/hosts/'+qs).then(response => {
                 this.hosts = response.data.results;
                 this.count = response.data.count;
+                this.next_link = response.data.next;
+                this.prev_link = response.data.previous;
                 this.current = response.data.current;
                 this.page_count = response.data.page_count;
                 this.setLoading(false);
@@ -94,11 +98,11 @@ export default {
             return window.moment(str);
         },
         next() {
-            page = this.hosts.next.split("?page=")[1];
+            let page = this.next_link.split("?page=")[1];
             this.get(this.search, page);
         },
         previous() {
-            page = this.hosts.previous.split("?page=")[1];
+            let page = this.prev_link.split("?page=")[1];
             this.get(this.search, page);
         },
         edit(id) {

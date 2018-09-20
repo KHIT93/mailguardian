@@ -68,7 +68,9 @@ export default {
             count: 0,
             search: null,
             current: 1,
-            page_count: 1
+            page_count: 1,
+            next_Link: '',
+            prev_link: '',
         }
     },
     created() {
@@ -96,6 +98,8 @@ export default {
                 if (this.users.filter(u => u.email === "AnonymousUser")) {
                     this.users = this.users.filter(u => u.email !== "AnonymousUser");
                 }
+                this.next_Link = response.data.next;
+                this.prev_link = response.data.previous;
                 this.count = response.data.count;
                 this.current = response.data.current;
                 this.page_count = response.data.page_count;
@@ -109,11 +113,11 @@ export default {
             return window.moment(str);
         },
         next() {
-            page = this.users.next.split("?page=")[1];
+            let page = this.next_Link.split("?page=")[1];
             this.get(this.search, page);
         },
         previous() {
-            page = this.users.previous.split("?page=")[1];
+            let page = this.prev_link.split("?page=")[1];
             this.get(this.search, page);
         },
         edit(id) {
