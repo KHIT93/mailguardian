@@ -231,8 +231,8 @@ export default {
                 this.setLoading(false);
             });
         },
-        submit() {
-            this.form.domains = this.form.domains.map(domain => domain.url);
+        async submit() {
+            this.form.domains = await this.form.domains.map(domain => domain.url);
             if (this.id) {
                 this.update();
             }
