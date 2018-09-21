@@ -36,46 +36,49 @@ class MessageViewSet(viewsets.ModelViewSet):
     def get_message_contents(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         data = { 'message_id':message.id, 'mailq_id': message.mailq_id, 'message_contents': None }
-        if message.queue_file_exists():
-            data = None
-            if message.mailscanner_hostname != settings.APP_HOSTNAME:
-                token = Token.objects.get(user=request.user)
-                host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
-                protocol = 'https' if host.use_tls else 'http'
-                url = '{0}://{1}/api/messages/{2}/contents/'.format(protocol, host.hostname, pk)
-                headers = {
-                    'Content-Type' : 'application/json',
-                    'Authorization' : 'Token {0}'.format(token.key)
+        if message.mailscanner_hostname != settings.APP_HOSTNAME:
+            token = Token.objects.get(user=request.user)
+            host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
+            protocol = 'https' if host.use_tls else 'http'
+            url = '{0}://{1}/api/messages/{2}/contents/'.format(protocol, host.hostname, pk)
+            headers = {
+                'Content-Type' : 'application/json',
+                'Authorization' : 'Token {0}'.format(token.key)
+            }
+            result = requests.get(url, headers=headers)
+            print(result)
+            if result.status_code == 404:
+                return Response({}, status.HTTP_404_NOT_FOUND)
+            data = result.json()
+        else:
+            if not message.queue_file_exists():
+                return Response({}, status.HTTP_404_NOT_FOUND)
+            m = None
+            data = {
+                'message': {
+                'message_id': message.id,
+                'mailq_id': message.mailq_id
                 }
-                result = requests.get(url, headers=headers)
-                data = json.loads(result.content.decode('utf-8'))
+            }
+            with open(message.file_path(), 'rb') as fp:
+                m = BytesParser(policy=policy.default).parse(fp)
+            simplest = m.get_body(preferencelist=('plain', 'html'))
+            richest = m.get_body()
+            data['message']['simple_type'] = "{0}/{1}".format(simplest['content-type'].maintype, simplest['content-type'].subtype)
+            data['message']['rich_type'] = "{0}/{1}".format(richest['content-type'].maintype, richest['content-type'].subtype)
+            if simplest['content-type'].subtype == 'html':
+                data['message']['simple_version'] = ''
             else:
-                m = None
-                data = {
-                    'message': {
-                    'message_id': message.id,
-                    'mailq_id': message.mailq_id
-                    }
-                }
-                with open(message.file_path()) as fp:
-                    m = BytesParser(policy=policy.default).parse(fp)
-                simplest = m.get_body(preferencelist=('plain', 'html'))
-                richest = m.get_body()
-                data['message']['simple_type'] = "{0}/{1}".format(simplest['content-type'].maintype, simplest['content-type'].subtype)
-                data['message']['rich_type'] = "{0}/{1}".format(richest['content-type'].maintype, richest['content-type'].subtype)
-                if simplest['content-type'].subtype == 'html':
-                    data['message']['simple_version'] = ''
-                else:
-                    data['message']['simple_version'] = simplest
-                if richest['content-type'].subtype == 'html':
-                    data['message']['rich_version'] = richest
-                elif richest['content-type'].content_type == 'multipart/related':
-                    data['message']['rich_version'] = richest.get_body(preferencelist=('html'))
-                    data['message']['attachments'] = []
-                    for part in richest.iter_attachments():
-                        data['message']['attachments'].append(part.get_filename())
-                else:
-                    data['message']['rich_version'] = 'Preview unavailable'
+                data['message']['simple_version'] = simplest
+            if richest['content-type'].subtype == 'html':
+                data['message']['rich_version'] = richest
+            elif richest['content-type'].content_type == 'multipart/related':
+                data['message']['rich_version'] = richest.get_body(preferencelist=('html'))
+                data['message']['attachments'] = []
+                for part in richest.iter_attachments():
+                    data['message']['attachments'].append(part.get_filename())
+            else:
+                data['message']['rich_version'] = 'Preview unavailable'
         return Response(data)
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='file-exists', url_name='message-queue-file-exists')
