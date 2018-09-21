@@ -73,7 +73,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             if richest['content-type'].subtype == 'html':
                 data['message']['rich_version'] = richest
             elif richest['content-type'].content_type == 'multipart/related':
-                data['message']['rich_version'] = richest.get_body(preferencelist=('html'))
+                data['message']['rich_version'] = richest.get_body(preferencelist=('html')).get_content()
                 data['message']['attachments'] = []
                 for part in richest.iter_attachments():
                     data['message']['attachments'].append(part.get_filename())
