@@ -21,11 +21,11 @@
             </div>
             <div class="card p-2" v-if="content.simple_version != ''">
                 <p class="border-b">Simplied message ({{ content.simple_type }})</p>
-                <div v-text="content.simple_version"/>
+                <div class="p-2" v-text="content.simple_version"/>
             </div>
             <div class="card p-2" v-if="content.rich_version != ''">
                 <p class="border-b">Full message ({{ content.rich_type }})</p>
-                <div v-html="content.rich_version"/>
+                <div class="p-2" v-html="content.rich_version"/>
             </div>
 
             <div class="card p-2" v-if="content.attachments">
@@ -50,6 +50,7 @@ export default {
     },
     created() {
         this.getQueueFileStatus().then(() => {
+            this.setLoading(true);
             if (!this.file_exists) {
                 router.push({ name: 'not_found' });
             }
@@ -61,10 +62,13 @@ export default {
     },
     methods: {
         get() {
-            if (this.message.queue_file_exists) {
+            this.setLoading(true);
+            if (this.file_exists) {
                 axios.get('/api/messages/' + this.uuid + '/contents/').then(response => {
                     this.content = response.data.message;
+                    this.setLoading(false);
                 }).catch(error => {
+                    this.setLoading(false);
                     if (error.response.status !== 404) {
                         this.notify(this.createNotification('An error occurred while getting the message contents', `${error}`, 'error'));
                     }
@@ -75,9 +79,12 @@ export default {
             }
         },
         getMessage() {
+            this.setLoading(true);
             axios.get('/api/messages/' + this.uuid + '/').then(response => {
                 this.message = response.data;
+                this.setLoading(false);
             }).catch(error => {
+                this.setLoading(false);
                 if (error.response.status == 404) {
                     router.push({ name: 'not_found' });
                 }
@@ -87,15 +94,19 @@ export default {
             })
         },
         getQueueFileStatus() {
-            axios.get('/api/messages/'+this.uuid+'/file-exists/').then(response => {
-                this.file_exists = response.data.file_exists;
-            }).catch(error => {
-                console.log(error.response);
+            return new Promise((resolve, reject) => {
+                axios.get('/api/messages/'+this.uuid+'/file-exists/').then(response => {
+                    this.file_exists = response.data.file_exists;
+                    resolve();
+                }).catch(error => {
+                    console.log(error.response);
+                    reject();
+                });
             });
         },
         goback() {
             router.push('/messages/'+this.uuid);
-        }
+        },
         ...mapMutations(['notify', 'toggleLoading', 'setLoading'])
     }
 }
