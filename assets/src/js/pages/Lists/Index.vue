@@ -163,8 +163,8 @@ export default {
             listing_choice_from: '',
             listing_choice_to: '',
             form: new Form({
-                from_address: this.from_address,
-                to_address: this.to_address,
+                from_address: '',
+                to_address: '',
                 listing_type: ''
             }),
             from_ip_address: '',
@@ -181,21 +181,17 @@ export default {
     computed: {
         from_address() {
             if (this.from_ip_address && this.from_ip_address != '') {
-                this.form.from_address = this.from_ip_address;
                 return this.from_ip_address;
             }
             else {
-                this.form.from_address = this.from + '@' + this.from_domain;
                 return this.from + '@' + this.from_domain;
             }
         },
         to_address() {
             if (this.to_ip_address && this.to_ip_address != '') {
-                this.form.to_address = this.to_ip_address;
                 return this.to_ip_address;
             }
             else {
-                this.form.to_address = this.to + '@' + this.to_domain;
                 return this.to + '@' + this.to_domain;
             }
         },
@@ -256,7 +252,9 @@ export default {
             this.form.listing_type = 'whitelisted'
             this.show_modal = true;
         },
-        submit_list() {
+        async submit_list() {
+            this.form.from_address = this.from_address;
+            this.form.to_address = this.to_address;
             this.toggleLoading();
             this.form.post('/api/lists/').then(() => {
                 this.toggleLoading();
