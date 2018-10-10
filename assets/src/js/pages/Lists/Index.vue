@@ -41,12 +41,6 @@
                 <mg-lists-table :list="blacklist" @next="next_blacklist" @previous="previous_blacklist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
         </div>
-        <mg-modal @close="delete_entry_no" @submit="delete_entry" submit-button-text="Yes" close-button-text="No" :show="delete_modal" modal-title="Delete entry?">
-            <p>Are you sure that you want to delete the {{ entry_to_delete.listing_type }} entry from {{ entry_to_delete._from }} to {{ entry_to_delete._to }}?</p>
-        </mg-modal>
-        <!-- <modal name="listentry-modal">
-            <mg-listentry-form :listing-type="form.listing_type" />
-        </modal> -->
     </div>
 </mg-page>
 </template>
@@ -143,28 +137,33 @@ export default {
                 height: 'auto'
             });
         },
-        delete_entry_modal(item) {
-            console.log(item);
-            this.entry_to_delete = item;
-            this.delete_modal = true;
-        },
-        delete_entry() {
-            this.setLoading(true);
-            axios.delete('/api/lists/'+this.entry_to_delete.id+'/').then(response => {
-                this.toggleLoading();
-                this.entry_to_delete = {};
-                this.delete_modal = false;
-                this.get();
-            }).catch(error => {
-                this.toggleLoading();
-                this.entry_to_delete = {};
-                this.delete_modal = false;
-            });
-        },
-        delete_entry_no() {
-            this.entry_to_delete = {};
-            this.delete_modal = false;
-        },
+    delete_entry_modal(item) {
+        this.$modal.show('dialog', {
+            title: 'Delete entry?',
+            text: `Are you sure that you want to delete the ${item.listing_type} entry from ${item.from_address} to ${item.to_address }@${item.to_domain}?`,
+            buttons: [
+                {
+                    title: 'Yes',
+                    handler: () => {
+                        this.setLoading(true);
+                        axios.delete('/api/lists/'+item.id+'/').then(response => {
+                            this.setLoading(false);
+                            this.notify(this.createNotification('Entry deleted', `The ${item.listing_type} entry from ${item.from_address} to ${item.to_address }@${item.to_domain} has been deleted`, 'success'));
+                        }).catch(error => {
+                            this.setLoading(false);
+                            this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                        });
+                        this.$modal.hide('dialog');
+                        this.get(this.search_query);
+                    },
+                    default: true
+                },
+                {
+                    title: 'No'
+                }
+            ]
+        });
+    },
         next_whitelist(event) {
             let page = 0;
             page = this.whitelist.next.split("?page=")[1];
@@ -185,7 +184,7 @@ export default {
             page = this.blacklist.previous.split("?page=")[1];
             this.get_blacklist(this.search_query, page);
         },
-        ...mapMutations(['toggleLoading', 'setLoading'])
+        ...mapMutations(['toggleLoading', 'setLoading', 'notify'])
     }
 }
 </script>

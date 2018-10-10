@@ -141,15 +141,30 @@ export default {
             });
         },
         destroy() {
-            this.setLoading(true);
-            this.form.delete('/api/hosts/'+this.entity.id+'/').then(data => {
-                console.log(data);
-                this.notify(this.createNotification('Host deleted', `The Host ${data.name} has been deleted`, 'success'));
-                this.setLoading(false);
-                router.push('/admin/hosts');
-            }).catch(error => {
-                this.setLoading(false);
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show('dialog', {
+                title: 'Delete host?',
+                text: `Are you sure that you want to delete ${this.entity.name}?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            this.setLoading(true);
+                            this.form.delete('/api/hosts/'+this.entity.id+'/').then(data => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('Host deleted', `The Host ${this.entity.name} has been deleted`, 'success'));
+                            }).catch(error => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                            router.push('/admin/hosts');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
             });
         },
         ...mapMutations(['notify', 'setLoading'])

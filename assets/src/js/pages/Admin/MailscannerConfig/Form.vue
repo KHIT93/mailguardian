@@ -147,15 +147,30 @@ export default {
             });
         },
         destroy() {
-            this.setLoading(true);
-            this.form.delete('/api/mailscanner-configuration/'+this.entity.id+'/').then(data => {
-                console.log(data);
-                this.notify(this.createNotification('Configuration option deleted', `The configuration option ${data.key} has been deleted`, 'success'));
-                this.setLoading(false);
-                router.push('/admin/mailscanner-configuration');
-            }).catch(error => {
-                this.setLoading(false);
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show('dialog', {
+                title: 'Delete configuration option?',
+                text: `Are you sure that you want to delete ${this.entity.key}?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            this.setLoading(true);
+                            this.form.delete('/api/mailscanner-configuration/'+this.entity.id+'/').then(data => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('Configuration option deleted', `The configuration option ${this.entity.key} has been deleted`, 'success'));
+                            }).catch(error => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                            router.push('/admin/mailscanner-configuration');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
             });
         },
         ...mapMutations(['notify', 'setLoading'])

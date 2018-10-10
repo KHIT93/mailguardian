@@ -265,15 +265,30 @@ export default {
             });
         },
         destroy() {
-            this.setLoading(true);
-            this.form.delete('/api/users/'+this.entity.id+'/').then(data => {
-                console.log(data);
-                this.notify(this.createNotification('User deleted', `The user ${this.entity.email} has been deleted`, 'success'));
-                this.setLoading(false);
-                router.push('/admin/users');
-            }).catch(error => {
-                this.setLoading(false);
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show('dialog', {
+                title: 'Delete user?',
+                text: `Are you sure that you want to delete ${this.entity.email}?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            this.setLoading(true);
+                            this.form.delete('/api/users/'+this.entity.id+'/').then(data => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('User deleted', `The user ${this.entity.email} has been deleted`, 'success'));
+                            }).catch(error => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                            router.push('/admin/users');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
             });
         },
         addDomain(domain) {

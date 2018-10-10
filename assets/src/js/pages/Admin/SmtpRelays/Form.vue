@@ -141,15 +141,30 @@ export default {
             });
         },
         destroy() {
-            this.setLoading(true);
-            this.form.delete('/api/smtp-relays/'+this.entity.id+'/').then(data => {
-                console.log(data);
-                this.notify(this.createNotification('Relay deleted', `The Relay ${data.ip_address} has been deleted`, 'success'));
-                this.setLoading(false);
-                router.push('/admin/smtp-relays');
-            }).catch(error => {
-                this.setLoading(false);
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show('dialog', {
+                title: 'Delete relay?',
+                text: `Are you sure that you want to delete ${this.entity.ip_address} from the list of hosts that are allowed to send email through us?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            this.setLoading(true);
+                            this.form.delete('/api/smtp-relays/'+this.entity.id+'/').then(data => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('Relay deleted', `The Relay ${this.entity.ip_address} has been deleted`, 'success'));
+                            }).catch(error => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                            router.push('/admin/smtp-relays');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
             });
         },
         ...mapMutations(['notify', 'setLoading'])

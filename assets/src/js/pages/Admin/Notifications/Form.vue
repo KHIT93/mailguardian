@@ -163,15 +163,30 @@ export default {
             });
         },
         destroy() {
-            this.setLoading(true);
-            this.form.delete('/api/notifications/'+this.entity.id+'/').then(data => {
-                console.log(data);
-                this.notify(this.createNotification('Notification deleted', `The notification ${data.title} has been deleted`, 'success'));
-                this.setLoading(false);
-                router.push('/admin/notifications');
-            }).catch(error => {
-                this.setLoading(false);
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show('dialog', {
+                title: 'Delete notification?',
+                text: `Are you sure that you want to remove this notification?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            this.setLoading(true);
+                            this.form.delete('/api/notifications/'+this.entity.id+'/').then(data => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('Notification deleted', `The notification ${this.entity.title} has been deleted`, 'success'));
+                            }).catch(error => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                            router.push('/admin/notifications');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
             });
         },
         ...mapMutations(['notify', 'setLoading'])

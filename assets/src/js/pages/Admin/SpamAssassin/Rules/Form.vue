@@ -139,15 +139,30 @@ export default {
             });
         },
         destroy() {
-            this.setLoading(true);
-            this.form.delete('/api/sa-rules/'+this.entity.id+'/').then(data => {
-                console.log(data);
-                this.notify(this.createNotification('SpamAssassin Rule deleted', `The SpamAssassin Rule ${data.name} has been deleted`, 'success'));
-                this.setLoading(false);
-                router.push('/admin/spamassassin/rules');
-            }).catch(error => {
-                this.setLoading(false);
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show('dialog', {
+                title: 'Delete rule?',
+                text: `Are you sure that you want to delete the ${this.entity.name} rule?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            this.setLoading(true);
+                            this.form.delete('/api/sa-rules/'+this.entity.id+'/').then(data => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('SpamAssassin Rule deleted', `The SpamAssassin Rule ${data.name} has been deleted`, 'success'));
+                            }).catch(error => {
+                                this.setLoading(false);
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                            router.push('/admin/spamassassin/rules');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
             });
         },
         ...mapMutations(['notify', 'setLoading'])
