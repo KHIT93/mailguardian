@@ -3,23 +3,46 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <div v-if="user.is_staff">
-                <h2 class="border-b p-1">Admin tools</h2>
-                <ul class="border-b pt-2 pb-3">
-                    <li><router-link to="/tools/mailqueue">View mail queue</router-link></li>
-                    <!-- <li>Clear mail queue</li> -->
-                    <li><router-link to="/tools/tasks">View task queue</router-link></li>
-                    <!-- <li>Clam AV Status</li> -->
-                    <!-- <li>GeoIP update status</li> -->
-                    <li><router-link to="/tools/sa-status">SpamAssassin rules status</router-link></li>
-                    <li><router-link to="/tools/app-updates">Application update status</router-link></li>
-                </ul>
+                <h2 class="p-1 font-hairline text-grey-darkest">Admin tools</h2>
+                <router-link class="block border-t px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/mailqueue">
+                    View mail queue<br/>
+                    <span class=" text-xs text-grey-dark">View the current messages in the mailqueue</span>
+                </router-link>
+                <!-- <router-link class="block border-t px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/mailqueue">
+                    Clear mail queue<br/>
+                    <span class=" text-xs text-grey-dark">Remove all messages from the mailqueue</span>
+                </router-link> -->
+                <router-link class="block border-t px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/tasks">
+                    View task queue<br/>
+                    <span class=" text-xs text-grey-dark">View the current queue of application tasks</span>
+                </router-link>
+                <!-- <router-link class="block border-t px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/tasks">
+                    ClamAV status<br/>
+                    <span class=" text-xs text-grey-dark">View the status of the ClamAV virus scanner engine/span>
+                </router-link> -->
+                <!-- <router-link class="block border-t px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/tasks">
+                    GeoIP update status<br/>
+                    <span class=" text-xs text-grey-dark">View the current state of the GeoIP database used to find out from which countries, that the given IP-addresses are located in</span>
+                </router-link> -->
+                <router-link class="block border-t px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/sa-status">
+                    SpamAssassin rules status<br/>
+                    <span class=" text-xs text-grey-dark">See when the SpamAssassin rules were last updated or perform a manual update</span>
+                </router-link>
+                <router-link class="block border-t border-b px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" to="/tools/app-updates">
+                    Application update status<br/>
+                    <span class=" text-xs text-grey-dark">Check for updates for the application itself</span>
+                </router-link>
             </div>
             <div>
-                <h2 class="border-b p-1">Helpful links</h2>
-                <ul>
-                    <li><a href="http://mxtoolbox.com/NetworkTools.aspx" target="new">MXToolBox</a></li>
-                    <li><a href="https://www.tcpiputils.com/" target="new">TCP IP Utilities</a></li>
-                </ul>
+                <h2 class="border-b p-1 pt-4 font-hairline text-grey-darkest">Helpful links</h2>
+                <a class="block px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" href="http://mxtoolbox.com/NetworkTools.aspx">
+                    MXToolBox<br/>
+                    <span class=" text-xs text-grey-dark">A popular and powerful set of tools, which you can use to find and resolve issues around sending and receiving email</span>
+                </a>
+                <a class="block border-t border-b px-4 py-2 hover:bg-grey-lighter no-underline text-grey-darkest" href="https://www.tcpiputils.com/">
+                    TCP IP Utilities<br/>
+                    <span class=" text-xs text-grey-dark">A service that allows you find a lot of information about IP-addresses</span>
+                </a>
             </div>
         </div>
     </div>
@@ -37,7 +60,7 @@ export default {
         this.$store.commit('setLoading', false);
     },
     computed: {
-        ...mapGetters(['isLoggedIn', 'user', 'loading'])
+        ...mapGetters(['isLoggedIn', 'user', 'loading', 'settings'])
     }
 }
 </script>
