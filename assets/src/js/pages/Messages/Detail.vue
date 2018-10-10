@@ -353,6 +353,7 @@
 </template>
 <script>
 import MessageActions from '../../components/MessageActions.vue';
+import ListEntryForm from '../../components/ListEntryForm.vue';
 import router from '../../routing/router';
 import { mapMutations, mapGetters } from 'vuex';
 export default {
@@ -465,21 +466,17 @@ export default {
             }
         },
         createListing(from_address, to_address, listing_type) {
-            let f = from_address.split('@');
-            let t = to_address.split('@');
-            axios.post('/api/lists/', {
-                'from_address': f[0],
-                'from_domain': f[1],
-                'to_address': t[0],
-                'to_domain': t[1],
-                'listing_type': listing_type,
-                'from_ip_address': null,
-                'to_ip_address': null
-            }).then(response => {
-                console.log(response.data);
-                this.notify(this.createNotification('Entry created', `A ${response.data.listing_type} entry has been created`, 'success'));
-            }).catch(error => {
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+            this.$modal.show(ListEntryForm,{
+                listingType: 'whitelisted',
+                fromAddress: from_address,
+                toAddress: to_address,
+                fromChoice: 'from_address',
+                toChoice: 'to_address'
+            },
+            {
+                clickToClose: false,
+                adaptive: true,
+                height: 'auto'
             });
         },
         release() {
