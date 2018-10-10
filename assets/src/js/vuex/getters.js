@@ -29,5 +29,8 @@ export default {
     },
     app_info(state) {
         return state.app_info;
+    },
+    settings(state) {
+        return state.settings
     }
 }
