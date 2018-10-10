@@ -164,6 +164,7 @@ export default {
         }
     },
     mounted() {
+        this.setLoading(true);
         axios.post('/api/current-user/', {}).then(response => {
             this.form = new Form({
                 id: response.data.id,
@@ -173,7 +174,7 @@ export default {
                 custom_spam_score: response.data.custom_spam_score,
                 custom_spam_highscore: response.data.custom_spam_highscore
             });
-            this.setLoadding(false);
+            this.setLoading(false);
         });
     },
     computed: {
