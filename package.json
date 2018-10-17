@@ -9,6 +9,7 @@
     "less-loader": "^4.1.0",
     "moment": "^2.22.2",
     "portal-vue": "^1.4.0",
+    "qrious": "^4.0.2",
     "tailwindcss": "^0.6.6",
     "uuid": "^3.3.2",
     "vue": "^2.5.17",

@@ -1,4 +1,5 @@
-import os
+import os, time
+from pyotp import TOTP as BaseTOTP
 
 class MailGuardianConfiguration:
     _configuration = {}
@@ -47,3 +48,11 @@ def which(program):
             if is_exe(exe_file):
                 return exe_file
     return None
+
+class TOTP(BaseTOTP):
+    def timecode(self, for_time):
+        if for_time.tzinfo:
+            i = calendar.timegm(for_time.utctimetuple())
+        else:
+            i = time.mktime(for_time.timetuple())
+        return int(i / self.interval)

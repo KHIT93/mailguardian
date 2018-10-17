@@ -19,14 +19,50 @@ from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
-from core.viewsets import UserViewSet, MailScannerConfigurationViewSet, SettingsViewSet, AuditLogViewSet, MailScannerHostViewSet, ApplicationTaskViewSet, ApplicationNotificationViewSet
-from mail.viewsets import MessageViewSet, SpamReportViewSet, RblReportViewSet, McpReportViewSet, HeaderViewSet, MailscannerReportViewSet, TransportLogViewSet, SmtpRelayViewSet
-from core.views import CurrentUserView, MailScannerConfigurationFilePathsView
+from core.viewsets import (
+    UserViewSet,
+    MailScannerConfigurationViewSet,
+    SettingsViewSet,
+    AuditLogViewSet,
+    MailScannerHostViewSet,
+    ApplicationTaskViewSet,
+    ApplicationNotificationViewSet,
+    TwoFactorConfigurationViewSet
+)
+from mail.viewsets import (
+    MessageViewSet,
+    SpamReportViewSet,
+    RblReportViewSet,
+    McpReportViewSet,
+    HeaderViewSet,
+    MailscannerReportViewSet,
+    TransportLogViewSet,
+    SmtpRelayViewSet
+)
+from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView
 from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
-from reports.views import SummaryApiView, MessageListApiView, MessagesByDateApiView, TopMailRelaysApiView, MessagesPerHourApiView, TopSendersByQuantityApiView, TopSendersByVolumeApiView, TopRecipientsByQuantityApiView, TopRecipientsByVolumeApiView, TopSenderDomainsByQuantityApiView, TopSenderDomainsByVolumeApiView, TopRecipientDomainsByQuantityApiView, TopRecipientDomainsByVolumeApiView
+from reports.views import (
+    SummaryApiView,
+    MessageListApiView,
+    MessagesByDateApiView,
+    TopMailRelaysApiView,
+    MessagesPerHourApiView,
+    TopSendersByQuantityApiView,
+    TopSendersByVolumeApiView,
+    TopRecipientsByQuantityApiView,
+    TopRecipientsByVolumeApiView,
+    TopSenderDomainsByQuantityApiView,
+    TopSenderDomainsByVolumeApiView,
+    TopRecipientDomainsByQuantityApiView,
+    TopRecipientDomainsByVolumeApiView
+)
 from domains.viewsets import DomainViewSet
 from setup_wizard.views import LicenseAPIView, InstalledAPIView, InitializeDatabaseAPIView
 from spamassassin.viewsets import RuleDescriptionViewSet, RuleViewSet
+from rest_auth.views import (
+    LogoutView, UserDetailsView, PasswordChangeView,
+    PasswordResetView, PasswordResetConfirmView
+)
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -51,6 +87,7 @@ router.register(r'settings', SettingsViewSet)
 router.register(r'audit-log', AuditLogViewSet)
 router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
+router.register(r'two-factor', TwoFactorConfigurationViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
@@ -82,8 +119,21 @@ if not settings.API_ONLY:
         re_path(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
             TemplateView.as_view(template_name="password_reset_confirm.html"),
             name='password_reset_confirm'),
-        path('rest-auth/', include('rest_auth.urls')),
         path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    ]
+    # URL for rest-auth
+    urlpatterns += [
+        # URLs that do not require a session or valid token
+        re_path(r'^rest-auth/password/reset/$', PasswordResetView.as_view(),
+            name='rest_password_reset'),
+        re_path(r'^rest-auth/password/reset/confirm/$', PasswordResetConfirmView.as_view(),
+            name='rest_password_reset_confirm'),
+        re_path(r'^rest-auth/login/$', LoginView.as_view(), name='rest_login'),
+        # URLs that require a user to be logged in with a valid session / token.
+        re_path(r'^rest-auth/logout/$', LogoutView.as_view(), name='rest_logout'),
+        re_path(r'^rest-auth/user/$', UserDetailsView.as_view(), name='rest_user_details'),
+        re_path(r'^rest-auth/password/change/$', PasswordChangeView.as_view(),
+            name='rest_password_change'),
     ]
 
 if settings.DEBUG:
