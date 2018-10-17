@@ -1,22 +1,47 @@
 from rest_framework import serializers
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification, TwoFactorConfiguration
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
 from django_celery_results.models import TaskResult
 import json
+from rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'url', 'email', 'is_staff', 'is_domain_admin', 'is_active', 'first_name', 'last_name', 'full_name', 'date_joined', 'domains', 'daily_quarantine_report', 'weekly_quarantine_report', 'monthly_quarantine_report', 'custom_spam_score', 'custom_spam_highscore', 'skip_scan')
+        fields = (
+            'id',
+            'url',
+            'email',
+            'is_staff',
+            'is_domain_admin',
+            'is_active',
+            'first_name',
+            'last_name',
+            'full_name',
+            'date_joined',
+            'domains',
+            'daily_quarantine_report',
+            'weekly_quarantine_report',
+            'monthly_quarantine_report',
+            'custom_spam_score',
+            'custom_spam_highscore',
+            'skip_scan',
+            'has_two_factor'
+        )
 
     full_name = serializers.SerializerMethodField()
+    has_two_factor = serializers.SerializerMethodField()
     # mailuser = MailUserSerializer(many=False, read_only=True)
 
     def get_full_name(self, obj):
         obj.get_full_name()
+        
+    def get_has_two_factor(self, obj):
+        return obj.get_has_two_factor()
+            
 
 class MailScannerConfigurationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -108,3 +133,11 @@ class ApplicationNotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ApplicationNotification
         fields = ('id', 'url', 'title', 'body', 'date_start', 'date_end', 'notification_type')
+
+class LoginSerializer(BaseRestAuthLoginSerializer):
+    two_factor_token = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+
+class TwoFactorConfigurationSerialiser(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TwoFactorConfiguration
+        fields = ('id', 'url', 'user', 'totp_key')

@@ -1,8 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import UserSerializer
-from .models import MailScannerConfiguration
+from .serializers import UserSerializer, LoginSerializer
+from .models import MailScannerConfiguration, User, TwoFactorConfiguration
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_auth.views import LoginView as RestAuthBaseLoginView
+from rest_framework import status
+from django.conf import settings
+from .exceptions import TwoFactorRequired, TwoFactorInvalid
+from rest_auth.app_settings import create_token, JWTSerializer
+from rest_auth.utils import jwt_encode
+from .helpers import TOTP
+import pyotp
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -24,3 +32,49 @@ class MailScannerConfigurationFilePathsView(APIView):
     
     def get_permissions(self):
         return (IsAdminUser()),
+
+class LoginView(RestAuthBaseLoginView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data, context={'request': request})
+        self.serializer.is_valid(raise_exception=True)
+        try:
+            self.login()
+        except TwoFactorRequired as e:
+            return Response({
+                'two_factor_token': ['Please provide your two factor login code']
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except TwoFactorInvalid as e:
+            return Response({
+                'non_field_errors': ['The provided 2FA code is invalid'],
+                'two_factor_token': ['Please provide your two factor login code']
+            }, status=status.HTTP_401_UNAUTHORIZED)
+
+        return self.get_response()
+
+
+    def login(self):
+        self.user = self.serializer.validated_data['user']
+
+        if self.user.get_has_two_factor():
+            # Verify 2FA code
+            if self.serializer.validated_data['two_factor_token'] != '' and not self.serializer.validated_data['two_factor_token'] is None:
+                totp = TOTP(TwoFactorConfiguration.objects.get(user=self.user).totp_key)
+                print(self.serializer.validated_data['two_factor_token'])
+                print(totp.now())
+                if not totp.verify(self.serializer.validated_data['two_factor_token']):
+                    raise TwoFactorInvalid()
+            # Raise Exception if code is not valid
+            else:
+                raise TwoFactorRequired()
+
+        if getattr(settings, 'REST_USE_JWT', False):
+            self.token = jwt_encode(self.user)
+        else:
+            self.token = create_token(self.token_model, self.user,
+                                      self.serializer)
+
+        if getattr(settings, 'REST_SESSION_LOGIN', True):
+            self.process_login()

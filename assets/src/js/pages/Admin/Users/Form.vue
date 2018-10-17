@@ -34,6 +34,21 @@
                         <button type="button" class="cursor-pointer underline" @click.prevent="show_password_modal = true">Change password</button>
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6 mt-4" v-if="user.is_staff">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                            Two Factor Authentication
+                        </label>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': entity.has_two_factor, 'bg-red': !entity.has_two_factor }" >
+                                {{ entity.has_two_factor | yesno }}
+                            </span>
+                        </div>
+                        <button type="button" class="cursor-pointer btn btn-red" @click.prevent="force_disable_two_factor" v-if="entity.has_two_factor">Force Disable 2FA</button>
+                    </div>
+                </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">

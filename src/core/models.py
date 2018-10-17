@@ -17,6 +17,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.postgres.fields import JSONField
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -110,6 +111,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def get_has_two_factor(self):
+        try:
+            two_factor = TwoFactorConfiguration.objects.get(user=self)
+        except ObjectDoesNotExist:
+            return False
+        return True
 
 class MailScannerConfiguration(models.Model):
     class Meta:
@@ -216,6 +224,12 @@ class ApplicationNotification(models.Model):
     date_start = models.DateField()
     date_end = models.DateField()
     notification_type = models.CharField(choices=notification_types, max_length=20)
+
+class TwoFactorConfiguration(models.Model):
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    totp_key = models.CharField(max_length=255)
 
 if settings.AUDIT_LOGGING:
     auditlog.register(User)

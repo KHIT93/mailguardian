@@ -28,6 +28,17 @@
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('password')">{{ form.errors.get('password') }}</p>
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6" v-if="form.errors.has('two_factor_token')">
+                    <div class="md:w-1/3">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="two_factor_token">
+                        Two Factor Verification
+                    </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <input v-model="form.two_factor_token" class="form-input" name="two_factor_token" id="two_factor_token" type="text" required>
+                        <p class="text-sm text-red pt-1" v-if="form.errors.has('two_factor_token')">{{ form.errors.get('two_factor_token') }}</p>
+                    </div>
+                </div>
                 <div class="flex flex-row-reverse items-center justify-between">
                     <input type='hidden' name='csrfmiddlewaretoken' :value="csrftoken"/>
                     <button class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded flex items-center" type="submit" :disabled="loading" :class="{'select-none cursor-not-allowed bg-blue-lighter hover:bg-blue-lighter' : loading}">
@@ -61,7 +72,8 @@
             return {
                 form: new Form({
                     email: '',
-                    password: ''
+                    password: '',
+                    two_factor_token: null
                 }),
                 loading: false,
                 login_notifications: []

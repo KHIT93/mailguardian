@@ -34,6 +34,22 @@
                         <button type="button" class="cursor-pointer underline" @click.prevent="show_password_modal = true">Change password</button>
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6 mt-4">
+                    <div class="md:w-1/4">
+                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                            Two Factor Authentication
+                        </label>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': user.has_two_factor, 'bg-red': !user.has_two_factor }" >
+                                {{ user.has_two_factor | yesno }}
+                            </span>
+                        </div>
+                        <button type="button" class="cursor-pointer btn btn-red" @click.prevent="disable_two_factor" v-if="user.has_two_factor">Disable 2FA</button>
+                        <button type="button" class="cursor-pointer btn btn-green" @click.prevent="enable_two_factor" v-else>Enable 2FA</button>
+                    </div>
+                </div>
                 <div class="md:flex md:items-center mb-6" v-if="user.is_staff">
                     <div class="md:w-1/4">
                         <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="is_staff">
@@ -148,11 +164,12 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import router from '../routing/router';
 import Form from '../classes/Form';
 import UserDomainTable from '../components/UserDomainTable.vue';
 import ChangePasswordModal from '../components/ChangePasswordModal.vue';
+import Enable2FAModal from '../components/Enable2FAModal.vue';
 export default {
     components: {
         'mg-change-password-modal': ChangePasswordModal
@@ -190,7 +207,42 @@ export default {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
-        ...mapMutations(['notify', 'setLoading'])
+        enable_two_factor() {
+            this.$modal.show(Enable2FAModal,{},
+            {
+                clickToClose: false,
+                adaptive: true,
+                height: 'auto'
+            });
+        },
+        disable_two_factor() {
+            this.$modal.show('dialog', {
+                title: 'Disable 2FA?',
+                text: `Are you sure that you want to disable Two-Factor Authentictation for your account?`,
+                buttons: [
+                    {
+                        title: 'Yes',
+                        handler: () => {
+                            axios.delete('/api/two-factor/disable/').then(response => {
+                                if (response.status == 204)
+                                {
+                                    this.getCurrentUser();
+                                }
+                            }).catch(error => {
+                                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                            });
+                            this.$modal.hide('dialog');
+                        },
+                        default: true
+                    },
+                    {
+                        title: 'No'
+                    }
+                ]
+            });
+        },
+        ...mapMutations(['notify', 'setLoading']),
+        ...mapActions(['getCurrentUser'])
     }
 }
 </script>

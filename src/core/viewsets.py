@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer, ApplicationTaskSerializer, ApplicationNotificationSerializer
+from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification, TwoFactorConfiguration
+from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer, ApplicationTaskSerializer, ApplicationNotificationSerializer, TwoFactorConfigurationSerialiser
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -11,7 +11,8 @@ from domains.serializers import DomainSerializer
 from .permissions import IsDomainAdminOrStaff, IsAdminUserOrReadOnly
 from auditlog.models import LogEntry as AuditLog
 from rest_framework.permissions import AllowAny
-import datetime
+from django.conf import settings
+import datetime, pyotp
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -117,3 +118,31 @@ class ApplicationNotificationViewSet(viewsets.ModelViewSet):
     def get_dashboard_notifications(self, request):
         serializer = ApplicationNotificationSerializer(self.get_queryset().filter(notification_type='dashboard', date_start__lte=datetime.datetime.now(), date_end__gte=datetime.datetime.now()), many=True, context={'request': request})
         return Response(serializer.data)
+
+class TwoFactorConfigurationViewSet(viewsets.ModelViewSet):
+    queryset = TwoFactorConfiguration.objects.all()
+    serializer_class = TwoFactorConfigurationSerialiser
+    permission_classes = (IsAdminUser,)
+    model = TwoFactorConfiguration
+
+    @action(methods=['put'], detail=False, permission_classes=[IsAuthenticated], url_path='enable', url_name='two-factor-enable')
+    def put_enable(self, request):
+        # Enable 2FA for currently logged in user
+        user = get_object_or_404(User, pk=request.user.id)
+        TwoFactorConfiguration.objects.create(user=user, totp_key=request.data['totp_key'])
+        return Response({}, status=status.HTTP_201_CREATED)
+
+    @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='qr', url_name='two-factor-qr-code')
+    def get_qr_code(self, request):
+        totp_key = pyotp.random_base32()
+        return Response({
+            'totp_key': totp_key,
+            'url': pyotp.totp.TOTP(totp_key).provisioning_uri(request.user.email, issuer_name="{0} ({1})".format(settings.BRAND_NAME, settings.APP_HOSTNAME if settings.APP_HOSTNAME else 'unknown'))
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['delete'], detail=False, permission_classes=[IsAuthenticated], url_path='disable', url_name='two-factor-disable')
+    def delete_disable(self, request):
+        # Disable 2FA for currently logged in user
+        user = get_object_or_404(User, pk=request.user.id)
+        TwoFactorConfiguration.objects.get(user=user).delete()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
