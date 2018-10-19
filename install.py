@@ -5,6 +5,12 @@
 import os, sys, platform, pytz, json, pwd, grp
 from src.core.helpers import which
 from django.core.management.utils import get_random_secret_key
+import cryptography.fernet
+
+def generate_encryption_key():
+    key = cryptography.fernet.Fernet.generate_key()
+    return key.decode()
+
 
 if __name__ == "__main__":
     os.system('clear')
@@ -259,6 +265,7 @@ if __name__ == "__main__":
             "quarantine": RETENTION_DAYS
         },
         "app_key": get_random_secret_key(),
+        "encryption_key": generate_encryption_key(),
         "audit_log": True,
         "mta": MTA,
         "branding": {
