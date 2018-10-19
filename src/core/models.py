@@ -18,6 +18,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
+from encrypted_model_fields import fields as encrypted_fields
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -229,7 +230,12 @@ class TwoFactorConfiguration(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    totp_key = models.CharField(max_length=255)
+    totp_key = encrypted_fields.EncryptedCharField(max_length=255)
+
+class TwoFactorBackupCode(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = encrypted_fields.EncryptedCharField(max_length=255)
 
 if settings.AUDIT_LOGGING:
     auditlog.register(User)

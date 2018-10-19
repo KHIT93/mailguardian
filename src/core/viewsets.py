@@ -1,7 +1,27 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification, TwoFactorConfiguration
-from .serializers import UserSerializer, MailScannerConfigurationSerializer, SettingsSerializer, ChangePasswordSerializer, AuditLogSerializer, MailScannerHostSerializer, ApplicationTaskSerializer, ApplicationNotificationSerializer, TwoFactorConfigurationSerialiser
+from .models import (
+    MailScannerConfiguration,
+    Setting,
+    User,
+    MailScannerHost,
+    ApplicationTask,
+    ApplicationNotification,
+    TwoFactorConfiguration,
+    TwoFactorBackupCode
+)
+from .serializers import (
+    UserSerializer,
+    MailScannerConfigurationSerializer,
+    SettingsSerializer,
+    ChangePasswordSerializer,
+    AuditLogSerializer,
+    MailScannerHostSerializer,
+    ApplicationTaskSerializer,
+    ApplicationNotificationSerializer,
+    TwoFactorConfigurationSerialiser,
+    TwoFactorBackupCodeSerializer
+)
 from django.db.models import Q
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
@@ -13,6 +33,7 @@ from auditlog.models import LogEntry as AuditLog
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 import datetime, pyotp
+from django.utils.crypto import get_random_string
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -146,3 +167,31 @@ class TwoFactorConfigurationViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(User, pk=request.user.id)
         TwoFactorConfiguration.objects.get(user=user).delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+class TwoFactorBackupCodeViewSet(viewsets.ModelViewSet):
+    queryset = TwoFactorBackupCode.objects.all()
+    serializer_class = TwoFactorBackupCodeSerializer
+    permission_classes = (IsAuthenticated,)
+    model = TwoFactorBackupCode
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.is_staff:
+            return qs
+        return qs.filter(user=self.request.user)
+
+    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='generate', url_name='two-factor-backup-code-generate')
+    def post_generate_backup_codes(self, request):
+        codes = []
+        for i in range(0, 5):
+            code, created = TwoFactorBackupCode.objects.create(user=request.user, code=get_random_string(16, 'abcdefghijklmnopqrstuvwxyz0123456789-'))
+            codes.append(code)
+        return Response({ 'codes': codes }, status=status.HTTP_201_CREATED)
+
+    @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='my', url_name='two-factor-backup-code-my-own')
+    def get_my_backup_codes(self, request):
+        qs = self.get_queryset()
+        if request.user.is_staff:
+            qs = qs.filter(user=request.user)
+        serializer = TwoFactorBackupCodeSerializer(qs, many=True, context={'request': request})
+        return Response(serializer.data)

@@ -26,11 +26,14 @@ MAILGUARDIAN_ENV = MailGuardianConfiguration(json.load(open(os.path.join(os.path
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = MAILGUARDIAN_ENV.get('app_key', get_random_secret_key())
+# SECURITY WARNING: keep the field encryption key used in production secret!
+# We use the SECRET_KEY as a fallback for compatibility with existing installations
+FIELD_ENCRYPTION_KEY = MAILGUARDIAN_ENV.get('encryption_key', None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILGUARDIAN_ENV.get("debug", False)
 APP_HOSTNAME = MAILGUARDIAN_ENV.get("hostname", None)
-APP_VERSION = '1.1.1'
+APP_VERSION = '1.3.0'
 ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
 
 
@@ -49,6 +52,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'guardian',
     'auditlog',
+    'encrypted_model_fields',
     'django_premailer',
     'core',
     'frontend',

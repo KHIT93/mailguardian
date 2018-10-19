@@ -1,5 +1,14 @@
 from rest_framework import serializers
-from .models import MailScannerConfiguration, Setting, User, MailScannerHost, ApplicationTask, ApplicationNotification, TwoFactorConfiguration
+from .models import (
+    MailScannerConfiguration,
+    Setting,
+    User,
+    MailScannerHost,
+    ApplicationTask,
+    ApplicationNotification,
+    TwoFactorConfiguration,
+    TwoFactorBackupCode
+)
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
@@ -135,3 +144,8 @@ class TwoFactorConfigurationSerialiser(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TwoFactorConfiguration
         fields = ('id', 'url', 'user', 'totp_key')
+
+class TwoFactorBackupCodeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = TwoFactorBackupCode
+        fields = ('id', 'url', 'user', 'code')
