@@ -27,7 +27,8 @@ from core.viewsets import (
     MailScannerHostViewSet,
     ApplicationTaskViewSet,
     ApplicationNotificationViewSet,
-    TwoFactorConfigurationViewSet
+    TwoFactorConfigurationViewSet,
+    TwoFactorBackupCodeViewSet
 )
 from mail.viewsets import (
     MessageViewSet,
@@ -88,6 +89,7 @@ router.register(r'audit-log', AuditLogViewSet)
 router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
 router.register(r'two-factor', TwoFactorConfigurationViewSet)
+router.register(r'two-factor-codes', TwoFactorBackupCodeViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
@@ -115,10 +117,6 @@ if not settings.API_ONLY:
         path('api/license/', LicenseAPIView.as_view()),
         path('api/installed/', InstalledAPIView.as_view()),
         path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
-        # this url is used to generate email content
-        re_path(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-            TemplateView.as_view(template_name="password_reset_confirm.html"),
-            name='password_reset_confirm'),
         path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     ]
     # URL for rest-auth
@@ -140,3 +138,14 @@ if settings.DEBUG:
     urlpatterns += [
         path('admin/', admin.site.urls),
     ]
+
+# Add final wildcard route to catch the deep links
+# into the frontend SPA
+urlpatterns += [
+    path('<path:spa_path>', IndexTemplateView.as_view()),
+    # This needs to be below in order to allow for the system to generate
+    # the Password reset confirmation URL
+    re_path(r'^password-reset/confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        TemplateView.as_view(template_name="password_reset_confirm.html"),
+        name='password_reset_confirm'),
+]

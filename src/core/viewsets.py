@@ -33,7 +33,6 @@ from auditlog.models import LogEntry as AuditLog
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 import datetime, pyotp
-from django.utils.crypto import get_random_string
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -151,6 +150,7 @@ class TwoFactorConfigurationViewSet(viewsets.ModelViewSet):
         # Enable 2FA for currently logged in user
         user = get_object_or_404(User, pk=request.user.id)
         TwoFactorConfiguration.objects.create(user=user, totp_key=request.data['totp_key'])
+        TwoFactorBackupCode().generate_codes(user=request.user)
         return Response({}, status=status.HTTP_201_CREATED)
 
     @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='qr', url_name='two-factor-qr-code')
@@ -166,6 +166,7 @@ class TwoFactorConfigurationViewSet(viewsets.ModelViewSet):
         # Disable 2FA for currently logged in user
         user = get_object_or_404(User, pk=request.user.id)
         TwoFactorConfiguration.objects.get(user=user).delete()
+        TwoFactorBackupCode.objects.filter(user=user).delete()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
 class TwoFactorBackupCodeViewSet(viewsets.ModelViewSet):
@@ -182,10 +183,7 @@ class TwoFactorBackupCodeViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='generate', url_name='two-factor-backup-code-generate')
     def post_generate_backup_codes(self, request):
-        codes = []
-        for i in range(0, 5):
-            code, created = TwoFactorBackupCode.objects.create(user=request.user, code=get_random_string(16, 'abcdefghijklmnopqrstuvwxyz0123456789-'))
-            codes.append(code)
+        codes = TwoFactorBackupCode().generate_codes(user=request.user)
         return Response({ 'codes': codes }, status=status.HTTP_201_CREATED)
 
     @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='my', url_name='two-factor-backup-code-my-own')

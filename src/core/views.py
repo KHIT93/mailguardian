@@ -1,16 +1,17 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer
-from .models import MailScannerConfiguration, User, TwoFactorConfiguration
+from .models import MailScannerConfiguration, User, TwoFactorConfiguration, TwoFactorBackupCode
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_auth.views import LoginView as RestAuthBaseLoginView
 from rest_framework import status
 from django.conf import settings
-from .exceptions import TwoFactorRequired, TwoFactorInvalid
+from .exceptions import TwoFactorRequired, TwoFactorInvalid, InvalidBackupCode
 from rest_auth.app_settings import create_token, JWTSerializer
 from rest_auth.utils import jwt_encode
 from .helpers import TOTP
 import pyotp
+from django.core.exceptions import ObjectDoesNotExist
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -51,6 +52,11 @@ class LoginView(RestAuthBaseLoginView):
                 'non_field_errors': ['The provided 2FA code is invalid'],
                 'two_factor_token': ['Please provide your two factor login code']
             }, status=status.HTTP_401_UNAUTHORIZED)
+        except InvalidBackupCode as e:
+            return Response({
+                'non_field_errors': ['The provided backup code is invalid'],
+                'backup_code': ['The provided backup code is invalid']
+            }, status=status.HTTP_401_UNAUTHORIZED)
 
         return self.get_response()
 
@@ -59,8 +65,19 @@ class LoginView(RestAuthBaseLoginView):
         self.user = self.serializer.validated_data['user']
 
         if self.user.get_has_two_factor():
+            # Check if we have a backup code in request.data
+            if 'backup_code' in self.serializer.validated_data and self.serializer.validated_data['backup_code'] != '' and not self.serializer.validated_data['backup_code'] is None:
+                match_code = None
+                codes = TwoFactorBackupCode.objects.filter(user=self.user)
+                for code in codes:
+                    if self.serializer.validated_data['backup_code'] == code.code:
+                        match_code = code
+                if not match_code:
+                    raise InvalidBackupCode()
+                else:
+                    match_code.delete()
             # Verify 2FA code
-            if self.serializer.validated_data['two_factor_token'] != '' and not self.serializer.validated_data['two_factor_token'] is None:
+            elif self.serializer.validated_data['two_factor_token'] != '' and not self.serializer.validated_data['two_factor_token'] is None:
                 totp = TOTP(TwoFactorConfiguration.objects.get(user=self.user).totp_key)
                 print(self.serializer.validated_data['two_factor_token'])
                 print(totp.now())

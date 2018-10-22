@@ -19,6 +19,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
 from encrypted_model_fields import fields as encrypted_fields
+from django.utils.crypto import get_random_string
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -236,6 +237,14 @@ class TwoFactorBackupCode(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     code = encrypted_fields.EncryptedCharField(max_length=255)
+
+    def generate_codes(self, user):
+        existing = TwoFactorBackupCode.objects.filter(user=user).values_list('code', flat=True)
+        codes = []
+        for i in range(0, 5-len(existing)):
+            code = TwoFactorBackupCode.objects.create(user=user, code=get_random_string(16, 'abcdefghijklmnopqrstuvwxyz0123456789'))
+            codes.append(code.code)
+        return codes
 
 if settings.AUDIT_LOGGING:
     auditlog.register(User)

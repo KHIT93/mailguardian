@@ -46,7 +46,10 @@
                                 {{ user.has_two_factor | yesno }}
                             </span>
                         </div>
-                        <button type="button" class="cursor-pointer btn btn-red" @click.prevent="disable_two_factor" v-if="user.has_two_factor">Disable 2FA</button>
+                        <div v-if="user.has_two_factor">
+                            <button type="button" class="cursor-pointer btn btn-red" @click.prevent="disable_two_factor">Disable 2FA</button>
+                            <button type="button" class="cursor-pointer btn btn-orange" @click.prevent="get_backup_codes">Get 2FA Backup codes</button>
+                        </div>
                         <button type="button" class="cursor-pointer btn btn-green" @click.prevent="enable_two_factor" v-else>Enable 2FA</button>
                     </div>
                 </div>
@@ -170,6 +173,7 @@ import Form from '../classes/Form';
 import UserDomainTable from '../components/UserDomainTable.vue';
 import ChangePasswordModal from '../components/ChangePasswordModal.vue';
 import Enable2FAModal from '../components/Enable2FAModal.vue';
+import Show2FABackupCodesModal from '../components/Show2FABackupCodesModal.vue';
 export default {
     components: {
         'mg-change-password-modal': ChangePasswordModal
@@ -239,6 +243,14 @@ export default {
                         title: 'No'
                     }
                 ]
+            });
+        },
+        get_backup_codes() {
+            this.$modal.show(Show2FABackupCodesModal,{},
+            {
+                clickToClose: false,
+                adaptive: true,
+                height: 'auto'
             });
         },
         ...mapMutations(['notify', 'setLoading']),

@@ -139,6 +139,7 @@ class ApplicationNotificationSerializer(serializers.HyperlinkedModelSerializer):
 
 class LoginSerializer(BaseRestAuthLoginSerializer):
     two_factor_token = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    backup_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
 class TwoFactorConfigurationSerialiser(serializers.HyperlinkedModelSerializer):
     class Meta:

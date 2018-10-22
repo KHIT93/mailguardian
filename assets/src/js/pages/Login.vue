@@ -28,7 +28,7 @@
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('password')">{{ form.errors.get('password') }}</p>
                     </div>
                 </div>
-                <div class="md:flex md:items-center mb-6" v-if="form.errors.has('two_factor_token')">
+                <div class="md:flex md:items-center mb-2" v-if="form.errors.has('two_factor_token') && !use_backup_code">
                     <div class="md:w-1/3">
                     <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="two_factor_token">
                         Two Factor Verification
@@ -37,6 +37,23 @@
                     <div class="md:w-2/3">
                         <input v-model="form.two_factor_token" class="form-input" name="two_factor_token" id="two_factor_token" type="text" required>
                         <p class="text-sm text-red pt-1" v-if="form.errors.has('two_factor_token')">{{ form.errors.get('two_factor_token') }}</p>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mb-6" v-if="form.errors.has('two_factor_token') && !use_backup_code">
+                    <div class="md:w-1/3"></div>
+                    <div class="md:w-2/3">
+                        <button type="button" class="inline-block align-baseline text-sm text-blue hover:text-blue-darker" @click.prevent="use_backup_code = true" v-if="form.errors.has('two_factor_token')">Use 2FA Backup code</button>
+                    </div>
+                </div>
+                <div class="md:flex md:items-center mb-2" v-if="form.errors.has('two_factor_token') && use_backup_code">
+                    <div class="md:w-1/3">
+                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="backup_code">
+                        2FA Backup Code
+                    </label>
+                    </div>
+                    <div class="md:w-2/3">
+                        <input v-model="form.backup_code" class="form-input" name="backup_code" id="backup_code" type="text" required>
+                        <p class="text-sm text-red pt-1" v-if="form.errors.has('backup_code')">{{ form.errors.get('backup_code') }}</p>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse items-center justify-between">
@@ -73,10 +90,12 @@
                 form: new Form({
                     email: '',
                     password: '',
-                    two_factor_token: null
+                    two_factor_token: null,
+                    backup_code: ''
                 }),
                 loading: false,
-                login_notifications: []
+                login_notifications: [],
+                use_backup_code: false
             }
         },
         components: {

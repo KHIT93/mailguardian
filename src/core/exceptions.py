@@ -3,3 +3,6 @@ class TwoFactorRequired(Exception):
 
 class TwoFactorInvalid(Exception):
     """The provided 2FA code is invalid"""
+
+class InvalidBackupCode(Exception):
+    """The provided 2FA backup code is not found"""
