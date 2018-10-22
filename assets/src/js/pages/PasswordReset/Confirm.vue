@@ -65,6 +65,10 @@ export default {
         this.form.uid = this.uid;
         this.form.token = this.token;
     },
+    mounted() {
+        this.setInitializing(false);
+        this.setLoading(false);
+    },
     methods: {
         submit() {
             this.toggleLoading();
@@ -81,7 +85,7 @@ export default {
         toggleLoading() {
             this.loading = !this.loading;
         },
-        ...mapMutations(['notify'])
+        ...mapMutations(['notify', 'setLoading', 'setInitializing'])
     }
 }
 </script>

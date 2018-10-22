@@ -4,7 +4,8 @@ import routes from './routes';
 import {store} from '../vuex/store';
 Vue.use(VueRouter);
 const router = new VueRouter({
-    routes
+    routes,
+    mode: 'history'
 });
 router.beforeEach(async (to, from, next) => {
     store.commit('setLoading', true);
