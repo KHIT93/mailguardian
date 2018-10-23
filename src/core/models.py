@@ -227,7 +227,7 @@ class ApplicationTask(models.Model):
 
 class ApplicationNotification(models.Model):
     notification_types = [
-        ('dashboard', _('Dasboard')),
+        ('dashboard', _('Dashboard')),
         ('login', _('Login'))
     ]
     class Meta:

@@ -1,0 +1,36 @@
+# Copyright (C) 2018 @KHIT93
+# This file is distributed under the same license as the MailGuardian package.
+# Kenneth Hansen <kenneth@khansen-it.dk>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: MailGuardian 1.3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-23 20:41+0200\n"
+"PO-Revision-Date: 2018-10-23 21:52+0200\n"
+"Last-Translator: Kenneth Hansen <kenneth@khansen-it.dk>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: setup_wizard/management/commands/setup_cron.py:10
+msgid "Configure application cron jobs"
+msgstr "Cron-Jobs für das Program Konfigurieren"
+
+#: setup_wizard/management/commands/setup_cron.py:24
+msgid "Cron jobs have been configured"
+msgstr "Cron-Jobs wurden konfiguriert"
+
+#: setup_wizard/views.py:67
+msgid "Initial settings have been configured"
+msgstr "Ersteinstellung wurde durchgeführt"
+
+#: setup_wizard/views.py:77
+msgid ""
+"Environment file succesfully updated. Please run \"sudo systemctl restart "
+"mailguardian.service\""
+msgstr "Umbegungsdatei erfolgreich aktualisiert. Bitt führen Sie den Befehl \"sudo systemctl restat mailguardian.service\" aus"

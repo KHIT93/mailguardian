@@ -74,6 +74,6 @@ class InitializeDatabaseAPIView(APIView):
             data.replace('"logo": ""', '"logo": "{0}"'.format(serializer.data['branding_logo']))
             with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'w') as f:
                 f.write(data)
-            response['update_env'] = _('Environment file succesfully updated. Please run "sudo systemctl restat mailguardian.service"')
+            response['update_env'] = _('Environment file succesfully updated. Please run "sudo systemctl restart mailguardian.service"')
             return Response(response, status=status.HTTP_200_OK)
 
