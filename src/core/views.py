@@ -12,6 +12,7 @@ from rest_auth.utils import jwt_encode
 from .helpers import TOTP
 import pyotp
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext_lazy as _
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -45,17 +46,17 @@ class LoginView(RestAuthBaseLoginView):
             self.login()
         except TwoFactorRequired as e:
             return Response({
-                'two_factor_token': ['Please provide your two factor login code']
+                'two_factor_token': [_('Please provide your two factor login code')]
             }, status=status.HTTP_400_BAD_REQUEST)
         except TwoFactorInvalid as e:
             return Response({
-                'non_field_errors': ['The provided 2FA code is invalid'],
-                'two_factor_token': ['Please provide your two factor login code']
+                'non_field_errors': [_('The provided 2FA code is invalid')],
+                'two_factor_token': [_('Please provide your two factor login code')]
             }, status=status.HTTP_401_UNAUTHORIZED)
         except InvalidBackupCode as e:
             return Response({
-                'non_field_errors': ['The provided backup code is invalid'],
-                'backup_code': ['The provided backup code is invalid']
+                'non_field_errors': [_('The provided backup code is invalid')],
+                'backup_code': [_('The provided backup code is invalid')]
             }, status=status.HTTP_401_UNAUTHORIZED)
 
         return self.get_response()

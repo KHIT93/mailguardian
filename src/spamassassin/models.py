@@ -1,17 +1,24 @@
 from django.db import models
 from django.conf import settings
 import re, uuid, subprocess
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class Rule(models.Model):
+    class Meta:
+        verbose_name = _('rule')
+        verbose_name_plural = _('rules')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255, unique=True)
-    score = models.DecimalField(default=0.00, max_digits=7, decimal_places=2)
+    name = models.CharField(_('Name'), max_length=255, unique=True)
+    score = models.DecimalField(_('Score'), default=0.00, max_digits=7, decimal_places=2)
 
 class RuleDescription(models.Model):
+    class Meta:
+        verbose_name = _('rule description')
+        verbose_name_plural = _('rule descriptions')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    key = models.CharField(max_length=255, unique=True)
-    value = models.TextField(blank=True, null=True)
+    key = models.CharField(_('Key'), max_length=255, unique=True)
+    value = models.TextField(_('Value'), blank=True, null=True)
 
     def sync_files(self):
         # Sync spam assassin rule descriptions to database

@@ -16,6 +16,7 @@ from django.db.models import Q
 import subprocess
 import requests, json, types
 from rest_framework.authtoken.models import Token
+from django.utils.translation import gettext_lazy as _
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
@@ -78,7 +79,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 for part in richest.iter_attachments():
                     data['message']['attachments'].append(part.get_filename())
             else:
-                data['message']['rich_version'] = 'Preview unavailable'
+                data['message']['rich_version'] = _('Preview unavailable')
         return Response(data)
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='file-exists', url_name='message-queue-file-exists')
@@ -167,7 +168,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='release', url_name='message-action-release')
     def post_action_release(self, request):
         if not 'messages' in request.data:
-            return Response({'error': 'No messages to process'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
         # Here we need to instruct the local MTA
         # to resend the message for the intended
         # recipient or an alternate recipient
@@ -184,7 +185,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             try:
                 message = Message.objects.get(id=message_id)
                 if message.released:
-                    response.append({'id': message_id, 'error': 'This message has already been released'})
+                    response.append({'id': message_id, 'error': _('This message has already been released')})
                 elif settings.APP_HOSTNAME == message.mailscanner_hostname:
                     command = "{0} -i -f {1} {2} < {3} 2>&1".format(settings.SENDMAIL_BIN, sender.value, message.to_address, message.file_path())
                     output = subprocess.check_output(command, shell=True)
@@ -207,7 +208,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                     else:
                         response.append({'id': data['result'][0]['id'], 'command': data['result'][0]['command'], 'output': data['result'][0]['output']})
                 else:
-                    response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
+                    response.append({'id': message_id, 'error': _('You are not authorized to run this request, as this node is for API requests only')})
             except Exception as e:
                 response.append({'id': message_id, 'error': e})
             
@@ -217,7 +218,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-spam', url_name='message-action-mark-spam')
     def post_action_spam(self, request):
         if not 'messages' in request.data:
-            return Response({'error': 'No messages to process'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
         # Here we need to instruct the local MTA
         # to resend the message for the intended
         # recipient or an alternate recipient
@@ -247,7 +248,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                     else:
                         response.append({'id': data['result'][0]['id'], 'command': data['result'][0]['command'], 'output': data['result'][0]['output']})
                 else:
-                    response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
+                    response.append({'id': message_id, 'error': _('You are not authorized to run this request, as this node is for API requests only')})
             except Exception as e:
                 response.append({'id': message_id, 'error': e})
         return Response({ 'result': response }, status=status.HTTP_200_OK)
@@ -255,7 +256,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-nonspam', url_name='message-action-mark-nonspam')
     def post_action_nonspam(self, request):
         if not 'messages' in request.data:
-            return Response({'error': 'No messages to process'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
         # Here we need to instruct the local MTA
         # to resend the message for the intended
         # recipient or an alternate recipient
@@ -285,7 +286,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                     else:
                         response.append({'id': data['result'][0]['id'], 'command': data['result'][0]['command'], 'output': data['result'][0]['output']})
                 else:
-                    response.append({'id': message_id, 'error': 'You are not authorized to run this request, as this node is for API requests only'})
+                    response.append({'id': message_id, 'error': _('You are not authorized to run this request, as this node is for API requests only')})
             except Exception as e:
                 response.append({'id': message_id, 'error': e})
         return Response({ 'result': response }, status=status.HTTP_200_OK)

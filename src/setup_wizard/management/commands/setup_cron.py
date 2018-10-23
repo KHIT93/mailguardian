@@ -4,9 +4,10 @@ from django.conf import settings
 from subprocess import check_output
 from core.helpers import which
 import os
+from django.utils.translation import gettext_lazy as _
 
 class Command(BaseCommand):
-    help = 'Configure application cron jobs'
+    help = _('Configure application cron jobs')
 
     def handle(self, *args, **kwargs):
         #user = check_output(which('whoami'), shell=True).decode('utf-8').replace(' ', '').replace('\n', ' ').replace('\r', '')
@@ -20,4 +21,4 @@ class Command(BaseCommand):
         job_month = cron.new(command='{0} {1} runjobs monthly > /dev/null 2>&1'.format(which('python'), os.path.join(settings.BASE_DIR, 'manage.py')))
         job_month.every().month()
         cron.write()
-        print('Cron jobs have been configured')
+        print(_('Cron jobs have been configured'))

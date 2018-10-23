@@ -4,28 +4,28 @@
 <table align="center" width="100%" cellpadding="0" cellspacing="0" class="text-center mb-4">
     <tr>
         <td>
-            <h2 class="mb-2">Quarantine Report</h2>
+            <h2 class="mb-2">{% trans "Quarantine Report" %}</h2>
         </td>
     </tr>
     <tr>
         {% if messages %}
         <td>
-            Please find below your Quarantine Report for the last {{ period }} day(s).<br/>We have {% if show_all %}processed{% else %}quarantined{% endif %} {{ message_count }} messages and listed them below. All quarantined messages will be kept for {{ retention_days }} day(s)
+            {% trans "Please find below your Quarantine Report for the last" %} {{ period }} {% trans "day(s)" %}.<br/>{% trans "We have" %} {% if show_all %}{% trans "processed" %}{% else %}{% trans "quarantined" %}{% endif %} {{ message_count }} {% trans "messages and listed them below" %}. {% trans "All quarantined messages will be kept for" %} {{ retention_days }} {% trans "day(s)" %}
         </td>
         {% else %}
-        <td>During the last {{ period }}, we did not find any messages that needed to be quarantined</td>
+        <td>{% trans "During the last" %} {{ period }}, {% trans "we did not find any messages that needed to be quarantined" %}</td>
         {% endif %}
     </tr>
 </table>
 {% if messages %}
 <table class="table" align="center" width="100%" cellpadding="0" cellspacing="0">
     <tr class="font-bold bg-grey">
-        <td>Recieved</td>
-        <td>From</td>
-        <td>To</td>
-        <td>Subject</td>
-        <td>Reason</td>
-        <td>Actions</td>
+        <td>{% "Recieved" %}</td>
+        <td>{% "From" %}</td>
+        <td>{% "To" %}</td>
+        <td>{% "Subject" %}</td>
+        <td>{% "Reason" %}</td>
+        <td>{% "Actions" %}</td>
     </tr>
     {% for message in messages %}
     <tr>
@@ -34,14 +34,14 @@
         <td>{{ message.to_address }}</td>
         <td>{{ message.subject}}</td>
         <td>
-            {% if message.is_spam %}Spam{% endif %}
-            {% if message.is_mcp %}MCP{% endif %}
-            {% if message.infected %}Infected{% endif %}
-            {% if message.is_rbl_listed %}RBL listed{% endif %}
-            {% if message.blacklisted %}Blacklisted{% endif %}
+            {% if message.is_spam %}{% trans "Spam" %}{% endif %}
+            {% if message.is_mcp %}{% trans "MCP" %}{% endif %}
+            {% if message.infected %}{% trans "Infected" %}{% endif %}
+            {% if message.is_rbl_listed %}{% trans "Listed in RBL" %}{% endif %}
+            {% if message.blacklisted %}{% trans "Blacklisted" %}{% endif %}
         </td>
         <td>
-            <a href="{{ protocol }}://{{ domain }}/messages/{{message.id}}">View</a>
+            <a href="{{ protocol }}://{{ domain }}/messages/{{message.id}}">{% trans "View" %}</a>
         </td>
     </tr>
     {% endfor %}

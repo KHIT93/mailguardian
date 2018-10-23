@@ -33,6 +33,7 @@ from auditlog.models import LogEntry as AuditLog
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 import datetime, pyotp
+from django.utils.translation import gettext_lazy as _
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,7 +62,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = ChangePasswordSerializer(data=request.data)
         if serializer.is_valid():
             if not serializer.data.get('new_password1') == serializer.data.get('new_password2'):
-                return Response({"new_password1": ["The passwords do not match."], "new_password2": ["The passwords do not match."]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"new_password1": [_("The passwords do not match.")], "new_password2": [_("The passwords do not match.")]}, status=status.HTTP_400_BAD_REQUEST)
             user.set_password(serializer.data.get('new_password1'))
             user.save()
             return Response({}, status=status.HTTP_200_OK)

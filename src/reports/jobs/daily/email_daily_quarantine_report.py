@@ -2,9 +2,10 @@ from django_extensions.management.jobs import DailyJob
 from core.models import User, Setting, MailScannerHost
 from django.conf import settings
 from reports.email_reports import QuarantinedEmailReport
+from django.utils.translation import gettext_lazy as _
 
 class Job(DailyJob):
-    help = 'Daily job for sending daily quarantine reports to users and administrators'
+    help = _('Daily job for sending daily quarantine reports to users and administrators')
 
     def execute(self):
         # Find out if we should run anything at all

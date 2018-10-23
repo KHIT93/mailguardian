@@ -1,17 +1,17 @@
 {% extends 'mailguardian/_layouts/plaintext.html' %}
 
 {% block content %}
-Quarantine Report
+{% trans "Quarantine Report" %}
 {% if messages %}
-Please find below your Quarantine Report for the last {{ period }} day(s).
-We have {% if show_all %}processed{% else %}quarantined{% endif %} {{ message_count }} messages and listed them below. All quarantined messages will be kept for {{ retention_days }} day(s)
+{% trans "Please find below your Quarantine Report for the last" %} {{ period }} {% trans "day(s)" %}.
+{% trans "We have" %} {% if show_all %}{% trans "processed" %}{% else %}{% trans "quarantined" %}{% endif %} {{ message_count }} {% trans "messages and listed them below" %}. {% trans "All quarantined messages will be kept for" %} {{ retention_days }} {% trans "day(s)" %}
 {% else %}
-During the last {{ period }}, we did not find any messages that needed to be quarantined
+{% trans "During the last" %} {{ period }}, {% trans "we did not find any messages that needed to be quarantined"%}
 {% endif %}
 -----------------------------------------------
 
 {% for message in messages %}
-{{ message.timestamp }} - {{ message.from_address }} - {{ message.to_address }} - {{ message.subject}} - {% if message.is_spam %}Spam{% endif %} {% if message.is_mcp %}MCP{% endif %} {% if message.infected %}Infected{% endif %} {% if message.is_rbl_listed %}RBL listed{% endif %} {% if message.blacklisted %}Blacklisted{% endif %} - {{ protocol }}://{{ domain }}/messages/{{message.id}}
+{{ message.timestamp }} - {{ message.from_address }} - {{ message.to_address }} - {{ message.subject}} - {% if message.is_spam %}{% trans "Spam" %}{% endif %} {% if message.is_mcp %}{% trans "MCP" %}{% endif %} {% if message.infected %}{% trans "Infected" %}{% endif %} {% if message.is_rbl_listed %}{% trans "Listed in RBL" %}{% endif %} {% if message.blacklisted %}{% trans "Blacklisted" %}{% endif %} - {{ protocol }}://{{ domain }}/messages/{{message.id}}
 {% endfor %}
 -----------------------------------------------
 {% endblock %}

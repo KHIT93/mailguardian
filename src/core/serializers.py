@@ -14,6 +14,7 @@ from django.conf import settings
 from auditlog.models import LogEntry as AuditLog
 import json
 from rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
+from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -74,7 +75,7 @@ class AuditLogSerializer(serializers.HyperlinkedModelSerializer):
         return obj.content_type.app_label + ':' + obj.content_type.model
 
     def get_actor_email(self, obj):
-        return obj.actor.email if obj.actor else 'System'
+        return obj.actor.email if obj.actor else _('System')
     
     def get_changes(self, obj):
         return json.loads(obj.changes)
@@ -84,14 +85,14 @@ class AuditLogSerializer(serializers.HyperlinkedModelSerializer):
             return 'Create'
         elif obj.action == 1:
             if 'last_login' in self.get_changes(obj) and obj.content_type.model == 'user':
-                return 'Login'
+                return _('Login')
             elif 'password' in self.get_changes(obj) and obj.content_type.model == 'user':
-                return 'Change password'
+                return _('Change password')
             elif 'released' in self.get_changes(obj) and self.get_changes(obj).released[1] == True and obj.content_type == 'message':
-                return 'Message released'
-            return 'Update'
+                return _('Message released')
+            return _('Update')
         elif obj.action == 2:
-            return 'Delete'
+            return _('Delete')
 
 class ChangePasswordSerializer(serializers.Serializer):
     """

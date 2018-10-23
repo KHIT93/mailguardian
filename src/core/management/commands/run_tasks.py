@@ -2,9 +2,10 @@ from django.core.management.base import BaseCommand, CommandError
 from core.models import ApplicationTask, MailScannerHost
 from django.conf import settings
 import importlib
+from django.utils.translation import gettext_lazy as _
 
 class Command(BaseCommand):
-    help = 'Run queued tasks'
+    help = _('Run queued tasks')
 
     def handle(self, *args, **kwargs):
         host_count = MailScannerHost.objects.count()

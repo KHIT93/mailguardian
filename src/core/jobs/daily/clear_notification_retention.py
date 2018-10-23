@@ -2,9 +2,10 @@ from django_extensions.management.jobs import DailyJob
 from core.models import ApplicationNotification
 from datetime import datetime, timedelta
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 class Job(DailyJob):
-    help = 'Daily database maintenance to remove auditlog.models.LogEntry entries that have passed the retention policy days'
+    help = _('Daily database maintenance to remove auditlog.models.LogEntry entries that have passed the retention policy days')
 
     def execute(self):
         multi_node = True if host_count > 0 else False

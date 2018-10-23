@@ -3,6 +3,7 @@ from rest_framework import serializers
 from spamassassin.models import RuleDescription
 import requests
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
@@ -29,7 +30,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'blacklisted',
             'is_spam',
             'is_rbl_listed',
-            'quarantined',
+            'stored',
             'infected',
             'is_clean'
             )
@@ -94,7 +95,7 @@ class SpamReportSerializer(serializers.HyperlinkedModelSerializer):
                     except:
                         pass
             if too_large:
-                report['TOO_LARGE'] = 'The message is too large to be scanned by SpamAssassin'
+                report['TOO_LARGE'] = _('The message is too large to be scanned by SpamAssassin')
         return report
 
 class RblReportSerializer(serializers.HyperlinkedModelSerializer):

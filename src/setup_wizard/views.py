@@ -13,6 +13,7 @@ from core.serializers import UserSerializer
 from django.core.management import call_command
 from io import StringIO
 import django, json
+from django.utils.translation import gettext_lazy as _
 
 # Create your views here.
 class LicenseAPIView(APIView):
@@ -63,7 +64,7 @@ class InitializeDatabaseAPIView(APIView):
             Setting.objects.update_or_create(key='quarantine.report.from', defaults={'key' : 'quarantine.report.from', 'value' : serializer.data['quarantine_report_from']})
             Setting.objects.update_or_create(key='quarantine.report.non_spam.hide', defaults={'key' : 'quarantine.report.non_spam.hide', 'value' : serializer.data['quarantine_report_non_spam_hide']})
             Setting.objects.update_or_create(key='quarantine.report.subject', defaults={'key' : 'quarantine.report.subject', 'value' : serializer.data['quarantine_report_subject']})
-            response['createsettings'] = 'Initial settings have been configured'
+            response['createsettings'] = _('Initial settings have been configured')
             # Last update guardianware-env.json with the branding information of the application
             data = ''
             with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'r') as f:
@@ -73,6 +74,6 @@ class InitializeDatabaseAPIView(APIView):
             data.replace('"logo": ""', '"logo": "{0}"'.format(serializer.data['branding_logo']))
             with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'w') as f:
                 f.write(data)
-            response['update_env'] = 'Environment file succesfully updated. Please run "sudo systemctl restat mailguardian.service"'
+            response['update_env'] = _('Environment file succesfully updated. Please run "sudo systemctl restat mailguardian.service"')
             return Response(response, status=status.HTTP_200_OK)
 

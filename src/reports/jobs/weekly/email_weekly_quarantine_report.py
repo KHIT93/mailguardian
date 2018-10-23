@@ -2,9 +2,10 @@ from django_extensions.management.jobs import WeeklyJob
 from core.models import User, Setting, MailScannerHost
 from django.conf import settings
 from reports.email_reports import QuarantinedEmailReport
+from django.utils.translation import gettext_lazy as _
 
 class Job(WeeklyJob):
-    help = 'Weekly job for sending weekly quarantine reports to users and administrators'
+    help = _('Weekly job for sending weekly quarantine reports to users and administrators')
 
     def execute(self):
         run_weekly = Setting.objects.filter(key='quarantine.report.weekly').get().value
