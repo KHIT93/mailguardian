@@ -13,6 +13,7 @@ class Domain(models.Model):
     class Meta:
         verbose_name = _('domain')
         verbose_name_plural = _('domains')
+        ordering = ('-name',)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_('Name'), max_length=128, unique=True)
     destination = models.CharField(_('Destination'), max_length=128, null=True, blank=True)
