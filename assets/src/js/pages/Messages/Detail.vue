@@ -177,6 +177,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="flex hover:bg-grey-lighter text-sm">
+                        <div class="text-grey-darker w-1/2 sm:w-1/4 p-2">
+                            <div class="font-semibold">
+                                Queue ID:
+                            </div>
+                        </div>
+                        <div class="text-grey-darker w-1/2 sm:w-3/4 p-2">
+                            <div class="">
+                                {{ message.mailq_id }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="sm:w-1/2 border-b">
