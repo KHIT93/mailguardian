@@ -1,4 +1,5 @@
 {% extends 'mailguardian/_layouts/plaintext.html' %}
+{% load i18n %}
 
 {% block content %}
 {% trans "Quarantine Report" %}

@@ -1,4 +1,5 @@
 {% extends 'mailguardian/layout.html' %}
+{% load i18n %}
 
 {% block app_title %}{% trans "Application Error (Page Not Found)" %}: {% if exception_type %}{{ exception_type }}{% endif %}{% endblock %}
 

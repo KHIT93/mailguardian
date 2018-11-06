@@ -1,4 +1,5 @@
 {% extends 'mailguardian/layout.html' %}
+{% load i18n %}
 
 {% block app_title %}{% trans "Server Error" %}: {% if exception_type %}{{ exception_type }}{% endif %}{% endblock %}
 
