@@ -382,3 +382,10 @@ class SmtpRelayViewSet(viewsets.ModelViewSet):
     serializer_class = SmtpRelaySerializer
     model = SmtpRelay
     permission_classes = (IsAdminUser,)
+
+    def get_queryset(self):
+        qs = self.queryset
+        if self.request.query_params.__contains__('search'):
+            search_key = self.request.query_params.get('search')
+            qs = qs.filter(Q(hostname__icontains=search_key) | Q(ip_address__icontains=search_key))
+        return qs

@@ -15,6 +15,9 @@ class DomainViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super(DomainViewSet, self).get_queryset()
+        if self.request.query_params.__contains__('search'):
+            search_key = self.request.query_params.get('search')
+            qs = qs.filter(name__icontains=search_key)
         if self.request.user.is_staff:
             return qs
         domains = [domain.name for domain in self.request.user.domains.all()]

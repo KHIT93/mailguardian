@@ -44,6 +44,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super(UserViewSet, self).get_queryset()
+        if self.request.query_params.__contains__('search'):
+            search_key = self.request.query_params.get('search')
+            qs = qs.filter(
+                    Q(email__icontains=search_key) | Q(first_name__icontains=search_key) | Q(last_name__icontains=search_key)
+                )
         if self.request.user.is_staff:
             return qs
         domains = [domain.name for domain in self.request.user.domains.all()]
@@ -111,6 +116,17 @@ class MailScannerHostViewSet(viewsets.ModelViewSet):
     serializer_class = MailScannerHostSerializer
     permission_classes = (IsAdminUser,)
     model = MailScannerHost
+
+    def get_queryset(self):
+        qs = self.queryset
+        if self.request.query_params.__contains__('search'):
+            search_key = self.request.query_params.get('search')
+            qs = qs.filter(
+                    Q(hostname__icontains=search_key) | Q(ip_address__icontains=search_key)
+                )
+        if self.request.query_params.__contains__('filename'):
+            qs = qs.filter(filepath=self.request.query_params.get('filename'))
+        return qs
 
 class ApplicationTaskViewSet(viewsets.ModelViewSet):
     queryset = ApplicationTask.objects.all()

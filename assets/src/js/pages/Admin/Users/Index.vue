@@ -4,6 +4,16 @@
         <div class="card">
             <h2 class="font-normal text-center mb-2">User management</h2>
             <p>Here you can manage the users that have been created on the system</p>
+            <div class="w-full py-2">
+                <form @submit.prevent="get_search">
+                    <div class="flex text-sm items-center">
+                        <input type="text" name="search" class="form-input" v-model="search" placeholder="Type something here..."/>
+                        <button type="submit" class="btn btn-blue shadow">
+                            Search
+                        </button>
+                    </div>
+                </form>
+            </div>
             <div class="card table-wrapper">
                 <table class="table text-sm">
                     <thead>
@@ -119,6 +129,10 @@ export default {
         previous() {
             let page = this.prev_link.split("?page=")[1];
             this.get(this.search, page);
+        },
+        async get_search() {
+            await this.get(this.search);
+            this.search = null;
         },
         edit(id) {
             router.push('/admin/users/'+id);
