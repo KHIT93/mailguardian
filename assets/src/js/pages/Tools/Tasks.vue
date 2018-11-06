@@ -59,6 +59,7 @@ export default {
     },
     methods: {
         get() {
+            this.setLoading(true);
             axios.get('/api/tasks/').then(response => {
                 this.tasks = response.data.results;
                 this.nextLink = response.data.next;
@@ -66,9 +67,9 @@ export default {
                 this.pages = response.data.page_count;
                 this.currentPage = response.data.current;
                 this.count = response.data.count;
-                this.setLoadding(false);
+                this.setLoading(false);
             }).catch(error => {
-                this.setLoadding(false);
+                this.setLoading(false);
                 console.log(error.response);
             })
         },

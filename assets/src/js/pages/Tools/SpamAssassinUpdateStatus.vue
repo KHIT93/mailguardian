@@ -31,21 +31,22 @@ export default {
         ...mapGetters(['user'])
     },methods: {
         get() {
+            this.setLoading(true);
             axios.post('/api/settings/by-key/', {'key': 'sa.last_updated'}).then(response => {
                 this.last_updated = response.data.value;
-                this.setLoadding(false);
+                this.setLoading(false);
             }).catch(error => {
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
-                this.setLoadding(false);
+                this.setLoading(false);
             });
         },
         sync() {
-            this.toggleLoading();
+            this.setLoading(true);
             axios.post('/api/sa-rule-descriptions/sync/').then(response => {
                 this.notify(this.createNotification('Rule descriptions synchronized', 'The spamassassin rule descriptions have been synchronized with the application', 'success'))
-                this.toggleLoading();
+                this.setLoading(false);
             }).catch(error => {
-                this.toggleLoading();
+                this.setLoading(false);
                 this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
