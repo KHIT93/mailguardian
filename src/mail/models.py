@@ -156,6 +156,7 @@ class SmtpRelay(models.Model):
     class Meta:
         verbose_name = _('smtp relay')
         verbose_name_plural = _('smtp relays')
+        ordering = ('ip_address', 'hostname')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ip_address = models.CharField(_("IP Address"), max_length=255, db_index=True)
     hostname = models.CharField(_('Hostname'), max_length=255, db_index=True, default='')

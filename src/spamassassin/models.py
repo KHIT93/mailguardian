@@ -8,6 +8,7 @@ class Rule(models.Model):
     class Meta:
         verbose_name = _('rule')
         verbose_name_plural = _('rules')
+        ordering = ('name',)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_('Name'), max_length=255, unique=True)
     score = models.DecimalField(_('Score'), default=0.00, max_digits=7, decimal_places=2)
@@ -16,6 +17,7 @@ class RuleDescription(models.Model):
     class Meta:
         verbose_name = _('rule description')
         verbose_name_plural = _('rule descriptions')
+        ordering = ('key',)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     key = models.CharField(_('Key'), max_length=255, unique=True)
     value = models.TextField(_('Value'), blank=True, null=True)

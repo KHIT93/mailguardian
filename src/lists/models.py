@@ -15,6 +15,7 @@ class ListEntry(models.Model):
         unique_together = ('from_address', 'to_address', 'to_domain', 'listing_type')
         verbose_name = _('listing entry')
         verbose_name_plural = _('listing entries')
+        ordering = ('listing_type', 'from_address', 'to_address')
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     from_address = models.CharField(_("From"), max_length=511, blank=True, default="", db_index=True)

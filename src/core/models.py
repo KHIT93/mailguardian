@@ -194,6 +194,7 @@ class MailScannerHost(models.Model):
     class Meta:
         verbose_name = _('mailscanner host')
         verbose_name_plural = _('mailscanner hosts')
+        ordering = ('hostname', 'ip_address')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     hostname = models.CharField(_('Hostname'), max_length=255)
     ip_address = models.GenericIPAddressField(_('IP Address'))
