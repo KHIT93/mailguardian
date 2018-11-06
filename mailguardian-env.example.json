@@ -35,6 +35,7 @@
     "app_key": "",
     "audit_log": true,
     "mta": "postfix",
+    "config_version": "1.3.0",
     "branding": {
         "name": "MailGuardian",
         "tagline": "Securing your email",

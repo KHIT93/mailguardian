@@ -266,6 +266,7 @@ if __name__ == "__main__":
         },
         "app_key": get_random_secret_key(),
         "encryption_key": generate_encryption_key(),
+        "config_version": '1.3.0',
         "audit_log": True,
         "mta": MTA,
         "branding": {
