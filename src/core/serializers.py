@@ -103,11 +103,16 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class MailGuardianPasswordResetSerializer(PasswordResetSerializer):
     def save(self):
+        from_email = getattr(settings, 'DEFAULT_FROM_EMAIL')
+        try:
+            from_email = Setting.objects.get(key='quarantine.report.from').value
+        except:
+            pass
         request = self.context.get('request')
         # Set some values to trigger the send_email method.
         opts = {
             'use_https': request.is_secure(),
-            'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
+            'from_email': from_email,
             'request': request,
             'email_template_name': 'mailguardian/registration/password_reset_email.html'
         }
