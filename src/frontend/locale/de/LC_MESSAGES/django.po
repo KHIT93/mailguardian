@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MailGuardian 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 20:41+0200\n"
+"POT-Creation-Date: 2018-11-07 18:39+0100\n"
 "PO-Revision-Date: 2018-10-23 21:26+0200\n"
 "Last-Translator: Kenneth Hansen <kenneth@khansen-it.dk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: frontend/templates/mailguardian/api_only.html:7
+#: frontend/templates/mailguardian/api_only.html:8
 msgid "You are authorized to proceed here"
 msgstr "Sie sind nicht berechtigt, her fortzufahren"

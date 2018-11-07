@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MailGuardian 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 20:41+0200\n"
+"POT-Creation-Date: 2018-11-07 18:40+0100\n"
 "PO-Revision-Date: 2018-10-23 20:42+0200\n"
 "Last-Translator: Kenneth Hansen <kenneth@khansen-it.dk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,183 +86,183 @@ msgstr "bruger"
 msgid "users"
 msgstr "brugere"
 
-#: core/models.py:130 core/models.py:131
+#: core/models.py:131 core/models.py:132
 msgid "mailscanner configuration"
 msgstr "mailscanner konfiguration"
 
-#: core/models.py:133 core/models.py:174 core/models.py:186
+#: core/models.py:134 core/models.py:175 core/models.py:187
 msgid "Key"
 msgstr "Nøgle"
 
-#: core/models.py:134 core/models.py:176 core/models.py:187
+#: core/models.py:135 core/models.py:177 core/models.py:188
 msgid "Value"
 msgstr "Værdi"
 
-#: core/models.py:135 core/models.py:177
+#: core/models.py:136 core/models.py:178
 msgid "Filepath"
 msgstr "Filsti"
 
-#: core/models.py:171 core/models.py:172
+#: core/models.py:172 core/models.py:173
 msgid "SpamAssassin configuration"
 msgstr "SpamAssassin konfiguration"
 
-#: core/models.py:175
+#: core/models.py:176
 msgid "Rule"
 msgstr "Regel"
 
-#: core/models.py:183
+#: core/models.py:184
 msgid "setting"
 msgstr "indstilling"
 
-#: core/models.py:184
+#: core/models.py:185
 msgid "settings"
 msgstr "indstillinger"
 
-#: core/models.py:194
+#: core/models.py:195
 msgid "mailscanner host"
 msgstr "mailscanner vært"
 
-#: core/models.py:195
+#: core/models.py:196
 msgid "mailscanner hosts"
 msgstr "mailscanner værter"
 
-#: core/models.py:197
+#: core/models.py:199
 msgid "Hostname"
 msgstr "værtsnavn"
 
-#: core/models.py:198
+#: core/models.py:200
 msgid "IP Address"
 msgstr "IP adresse"
 
-#: core/models.py:199
+#: core/models.py:201
 msgid "Use TLS"
 msgstr "Brug TLS"
 
-#: core/models.py:200
+#: core/models.py:202
 msgid "MX Priority"
 msgstr "MX Prioritet"
 
-#: core/models.py:207
+#: core/models.py:209
 msgid "application task"
 msgstr "programopgave"
 
-#: core/models.py:208
+#: core/models.py:210
 msgid "application tasks"
 msgstr "programopgaver"
 
-#: core/models.py:210
+#: core/models.py:212
 msgid "queued"
 msgstr "i kø"
 
-#: core/models.py:211
+#: core/models.py:213
 msgid "running"
 msgstr "kører"
 
-#: core/models.py:212
+#: core/models.py:214
 msgid "failed"
 msgstr "fejlet"
 
-#: core/models.py:213
+#: core/models.py:215
 msgid "completed"
 msgstr "færdig"
 
-#: core/models.py:216 core/models.py:249 core/models.py:257
+#: core/models.py:218 core/models.py:251 core/models.py:259
 msgid "User"
 msgstr "Bruger"
 
-#: core/models.py:217
+#: core/models.py:219
 msgid "Host"
 msgstr "Vært"
 
-#: core/models.py:218
+#: core/models.py:220
 msgid "Created on"
 msgstr ""
 
-#: core/models.py:219
+#: core/models.py:221
 msgid "Last updated on"
 msgstr "Sidst opdateret den"
 
-#: core/models.py:220
+#: core/models.py:222
 msgid "Completed"
 msgstr "Færdig"
 
-#: core/models.py:221
+#: core/models.py:223
 msgid "Status code"
 msgstr "Statuskode"
 
-#: core/models.py:222
+#: core/models.py:224
 msgid "Status message"
 msgstr "Statusbesked"
 
-#: core/models.py:223
+#: core/models.py:225
 msgid "content type"
 msgstr "indholdstype"
 
-#: core/models.py:224
+#: core/models.py:226
 msgid "object primary key"
 msgstr "objekt primærnøgle"
 
-#: core/models.py:225
+#: core/models.py:227
 msgid "method"
 msgstr "metode"
 
-#: core/models.py:226
+#: core/models.py:228
 msgid "parameters"
 msgstr "parametre"
 
-#: core/models.py:230
+#: core/models.py:232
 msgid "Dashboard"
 msgstr ""
 
-#: core/models.py:231 core/serializers.py:88
+#: core/models.py:233 core/serializers.py:88
 msgid "Login"
 msgstr "Log ind"
 
-#: core/models.py:235
+#: core/models.py:237
 msgid "application notification"
 msgstr "programnotifikation"
 
-#: core/models.py:236
+#: core/models.py:238
 msgid "application notifications"
 msgstr "programnotifikationer"
 
-#: core/models.py:238
+#: core/models.py:240
 msgid "Title"
 msgstr "Titel"
 
-#: core/models.py:239
+#: core/models.py:241
 msgid "Body"
 msgstr "Brødtekst"
 
-#: core/models.py:240
+#: core/models.py:242
 msgid "Starting on"
 msgstr "Starter den"
 
-#: core/models.py:241
+#: core/models.py:243
 msgid "Ending on"
 msgstr "Slutter den"
 
-#: core/models.py:242
+#: core/models.py:244
 msgid "Notification type"
 msgstr "Notifikationstype"
 
-#: core/models.py:246 core/models.py:247
+#: core/models.py:248 core/models.py:249
 msgid "two factor configuration"
 msgstr "to-faktor konfiguration"
 
-#: core/models.py:250
+#: core/models.py:252
 msgid "Timebased Onetime Password Key"
 msgstr "Nøgle til tidsbaserede engangskoder"
 
-#: core/models.py:254
+#: core/models.py:256
 msgid "two factor backup code"
 msgstr "to-faktor backup kode"
 
-#: core/models.py:255
+#: core/models.py:257
 msgid "two factor backup codes"
 msgstr "to-faktor backup koder"
 
-#: core/models.py:258
+#: core/models.py:260
 msgid "Two Factor Backup Code"
 msgstr "To-faktor Backup Kode"
 
@@ -286,27 +286,27 @@ msgstr "Opdater"
 msgid "Delete"
 msgstr "Slet"
 
-#: core/templates/400.html:3
+#: core/templates/400.html:4
 msgid "Application Error (Bad Request)"
 msgstr "Programfejl (Fejl i forespørgsel)"
 
-#: core/templates/400.html:11 core/templates/500.html:11
+#: core/templates/400.html:12 core/templates/500.html:12
 msgid "Whoops! Something seems wrong"
 msgstr "Ups! Det ser ud til at noget gik galt"
 
-#: core/templates/400.html:13 core/templates/500.html:13
+#: core/templates/400.html:14 core/templates/500.html:14
 msgid "No exception message supplied"
 msgstr "Ingen fejlbesked angivet"
 
-#: core/templates/404.html:3
+#: core/templates/404.html:4
 msgid "Application Error (Page Not Found)"
 msgstr "Programfejl (Siden blev ikke fundet)"
 
-#: core/templates/404.html:11
+#: core/templates/404.html:12
 msgid "Whoops! Seems like we could not find what you were looking for"
 msgstr "Ups! Det ser ud til at vi ikke kunne finde det du ledte efter"
 
-#: core/templates/404.html:13
+#: core/templates/404.html:14
 msgid ""
 "The page that you were looking for does not exist here. Please check that "
 "you have typed the correct URL and try again. Otherwise please contact "
@@ -316,11 +316,11 @@ msgstr ""
 "indtastet adressen korrekt og prøv igen. Alternativt kan du kontakte "
 "kundeservice"
 
-#: core/templates/500.html:3
+#: core/templates/500.html:4
 msgid "Server Error"
 msgstr "Serverfejl"
 
-#: core/templates/mailguardian/registration/password_reset_email.html:1
+#: core/templates/mailguardian/registration/password_reset_email.html:2
 msgid ""
 "You're receiving this email because you requested a password reset for your "
 "user account at"
@@ -328,17 +328,13 @@ msgstr ""
 "Du modtager denne mail fordi du har bedt om at få nulstillet din adgangskode "
 "på"
 
-#: core/templates/mailguardian/registration/password_reset_email.html:3
+#: core/templates/mailguardian/registration/password_reset_email.html:4
 msgid "Please go to the following page and choose a new password:"
 msgstr "Beøsg følgende side og vælg en ny adgangskode:"
 
-#: core/templates/mailguardian/registration/password_reset_email.html:11
-msgid "The"
-msgstr ""
-
-#: core/templates/mailguardian/registration/password_reset_email.html:11
-msgid "team"
-msgstr "holdet"
+#: core/templates/mailguardian/registration/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr "Dit brugernavn, hvis du skulle have glemt det, er:"
 
 #: core/views.py:49 core/views.py:54
 msgid "Please provide your two factor login code"
@@ -352,6 +348,9 @@ msgstr "Den oplyste 2FA kode er ugyldig"
 msgid "The provided backup code is invalid"
 msgstr "Den oplyste backup kode er ugyldig"
 
-#: core/viewsets.py:65
+#: core/viewsets.py:70
 msgid "The passwords do not match."
 msgstr "Adgangskoderne er ikke ens"
+
+#~ msgid "team"
+#~ msgstr "holdet"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MailGuardian 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 20:41+0200\n"
+"POT-Creation-Date: 2018-11-07 18:39+0100\n"
 "PO-Revision-Date: 2018-10-23 21:45+0200\n"
 "Last-Translator: Kenneth Hansen <kenneth@khansen-it.dk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,24 +21,33 @@ msgstr ""
 msgid ""
 "Daily database maintenance to remove mail.models.Message entries that have "
 "passed the retention policy days"
-msgstr "Tägliche Wartung, um mail.models.Message Einträge zu entfernen, die die Tage der Aufbewahrungspolitik überschritten haben"
+msgstr ""
+"Tägliche Wartung, um mail.models.Message Einträge zu entfernen, die die Tage "
+"der Aufbewahrungspolitik überschritten haben"
 
 #: mail/jobs/hourly/process_mta_log.py:9
 msgid ""
 "Hourly job to read the logfile of the MTA and add the log entry to mail."
 "models.TransportLog"
-msgstr "Stündlicher job, um die Protokoldatie des MTA zu lesen und die Protokoleinträge im mail.models.TransportLog hinzuzufügen"
+msgstr ""
+"Stündlicher job, um die Protokoldatie des MTA zu lesen und die "
+"Protokoleinträge im mail.models.TransportLog hinzuzufügen"
 
 #: mail/management/commands/syncmtalog.py:8
 msgid "Manually trigger a sync of the MTA transport logfile to the database"
-msgstr "Manuell eine Synchronisierung der MTA-Transportprotokoldatei mit der Datenbank zu starten"
+msgstr ""
+"Manuell eine Synchronisierung der MTA-Transportprotokoldatei mit der "
+"Datenbank zu starten"
 
 #: mail/management/commands/syncmtalog.py:12
 #, python-format
 msgid ""
 "You are not authorized to read the file %(file)s. Please verify that you "
 "have the correct permissions or that you are running this command as root"
-msgstr "Sie sind nicht berechtigt, die Datei %(file)s zu lesen. Bitten stellen Sie sicher das richtigen Berechtigungen verfügbar sind oder das Sie diesen Befehl als root ausführen"
+msgstr ""
+"Sie sind nicht berechtigt, die Datei %(file)s zu lesen. Bitten stellen Sie "
+"sicher das richtigen Berechtigungen verfügbar sind oder das Sie diesen "
+"Befehl als root ausführen"
 
 #: mail/models.py:57
 msgid "message"
@@ -204,19 +213,19 @@ msgstr "smtp-relay"
 msgid "smtp relays"
 msgstr "smtp-relays"
 
-#: mail/models.py:160
+#: mail/models.py:161
 msgid "IP Address"
 msgstr "IP-Adresse"
 
-#: mail/models.py:161
+#: mail/models.py:162
 msgid "Hostname"
 msgstr "Hostname"
 
-#: mail/models.py:162
+#: mail/models.py:163
 msgid "Active"
 msgstr "Aktiv"
 
-#: mail/models.py:163
+#: mail/models.py:164
 msgid "Comment"
 msgstr "Kommentar"
 
@@ -240,4 +249,6 @@ msgstr "Die Nachricht ist bereits Freigegeben"
 msgid ""
 "You are not authorized to run this request, as this node is for API requests "
 "only"
-msgstr "Sie sind nicht berechtigt, die Anfrage auszuführen, da dieser Node nur für API-Anfagen vorgesehen ist"
+msgstr ""
+"Sie sind nicht berechtigt, die Anfrage auszuführen, da dieser Node nur für "
+"API-Anfagen vorgesehen ist"

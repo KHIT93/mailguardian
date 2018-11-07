@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MailGuardian 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 20:41+0200\n"
+"POT-Creation-Date: 2018-11-07 18:40+0100\n"
 "PO-Revision-Date: 2018-10-23 20:44+0200\n"
 "Last-Translator: Kenneth Hansen <kenneth@khansen-it.dk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,9 @@ msgstr ""
 msgid ""
 "Hourly job to automatically regenerate the configuration/SpamAssassin/rules."
 "spamassassin.conf file"
-msgstr "Timekørsel til automatisk at opdatere filen configuration/SpamAssassin/rules.spamassassin.conf"
+msgstr ""
+"Timekørsel til automatisk at opdatere filen configuration/SpamAssassin/rules."
+"spamassassin.conf"
 
 #: spamassassin/models.py:9
 msgid "rule"
@@ -30,26 +32,26 @@ msgstr "regel"
 msgid "rules"
 msgstr "regler"
 
-#: spamassassin/models.py:12
+#: spamassassin/models.py:13
 msgid "Name"
 msgstr "Navn"
 
-#: spamassassin/models.py:13
+#: spamassassin/models.py:14
 msgid "Score"
 msgstr "Score"
 
-#: spamassassin/models.py:17
+#: spamassassin/models.py:18
 msgid "rule description"
 msgstr "regel beskrivelse"
 
-#: spamassassin/models.py:18
+#: spamassassin/models.py:19
 msgid "rule descriptions"
 msgstr "regel beskrivelser"
 
-#: spamassassin/models.py:20
+#: spamassassin/models.py:22
 msgid "Key"
 msgstr "Nøgle"
 
-#: spamassassin/models.py:21
+#: spamassassin/models.py:23
 msgid "Value"
 msgstr "Værdi"

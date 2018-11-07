@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: MailGuardian 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-23 20:41+0200\n"
+"POT-Creation-Date: 2018-11-07 18:39+0100\n"
 "PO-Revision-Date: 2018-10-23 21:46+0200\n"
 "Last-Translator: Kenneth Hansen <kenneth@khansen-it.dk>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,95 +20,125 @@ msgstr ""
 #: reports/jobs/daily/email_daily_quarantine_report.py:8
 msgid ""
 "Daily job for sending daily quarantine reports to users and administrators"
-msgstr "Täglicher Job zum Senden täglicher Quarantäneberichte an Benutzer und Administratoren"
+msgstr ""
+"Täglicher Job zum Senden täglicher Quarantäneberichte an Benutzer und "
+"Administratoren"
 
 #: reports/jobs/monthly/email_monthly_quarantine_report.py:10
 msgid ""
 "Monthly job for sending monthly quarantine reports to users and "
 "administrators"
-msgstr "Monatlicher Job zum Senden monatlichen Quarantäneberichte an Benutzer und Administratoren"
+msgstr ""
+"Monatlicher Job zum Senden monatlichen Quarantäneberichte an Benutzer und "
+"Administratoren"
 
 #: reports/jobs/weekly/email_weekly_quarantine_report.py:8
 msgid ""
 "Weekly job for sending weekly quarantine reports to users and administrators"
-msgstr "Wöchentliger Job zum Senden wöchentliger Quarantäneberichte an Benutzer und Administratoren"
+msgstr ""
+"Wöchentliger Job zum Senden wöchentliger Quarantäneberichte an Benutzer und "
+"Administratoren"
 
-#: reports/templates/quarantine_report.html:7
-#: reports/templates/quarantine_report.txt:4
+#: reports/templates/quarantine_report.html:8
+#: reports/templates/quarantine_report.txt:5
 msgid "Quarantine Report"
 msgstr "Quarantänebericht"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:6
+#: reports/templates/quarantine_report.html:14
+#: reports/templates/quarantine_report.txt:7
 msgid "Please find below your Quarantine Report for the last"
 msgstr "Nachfolgend finden Sie Ihren Quarantänebericht für die letzten"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:6
+#: reports/templates/quarantine_report.html:14
 #: reports/templates/quarantine_report.txt:7
+#: reports/templates/quarantine_report.txt:8
 msgid "day(s)"
 msgstr "Tag(e)"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:7
+#: reports/templates/quarantine_report.html:14
+#: reports/templates/quarantine_report.txt:8
 msgid "We have"
 msgstr "Wir haben"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:7
+#: reports/templates/quarantine_report.html:14
+#: reports/templates/quarantine_report.txt:8
 msgid "processed"
 msgstr "bearbeitet"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:7
+#: reports/templates/quarantine_report.html:14
+#: reports/templates/quarantine_report.txt:8
 msgid "quarantined"
 msgstr "gestoppt"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:7
+#: reports/templates/quarantine_report.html:14
+#: reports/templates/quarantine_report.txt:8
 msgid "messages and listed them below"
 msgstr "Nachrichte und unten aufgelistet"
 
-#: reports/templates/quarantine_report.html:13
-#: reports/templates/quarantine_report.txt:7
+#: reports/templates/quarantine_report.html:14
+#: reports/templates/quarantine_report.txt:8
 msgid "All quarantined messages will be kept for"
 msgstr "Alle Nachrichten in der Quarantäne aufbewahren wir für"
 
-#: reports/templates/quarantine_report.html:16
-#: reports/templates/quarantine_report.txt:9
+#: reports/templates/quarantine_report.html:17
+#: reports/templates/quarantine_report.txt:10
 msgid "During the last"
 msgstr "In der letzten"
 
-#: reports/templates/quarantine_report.html:16
-#: reports/templates/quarantine_report.txt:9
+#: reports/templates/quarantine_report.html:17
+#: reports/templates/quarantine_report.txt:10
 msgid "we did not find any messages that needed to be quarantined"
 msgstr "haben wir keine Nachrichten erhalten"
 
-#: reports/templates/quarantine_report.html:37
-#: reports/templates/quarantine_report.txt:14
+#: reports/templates/quarantine_report.html:24
+msgid "Recieved"
+msgstr "Erhalten"
+
+#: reports/templates/quarantine_report.html:25
+msgid "From"
+msgstr "Von"
+
+#: reports/templates/quarantine_report.html:26
+msgid "To"
+msgstr "An"
+
+#: reports/templates/quarantine_report.html:27
+msgid "Subject"
+msgstr "Fach"
+
+#: reports/templates/quarantine_report.html:28
+msgid "Reason"
+msgstr "Begründung"
+
+#: reports/templates/quarantine_report.html:29
+msgid "Actions"
+msgstr "Handlungen"
+
+#: reports/templates/quarantine_report.html:38
+#: reports/templates/quarantine_report.txt:15
 msgid "Spam"
 msgstr "Spam"
 
-#: reports/templates/quarantine_report.html:38
-#: reports/templates/quarantine_report.txt:14
+#: reports/templates/quarantine_report.html:39
+#: reports/templates/quarantine_report.txt:15
 msgid "MCP"
 msgstr "MCP"
 
-#: reports/templates/quarantine_report.html:39
-#: reports/templates/quarantine_report.txt:14
+#: reports/templates/quarantine_report.html:40
+#: reports/templates/quarantine_report.txt:15
 msgid "Infected"
 msgstr "Infiziert"
 
-#: reports/templates/quarantine_report.html:40
-#: reports/templates/quarantine_report.txt:14
+#: reports/templates/quarantine_report.html:41
+#: reports/templates/quarantine_report.txt:15
 msgid "Listed in RBL"
 msgstr "In RBL aufgeführt"
 
-#: reports/templates/quarantine_report.html:41
-#: reports/templates/quarantine_report.txt:14
+#: reports/templates/quarantine_report.html:42
+#: reports/templates/quarantine_report.txt:15
 msgid "Blacklisted"
 msgstr "Blacklisted"
 
-#: reports/templates/quarantine_report.html:44
+#: reports/templates/quarantine_report.html:45
 msgid "View"
 msgstr "Ansehen"
