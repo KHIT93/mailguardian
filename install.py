@@ -327,11 +327,14 @@ if __name__ == "__main__":
                 os.system('clear')
                 # Check if certbot is installed and if not, then we install it
                 if not which('certbot'):
-                    os.system(PKG_MGR + ' install certbot -y')
+                    if platform.linux_distribution()[0] == 'debian':
+                        os.system(PKG_MGR + ' install certbot -t stretch-backports -y')
+                    else:
+                        os.system(PKG_MGR + ' install certbot -y')
                 # Request a certificate and note the path
                 PRIVKEY_PATH = '/etc/letsencrypt/live/{0}/privkey.pem'.format(APP_HOSTNAME)
                 CERT_PATH = '/etc/letsencrypt/live/{0}/fullchain.pem'.format(APP_HOSTNAME)
-                os.system(which('certbot') + ' certonly --standalone -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
+                os.system(which('certbot') + ' certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
                 print('If the certificate was successfully created, please make sure to manually add this cronjob using sudo crontab -e')
                 print("0 6,18 * * * python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew")
                 print('This will make sure that we try to renew your LetsEncrypt Certificate twice a day and random minutes')
