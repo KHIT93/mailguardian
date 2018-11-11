@@ -198,7 +198,7 @@ export default {
         getHosts() {
             this.setLoading(true);
             axios.get('/api/hosts/').then(response => {
-                this.hosts = response.data.results;
+                this.hosts = response.data.results.filter(host => !host.passive);
                 this.setLoading(false);
             }).catch(error => {
                 this.setLoading(false);

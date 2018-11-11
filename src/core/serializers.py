@@ -123,7 +123,7 @@ class MailGuardianPasswordResetSerializer(PasswordResetSerializer):
 class MailScannerHostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = MailScannerHost
-        fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls', 'priority')
+        fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls', 'priority', 'passive')
 
 class ApplicationTaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

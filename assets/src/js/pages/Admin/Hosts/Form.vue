@@ -42,6 +42,15 @@
                         </label>
                     </div>
                 </div>
+                <div class="md:flex md:items-center mb-6">
+                    <div class="md:w-1/4"></div>
+                    <div class="md:w-1/2">
+                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="use_tls">
+                            <input v-model="form.passive" class="mr-2" type="checkbox" name="use_tls" />
+                            <span class="text-sm">This host is passive</span>
+                        </label>
+                    </div>
+                </div>
                 <div class="flex flex-row-reverse border-t pt-2">
                     <button type="submit" class="btn btn-blue shadow">
                         Submit
@@ -78,7 +87,8 @@ export default {
                 hostname: '',
                 ip_address: '',
                 use_tls: true,
-                priority: 10
+                priority: 10,
+                passive: false
             });
         }
     },
@@ -95,7 +105,8 @@ export default {
                     hostname: response.data.hostname,
                     ip_address: response.data.ip_address,
                     use_tls: response.data.use_tls,
-                    priority: response.data.priority
+                    priority: response.data.priority,
+                    passive: response.data.passive
                 });
                 this.setLoading(false);
             }).catch(error => {

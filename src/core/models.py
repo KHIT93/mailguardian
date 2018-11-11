@@ -200,6 +200,7 @@ class MailScannerHost(models.Model):
     ip_address = models.GenericIPAddressField(_('IP Address'))
     use_tls = models.BooleanField(_('Use TLS'), default=True)
     priority = models.IntegerField(_('MX Priority'), default=10)
+    passive = models.BooleanField(_("Passive host"), default=0)
 
     def __str__(self):
         return '{0} ({1})'.format(self.hostname, self.ip_address)
