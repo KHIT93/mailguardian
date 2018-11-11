@@ -7,7 +7,7 @@
 {% trans "Please find below your Quarantine Report for the last" %} {{ period }} {% trans "day(s)" %}.
 {% trans "We have" %} {% if show_all %}{% trans "processed" %}{% else %}{% trans "quarantined" %}{% endif %} {{ message_count }} {% trans "messages and listed them below" %}. {% trans "All quarantined messages will be kept for" %} {{ retention_days }} {% trans "day(s)" %}
 {% else %}
-{% trans "During the last" %} {{ period }}, {% trans "we did not find any messages that needed to be quarantined"%}
+{% trans "During the last" %} {{ period }} {% trans "day(s)" %}, {% trans "we did not find any messages that needed to be quarantined"%}
 {% endif %}
 -----------------------------------------------
 
