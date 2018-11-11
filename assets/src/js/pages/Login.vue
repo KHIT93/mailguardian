@@ -73,7 +73,7 @@
                 </div>
             </form>
             <p class="text-center text-grey text-xs">
-                &copy;2018 MailGuardian (@KHIT93). All rights reserved.
+                <!-- &copy;2018 MailGuardian (@KHIT93). All rights reserved. -->
             </p>
         </div>
     </div>
