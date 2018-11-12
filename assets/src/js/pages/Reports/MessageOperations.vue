@@ -2,8 +2,8 @@
 <mg-page>
     <div>
         <div class="sm:container mx-auto px-4">
-            <div class="flex justify-between" v-if="page_count > 1">
-                <button @click="previous_page" class="hidden sm:block bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
+            <div class="flex justify-between">
+                <button @click="previous_page" v-if="page_count > 1" class="hidden sm:block bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
                     Prev
                 </button>
                 <div v-if="selectedMessages.length > 0">
@@ -17,7 +17,7 @@
                         Release
                     </button>
                 </div>
-                <button @click="next_page" class="hidden sm:block bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
+                <button @click="next_page" v-if="page_count > 1" class="hidden sm:block bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
                     Next
                 </button>
             </div>
