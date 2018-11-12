@@ -228,7 +228,12 @@ export default {
                     daily_quarantine_report: response.data.daily_quarantine_report,
                     weekly_quarantine_report: response.data.weekly_quarantine_report,
                     monthly_quarantine_report: response.data.monthly_quarantine_report
-                })
+                });
+                axios.get('/api/users/'+this.id+'/domains/').then(response => {
+                    this.form.domains = response.data;
+                }).catch(error => {
+                    this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                });
                 this.setLoading(false);
             }).catch(error => {
                 this.setLoading(false);
@@ -238,12 +243,6 @@ export default {
                 else if (error.response.status == 403) {
                     router.push({ name: 'access_denied' });
                 }
-            });
-            axios.get('/api/users/'+this.id+'/domains/').then(response => {
-                this.setLoading(true);
-                this.form.domains = response.data;
-            }).catch(error => {
-                this.setLoading(false);
             });
         },
         async submit() {
