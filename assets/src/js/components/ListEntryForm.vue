@@ -30,7 +30,7 @@
                 </label>
             </div>
             <div class="md:w-3/4 inline-flex">
-                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="from_address" v-model="from" id="from_address" type="email" placeholder="JaneDoe">
+                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="from_address" v-model="from" id="from_address" type="text" placeholder="JaneDoe">
                 <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
                 <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue w-full rounded py-2 px-4 text-grey-darker" name="from_domain" v-model="from_domain" id="from_domain" type="text" placeholder="example.com">
             </div>
@@ -76,7 +76,7 @@
                 </label>
             </div>
             <div class="md:w-3/4 inline-flex">
-                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="to" id="to_address" type="email" placeholder="JohnDoe">
+                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="to" id="to_address" type="text" placeholder="JohnDoe">
                 <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
                 <input class="form-input" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com">                    
             </div>
@@ -171,7 +171,7 @@ export default {
         submit_list() {
             this.form.from_address = this.from_address;
             this.form.to_address = this.to_address;
-            this.toggleLoading();
+            this.form.listing_type = this.listingType;
             this.form.post('/api/lists/').then(() => {
                 this.$emit('close');
                 this.notify(this.createNotification('Entry created', `A ${this.listingType} entry has been created for email from ${this.form.from_address} to ${this.form.to_address}`, 'success'));
