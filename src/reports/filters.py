@@ -21,12 +21,14 @@ class MessageQuerySetFilter(QuerySetFilter):
                     allow_from_filter = False
                 else:
                     allow_to_filter = True
+                    qs = qs.filter(from_domain__in=domains)
             elif 'from_address' in filters or'from_domain' in filters:
                 if ('from_address' in filters and filters['from_address']['value'].split('@')[-1] in domains) or ('from_domain' in filters and filters['from_domain']['value'] in domains):
                     allow_to_filter = False
                     allow_from_filter = True
                 else:
                     allow_from_filter = True
+                    qs = qs.filter(to_domain__in=domains)
             else:
                 qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
         else:
