@@ -21,7 +21,7 @@ export default {
         this.getMessages();
         this.interval = setInterval(function () {
             this.getMessages();
-        }.bind(this), 5000);
+        }.bind(this), 30000);
     },
     methods: {
         getMessages() {
