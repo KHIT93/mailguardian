@@ -12,6 +12,6 @@ class Job(DailyJob):
         if (multi_node and not settings.API_ONLY) or not multi_node:
             to_remove = Message.objects.filter(date__lt=datetime.today() - timedelta(days=settings.RECORD_RETENTION))
             # Remove files from filesystem before we delete the record in the database
-            for message in to_remove:
-                message.remove_file()
+            # for message in to_remove:
+            #     message.remove_file()
             to_remove.delete()
