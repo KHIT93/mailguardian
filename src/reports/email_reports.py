@@ -24,8 +24,12 @@ class QuarantinedEmailReport:
         with open(os.path.join(settings.ASSETS_DIR, 'dist', 'css', 'app.css')) as f:
             styles = f.read()
         for user in queryset:
+            domains = [domain.name for domain in user.domains.all()]
             messages = Message.objects.filter(date__gt=datetime.today() - timedelta(days=self.period+1), date__lt=datetime.today())
-            messages = messages.filter(Q(from_address=user.email) | Q(to_address=user.email))
+            if user.is_domain_admin:
+                messages = messages.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+            if not user.is_staff and not user.is_domain_admin:
+                messages = messages.filter(Q(from_address=user.email) | Q(to_address=user.email))
             if not self.show_all_messages:
                 messages = messages.filter(Q(is_spam=True) | Q(blacklisted=True) | Q(is_mcp=True) | Q(is_rbl_listed=True) | Q(infected=True))
             
