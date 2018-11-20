@@ -12,6 +12,9 @@
     </head>
     <body class="font-sans bg-grey-lighter antialiased">
         {% block content %}{% endblock %}
+        <script>
+            window.Promise || document.write('<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>');
+        </script>
         {% block scripts %}
         <script src="{% static 'js/app.js' %}" defer></script>
         {% endblock %}
