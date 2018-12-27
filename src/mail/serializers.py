@@ -31,6 +31,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
             'is_spam',
             'is_rbl_listed',
             'stored',
+            'scanned',
             'infected',
             'is_clean'
             )

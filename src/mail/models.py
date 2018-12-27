@@ -77,6 +77,7 @@ class Message(models.Model):
     is_mcp = models.BooleanField(_('Is MCP'), db_index=True, default=False)
     is_rbl_listed = models.BooleanField(_("Listed in RBL"), db_index=True, default=False)
     stored = models.BooleanField(_('Stored'), db_index=True, default=False)
+    scanned = models.BooleanField(_('Message has been scanned'),db_index=True, default=False)
     infected = models.BooleanField(_('Infected'), db_index=True, default=False)
     released = models.BooleanField(_('Released'), db_index=True, default=False)
 
