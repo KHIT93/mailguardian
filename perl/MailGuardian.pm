@@ -159,7 +159,7 @@ sub ListenForMessages {
 
         # Check to make sure DB connection is still valid
         InitConnection unless $dbh->ping;
-        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, stored, infected, size, mailq_id, is_mcp, mcp_score, date, released) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Error: %s", $DBI::errstr);
+        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, stored, infected, size, mailq_id, is_mcp, mcp_score, date, released, scanned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Error: %s", $DBI::errstr);
         # Log message
         my $message_id = $ug->create_str();
         my $header_id = $ug->create_str();
@@ -202,7 +202,8 @@ sub ListenForMessages {
             $issamcp,
             $$message{mcpsascore},
             $$message{date},
-            0
+            0,
+            1
         );
         
         # Uncomment this row for debugging
