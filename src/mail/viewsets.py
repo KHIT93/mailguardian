@@ -29,8 +29,11 @@ class MessageViewSet(viewsets.ModelViewSet):
         qs = super(MessageViewSet, self).get_queryset()
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains.all()]
-        qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
         return qs
 
     @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='contents', url_name='message-file-contents')
