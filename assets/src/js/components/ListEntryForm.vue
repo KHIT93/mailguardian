@@ -10,8 +10,8 @@
                 </div>
                 <div class="md:w-3/4">
                     <div class="relative">
-                        <select v-model="listing_choice_from" @change="from_reset" name="from_select" class="form-select">
-                            <option value="">-- Select --</option>
+                        <select v-model="listing_choice_from" @change="from_reset" name="from_select" class="form-select" required>
+                            <option value="">-- Select From --</option>
                             <option value="from_address">Senders email address or domain</option>
                             <option value="from_ip_address">Senders IP-address</option>
                         </select>
@@ -32,7 +32,7 @@
             <div class="md:w-3/4 inline-flex">
                 <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="from_address" v-model="from" id="from_address" type="text" placeholder="JaneDoe">
                 <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
-                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue w-full rounded py-2 px-4 text-grey-darker" name="from_domain" v-model="from_domain" id="from_domain" type="text" placeholder="example.com">
+                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue w-full rounded py-2 px-4 text-grey-darker" name="from_domain" v-model="from_domain" id="from_domain" type="text" placeholder="example.com" :required="listing_choice_from == 'from_address'">
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                 </label>
             </div>
             <div class="md:w-3/4">
-                <input class="form-input" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444">
+                <input class="form-input" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_from == 'from_ip_address'">
             </div>
         </div>
 
@@ -56,8 +56,8 @@
                 </div>
                 <div class="md:w-3/4">
                     <div class="relative">
-                        <select v-model="listing_choice_to" @change="to_reset" name="to_select" class="form-select">
-                            <option value="">-- Select --</option>
+                        <select v-model="listing_choice_to" @change="to_reset" name="to_select" class="form-select" required>
+                            <option value="">-- Select To --</option>
                             <option value="to_address">Recipients email address or domain</option>
                             <option value="to_ip_address">Recipients IP-address</option>
                         </select>
@@ -78,7 +78,7 @@
             <div class="md:w-3/4 inline-flex">
                 <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="to" id="to_address" type="text" placeholder="JohnDoe">
                 <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
-                <input class="form-input" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com">                    
+                <input class="form-input" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com" :required="listing_choice_to == 'to_address'">                    
             </div>
         </div>
 
@@ -89,7 +89,7 @@
                 </label>
             </div>
             <div class="md:w-3/4">
-                <input class="form-input" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444">
+                <input class="form-input" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_to == 'to_ip_address'">
             </div>
         </div>
         <div class="px-6 py-4 border-t bg-grey-lightest rounded-b">
