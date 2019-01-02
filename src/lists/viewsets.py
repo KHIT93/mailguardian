@@ -19,8 +19,11 @@ class ListEntryViewSet(viewsets.ModelViewSet):
                 )
         if self.request.user.is_staff:
             return qs
-        domains = [domain.name for domain in self.request.user.domains.all()]
-        qs = qs.filter(to_domain__in=domains)
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_domain__icontains=self.request.user.email.split('@')[-1]) | Q(to_domain__icontains=self.request.user.email.split('@')[-1]))
         return qs
 
 class BlacklistEntryViewSet(ListEntryViewSet):

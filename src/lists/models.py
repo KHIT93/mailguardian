@@ -18,8 +18,9 @@ class ListEntry(models.Model):
         ordering = ('listing_type', 'from_address', 'to_address')
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    from_address = models.CharField(_("From"), max_length=511, blank=True, default="", db_index=True)
-    to_address = models.CharField(_("To"), max_length=511, blank=True, default="", db_index=True)
+    from_address = models.CharField(_("From"), max_length=511, default="", db_index=True)
+    from_domain = models.CharField(_("From"), max_length=255, null=True, blank=True, default="", db_index=True)
+    to_address = models.CharField(_("To"), max_length=511, default="", db_index=True)
     to_domain = models.CharField(_("To"), max_length=255, null=True, blank=True, default="", db_index=True)
     listing_type = models.CharField(_('Listing type'), max_length=12, choices=(
         ('blacklisted', _('Blacklisted')),
@@ -28,7 +29,9 @@ class ListEntry(models.Model):
 
     def save(self, *args, **kwargs):
         if '@' in self.to_address:
-            self.to_domain = self.to_address.split('@')[:1]
+            self.to_domain = self.to_address.split('@')[-1]
+        if '@' in self.from_address:
+            self.from_domain = self.from_address.split('@')[-1]
         super(ListEntry, self).save(*args, **kwargs)
 
 if settings.AUDIT_LOGGING:

@@ -2,6 +2,7 @@
     <form @submit.prevent="submit_list" class="h-full">
         <h2 class="p-2 text-center">Add {{listingType}} entry</h2>
         <div class="px-4">
+            <mg-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Validation Error', message: form.errors.get('non_field_errors'), type: 'error' }"></mg-notification>
             <div class="md:flex md:items-center mb-6">
                 <div class="md:w-1/4">
                     <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_select">
@@ -103,6 +104,7 @@
 <script>
 import Form from '../classes/Form';
 import { mapMutations } from 'vuex';
+import Notification from './Notification.vue';
 export default {
     props: {
         listingType: {
@@ -176,7 +178,10 @@ export default {
                 this.$emit('close');
                 this.notify(this.createNotification('Entry created', `A ${this.listingType} entry has been created for email from ${this.form.from_address} to ${this.form.to_address}`, 'success'));
             }).catch(error => {
-                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                if (error.request.status_code != 400)
+                {
+                    this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
+                }
             });
         },
         from_reset() {
@@ -190,6 +195,9 @@ export default {
             this.to = '';
         },
         ...mapMutations(['notify'])
-    }
+    },
+    components: {
+        'mg-notification': Notification
+    },
 }
 </script>
