@@ -11,10 +11,10 @@ let tailwindcss = require('tailwindcss');
  | file for your application, as well as bundling up your JS files.
  |
  */
-
+mix.setPublicPath(path.resolve('./'));
 mix.js('./assets/src/js/app.js', './assets/dist/js')
    .less('./assets/src/css/app.less', './assets/dist/css').options({
        postCss: [
            tailwindcss('./mailguardian.js'),
        ]
-   });
+   }).version();
