@@ -1,10 +1,18 @@
 .card {
-    @apply .bg-white .border .shadow .p-2;
+    @apply .bg-white .border .shadow-md .p-3;
+}
+
+.card-no-shadow {
+    @apply .shadow-none;
+}
+
+.card-no-border {
+    @apply .border-none;
 }
 
 @screen sm {
     .card {
-        @apply .rounded;
+        @apply .rounded-lg;
     }
 }
 

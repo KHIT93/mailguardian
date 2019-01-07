@@ -4,7 +4,7 @@
         <div class="card p-2">
             <h2 class="font-normal text-center mb-2">Notification management</h2>
             <p>Here you can manage the notifications that have been created on the system</p>
-            <div class="card table-wrapper">
+            <div class="card card-no-shadow card-no-border table-wrapper">
                 <table class="table text-sm">
                     <thead>
                         <tr>

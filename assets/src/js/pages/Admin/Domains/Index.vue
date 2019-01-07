@@ -14,7 +14,7 @@
                     </div>
                 </form>
             </div>
-            <div class="card table-wrapper">
+            <div class="card card-no-shadow card-no-border table-wrapper">
                 <table class="table text-sm">
                     <thead>
                         <tr>
