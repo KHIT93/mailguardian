@@ -1,4 +1,5 @@
 {% load static %}
+{% load mix %}
 {% load i18n %}
 <!DOCTYPE html>
 <html>
@@ -8,7 +9,7 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>{% block app_title %}{{ app_name }}{% endblock %}</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% mix 'css/app.css' %}" />
     </head>
     <body class="font-sans bg-grey-lighter antialiased">
         {% block content %}{% endblock %}
@@ -17,7 +18,7 @@
         </script>
 
         {% block scripts %}
-        <script src="{% static 'js/app.js' %}" defer></script>
+        <script src="{% mix 'js/app.js' %}" defer></script>
         {% endblock %}
     </body>
 </html>
