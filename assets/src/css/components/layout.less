@@ -1,13 +1,17 @@
 .card {
-    @apply .bg-white .border .shadow-md .p-3;
+    @apply .bg-white .shadow-lg .p-3;
 }
 
-.card-no-shadow {
+.card.card-no-shadow {
     @apply .shadow-none;
 }
 
-.card-no-border {
-    @apply .border-none;
+.card.card-border {
+    @apply .border;
+}
+
+.card.card-shadow-md {
+    @apply .shadow-md;
 }
 
 @screen sm {

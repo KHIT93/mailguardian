@@ -31,7 +31,7 @@
                 </form>
             </div>
         </div>
-        <div class="sm:flex">
+        <div class="sm:flex mt-4 sm:pr-2">
             <div class="card sm:w-1/2 p-2 sm:mr-1">
                 <h2 class="font-normal text-center border-b">Whitelist</h2>
                 <mg-lists-table :list="whitelist" @next="next_whitelist" @previous="previous_whitelist" @confirmDelete="delete_entry_modal"></mg-lists-table>

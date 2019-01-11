@@ -47,7 +47,7 @@
                 </div>
             </div>
             <!-- Chart.js graph here for showing message stats -->
-            <mg-dashboard-chart class="mt-2 card" :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mg-dashboard-chart>
+            <mg-dashboard-chart class="mt-6 card" :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mg-dashboard-chart>
         </div>
     </div>
 </mg-page>

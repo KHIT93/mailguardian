@@ -1,10 +1,11 @@
 <template>
     <div class="justify-center flex pt-8">
         <div class="w-full max-w-sm">
+            <div class="text-center mb-2"><img v-if="app_info.app_logo" :src="app_info.app_logo" /></div>
             <div>
                 <mg-notification v-for="message in login_notifications" :key="message.id" :notification="{ title: message.title, message: message.body, type: 'info' }"/>
             </div>
-            <form @submit.prevent="submit" class="bg-white shadow-md sm:rounded px-8 pt-6 pb-8 mb-4" method="POST">
+            <form @submit.prevent="submit" class="bg-white shadow-lg sm:rounded px-8 pt-6 pb-8 mb-4" method="POST">
                 <mg-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Error during login', message: form.errors.get('non_field_errors'), type: 'error' }"></mg-notification>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/3">
@@ -119,7 +120,7 @@
             this.setLoading(false);
         },
         computed: {
-            ...mapGetters(['isLoggedIn', 'csrftoken'])
+            ...mapGetters(['isLoggedIn', 'csrftoken', 'app_info'])
         },
         methods: {
             submit() {
