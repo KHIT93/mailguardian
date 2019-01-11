@@ -64,7 +64,7 @@
                                 Tools
                             </router-link>
                         </div>
-                        <hr class="border-b">
+                        <hr class="border-b" v-if="user.is_staff">
                         <div class="flex -mb-px mr-6" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/users" active-class="active" class="nav-link">
                                 <mg-people-icon class="w-6 h-6 mr-2"></mg-people-icon>
@@ -107,7 +107,7 @@
                                 Settings
                             </router-link>
                         </div>
-                        <hr class="border-b">
+                        <hr class="border-b" v-if="user.is_staff">
                         <div class="flex -mb-px" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/notifications" active-class="active" class="nav-link">
                                 <mg-settings-icon class="w-6 h-6 mr-2"></mg-settings-icon>
