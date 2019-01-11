@@ -4,19 +4,19 @@
         <div>
             <mg-notification v-for="message in dashboard_notifications" :key="message.id" :notification="{ title: message.title, message: message.body, type: 'info' }"/>
         </div>
-        <div class="card">
-            <div class="flex flex-row-reverse p-2 bg-grey-lightest">
+        <div class="">
+            <!-- <div class="flex flex-row-reverse p-2 bg-grey-lightest">
                 <div class="mt-2">
                     <button @click="get(interval)" type="button" class="bg-blue hover:bg-blue-dark no-underline text-white font-semibold py-2 px-4 border border-blue hover:border-bleu-dark text-sm rounded">Refresh</button>
                     <button @click="get('last_hour')" type="button" class="bg-white hover:bg-blue no-underline text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent text-sm rounded">Last hour</button>
                     <button @click="get('today')" type="button" class="bg-white hover:bg-blue no-underline text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent text-sm rounded">Today</button>
                     <button @click="get('last_day')" type="button" class="bg-white hover:bg-blue no-underline text-blue-dark font-semibold hover:text-white py-2 px-4 border border-blue hover:border-transparent text-sm rounded">Last day</button>
                 </div>
-            </div>
-            <div class="pt-2 border-b bg-grey-lightest"></div>
+            </div> -->
+            <!-- <div class="pt-2 border-b bg-grey-lightest"></div> -->
             <div class="sm:flex sm:justify-between">
-                <div class="sm:w-1/3 text-center text-grey-darker py-6">
-                    <div class="sm:border-r">
+                <div class="sm:w-1/3 text-center text-grey-darker card sm:mr-1 py-3">
+                    <div class="p-2">
                         <div class="mb-2">
                             <span class="text-5xl">{{ daily_total }}</span>
                         </div>
@@ -25,8 +25,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="sm:w-1/3 text-center text-grey-darker py-6">
-                    <div class="sm:border-r">
+                <div class="sm:w-1/3 text-center text-grey-darker card sm:mx-1 py-3 my-2 sm:my-0">
+                    <div class="p-2">
                         <div class="mb-2">
                             <span class="text-5xl">{{ daily_spam }}</span>
                         </div>
@@ -35,8 +35,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="sm:w-1/3 text-center text-grey-darker py-6">
-                    <div>
+                <div class="sm:w-1/3 text-center text-grey-darker card sm:ml-1 py-3">
+                    <div class="p-2">
                         <div class="mb-2">
                             <span class="text-5xl">{{ daily_virus }}</span>
                         </div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <!-- Chart.js graph here for showing message stats -->
-            <mg-dashboard-chart :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mg-dashboard-chart>
+            <mg-dashboard-chart class="mt-2 card" :chart-data="chart" :height="chartheight" v-show="chart.labels.length > 0"></mg-dashboard-chart>
         </div>
     </div>
 </mg-page>
@@ -71,7 +71,7 @@
                     datasets: []
                 },
                 chartheight: 150,
-                interval: 'last_hour',
+                interval: 'daily',
                 dashboard_notifications: []
             }
         },
@@ -81,7 +81,7 @@
             this.getNotifications();
         },
         methods: {
-            get(interval = 'last_hour') {
+            get(interval = 'daily') {
                 this.interval = interval;
                 axios.post('/api/dashboard/', {'interval' : interval}).then(response => {
                     this.daily_total = response.data.daily_total;

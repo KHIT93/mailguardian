@@ -22,7 +22,7 @@ class DashboardApiView(APIView):
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
         today = datetime.datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
-        interval = [today, today]
+        interval = [today, today + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)]
         field = 'timestamp'
         timefield = 'hour'
         if 'interval' in request.data:
@@ -57,7 +57,6 @@ class DashboardApiView(APIView):
         with connection.cursor() as cursor:
             cursor.execute("SELECT date_trunc('{timefield}', m.timestamp) as time, count(m.id) as total, count(CASE WHEN m.is_spam THEN 1 END) as total_spam, count(CASE WHEN m.infected THEN 1 END) as total_virus FROM public.mail_message as m{join} where m.{field} between '{fromdate}' and '{todate}'{filter} group by time order by time".format(field=field, fromdate=str(interval[0]), todate=str(interval[1]), timefield=timefield, filter=user_filter, join=join))
             chart_data = cursor.fetchall()
-        
         data = {
             'daily_total' : result[0],
             'daily_spam' : result[1],
