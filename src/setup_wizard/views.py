@@ -33,12 +33,15 @@ class InstalledAPIView(APIView):
             return Response({}, 204)
         host_count = MailScannerHost.objects.count()
         multi_node = True if host_count > 0 else False
+
         return Response({
-            'django_version': django.VERSION,
-            'mailguardian_api_version': settings.APP_VERSION,
-            'mailguardian_version': settings.APP_VERSION,
-            'mailguardian_multi_node': multi_node,
-            'mailguardian_host': settings.APP_HOSTNAME
+            'framework_version': '.'.join([str(x) for x in django.VERSION]),
+            'api_version': settings.APP_VERSION,
+            'app_version': settings.APP_VERSION,
+            'multi_node': multi_node,
+            'host': settings.APP_HOSTNAME,
+            'app_name': settings.BRAND_NAME,
+            'app_logo': settings.BRAND_LOGO
         }, 200)
 
 class InitializeDatabaseAPIView(APIView):
