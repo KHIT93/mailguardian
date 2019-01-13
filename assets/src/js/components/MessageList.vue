@@ -22,7 +22,7 @@
                         <td>{{ item.from_address }}</td>
                         <td>{{ item.to_address }}</td>
                         <td class="hidden md:table-cell">{{ item.subject }}</td>
-                        <td>{{ item.timestamp }}</td>
+                        <td>{{ new Date(item.timestamp).toLocaleString() }}</td>
                         <td v-if="app_info.mailguardian_multi_node">{{ item.mailscanner_hostname }}</td>
                         <td class="hidden md:table-cell">
                             <span v-if="item.is_clean">Clean</span>

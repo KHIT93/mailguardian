@@ -223,8 +223,8 @@ export default {
         get() {
             this.setLoading(true);
             (new Form(this.activeFilters)).post('/api/reports/summary/').then(data => {
-                this.dates.latest = data.latest;
-                this.dates.earliest = data.earliest;
+                this.dates.latest = new Date(data.latest).toLocaleDateString();
+                this.dates.earliest = new Date(data.earliest).toLocaleDateString();
                 this.message_count = data.count;
                 this.toggleLoading();
             }).catch(error => {
