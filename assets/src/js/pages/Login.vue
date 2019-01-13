@@ -126,7 +126,7 @@
             submit() {
                 this.loading = true;
                 this.form.post('/rest-auth/login/').then(response => {
-                    window.location.href = '/';
+                    window.location.href = (this.$route.query.next) ? this.$route.query.next : '/';
                 }).catch(error => {
                     this.loading = false;
                 })

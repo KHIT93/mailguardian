@@ -37,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
             if (to.matched.some(record => record.meta.requiresAuth)) {
                 if (response.status == 403 && to.path != '/login') {
                     next({
-                        path: '/login'
+                        path: '/login?next=' + to.path
                     });
                 }
                 else {
@@ -66,7 +66,7 @@ router.beforeEach(async (to, from, next) => {
         }).catch(error => {
             if (error.response.status == 403 && to.path != '/login') {
                 next({
-                    path: '/login'
+                    path: '/login?next=' + to.path
                 });
             }
             else {
