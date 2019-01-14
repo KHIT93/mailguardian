@@ -1,4 +1,4 @@
-amqp==2.3.2
+amqp==2.4.0
 anyjson==0.3.3
 argon2-cffi==18.3.0
 asn1crypto==0.24.0
@@ -10,7 +10,7 @@ coreschema==0.0.4
 cryptography==2.4.2
 cssselect==1.0.3
 cssutils==1.0.2
-Django==2.1.4
+Django==2.1.5
 django-auditlog==0.4.5
 django-encrypted-model-fields==0.5.8
 django-extensions==2.1.4
@@ -24,8 +24,8 @@ gunicorn==19.9.0
 idna==2.8
 itypes==1.1.0
 Jinja2==2.10
-kombu==4.2.2
-lxml==4.2.5
+kombu==4.2.2.post1
+lxml==4.3.0
 Markdown==3.0.1
 MarkupSafe==1.1.0
 premailer==3.0.0
@@ -33,12 +33,12 @@ psycopg2==2.7.6.1
 pycparser==2.19
 pymailq==0.9.0
 pyotp==2.2.7
-python-crontab==2.3.5
+python-crontab==2.3.6
 python-dateutil==2.6.0
-pytz==2018.7
+pytz==2018.9
 requests==2.21.0
 six==1.12.0
 typing==3.6.6
 uritemplate==3.0.0
 urllib3==1.24.1
-vine==1.1.4
+vine==1.2.0
