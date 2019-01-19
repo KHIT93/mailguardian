@@ -163,9 +163,50 @@ class MessageViewSet(viewsets.ModelViewSet):
     
     @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='queue', url_name='message-queue')
     def get_queue(self, request):
+        host_count = MailScannerHost.objects.count()
         store = PostqueueStore()
         store.load()
-        serializer = PostqueueStoreSerializer({ 'mails':store.mails, 'loaded_at':store.loaded_at })
+        mails = [{
+            'qid': mail.qid,
+            'size': mail.size,
+            'parsed': mail.parsed,
+            'parse_error': mail.parse_error,
+            'date': mail.date,
+            'status': mail.status,
+            'sender': mail.sender,
+            'recipients': mail.recipients,
+            'errors': mail.errors,
+            'head': mail.head,
+            'postcat_cmd': mail.postcat_cmd,
+            'hostname': settings.APP_HOSTNAME
+        } for mail in store.mails]
+        if host_count > 0 and not settings.API_ONLY:
+            for host in MailScannerHost.objects.all():
+                token = Token.objects.get(user=request.user)
+                protocol = 'https' if host.use_tls else 'http'
+                url = '{0}://{1}/api/messages/queue/'.format(protocol, host.hostname)
+                headers = {
+                    'Content-Type' : 'application/json',
+                    'Authorization' : 'Token {0}'.format(token.key)
+                }
+                result = requests.get(url, headers=headers)
+                data = json.loads(result.content.decode('utf-8'))
+                for mail in data:
+                    mails.append({
+                        'qid': mail.qid,
+                        'size': mail.size,
+                        'parsed': mail.parsed,
+                        'parse_error': mail.parse_error,
+                        'date': mail.date,
+                        'status': mail.status,
+                        'sender': mail.sender,
+                        'recipients': mail.recipients,
+                        'errors': mail.errors,
+                        'head': mail.head,
+                        'postcat_cmd': mail.postcat_cmd,
+                        'hostname': mail.hostname
+                    })
+        serializer = PostqueueStoreSerializer({ 'mails':mails, 'loaded_at':store.loaded_at })
         return Response(serializer.data)
 
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='release', url_name='message-action-release')

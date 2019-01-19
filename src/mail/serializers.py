@@ -152,9 +152,10 @@ class PostqueueStoreMailSerializer(serializers.Serializer):
     sender = serializers.CharField()
     recipients = serializers.ListField(child=serializers.CharField())
     errors = serializers.ListField(child=serializers.CharField())
+    hostname = serializers.CharField(max_length=255, required=False)
 
     class Meta:
-        fields = ('qid', 'size', 'parsed', 'parse_error', 'data', 'status', 'sender', 'recipients', 'errors')
+        fields = ('qid', 'size', 'parsed', 'parse_error', 'data', 'status', 'sender', 'recipients', 'errors', 'hostname')
 
 class PostqueueStoreSerializer(serializers.Serializer):
     mails = PostqueueStoreMailSerializer(many=True, read_only=True)
