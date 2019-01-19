@@ -48,6 +48,7 @@ export default {
         if (this.user.is_staff) {
             this.get();
         }
+        
     },
     computed: {
         ...mapGetters(['isLoggedIn', 'user', 'loading'])
@@ -58,7 +59,7 @@ export default {
             axios.get('/api/messages/queue/').then(response => {
                 this.mails = response.data.mails;
                 this.loaded_at = response.data.loaded_at;
-                this.toggleLoading();
+                this.setLoading(false);
             });
         },
         moment(str) {
