@@ -7,7 +7,7 @@
             </div>
             <div v-else>
                 <p>The rules were last synchroized with the application {{ last_updated | ago }}.</p>
-                <button @click="sync" type="button" class="bg-blue hover:bg-blue-dark no-underline text-white font-semibold py-2 px-4 border border-blue hover:border-bleu-dark text-sm rounded">Synchronize rule descriptions</button>
+                <button @click="sync" type="button" class="bg-blue-500 hover:bg-blue-600 no-underline text-white font-semibold py-2 px-4 border border-blue-500 hover:border-bleu-600 text-sm rounded">Synchronize rule descriptions</button>
             </div>
         </div>
     </div>

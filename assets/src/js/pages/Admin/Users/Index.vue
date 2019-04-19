@@ -35,14 +35,14 @@
                             <td>{{ item.last_name }}</td>
                             <td>
                                 <div class="badge">
-                                    <span class="badge-inner" :class="{ 'bg-green': item.is_staff, 'bg-grey': !item.is_staff }" >
+                                    <span class="badge-inner" :class="{ 'bg-green-500': item.is_staff, 'bg-gray-500': !item.is_staff }" >
                                         {{ item.is_staff | yesno }}
                                     </span>
                                 </div>
                             </td>
                             <td>
                                 <div class="badge">
-                                    <span class="badge-inner" :class="{ 'bg-green': item.is_domain_admin, 'bg-grey': !item.is_domain_admin }" >
+                                    <span class="badge-inner" :class="{ 'bg-green-500': item.is_domain_admin, 'bg-gray-500': !item.is_domain_admin }" >
                                         {{ item.is_domain_admin | yesno }}
                                     </span>
                                 </div>
@@ -52,10 +52,10 @@
                 </table>
             </div>
             <div class="inline-flex pt-2 rounded" v-if="page_count > 1">
-                <button @click="previous" class="btn rounded-none rounded-l" :class="{'select-none cursor-not-allowed btn-grey-lightest' : current == 1, 'btn-grey-light' : current != 1}">
+                <button @click="previous" class="btn rounded-none rounded-l" :class="{'select-none cursor-not-allowed btn-gray-lightest' : current == 1, 'btn-gray-400' : current != 1}">
                     Prev
                 </button>
-                <button @click="next" class="btn rounded-none rounded-r" :class="{'select-none cursor-not-allowed btn-grey-lightest' : current == page_count, 'btn-grey-light' : current != page_count}">
+                <button @click="next" class="btn rounded-none rounded-r" :class="{'select-none cursor-not-allowed btn-gray-lightest' : current == page_count, 'btn-gray-400' : current != page_count}">
                     Next
                 </button>
             </div>

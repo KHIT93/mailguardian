@@ -7,7 +7,7 @@
                     <button @click="show_blacklist_modal" class="btn btn-black shadow" type="button">
                         Add blacklist entry
                     </button>
-                    <button @click="show_whitelist_modal" class="btn btn-grey-lightest shadow" type="button">
+                    <button @click="show_whitelist_modal" class="btn btn-gray-lightest shadow" type="button">
                         Add whitelist entry
                     </button>
                 </div>
@@ -15,12 +15,12 @@
             <div class="sm:w-1/2">
                 <form @submit.prevent="search">
                     <div class="flex text-sm items-center">
-                        <div class="text-grey-darker w-3/4 md:w-5/6 p-2">
+                        <div class="text-gray-700 w-3/4 md:w-5/6 p-2">
                             <div class="font-semibold">
                                 <input type="text" name="search" class="form-input" v-model="search_query" placeholder="Type something here..."/>
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/4 md:w-1/6 p-2">
+                        <div class="text-gray-700 w-1/4 md:w-1/6 p-2">
                             <div class="">
                                 <button type="submit" class="btn btn-blue shadow">
                                     Search

@@ -12,9 +12,9 @@
                 Fetching QR-code from the server. Please give us a moment
             </p>
         </div>
-        <div class="px-6 py-4 border-t bg-grey-lightest rounded-b">
+        <div class="px-6 py-4 border-t bg-gray-100 rounded-b">
             <div class="flex flex-row-reverse">
-                <button type="button" @click.prevent="$emit('close')" class="btn btn-grey-lightest shadow">Cancel</button>
+                <button type="button" @click.prevent="$emit('close')" class="btn btn-gray-lightest shadow">Cancel</button>
                 <button type="submit" class="btn btn-blue shadow mr-2">Enable 2FA</button>
             </div>
         </div>

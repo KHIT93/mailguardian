@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center text-grey-darker py-6">
+    <div class="text-center text-gray-700 py-6">
         <div>
             <div class="mb-2">
                 <span class="text-5xl">Access Denied</span>

@@ -6,25 +6,25 @@
             <mg-message-actions @view="showMessage" @release="release" @spam="spam" @nonspam="nonspam" class="border-b" :uuid="uuid" v-if="file_exists"></mg-message-actions>
             <div class="sm:flex">
                 <div class="sm:w-1/2 sm:border-r border-b">
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/6 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/6 p-2">
                             <div class="font-semibold">
                                 From:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-5/6 p-2">
-                            <div class="flex hover:bg-grey-lighter text-sm">
-                                <div class="text-grey-darker">
+                        <div class="text-gray-700 w-1/2 sm:w-5/6 p-2">
+                            <div class="flex hover:bg-gray-200 text-sm">
+                                <div class="text-gray-700">
                                     {{ message.from_address }}
                                 </div>
                             </div>
-                            <div class="sm:flex hover:bg-grey-lighter text-sm pt-2">
-                                <div class="text-grey-darker sm:w-1/2">
+                            <div class="sm:flex hover:bg-gray-200 text-sm pt-2">
+                                <div class="text-gray-700 sm:w-1/2">
                                     <div class="font-semibold">
                                         Recieved from:
                                     </div>
                                 </div>
-                                <div class="text-grey-darker sm:w-1/2">
+                                <div class="text-gray-700 sm:w-1/2">
                                     <div class="">
                                         {{ message.client_ip }}
                                     </div>
@@ -65,25 +65,25 @@
                 </div>
 
                 <div class="sm:w-1/2 border-b">
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/6 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/6 p-2">
                             <div class="font-semibold">
                                 To:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-5/6 p-2">
-                            <div class="flex hover:bg-grey-lighter text-sm">
-                                <div class="text-grey-darker">
+                        <div class="text-gray-700 w-1/2 sm:w-5/6 p-2">
+                            <div class="flex hover:bg-gray-200 text-sm">
+                                <div class="text-gray-700">
                                     {{ message.to_address }}
                                 </div>
                             </div>
-                            <div class="sm:flex hover:bg-grey-lighter text-sm pt-2">
-                                <div class="text-grey-darker sm:w-1/2">
+                            <div class="sm:flex hover:bg-gray-200 text-sm pt-2">
+                                <div class="text-gray-700 sm:w-1/2">
                                     <div class="font-semibold">
                                         Processed by:
                                     </div>
                                 </div>
-                                <div class="text-grey-darker sm:w-1/2">
+                                <div class="text-gray-700 sm:w-1/2">
                                     <div class="">
                                         {{ message.mailscanner_hostname }}
                                     </div>
@@ -126,64 +126,64 @@
 
             <div class="sm:flex">
                 <div class="sm:w-1/2 sm:border-r border-b">
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/4 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/4 p-2">
                             <div class="font-semibold">
                                 Subject:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-3/4 p-2">
+                        <div class="text-gray-700 w-1/2 sm:w-3/4 p-2">
                             <div class="">
                                 {{ message.subject }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/4 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/4 p-2">
                             <div class="font-semibold">
                                 Recieved:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-3/4 p-2">
+                        <div class="text-gray-700 w-1/2 sm:w-3/4 p-2">
                             <div class="">
                                 {{ new Date(message.timestamp).toLocaleString() }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/4 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/4 p-2">
                             <div class="font-semibold">
                                 Size:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-3/4 p-2">
+                        <div class="text-gray-700 w-1/2 sm:w-3/4 p-2">
                             <div class="">
                                 {{ message.size | byte_display }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/4 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/4 p-2">
                             <div class="font-semibold">
                                 Spam score:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-3/4 p-2">
+                        <div class="text-gray-700 w-1/2 sm:w-3/4 p-2">
                             <div class="">
                                 {{ message.spam_score }}
                             </div>
                         </div>
                     </div>
-                    <div class="flex hover:bg-grey-lighter text-sm">
-                        <div class="text-grey-darker w-1/2 sm:w-1/4 p-2">
+                    <div class="flex hover:bg-gray-200 text-sm">
+                        <div class="text-gray-700 w-1/2 sm:w-1/4 p-2">
                             <div class="font-semibold">
                                 Queue ID:
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/2 sm:w-3/4 p-2">
+                        <div class="text-gray-700 w-1/2 sm:w-3/4 p-2">
                             <div class="">
                                 {{ message.mailq_id }}
                             </div>
@@ -193,28 +193,28 @@
 
                 <div class="sm:w-1/2 border-b">
                     <div class="sm:flex text-sm">
-                        <div class="sm:w-1/2 hover:bg-grey-lighter">
+                        <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-grey-darker bg-grey-light w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
                                     Whitelisted:
                                 </div>
-                                <div class="text-grey-darker w-1/2 p-2">
+                                <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': message.whitelisted, 'bg-grey': !message.whitelisted }" >
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': message.whitelisted, 'bg-gray-500': !message.whitelisted }" >
                                             {{ message.whitelisted | yesno }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="sm:w-1/2 hover:bg-grey-lighter">
+                        <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-grey-darker bg-grey-light w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
                                     Blacklisted:
                                 </div>
-                                <div class="text-grey-darker w-1/2 p-2">
+                                <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red': message.blacklisted, 'bg-grey': !message.blacklisted }" >
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': message.blacklisted, 'bg-gray-500': !message.blacklisted }" >
                                             {{ message.blacklisted | yesno }}
                                         </span>
                                     </div>
@@ -224,28 +224,28 @@
                     </div>
 
                     <div class="sm:flex text-sm">
-                        <div class="sm:w-1/2 hover:bg-grey-lighter">
+                        <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-grey-darker bg-grey-light w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
                                     Stored:
                                 </div>
-                                <div class="text-grey-darker w-1/2 p-2">
+                                <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold bg-grey">
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold bg-gray-500">
                                             {{ message.stored | yesno }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="sm:w-1/2 hover:bg-grey-lighter">
+                        <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-grey-darker bg-grey-light w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
                                     Spam:
                                 </div>
-                                <div class="text-grey-darker w-1/2 p-2">
+                                <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red': message.is_spam, 'bg-green': !message.is_spam }" >
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': message.is_spam, 'bg-green-500': !message.is_spam }" >
                                             {{ message.is_spam | yesno }}
                                         </span>
                                     </div>
@@ -255,28 +255,28 @@
                     </div>
 
                     <div class="sm:flex text-sm">
-                        <div class="sm:w-1/2 hover:bg-grey-lighter">
+                        <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-grey-darker bg-grey-light w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
                                     Infected:
                                 </div>
-                                <div class="text-grey-darker w-1/2 p-2">
+                                <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red': message.infected, 'bg-green': !message.infected }" >
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': message.infected, 'bg-green-500': !message.infected }" >
                                             {{ message.infected | yesno }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="sm:w-1/2 hover:bg-grey-lighter">
+                        <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-grey-darker bg-grey-light w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
                                     RBL listed:
                                 </div>
-                                <div class="text-grey-darker w-1/2 p-2">
+                                <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red': message.is_rbl_listed, 'bg-green': !message.is_rbl_listed }" >
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': message.is_rbl_listed, 'bg-green-500': !message.is_rbl_listed }" >
                                             {{ message.is_rbl_listed | yesno }}
                                         </span>
                                     </div>
@@ -288,8 +288,8 @@
             </div>
             <div class="sm:flex mb-2">
                 <div class="sm:w-1/2 sm:border-r">
-                    <div class="text-center font-bold bg-grey-lightest">Message Headers</div>
-                    <div class="flex hover:bg-grey-lighter text-xs" v-for="(value, key) in headers.headers" :key="key">
+                    <div class="text-center font-bold bg-gray-100">Message Headers</div>
+                    <div class="flex hover:bg-gray-200 text-xs" v-for="(value, key) in headers.headers" :key="key">
                         <div class="w-1/4">
                             {{ key }}
                         </div>
@@ -300,10 +300,10 @@
                 </div>
                 <div class="sm:w-1/2">
                     <div>
-                        <div class="text-center font-bold bg-grey-lightest" v-show="spamreport.id">Spam report</div>
-                        <div class="flex hover:bg-grey-lighter text-sm" v-for="(value, key) in spamreport.report" :key="key">
+                        <div class="text-center font-bold bg-gray-100" v-show="spamreport.id">Spam report</div>
+                        <div class="flex hover:bg-gray-200 text-sm" v-for="(value, key) in spamreport.report" :key="key">
                             <div class="w-3/4">
-                                <a class="text-black no-underline" :href="'http://wiki.apache.org/spamassassin/Rules/' + key" target="_blank">
+                                <a class="text-gray-900 no-underline" :href="'http://wiki.apache.org/spamassassin/Rules/' + key" target="_blank">
                                     <span v-if="value.description">{{ value.description }}</span>
                                     <span v-else>{{ key }}</span>
                                 </a>
@@ -312,8 +312,8 @@
                                 {{ value.value }}
                             </div>
                         </div>
-                        <div class="text-center font-bold bg-grey-lightest" v-show="mcpreport.id">MCP report</div>
-                        <div class="flex hover:bg-grey-lighter text-sm" v-for="(value, key) in mcpreport.report" :key="key">
+                        <div class="text-center font-bold bg-gray-100" v-show="mcpreport.id">MCP report</div>
+                        <div class="flex hover:bg-gray-200 text-sm" v-for="(value, key) in mcpreport.report" :key="key">
                             <div class="w-3/4">
                                 <a :href="'http://wiki.apache.org/spamassassin/Rules/' + key" target="_blank">{{ key }}</a>
                             </div>
@@ -322,14 +322,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="hover:bg-grey-lighter">
-                        <div class="text-center font-bold bg-grey-lightest" v-show="mailscanner_report.id">MailScanner report</div>
+                    <div class="hover:bg-gray-200">
+                        <div class="text-center font-bold bg-gray-100" v-show="mailscanner_report.id">MailScanner report</div>
                         <div class=" text-sm"><p>{{ mailscanner_report.contents }}</p></div>
                     </div>
                 </div>
             </div>
             <div class="w-full" v-if="transport_log.length">
-                <div class="text-center font-bold bg-grey-lightest">Transport log</div>
+                <div class="text-center font-bold bg-gray-100">Transport log</div>
                 <div class="table-wrapper">
                     <table class="table text-sm">
                         <thead>
@@ -479,7 +479,7 @@ export default {
         },
         createListing(from_address, to_address, listing_type) {
             this.$modal.show(ListEntryForm,{
-                listingType: 'whitelisted',
+                listingType: listing_type,
                 fromAddress: from_address,
                 toAddress: to_address,
                 fromChoice: 'from_address',

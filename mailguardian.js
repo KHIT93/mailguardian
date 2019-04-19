@@ -24,7 +24,7 @@ View the full documentation at https://tailwindcss.com.
 |
 */
 
-var defaultConfig = require('tailwindcss/defaultConfig')()
+let defaultConfig = require('tailwindcss/defaultConfig')()
 
 
 /*
@@ -43,7 +43,7 @@ var defaultConfig = require('tailwindcss/defaultConfig')()
 |
 */
 
-var colors = {
+let colors = {
   'transparent': 'transparent',
 
   'black': '#222b2f',
@@ -235,7 +235,7 @@ module.exports = {
       'Liberation Mono',
       'Courier New',
       'monospace',
-    ]
+    ],
   },
 
 
@@ -505,7 +505,7 @@ module.exports = {
     '1/6': '16.66667%',
     '5/6': '83.33333%',
     'full': '100%',
-    'screen': '100vw'
+    'screen': '100vw',
   },
 
 
@@ -542,7 +542,7 @@ module.exports = {
     '48': '12rem',
     '64': '16rem',
     'full': '100%',
-    'screen': '100vh'
+    'screen': '100vh',
   },
 
 
@@ -658,6 +658,7 @@ module.exports = {
     '2': '0.5rem',
     '3': '0.75rem',
     '4': '1rem',
+    '5': '1.25rem',
     '6': '1.5rem',
     '8': '2rem',
     '10': '2.5rem',
@@ -700,6 +701,7 @@ module.exports = {
     '2': '0.5rem',
     '3': '0.75rem',
     '4': '1rem',
+    '5': '1.25rem',
     '6': '1.5rem',
     '8': '2rem',
     '10': '2.5rem',
@@ -741,6 +743,7 @@ module.exports = {
     '2': '0.5rem',
     '3': '0.75rem',
     '4': '1rem',
+    '5': '1.25rem',
     '6': '1.5rem',
     '8': '2rem',
     '10': '2.5rem',
@@ -781,6 +784,7 @@ module.exports = {
     'md': '0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08)',
     'lg': '0 15px 30px 0 rgba(0,0,0,0.11), 0 5px 15px 0 rgba(0,0,0,0.08)',
     'inner': 'inset 0 2px 4px 0 rgba(0,0,0,0.06)',
+    'outline': '0 0 0 3px rgba(52,144,220,0.5)',
     'none': 'none',
   },
 

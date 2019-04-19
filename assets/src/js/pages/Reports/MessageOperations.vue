@@ -3,21 +3,21 @@
     <div>
         <div class="sm:container mx-auto px-4">
             <div class="flex justify-between">
-                <button @click="previous_page" v-if="page_count > 1" class="hidden sm:block bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
+                <button @click="previous_page" v-if="page_count > 1" class="hidden sm:block bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == 1}">
                     Prev
                 </button>
                 <div v-if="selectedMessages.length > 0">
-                    <button @click="mark_spam" type="button" class="flex-no-shrink bg-orange hover:bg-orange-dark border-orange hover:border-orange-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button @click="mark_spam" type="button" class="flex-shrink-0 bg-orange-500 hover:bg-orange-600 border-orange-500 hover:border-orange-600 text-sm border-4 text-white py-1 px-2 rounded shadow">
                         Mark as spam
                     </button>
-                    <button @click="mark_non_spam" type="button" class="flex-no-shrink bg-orange hover:bg-orange-dark border-orange hover:border-orange-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button @click="mark_non_spam" type="button" class="flex-shrink-0 bg-orange-500 hover:bg-orange-600 border-orange-500 hover:border-orange-600 text-sm border-4 text-white py-1 px-2 rounded shadow">
                         Mark as not spam
                     </button>
-                    <button @click="release_messages" type="button" class="flex-no-shrink bg-green hover:bg-green-dark border-green hover:border-green-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button @click="release_messages" type="button" class="flex-shrink-0 bg-green-500 hover:bg-green-600 border-green-500 hover:border-green-600 text-sm border-4 text-white py-1 px-2 rounded shadow">
                         Release
                     </button>
                 </div>
-                <button @click="next_page" v-if="page_count > 1" class="hidden sm:block bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
+                <button @click="next_page" v-if="page_count > 1" class="hidden sm:block bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == page_count}">
                     Next
                 </button>
             </div>
@@ -40,7 +40,7 @@
                                 There are currently no messages to display
                             </td>
                         </tr>
-                        <tr v-for="item in messages" :key="item.id" class="text-grey-darker" @click="item.selected = !item.selected" v-else :class="{ 'bg-blue-lighter hover:bg-blue-light': item.selected, 'bg-red': item.is_spam, 'bg-orange': item.is_rbl_listed, 'bg-black text-white': item.blacklisted, 'bg-green-lighter': item.whitelisted }">
+                        <tr v-for="item in messages" :key="item.id" class="text-gray-700" @click="item.selected = !item.selected" v-else :class="{ 'bg-blue-200 hover:bg-blue-500': item.selected, 'bg-red-500': item.is_spam, 'bg-orange-500': item.is_rbl_listed, 'bg-gray-900 text-white': item.blacklisted, 'bg-green-200': item.whitelisted }">
                             <td>{{ item.from_address }}</td>
                             <td>{{ item.to_address }}</td>
                             <td class="hidden md:table-cell">{{ item.subject }}</td>
@@ -62,10 +62,10 @@
         </div>
         <div class="container mx-auto px-4">
             <div class="flex justify-between" v-if="page_count > 1">
-                <button @click="previous_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
+                <button @click="previous_page" class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == 1}">
                     Prev
                 </button>
-                <button @click="next_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
+                <button @click="next_page" class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == page_count}">
                     Next
                 </button>
             </div>

@@ -18,7 +18,7 @@
                             There are currently no messages to display
                         </td>
                     </tr>
-                    <tr v-for="item in messages" :key="item.id" class="text-grey-darkest" :class="computeColorClasses(item)" @click="details(item.id)" v-else>
+                    <tr v-for="item in messages" :key="item.id" class="text-gray-800" :class="computeColorClasses(item)" @click="details(item.id)" v-else>
                         <td>{{ item.from_address }}</td>
                         <td>{{ item.to_address }}</td>
                         <td class="hidden md:table-cell">{{ item.subject }}</td>
@@ -59,16 +59,16 @@ export default {
         },
         computeColorClasses(item) {
             if (item.is_spam) {
-                return 'bg-red';
+                return 'bg-red-500';
             }
             if (item.is_rbl_listed) {
-                return 'bg-orange';
+                return 'bg-orange-500';
             }
             if (item.blacklisted) {
-                return 'bg-black text-white';
+                return 'bg-gray-900 text-white';
             }
             if (item.whitelisted) {
-                return 'bg-green-lighter';
+                return 'bg-green-200';
             }
         }
     }

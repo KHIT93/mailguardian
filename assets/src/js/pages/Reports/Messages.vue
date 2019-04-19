@@ -3,10 +3,10 @@
     <div>
         <div class="sm:container mx-auto px-4">
             <div class="flex justify-between" v-if="page_count > 1">
-                <button @click="previous_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
+                <button @click="previous_page" class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == 1}">
                     Prev
                 </button>
-                <button @click="next_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
+                <button @click="next_page" class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == page_count}">
                     Next
                 </button>
             </div>
@@ -14,10 +14,10 @@
         <mg-message-list :messages="messages" :count="message_count" class="sm:px-4"></mg-message-list>
         <div class="container mx-auto px-4">
             <div class="flex justify-between" v-if="page_count > 1">
-                <button @click="previous_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == 1}">
+                <button @click="previous_page" class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == 1}">
                     Prev
                 </button>
-                <button @click="next_page" class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-grey-lightest hover:bg-grey-lightest' : current == page_count}">
+                <button @click="next_page" class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded" :class="{'select-none cursor-not-allowed bg-gray-100 hover:bg-gray-100' : current == page_count}">
                     Next
                 </button>
             </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="absolute pin-r pin-b z-10" v-cloak>
+    <div class="absolute right-0 bottom-0 z-10" v-cloak>
         <mg-notification v-for="item in notifications" :notification="item" :key="item.id"></mg-notification>
     </div>
 </template>

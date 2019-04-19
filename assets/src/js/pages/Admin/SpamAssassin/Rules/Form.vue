@@ -5,7 +5,7 @@
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="name">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="name">
                             Rule*
                         </label>
                     </div>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="score">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="score">
                             Score*
                         </label>
                     </div>
@@ -27,7 +27,7 @@
                     <button type="submit" class="btn btn-blue shadow">
                         Submit
                     </button>
-                    <button v-if="id" @click="destroy" type="button" class="mr-1 flex-no-shrink bg-red hover:bg-red-dark border-red hover:border-red-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button v-if="id" @click="destroy" type="button" class="mr-1 flex-shrink-0 bg-red-500 hover:bg-red-600 border-red-500 hover:border-red-600 text-sm border-4 text-white py-1 px-2 rounded shadow">
                         Delete
                     </button>
                 </div>

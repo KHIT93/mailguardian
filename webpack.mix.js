@@ -15,6 +15,6 @@ mix.setPublicPath(path.resolve('./'));
 mix.js('./assets/src/js/app.js', './assets/dist/js')
    .less('./assets/src/css/app.less', './assets/dist/css').options({
        postCss: [
-           tailwindcss('./mailguardian.js'),
+           tailwindcss('./tailwind.config.js'),
        ]
    }).version();

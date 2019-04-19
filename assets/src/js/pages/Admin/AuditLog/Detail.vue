@@ -5,7 +5,7 @@
             <h2 class="border-b">Details for log entry</h2>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">
-                    <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4">
+                    <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4">
                         Timestamp
                     </label>
                 </div>
@@ -15,7 +15,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">
-                    <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4">
+                    <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4">
                         Module
                     </label>
                 </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">
-                    <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4">
+                    <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4">
                         Record ID
                     </label>
                 </div>
@@ -35,7 +35,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">
-                    <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4">
+                    <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4">
                         Action
                     </label>
                 </div>
@@ -45,7 +45,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">
-                    <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4">
+                    <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4">
                         Perfomed by
                     </label>
                 </div>
@@ -55,7 +55,7 @@
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
                 <div class="md:w-1/6">
-                    <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4">
+                    <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4">
                         From IP Address
                     </label>
                 </div>

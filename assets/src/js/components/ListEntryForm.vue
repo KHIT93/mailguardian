@@ -5,7 +5,7 @@
             <mg-notification v-if="form.errors.has('non_field_errors')" :notification="{ title: 'Validation Error', message: form.errors.get('non_field_errors'), type: 'error' }"></mg-notification>
             <div class="md:flex md:items-center mb-6">
                 <div class="md:w-1/4">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_select">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_select">
                         I want to make a listing based on
                     </label>
                 </div>
@@ -26,20 +26,20 @@
 
         <div class="md:flex md:items-center mb-6 px-4" v-if="listing_choice_from == 'from_address'">
             <div class="md:w-1/4">
-                <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_address">
+                <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_address">
                     From
                 </label>
             </div>
             <div class="md:w-3/4 inline-flex">
-                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="from_address" v-model="from" id="from_address" type="text" placeholder="JaneDoe">
-                <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
-                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue w-full rounded py-2 px-4 text-grey-darker" name="from_domain" v-model="from_domain" id="from_domain" type="text" placeholder="example.com" :required="listing_choice_from == 'from_address'">
+                <input class="bg-gray-200 appearance-none border border-gray-200 hover:border-blue-500 rounded py-2 px-4 text-gray-700" name="from_address" v-model="from" id="from_address" type="text" placeholder="JaneDoe">
+                <span class="select-none bg-gray-200 appearance-none border border-gray-200 py-2 px-4 text-gray-700">@</span>
+                <input class="bg-gray-200 appearance-none border border-gray-200 hover:border-blue-500 w-full rounded py-2 px-4 text-gray-700" name="from_domain" v-model="from_domain" id="from_domain" type="text" placeholder="example.com" :required="listing_choice_from == 'from_address'">
             </div>
         </div>
 
         <div class="md:flex md:items-center mb-6 px-4" v-if="listing_choice_from == 'from_ip_address'">
             <div class="md:w-1/4">
-                <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_ip_address">
+                <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="from_ip_address">
                     From
                 </label>
             </div>
@@ -51,7 +51,7 @@
         <div class="px-4">
             <div class="md:flex md:items-center mb-6">
                 <div class="md:w-1/4">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="to_select">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="to_select">
                         I want to make a listing based on
                     </label>
                 </div>
@@ -72,20 +72,20 @@
 
         <div class="md:flex md:items-center mb-6 px-4" v-if="listing_choice_to == 'to_address'">
             <div class="md:w-1/4">
-                <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="to_address">
+                <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="to_address">
                     To
                 </label>
             </div>
             <div class="md:w-3/4 inline-flex">
-                <input class="bg-grey-lighter appearance-none border border-grey-lighter hover:border-blue rounded py-2 px-4 text-grey-darker" name="to_address" v-model="to" id="to_address" type="text" placeholder="JohnDoe">
-                <span class="select-none bg-grey-lighter appearance-none border border-grey-lighter py-2 px-4 text-grey-darker">@</span>
+                <input class="bg-gray-200 appearance-none border border-gray-200 hover:border-blue-500 rounded py-2 px-4 text-gray-700" name="to_address" v-model="to" id="to_address" type="text" placeholder="JohnDoe">
+                <span class="select-none bg-gray-200 appearance-none border border-gray-200 py-2 px-4 text-gray-700">@</span>
                 <input class="form-input" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com" :required="listing_choice_to == 'to_address'">                    
             </div>
         </div>
 
         <div class="md:flex md:items-center mb-6 px-4" v-if="listing_choice_to == 'to_ip_address'">
             <div class="md:w-1/4">
-                <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="to_ip_address">
+                <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="to_ip_address">
                     To
                 </label>
             </div>
@@ -93,9 +93,9 @@
                 <input class="form-input" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_to == 'to_ip_address'">
             </div>
         </div>
-        <div class="px-6 py-4 border-t bg-grey-lightest rounded-b">
+        <div class="px-6 py-4 border-t bg-gray-100 rounded-b">
             <div class="flex flex-row-reverse">
-                <button type="button" @click.prevent="$emit('close')" class="btn btn-grey-lightest shadow">Cancel</button>
+                <button type="button" @click.prevent="$emit('close')" class="btn btn-gray-lightest shadow">Cancel</button>
                 <button type="submit" class="btn btn-blue shadow mr-2">Save</button>
             </div>
         </div>
@@ -131,7 +131,7 @@ export default {
             form: new Form({
                 from_address: '',
                 to_address: '',
-                listing_type: this.listingType
+                listing_type: null
             }),
             listing_choice_from: '',
             listing_choice_to: '',
@@ -142,6 +142,9 @@ export default {
             from: '',
             to: ''
         }
+    },
+    created() {
+        this.form.listing_type = this.listingType;
     },
     mounted() {
         this.listing_choice_from = (this.fromChoice && this.fromChoice != '') ? this.fromChoice : '';

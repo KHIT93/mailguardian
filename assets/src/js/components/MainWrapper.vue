@@ -3,7 +3,7 @@
     <div>
         <div class="fixed z-10 w-full" v-if="isLoggedIn">
             <!-- Top nav -->
-            <div class="bg-grey-darkest" :class="{ 'shadow-md' : hide, 'lg:shadow-md':!hide }">
+            <div class="bg-gray-800" :class="{ 'shadow-md' : hide, 'lg:shadow-md':!hide }">
                 <div class="mx-auto px-4">
                     <div class="flex items-center lg:justify-between py-2 md:py-0">
                         <div class="w-1/4 lg:hidden">
@@ -16,10 +16,10 @@
                             <template v-else>{{appName}}</template>
                         </div>
                         <div class="hidden md:block md:w-2/3">
-                            <input type="text" name="search" placeholder="Search..." class="bg-grey-lighter shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-grey-dark"/>
+                            <input type="text" name="search" placeholder="Search..." class="bg-gray-200 shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-gray-600"/>
                         </div>
-                        <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-grey" title="Log out">
-                            <router-link to="/profile" class="text-grey hover:text-white pr-3">
+                        <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-gray-500" title="Log out">
+                            <router-link to="/profile" class="text-gray-500 hover:text-white pr-3">
                                 <mg-account-circle-icon class="w-6 h-6"></mg-account-circle-icon>
                             </router-link>
                             <div class="hover:text-white cursor-pointer" @click="logout">
@@ -32,7 +32,7 @@
         </div>
         <div class="lg:flex">
             <!-- Secondary -->
-            <div v-if="isLoggedIn" class="bg-grey-darkest lg:block lg:bg-transparent lg:border-b lg:w-1/5 xxl:w-1/6 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
+            <div v-if="isLoggedIn" class="bg-gray-800 lg:block lg:bg-transparent lg:border-b lg:w-1/5 xxl:w-1/6 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
                 <div class="container mx-auto px-4">
                     <div class="">
                         <div class="flex -mb-px" @click="hideMenu()">

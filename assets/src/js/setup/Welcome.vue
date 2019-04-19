@@ -10,7 +10,7 @@
             Luckily we have made this extremely easy. Just follow this wizard and you will be up and running a matter of minutes
         </p>
         <hr>
-        <p>Please click <code class="text-red bg-grey-lighter rounded p-1">Next</code> in the top right corner to get started</p>
+        <p>Please click <code class="text-red-500 bg-gray-200 rounded p-1">Next</code> in the top right corner to get started</p>
     </div>
 </template>
 

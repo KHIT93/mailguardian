@@ -1,6 +1,6 @@
 <template>
     <!-- show container -->
-    <div class="fixed pin z-40 overflow-auto bg-smoke-light" :class="{'hidden' : !show, 'flex': show}">
+    <div class="fixed pin z-40 overflow-auto bg-smoke-500" :class="{'hidden' : !show, 'flex': show}">
         <!-- show dialog -->
         <div class="relative bg-white w-full max-w-md m-auto flex-col flex rounded">
             <!-- show content -->
@@ -10,21 +10,21 @@
                     {{modalTitle}}
                 </div>
                 <!-- show body -->
-                <p class="text-grey-darker text-base">
+                <p class="text-gray-700 text-base">
                     <slot>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et perferendis eaque, exercitationem praesentium nihil.</slot>
                 </p>
             </div>
             <!-- show footer -->
-            <div class="px-6 py-4 border-t bg-grey-lightest rounded-b">
+            <div class="px-6 py-4 border-t bg-gray-100 rounded-b">
                 <div class="flex flex-row-reverse">
                     <slot name="footer">
-                        <button v-if="closeButton" type="button" @click="close" class="bg-white hover:bg-grey-lighter text-grey-darkest py-2 px-4 border border-grey-light rounded shadow ml-1">{{closeButtonText}}</button>
-                        <button v-if="submitButton" type="button" @click="submit" class="bg-blue hover:bg-blue-light text-white py-2 px-4 border border-grey-light rounded shadow mr-1">{{submitButtonText}}</button>
+                        <button v-if="closeButton" type="button" @click="close" class="bg-white hover:bg-gray-200 text-gray-800 py-2 px-4 border border-gray-400 rounded shadow ml-1">{{closeButtonText}}</button>
+                        <button v-if="submitButton" type="button" @click="submit" class="bg-blue-500 hover:bg-blue-500 text-white py-2 px-4 border border-gray-400 rounded shadow mr-1">{{submitButtonText}}</button>
                     </slot>
                 </div>
             </div>
-            <span class="absolute pin-t pin-b pin-r p-4" @click="close" v-if="closeIcon">
-                <svg class="h-4 w-4 text-grey hover:text-grey-darkest" role="button" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <span class="absolute top-0 bottom-0 right-0 p-4" @click="close" v-if="closeIcon">
+                <svg class="h-4 w-4 text-gray-500 hover:text-gray-800" role="button" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
                     <path d="M0 0h24v24H0z" fill="none"/>
                 </svg>

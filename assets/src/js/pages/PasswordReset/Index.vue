@@ -8,17 +8,17 @@
                 <p class="text-center mb-4" v-else>We have sent you an email with instructions on how to reset your password</p>
                 <div class="md:flex md:items-center mb-6" v-if="!success">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
                         Email
                     </label>
                     </div>
                     <div class="md:w-2/3">
                         <input :disabled="loading" v-model="form.email" class="form-input" name="email" id="email" type="email" placeholder="john@example.com">
-                        <p class="text-sm text-red pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
+                        <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse items-center justify-between" v-if="!success">
-                    <button class="bg-blue hover:bg-blue-dark text-white py-2 px-4 rounded flex items-center" type="submit" :disabled="loading" :class="{'select-none cursor-not-allowed bg-blue-lighter hover:bg-blue-lighter' : loading}">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center" type="submit" :disabled="loading" :class="{'select-none cursor-not-allowed bg-blue-200 hover:bg-blue-200' : loading}">
                         <svg class="fill-current w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" v-if="loading">
                             <circle cx="50" cy="50" fill="none" stroke-linecap="round" r="40" stroke-width="4" stroke="#fff" stroke-dasharray="62.83185307179586 62.83185307179586" transform="rotate(66 50 50)">
                                 <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite"></animateTransform>

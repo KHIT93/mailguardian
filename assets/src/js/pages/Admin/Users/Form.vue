@@ -5,7 +5,7 @@
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
                             Email address*
                         </label>
                     </div>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="first_name">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="first_name">
                             Name 
                         </label>
                     </div>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
                             Password
                         </label>
                     </div>
@@ -36,13 +36,13 @@
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4" v-if="user.is_staff">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
                             Two Factor Authentication
                         </label>
                     </div>
                     <div class="md:w-1/2">
                         <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': entity.has_two_factor, 'bg-red': !entity.has_two_factor }" >
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': entity.has_two_factor, 'bg-red-500': !entity.has_two_factor }" >
                                 {{ entity.has_two_factor | yesno }}
                             </span>
                         </div>
@@ -52,7 +52,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="is_staff">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="is_staff">
                             <input v-model="form.is_staff" class="mr-2" type="checkbox" name="is_staff" />
                             <span class="text-sm">This user is a member of the staff</span>
                         </label>
@@ -61,7 +61,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="is_domain_admin">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="is_domain_admin">
                             <input v-model="form.is_domain_admin" class="mr-2" type="checkbox" name="is_domain_admin" />
                             <span class="text-sm">This user is the administrator of one or more domains</span>
                         </label>
@@ -78,7 +78,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
                             <input v-model="form.daily_quarantine_report" class="mr-2" type="checkbox" name="daily_quarantine_report" />
                             <span class="text-sm">Send daily quarantine reports</span>
                         </label>
@@ -88,7 +88,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
                             <input v-model="form.weekly_quarantine_report" class="mr-2" type="checkbox" name="weekly_quarantine_report" />
                             <span class="text-sm">Send weekly quarantine reports</span>
                         </label>
@@ -98,7 +98,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
                             <input v-model="form.monthly_quarantine_report" class="mr-2" type="checkbox" name="monthly_quarantine_report" />
                             <span class="text-sm">Send monthly quarantine reports</span>
                         </label>
@@ -108,7 +108,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="skip_scan">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="skip_scan">
                             <input v-model="form.skip_scan" class="mr-2" type="checkbox" name="skip_scan" />
                             <span class="text-sm">Do not scan email for this user</span>
                         </label>
@@ -116,7 +116,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_score">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_score">
                             Spam score 
                         </label>
                     </div>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_highscore">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_highscore">
                             High Spam score 
                         </label>
                     </div>
@@ -152,7 +152,7 @@
                     <button type="submit" class="btn btn-blue shadow">
                         Submit
                     </button>
-                    <button v-if="id" @click="destroy" type="button" class="mr-1 flex-no-shrink bg-red hover:bg-red-dark border-red hover:border-red-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                    <button v-if="id" @click="destroy" type="button" class="mr-1 flex-shrink-0 bg-red-500 hover:bg-red-600 border-red-500 hover:border-red-600 text-sm border-4 text-white py-1 px-2 rounded shadow">
                         Delete
                     </button>
                 </div>

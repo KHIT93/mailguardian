@@ -4,11 +4,11 @@
         <div class="card p-2">
             <h2 class="font-normal text-center mb-2">MailScanner Configuration</h2>
             <p class="text-center">Here you can search, add, edit or remove data from the MailScanner configuration files</p>
-            <p class="text-center text-red">Please only do changes to these settings if you are technically qualified to do so and make sure to consult the MailScanner documentation first</p>
+            <p class="text-center text-red-500">Please only do changes to these settings if you are technically qualified to do so and make sure to consult the MailScanner documentation first</p>
             <div class="sm:flex card p-2 mt-2 mb-2 sm:items-center">
                 <div class="sm:w-1/4">
                     <div class="p-2">
-                        <router-link to="/admin/mailscanner/configuration/add" class="flex-no-shrink bg-grey-lightest hover:bg-grey-lighter hover:border-grey-lighter border-grey-lightest text-sm border-4 text-black py-1 px-2 rounded shadow no-underline">
+                        <router-link to="/admin/mailscanner/configuration/add" class="flex-shrink-0 bg-gray-100 hover:bg-gray-200 hover:border-gray-200 border-gray-100 text-sm border-4 text-gray-900 py-1 px-2 rounded shadow no-underline">
                             Add configuration option
                         </router-link>
                     </div>
@@ -16,7 +16,7 @@
                 <form @submit.prevent="search">
                 <div>
                     <div class="flex text-sm items-center">
-                        <div class="text-grey-darker w-3/4 md:w-5/6 p-2">
+                        <div class="text-gray-700 w-3/4 md:w-5/6 p-2">
                             <div class="font-semibold">
                                 <input type="text" name="search" class="form-input" v-model="search_query" placeholder="Type something here..."/>
                             </div>
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="text-grey-darker w-1/4 md:w-1/6 p-2">
+                        <div class="text-gray-700 w-1/4 md:w-1/6 p-2">
                             <div class="">
                                 <button type="submit" class="btn btn-blue shadow">
                                     Search

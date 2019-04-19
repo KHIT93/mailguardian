@@ -5,28 +5,28 @@
             <form @submit.prevent="update">
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
                             Email address*
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <p v-text="user.email" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="user.email" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="name">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="name">
                             Name 
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <p v-text="user.first_name" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
-                        <p v-text="user.last_name" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="user.first_name" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
+                        <p v-text="user.last_name" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
                             Password
                         </label>
                     </div>
@@ -36,13 +36,13 @@
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
                             Two Factor Authentication
                         </label>
                     </div>
                     <div class="md:w-1/2">
                         <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': user.has_two_factor, 'bg-red': !user.has_two_factor }" >
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': user.has_two_factor, 'bg-red-500': !user.has_two_factor }" >
                                 {{ user.has_two_factor | yesno }}
                             </span>
                         </div>
@@ -55,13 +55,13 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="user.is_staff">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="is_staff">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="is_staff">
                             Are you a member of the staff?
                         </label>
                     </div>
                     <div class="md:w-1/2">
                         <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': user.is_staff, 'bg-grey': !user.is_staff }" >
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': user.is_staff, 'bg-gray-500': !user.is_staff }" >
                                 {{ user.is_staff | yesno }}
                             </span>
                         </div>
@@ -69,13 +69,13 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="user.is_domain_admin || user.is_staff">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="is_domain_admin">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="is_domain_admin">
                             Are you an administrator of one or more domains?
                         </label>
                     </div>
                     <div class="md:w-1/2">
                         <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green': user.is_domain_admin, 'bg-grey': !user.is_domain_admin }" >
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': user.is_domain_admin, 'bg-gray-500': !user.is_domain_admin }" >
                                 {{ user.is_domain_admin | yesno }}
                             </span>
                         </div>
@@ -92,7 +92,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
                             <input v-model="form.daily_quarantine_report" class="mr-2" type="checkbox" />
                             <span class="text-sm">Send daily quarantine reports</span>
                         </label>
@@ -102,7 +102,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
                             <input v-model="form.weekly_quarantine_report" class="mr-2" type="checkbox" />
                             <span class="text-sm">Send weekly quarantine reports</span>
                         </label>
@@ -112,7 +112,7 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-grey-darker font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
+                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
                             <input v-model="form.monthly_quarantine_report" class="mr-2" type="checkbox" />
                             <span class="text-sm">Send monthly quarantine reports</span>
                         </label>
@@ -121,13 +121,13 @@
 
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="skip_scan">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="skip_scan">
                             Do not scan my email
                         </label>
                     </div>
                     <div class="md:w-1/2">
                         <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red': user.skip_scan, 'bg-green': !user.skip_scan }" >
+                            <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': user.skip_scan, 'bg-green-500': !user.skip_scan }" >
                                 {{ user.skip_scan | yesno }}
                             </span>
                         </div>
@@ -135,7 +135,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!user.skip_scan">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_score">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_score">
                             Spam score 
                         </label>
                     </div>
@@ -145,7 +145,7 @@
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
                     <div class="md:w-1/4">
-                        <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_highscore">
+                        <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="custom_spam_highscore">
                             High Spam score 
                         </label>
                     </div>

@@ -14,19 +14,19 @@
             </tbody>
         </table>
         <div class="inline-flex pt-2 rounded">
-            <button @click="previous" class="btn rounded-none rounded-l" :class="{'select-none cursor-not-allowed btn-grey-lightest' : list.current == 1, 'btn-grey-light' : list.current != 1}">
+            <button @click="previous" class="btn rounded-none rounded-l" :class="{'select-none cursor-not-allowed btn-gray-lightest' : list.current == 1, 'btn-gray-400' : list.current != 1}">
                 Prev
             </button>
-            <!-- <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4">
+            <!-- <button class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4">
                 1
             </button>
-            <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4">
+            <button class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4">
                 2
             </button>
-            <button class="bg-grey-light hover:bg-grey text-grey-darkest py-2 px-4">
+            <button class="bg-gray-400 hover:bg-gray-500 text-gray-800 py-2 px-4">
                 3
             </button> -->
-            <button @click="next" class="btn rounded-none rounded-r" :class="{'select-none cursor-not-allowed btn-grey-lightest' : list.current == list.page_count, 'btn-grey-light' : list.current != list.page_count}">
+            <button @click="next" class="btn rounded-none rounded-r" :class="{'select-none cursor-not-allowed btn-gray-lightest' : list.current == list.page_count, 'btn-gray-400' : list.current != list.page_count}">
                 Next
             </button>
         </div>

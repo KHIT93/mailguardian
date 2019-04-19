@@ -2,28 +2,28 @@
     <div class="justify-center flex pt-8">
         <div class="w-full max-w-lg">
             <div class="bg-white shadow-lg sm:rounded">
-                <div class="flex bg-grey-light justify-between items-center border-b shadow-inner rounded-t">
+                <div class="flex bg-gray-400 justify-between items-center border-b shadow-inner rounded-t">
                     <div class="flex">
-                        <div v-for="(step, index) in steps" :key="step.order" :class="{ 'bg-blue-lighter text-black' : currentStepIndex == index, 'bg-green text-white': step.completed, 'bg-red text-white': step.error, 'rounded-tl': index == 0 }"  class="text-sm p-4">
+                        <div v-for="(step, index) in steps" :key="step.order" :class="{ 'bg-blue-200 text-gray-900' : currentStepIndex == index, 'bg-green-500 text-white': step.completed, 'bg-red-500 text-white': step.error, 'rounded-tl': index == 0 }"  class="text-sm p-4">
                             {{ step.order }} {{ step.name }}
                         </div>
                     </div>
                     <div class="flex mr-2">
-                        <button @click="previous" type="button" :disabled="currentStepIndex <= 0" :class="{ 'cursor-not-allowed bg-grey-light border-grey-light hover:bg-grey-light hover:border-grey-light': currentStepIndex <= 0, 'bg-grey-lighter hover:bg-grey border-grey-lighter hover:border-grey shadow': currentStepIndex > 0 }" class="flex-no-shrink text-sm border-4 text-black py-1 px-2 rounded mr-2">
+                        <button @click="previous" type="button" :disabled="currentStepIndex <= 0" :class="{ 'cursor-not-allowed bg-gray-400 border-gray-400 hover:bg-gray-400 hover:border-gray-400': currentStepIndex <= 0, 'bg-gray-200 hover:bg-gray-500 border-gray-200 hover:border-gray-500 shadow': currentStepIndex > 0 }" class="flex-shrink-0 text-sm border-4 text-gray-900 py-1 px-2 rounded mr-2">
                             <mg-navigate-before-icon class="w-3 h-3"></mg-navigate-before-icon>
                             Previous
                         </button>
-                        <button @click="next" v-if="currentStepIndex < steps.length-1" type="button" class="btn btn-blue shadow" :class="{ 'cursor-not-allowed bg-blue-lighter border-blue-lighter hover:bg-blue-lighter hover:border-blue-lighter shadow-none': !steps[currentStepIndex].completed && currentStepIndex > 0 }" :disabled="!steps[currentStepIndex].completed && currentStepIndex > 0">
+                        <button @click="next" v-if="currentStepIndex < steps.length-1" type="button" class="btn btn-blue shadow" :class="{ 'cursor-not-allowed bg-blue-200 border-blue-200 hover:bg-blue-200 hover:border-blue-200 shadow-none': !steps[currentStepIndex].completed && currentStepIndex > 0 }" :disabled="!steps[currentStepIndex].completed && currentStepIndex > 0">
                             Next
                             <mg-navigate-next-icon class="w-3 h-3"></mg-navigate-next-icon>
                         </button>
-                        <button v-else type="button" @click="finish" class="flex-no-shrink bg-green hover:bg-green-dark border-green hover:border-green-dark text-sm border-4 text-white py-1 px-2 rounded shadow">
+                        <button v-else type="button" @click="finish" class="flex-shrink-0 bg-green-500 hover:bg-green-600 border-green-500 hover:border-green-600 text-sm border-4 text-white py-1 px-2 rounded shadow">
                             <mg-checkmark-icon class="w-3 h-3"></mg-checkmark-icon>
                             Finish
                         </button>
                     </div>
                 </div>
-                <div class="px-8 pt-6 pb-8 mb-4 text-grey-dark text-sm">
+                <div class="px-8 pt-6 pb-8 mb-4 text-gray-600 text-sm">
                     <component :is="currentStep.component" @complete="markCompleted" @error="markError" />
                 </div>
             </div>

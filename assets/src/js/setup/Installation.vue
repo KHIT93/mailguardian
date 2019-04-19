@@ -14,7 +14,7 @@
         <div v-else-if="!loading && error" class="flex flex-col items-center">
             <h1 class="text-2xl mb-2 text-center border-b pb-1">Whoops! Something seems to have gone wrong</h1>
             <p class="py-2">{{getWizardPayload.errors}}</p>
-            <button @click="submit" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 text-base rounded flex items-center" type="button">
+            <button @click="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-base rounded flex items-center" type="button">
                 <span>Try again</span>
             </button>
         </div>
@@ -23,86 +23,86 @@
             <p class="text-center pb-1">
                 Thank you for providing us wit the information necessary to customize the application to your liking.<br/>
                 Please find below you selections and review them.<br/>
-                If you need to go back and change some of the choices, please click the <code class="text-red bg-grey-lighter rounded p-1">Previous</code> button in the top right corner
+                If you need to go back and change some of the choices, please click the <code class="text-red-500 bg-gray-200 rounded p-1">Previous</code> button in the top right corner
             </p>
             <div>
                 <h2 class="text-xl text-center border-b pb-1">Administrator details</h2>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="admin_email">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="admin_email">
                         Email
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.admin_email" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.admin_email" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="admin_password">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="admin_password">
                         Password
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.admin_password" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.admin_password" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <h2 class="text-xl text-center border-b pb-1">Branding information</h2>
                 <p class="text-center pt-1">Here you can provide us some details if you want to brand the application in a specific way. You can leave the information is as, if you do not want to rebrand the application</p>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_name">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_name">
                         Custom Application Name
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.branding_name" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.branding_name" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_tagline">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_tagline">
                         Custom Application Tagline
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.branding_tagline" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.branding_tagline" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_logo">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_logo">
                         Custom Application Logo
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.branding_logo" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.branding_logo" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <h2 class="text-xl text-center border-b pb-1">Quarantine settings</h2>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_from">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_from">
                         Quarantine Email From
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.quarantine_report_from" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.quarantine_report_from" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_subject">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_subject">
                         Quarantine Email Subject
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <p v-text="getWizardPayload.quarantine_report_subject" class="bg-grey-lighter appearance-none border border-grey-lighter rounded w-full py-2 px-4 text-grey-darker"></p>
+                        <p v-text="getWizardPayload.quarantine_report_subject" class="bg-gray-200 appearance-none border border-gray-200 rounded w-full py-2 px-4 text-gray-700"></p>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_daily">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_daily">
                         Daily Quarantine Reports
                     </label>
                     </div>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
-                    <label class="block text-grey-darker font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_non_spam_hide">
+                    <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="quarantine_report_non_spam_hide">
                         Hide clean email in the report?
                     </label>
                     </div>
@@ -135,7 +135,7 @@
                     </div>
                 </div>
                 <div class="flex flex-row-reverse items-center justify-between pt-2">
-                    <button @click="submit" class="bg-blue hover:bg-blue-dark text-white py-2 px-4 text-base rounded flex items-center" type="button">
+                    <button @click="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 text-base rounded flex items-center" type="button">
                         <span>Confirm</span>
                     </button>
                 </div>

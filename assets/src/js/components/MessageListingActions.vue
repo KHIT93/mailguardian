@@ -3,7 +3,7 @@
         <div class="pt-2">
 
             <div class="pb-1">
-                <button @click="whitelist_modal" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                <button @click="whitelist_modal" class="bg-white hover:bg-blue-500 text-blue-600 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent text-xs rounded shadow">
                     <div class="inline-flex content-center">
                         <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <defs>
@@ -20,7 +20,7 @@
             </div>
 
             <div>
-                <button @click="blacklist_modal" class="bg-white hover:bg-blue text-blue-dark font-semibold hover:text-white py-1 px-2 border border-blue hover:border-transparent text-xs rounded shadow">
+                <button @click="blacklist_modal" class="bg-white hover:bg-blue-500 text-blue-600 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent text-xs rounded shadow">
                     <div class="inline-flex content-center">
                         <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"/>

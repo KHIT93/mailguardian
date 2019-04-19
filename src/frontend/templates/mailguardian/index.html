@@ -8,7 +8,7 @@
         <router-view v-cloak>{% csrf_token %}</router-view>
     </mg-wrapper>
     <v-dialog/>
-    <div class="fixed pin z-50 bg-smoke-light fade" :class="{ 'hidden' : !initializing }">
+    <div class="fixed pin z-50 bg-smoke-500 fade" :class="{ 'hidden' : !initializing }">
         <div class="absolute loader" style="top:50%; right:50%;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="stroke-current h-10 w-10">
                 <circle cx="50" cy="50" ng-attr-r="{{config.radius}}" ng-attr-stroke-width="{{config.width}}" ng-attr-stroke="{{config.c1}}" ng-attr-stroke-dasharray="{{config.dasharray}}" fill="none" stroke-linecap="round" r="40" stroke-width="4" stroke="#000" stroke-dasharray="62.83185307179586 62.83185307179586" transform="rotate(360 -8.10878e-8 -8.10878e-8)">
