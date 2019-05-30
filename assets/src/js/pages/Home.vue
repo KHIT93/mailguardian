@@ -92,13 +92,6 @@
                         labels: (this.chartdata.length) ? this.chartdata.map(m => moment(m[0]).format('HH:mm')) : [],
                         datasets: [
                             {
-                                label: 'Messages',
-                                backgroundColor: '#3490DC',
-                                lineTension: 0,
-                                radius: 0,
-                                data: (this.chartdata.length) ? this.chartdata.map(m => m[1]) : []
-                            },
-                            {
                                 label: 'Viruses',
                                 backgroundColor: '#E3342F',
                                 lineTension: 0,
@@ -111,6 +104,13 @@
                                 lineTension: 0,
                                 radius: 0,
                                 data: (this.chartdata.length) ? this.chartdata.map(m => m[2]) : []
+                            },
+                            {
+                                label: 'Messages',
+                                backgroundColor: '#3490DC',
+                                lineTension: 0,
+                                radius: 0,
+                                data: (this.chartdata.length) ? this.chartdata.map(m => m[1]) : []
                             }
                         ]
                     }
