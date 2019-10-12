@@ -33,7 +33,7 @@ FIELD_ENCRYPTION_KEY = MAILGUARDIAN_ENV.get('encryption_key', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = MAILGUARDIAN_ENV.get("debug", False)
 APP_HOSTNAME = MAILGUARDIAN_ENV.get("hostname", None)
-APP_VERSION = '1.4.1'
+APP_VERSION = '1.4.2'
 ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
 
 
