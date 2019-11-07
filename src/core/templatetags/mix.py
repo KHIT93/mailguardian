@@ -9,7 +9,9 @@ register = template.Library()
 def mix(asset):
     base_assets_dir = '/assets/dist/'
     mix_manifest = dict()
-    with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'mix-manifest.json'), 'r') as f:
-        mix_manifest = json.load(f)
-    cache_hash = mix_manifest[base_assets_dir + asset].replace(base_assets_dir + asset, "")
-    return static(asset) + cache_hash
+    if os.path.exists(os.path.join(os.path.dirname(settings.BASE_DIR), 'mix-manifest.json')):
+        with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'mix-manifest.json'), 'r') as f:
+            mix_manifest = json.load(f)
+        cache_hash = mix_manifest[base_assets_dir + asset].replace(base_assets_dir + asset, "")
+        return static(asset) + cache_hash
+    return static(asset)
