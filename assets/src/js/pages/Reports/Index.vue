@@ -58,7 +58,7 @@
                         <hr>
                         <form @submit.prevent="add_filter">
                             <div class="relative">
-                                <select v-model="filter_form.filter" class="form-select">
+                                <select v-model="filter_form.filter" class="form-select" required>
                                     <option value="">Select field to filter on</option>
                                     <option v-for="(value, key) in availableFilters" :key="key" :value="key">{{ key.replace('_', ' ') }}</option>
                                 </select>
@@ -68,7 +68,7 @@
                             </div>
                             <hr>
                             <div class="relative">
-                                <select v-model="filter_form.operator" class="form-select">
+                                <select v-model="filter_form.operator" class="form-select" required>
                                     <option value="">Select filter operator</option>
                                     <option v-for="option in selectedFilterOptions.operators" :key="option.value" :value="option.value">{{ option.label }}</option>
                                 </select>
