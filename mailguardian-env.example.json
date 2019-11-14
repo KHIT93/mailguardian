@@ -24,6 +24,7 @@
         "tmp_dir":"/tmp",
         "sa_rules_dir":"/usr/share/spamassassin",
         "sendmail_bin":"/usr/sbin/sendmail",
+        "postqueue_bin":"/usr/sbin/postqueue",
         "mailscanner_quarantine_dir": "/var/spool/MailScanner/quarantine",
         "mta_logfile": "/var/log/mail.log"
     },
