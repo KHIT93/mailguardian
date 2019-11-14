@@ -179,6 +179,10 @@ sub ListenForMessages {
         if ($$message{issamcp} ne undef) {
             $issamcp = $$message{issamcp};
         }
+        my $scanmail = 0;
+        if ($$message{scanmail} ne undef) {
+            $scanmail = $$message{scanmail};
+        }
         $sth_mail->execute(
             $message_id,
             $$message{from},
@@ -203,7 +207,7 @@ sub ListenForMessages {
             $$message{mcpsascore},
             $$message{date},
             0,
-            1
+            $$message{scanmail}
         );
         
         # Uncomment this row for debugging
