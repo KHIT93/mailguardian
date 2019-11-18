@@ -190,22 +190,9 @@ class MessageViewSet(viewsets.ModelViewSet):
                     'Authorization' : 'Token {0}'.format(token.key)
                 }
                 result = requests.get(url, headers=headers)
-                data = json.loads(result.content.decode('utf-8'))
+                data = json.loads(result.content.decode('utf-8'))['mails']
                 for mail in data:
-                    mails.append({
-                        'qid': mail['qid'],
-                        'size': mail['size'],
-                        'parsed': mail['parsed'],
-                        'parse_error': mail['parse_error'],
-                        'date': mail['date'],
-                        'status': mail['status'],
-                        'sender': mail['sender'],
-                        'recipients': mail['recipients'],
-                        'errors': mail['errors'],
-                        'head': mail['head'],
-                        'postcat_cmd': mail['postcat_cmd'],
-                        'hostname': mail['hostname']
-                    })
+                    mails.append(mail)
         serializer = PostqueueStoreSerializer({ 'mails':mails, 'loaded_at':store.loaded_at })
         return Response(serializer.data)
 
