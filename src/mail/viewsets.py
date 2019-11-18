@@ -193,21 +193,65 @@ class MessageViewSet(viewsets.ModelViewSet):
                 data = json.loads(result.content.decode('utf-8'))
                 for mail in data:
                     mails.append({
-                        'qid': mail.qid,
-                        'size': mail.size,
-                        'parsed': mail.parsed,
-                        'parse_error': mail.parse_error,
-                        'date': mail.date,
-                        'status': mail.status,
-                        'sender': mail.sender,
-                        'recipients': mail.recipients,
-                        'errors': mail.errors,
-                        'head': mail.head,
-                        'postcat_cmd': mail.postcat_cmd,
-                        'hostname': mail.hostname
+                        'qid': mail['qid'],
+                        'size': mail['size'],
+                        'parsed': mail['parsed'],
+                        'parse_error': mail['parse_error'],
+                        'date': mail['date'],
+                        'status': mail['status'],
+                        'sender': mail['sender'],
+                        'recipients': mail['recipients'],
+                        'errors': mail['errors'],
+                        'head': mail['head'],
+                        'postcat_cmd': mail['postcat_cmd'],
+                        'hostname': mail['hostname']
                     })
         serializer = PostqueueStoreSerializer({ 'mails':mails, 'loaded_at':store.loaded_at })
         return Response(serializer.data)
+
+    @action(methods=['post'], detail=False, permission_classes=[IsAdminUser], url_path='queue/resend', url_name='message-queue-resend')
+    def post_resend(self, request):
+        if not 'messages' in request.data:
+            return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
+        if isinstance(request.data['messages'], list):
+            messages = request.data['messages']
+        elif isinstance(request.data['messages'], types.StringType):
+            messages.append = request.data['messages']
+        response = []
+        host_count = MailScannerHost.objects.count()
+        # Data is delivered as { 'qid', <POSTFIX_QUEUE_ID>, 'hostname': <SERVER_HOSTNAME>}
+        # Here we will instruct postfix to deliver the passed messages
+        # This is done by running postqueue -i <QUEUE_ID>
+
+        # We can also resend all messages in the queue by running postqueue -f
+        for message in messages:
+            if not 'qid' in message or not 'hostname' in message:
+                response.append({'qid': message['qid'], 'error': _('Message data is malformed')})
+            else:
+                if message['hostname'] == settings.APP_HOSTNAME:
+                    command = "{} -i {}".format(settings.POSTQUEUE_BIN, message['qid'])
+                    output = subprocess.check_output(command, shell=True)
+                    message.released = True
+                    message.save()
+                    response.append({ 'qid':message['qid'], 'command': command, 'output': output })
+                elif host_count > 0 and not settings.API_ONLY:
+                    token = Token.objects.get(user=request.user)
+                    host = MailScannerHost.objects.get(hostname=message.mailscanner_hostname)
+                    protocol = 'https' if host.use_tls else 'http'
+                    url = '{0}://{1}/api/messages/queue/resend/'.format(protocol, host.hostname)
+                    headers = {
+                        'Content-Type' : 'application/json',
+                        'Authorization' : 'Token {0}'.format(token.key)
+                    }
+                    result = requests.post(url, json={ "messages": [message]}, headers=headers)
+                    data = result.json()
+                    if 'error' in data:
+                        response.append({'id': data['result'][0]['id'], 'error': data['result'][0]['error']})
+                    else:
+                        response.append({'id': data['result'][0]['id'], 'command': data['result'][0]['command'], 'output': data['result'][0]['output']})
+                else:
+                    response.append({'qid': message['qid'], 'hostname': message['hostname'], 'error': _('You are not authorized to run this request, as this node is for API requests only')})
+        return Response({ 'result': response }, status=status.HTTP_200_OK)
 
     @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='release', url_name='message-action-release')
     def post_action_release(self, request):
