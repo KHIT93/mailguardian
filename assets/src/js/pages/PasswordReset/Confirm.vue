@@ -52,18 +52,17 @@ export default {
     props: ['uid', 'token'],
     data: () => {
         return {
-            form: new Form({
-                uid: this.uid,
-                token: this.token,
-                new_password1: '',
-                new_password2: ''
-            }),
+            form: {},
             loading: false
         }
     },
     created() {
-        this.form.uid = this.uid;
-        this.form.token = this.token;
+        this.form = new Form({
+            uid: this.uid,
+            token: this.token,
+            new_password1: '',
+            new_password2: ''
+        })
     },
     mounted() {
         this.setInitializing(false);
