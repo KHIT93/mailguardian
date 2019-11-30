@@ -42,7 +42,7 @@ We recommend the following requirements for your hardware, regardless of whether
 - Debian 9 `Stretch` or CentOS 7
 - Python 3.5 or newer
 - Python `virtualenv`
-- PostgreSQL 10.x
+- PostgreSQL 12.x
 - Postfix 3.10+ with `pgsql` driver
 - Nginx 1.10+ or Apache 2.4+ with `HTTP/2` support
 - `sudo` installed and configured on your system
@@ -77,28 +77,26 @@ This means that we will be installing the following applications:
 First we install what we can from the official Debian `repositories`:
 
 ```
-apt install sudo wget postfix-pgsql python3 python3-setuptools libpq-dev nginx ca-certificates openssl libpng-dev
-easy_install3 virtualenv pip
+apt install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev
+python3 /usr/lib/python3/dist-packages/easy_install.py virtualenv pip
 ```
 
-This will install most of the things that we need. Next we will add the official `PostgreSQL` repo to get the latest version of `PostgreSQL 10`
+This will install most of the things that we need. Next we will add the official `PostgreSQL` repo to get the latest version of `PostgreSQL 12`
 
 ```
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 apt update
 apt dist-upgrade
-apt install postgresql-10 postgresql-sever-dev-10 postgresql-client-10
+apt install postgresql-12 postgresql-server-dev-12 postgresql-client-12
 ```
 
 Next, we need to install MailScanner. Go to https://www.mailscanner.info/downloads/ and download the package that you need, onto your server.
-For Debian, we will run these command to get the current version 5.0.7-3 of `MailScanner` and install it
+For Debian, we will run these command to get the current version 5.2.1-1 of `MailScanner` and install it
 ```
-wget https://s3.amazonaws.com/msv5/release/MailScanner-5.0.7-3.deb.tar.gz
-tar xvzf MailScanner-5.0.7-3.deb.tar.gz
-cd MailScanner-5.0.7-3
-chmod +x install.sh
-./install.sh
+wget https://github.com/MailScanner/v5/raw/master/builds/MailScanner-5.2.1-1-noarch.deb
+dpkg -i MailScanner-5.2.1-1-noarch.deb
+/usr/sbin/ms-configure
 ```
 
 The installer will ask you some questions and mostly you can just accept the defaults, unless you know what are doing. The only question where we need to choose something else is during the question where we are asked what `MTA` to use. Here we need to make sure that we choose the number corresponding to `postfix`.
@@ -155,18 +153,15 @@ cpan -i Mail::SpamAssassin::Plugin::DNSEval
 
 #### Downloading the application
 
-Next we need to download the application from https://github.com/KHIT93/mailguardian/releases
+Next we need to go to https://github.com/KHIT93/mailguardian/releases, to find out the latest release
 
-You can choose to download the sources and then compile the frontend assets (CSS and JavaScript) yourself, or you can download a prebuilt package, where these things are already done. We will cover installation from the prebuilt package.
-
-Right click the link to the prebuilt package mailguardian-X.Y.Z.tar.gz and copy the link.
-
-Run the following commands to download and extract the application:
+Run the following commands to download and extract the application. Please note that we use release 1.4.5 as the example:
 
 ```
 su - mailguardian
-wget https://github.com/KHIT93/mailguardian/releases/download/X.Y.Z/mailguardian-X.Y.Z.tar.gz
-tar xvzf mailguardian-X.Y.Z.tar.gz
+git clone https://github.com/khit93/mailguardian
+cd mailguardian
+git checkout 1.4.5
 ```
 
 This should now create a new folder called `mailguardian` inside `/home/mailguardian`
@@ -193,9 +188,7 @@ Your prompt should now look something like this:
 
 Now we run `pip install -r requirements.txt` to install the necessary `python` packages and libraries that are required for the application to run.
 
-Next we need to install `WSGI` server to run our application. We do not provide one by default, but all our examples and prebuilt scripts asume that we will use `gunicorn`.
-
-You can install `gunicorn` with `pip install gunicorn`.
+Next we need to install `WSGI` server to run our application. We do provide `gunicorn` by default, All our examples and prebuilt scripts asume that we will use `gunicorn`. If you choose to use something different, it might be required to perform some changes to get it working
 
 #### Initializing the application and configuring your webserver
 
