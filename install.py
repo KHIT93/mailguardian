@@ -5,6 +5,7 @@
 import os, sys, platform, pytz, json, pwd, grp
 from src.core.helpers import which
 from django.core.management.utils import get_random_secret_key
+from src.mailguardian import settings
 import cryptography.fernet
 
 def generate_encryption_key():
@@ -70,6 +71,7 @@ if __name__ == "__main__":
     SA_BIN = which('spamassassin')
     SA_RULES_DIR = '/var/lib/spamassassin'
     SENDMAIL_BIN = which('sendmail')
+    POSTQUEUE_BIN = which('postqueue')
 
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
@@ -230,52 +232,76 @@ if __name__ == "__main__":
         if SA_RULES_DIR_INPUT != '' and SA_RULES_DIR_INPUT is not None:
             SA_RULES_DIR = SA_RULES_DIR_INPUT
     os.system('clear')
-    env_contents = {
-        "debug": False,
-        "hostname": APP_HOSTNAME,
-        "database": {
-            "name": DB_NAME,
-            "user": DB_USER,
-            "password": DB_PASS,
-            "host": DB_HOST,
-            "port": DB_PORT,
-            "options": {
-                "sslmode": "require" if DB_SSL else "prefer"
-            }
-        },
-        "language_code": "en_us",
-        "time_zone": TZ,
-        "api_only_mode": API_ONLY_MODE,
-        "hostconfig": {
-            "salearn_bin": SALEARN_BIN,
-            "sa_bin": SA_BIN,
-            "mailscanner_bin": MS_BIN,
-            "mailscanner_config_dir": MS_CONF_DIR,
-            "mailscanner_share_dir": MS_SHARED,
-            "mailscanner_lib_dir": MS_LIB,
-            "tmp_dir": "/tmp",
-            "sa_rules_dir": SA_RULES_DIR,
-            "sendmail_bin": SENDMAIL_BIN,
-            "mailscanner_quarantine_dir": MS_QUARANTINE_DIR,
-            "mta_logfile": MTA_LOG
-        },
-        "retention": {
-            "records": RETENTION_DAYS,
-            "audit": RETENTION_DAYS,
-            "quarantine": RETENTION_DAYS
-        },
-        "app_key": get_random_secret_key(),
-        "encryption_key": generate_encryption_key(),
-        "config_version": '1.3.0',
-        "audit_log": True,
-        "mta": MTA,
-        "branding": {
-            "name": "MailGuardian",
-            "tagline": "Securing your email",
-            "logo": ""
-        }
-    }
-    mailguardian_env_contents = json.dumps(env_contents)
+
+    env_contents = [
+        '# Quick-start development settings - unsuitable for production',
+        '# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/',
+        '',
+        '# SECURITY WARNING: keep the secret key used in production secret!',
+        'SECRET_KEY = "{}"'.format(get_random_secret_key()),
+        '# SECURITY WARNING: keep the field encryption key used in production secret!',
+        '# We use the SECRET_KEY as a fallback for compatibility with existing installations',
+        'FIELD_ENCRYPTION_KEY = "{}"'.format(generate_encryption_key()),
+        '',
+        'APP_HOSTNAME = "{}"'.format(APP_HOSTNAME),
+        'DEBUG = False',
+        'LOCAL_CONFIG_VERSION = "1.5.0"',
+        '',
+        '#MailGuardian specific settings',
+        'TMP_DIR = "/tmp"',
+        'MTA = "{}"'.format(MTA),
+        'MTA_LOGFILE = "{}"'.format(MTA_LOG),
+        'SENDMAIL_BIN = "{}"'.format(SENDMAIL_BIN),
+        'POSTQUEUE_BIN = "{}"'.format(POSTQUEUE_BIN),
+        'AUDIT_LOGGING = True',
+        'API_ONLY = {}'.format(API_ONLY_MODE),
+        'CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), "configuration")',
+        '',
+        '#MailScanner settings',
+        'MAILSCANNER_BIN = "{}"'.format(MS_BIN),
+        'MAILSCANNER_CONFIG_DIR = "{}"'.format(MS_CONF_DIR),
+        'MAILSCANNER_SHARE_DIR = "{}"'.format(MS_SHARED),
+        'MAILSCANNER_LIB_DIR = "{}"'.format(MS_LIB),
+        'MAILSCANNER_QUARANTINE_DIR = "{}"'.format(MS_QUARANTINE_DIR),
+        '',
+        '# SpamAssassin settings',
+        'SALEARN_BIN = "{}"'.format(SALEARN_BIN),
+        'SA_BIN = "{}"'.format(SA_BIN),
+        'SA_RULES_DIR = "{}"'.format(SA_RULES_DIR),
+        'SA_PREF = MAILSCANNER_CONFIG_DIR+"/spamassassin.conf"',
+        '',
+        '# Retention policy',
+        'RECORD_RETENTION = {}'.format(RETENTION_DAYS),
+        'AUDIT_RETENTION = {}'.format(RETENTION_DAYS),
+        'QUARANTINE_RETENTION = {}'.format(RETENTION_DAYS),
+        '',
+        '# Branding',
+        'BRAND_NAME = "MailGuardian"',
+        'BRAND_TAGLINE = "Securing your email"',
+        'BRAND_LOGO = ""',
+        '',
+        '# Internationalization',
+        '# https://docs.djangoproject.com/en/2.2/topics/i18n/',
+        'LANGUAGE_CODE = "en-us"',
+        '',
+        'TIME_ZONE = "{}"'.format(TZ),
+        '# Database',
+        '# https://docs.djangoproject.com/en/2.2/ref/settings/#databases',
+        'DATABASES = {',
+        '    "default": {',
+        '        "ENGINE": "django.db.backends.postgresql",',
+        '        "NAME": "{}",'.format(DB_NAME),
+        '        "USER": "{}",'.format(DB_USER),
+        '        "PASSWORD": "{}",'.format(DB_PASS),
+        '        "HOST": "{}",'.format(DB_HOST),
+        '        "PORT": "{}",'.format(DB_PORT),
+        '        "OPTIONS": {',
+        '            "sslmode": "{}"'.format("require" if DB_SSL else "prefer"),
+        '        },',
+        '    }',
+        '}'
+    ]
+    mailguardian_env_contents = "\n".join(env_contents)
 
     # Print the configuration settings
     print('Hostname: {0}'.format(APP_HOSTNAME))
@@ -313,10 +339,10 @@ if __name__ == "__main__":
         print('Installation has been aborted. Please rerun the installation script to try again')
         exit()
     os.system('clear')
-    print('Writing configuration file {0}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
-    with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'w') as f:
+    print('Writing configuration file {0}'.format(os.path.join(settings.BASE_DIR, 'mailguardian', 'settings', 'local.py')))
+    with open(os.path.join(settings.BASE_DIR, 'mailguardian', 'settings', 'local.py'), 'w') as f:
         f.write(mailguardian_env_contents)
-    os.chown(os.path.join(APP_DIR, 'mailguardian-env.json'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+    os.chown(os.path.join(settings.BASE_DIR, 'mailguardian', 'settings', 'local.py'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     os.system('clear')
     if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
         if os.geteuid() != 0:
