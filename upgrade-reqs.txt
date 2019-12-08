@@ -11,7 +11,7 @@ coreschema>=0.0.4
 cryptography>=2.7
 cssselect>=1.1.0
 cssutils>=1.0.2
-Django>=2.2.4
+Django==2.2.*
 django-auditlog>=0.4.5
 django-encrypted-model-fields>=0.5.8
 django-extensions>=2.2.1
