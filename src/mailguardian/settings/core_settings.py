@@ -16,7 +16,7 @@ from django.core.management.utils import get_random_secret_key
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -136,22 +136,6 @@ elif 'GITLAB_CI' in os.environ:
         }
     }
 
-# Caching
-# https://docs.djangoproject.com/en/2.0/topics/cache/#database-caching
-if DEBUG:
-    CACHES = {
-        'default': {
-            'BACKEND': 'path.to.backend',
-        }
-    }
-else:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-            'LOCATION': 'cache',
-        }
-    }
-
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -200,37 +184,6 @@ LOCALE_PATHS = [
 
 STATIC_URL = '/assets/'
 ASSETS_DIR = os.path.join(os.path.dirname(BASE_DIR), "assets")
-
-if DEBUG:
-    STATICFILES_DIRS = [
-        os.path.join(ASSETS_DIR, "dist")
-    ]
-else:
-    STATIC_ROOT = os.path.join(ASSETS_DIR, "dist")
-
-# REST Framework configuration
-# http://www.django-rest-framework.org/#example
-REST_RENDERERS = ('rest_framework.renderers.JSONRenderer','rest_framework.renderers.BrowsableAPIRenderer',) if DEBUG else ('rest_framework.renderers.JSONRenderer',)
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication'
-    ),
-    'DEFAULT_PAGINATION_CLASS': 'mailguardian.pagination.PageNumberPaginationWithPageCount',
-    'PAGE_SIZE': 100,
-    'DEFAULT_RENDERER_CLASSES': (
-        REST_RENDERERS
-    )
-}
-
-REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailGuardianPasswordResetSerializer'
-}
 
 # Guardian Authentication backends
 # https://django-guardian.readthedocs.io/en/stable/configuration.html#configuration
