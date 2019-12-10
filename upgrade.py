@@ -3,9 +3,8 @@
 # MailGuardian upgrade script
 #
 from django.core.management.utils import get_random_secret_key
-from src.mailguardian.settings import APP_VERSION, BASE_DIR
 from src.core.helpers import which
-import os, json
+import os, json, platform
 from distutils.version import StrictVersion
 import cryptography.fernet
 import argparse
@@ -33,8 +32,8 @@ if __name__ == "__main__":
         exit()
     # Get the current directory of this script to determine the path to use
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
+    BASE_DIR = os.path.join(APP_DIR,'src')
     if input('This script will evaluate your curren MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
-        print('Please relaunch this script after running \'pip install -r requirements.txt\' ')
         exit(0)
     os.system('clear')
     if os.path.exists(os.path.join(APP_DIR, 'mailguardian-env.json')):
@@ -55,6 +54,8 @@ if __name__ == "__main__":
                 CONFIG['encryption_key'] = generate_encryption_key()
         print('Generating new configuration file')
         env_contents = [
+            'from .core_settings import BASE_DIR, ASSETS_DIR',
+            'import os',
             '# Quick-start development settings - unsuitable for production',
             '# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/',
             '',
@@ -71,24 +72,24 @@ if __name__ == "__main__":
             '#MailGuardian specific settings',
             'TMP_DIR = "/tmp"',
             'MTA = "{}"'.format(CONFIG['mta']),
-            'MTA_LOGFILE = "{}"'.format(CONFIG['mta_log']),
-            'SENDMAIL_BIN = "{}"'.format(CONFIG['sendmail_bin']),
-            'POSTQUEUE_BIN = "{}"'.format(CONFIG['postqueue_bin']),
+            'MTA_LOGFILE = "{}"'.format(CONFIG['hostconfig']['mta_logfile']),
+            'SENDMAIL_BIN = "{}"'.format(CONFIG['hostconfig']['sendmail_bin']),
+            'POSTQUEUE_BIN = "{}"'.format(CONFIG['hostconfig']['postqueue_bin'] if 'postqueue_bin' in CONFIG['hostconfig'] else which('postqueue')),
             'AUDIT_LOGGING = {}'.format(CONFIG['audit_log']),
             'API_ONLY = {}'.format(CONFIG['api_only_mode']),
             'CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), "configuration")',
             '',
             '#MailScanner settings',
-            'MAILSCANNER_BIN = "{}"'.format(CONFIG['mailscanner_bin']),
-            'MAILSCANNER_CONFIG_DIR = "{}"'.format(CONFIG['mailscanner_config_dir']),
-            'MAILSCANNER_SHARE_DIR = "{}"'.format(CONFIG['mailscanner_share_dir']),
-            'MAILSCANNER_LIB_DIR = "{}"'.format(CONFIG['mailscanner_lib_dir']),
-            'MAILSCANNER_QUARANTINE_DIR = "{}"'.format(CONFIG['mailscanner_quarantine_dir']),
+            'MAILSCANNER_BIN = "{}"'.format(CONFIG['hostconfig']['mailscanner_bin']),
+            'MAILSCANNER_CONFIG_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_config_dir']),
+            'MAILSCANNER_SHARE_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_share_dir']),
+            'MAILSCANNER_LIB_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_lib_dir']),
+            'MAILSCANNER_QUARANTINE_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_quarantine_dir']),
             '',
             '# SpamAssassin settings',
-            'SALEARN_BIN = "{}"'.format(CONFIG['salearn_bin']),
-            'SA_BIN = "{}"'.format(CONFIG['sa_bin']),
-            'SA_RULES_DIR = "{}"'.format(CONFIG['sa_rules_dir']),
+            'SALEARN_BIN = "{}"'.format(CONFIG['hostconfig']['salearn_bin']),
+            'SA_BIN = "{}"'.format(CONFIG['hostconfig']['sa_bin']),
+            'SA_RULES_DIR = "{}"'.format(CONFIG['hostconfig']['sa_rules_dir']),
             'SA_PREF = MAILSCANNER_CONFIG_DIR+"/spamassassin.conf"',
             '',
             '# Retention policy',
@@ -124,7 +125,7 @@ if __name__ == "__main__":
         ]
         mailguardian_env_contents = "\n".join(env_contents)
         # Write out the new configuration file
-        with open(os.path.join(BASE_DIR, 'mailguardian','settings', 'local.py'), 'w'):
+        with open(os.path.join(BASE_DIR, 'mailguardian','config', 'local.py'), 'w') as f:
             f.write(mailguardian_env_contents)
 
         print('We have now migrated the contents of your configuration file into the new format')
@@ -142,7 +143,7 @@ if __name__ == "__main__":
         # If we run the frontend, then we will have to perform node updates
         print('Web frontend detected. Rebuilding static assets. This may take some time')
         os.system('npm install')
-        os.system('npm run prooduction')
+        os.system('npm run production')
     auto_fix = args.yes
 
     if not auto_fix:
@@ -151,6 +152,7 @@ if __name__ == "__main__":
     
     if auto_fix:
         rebuild_latest_nginx()
+        auto_fix = False
     
     if not auto_fix:
         if input('Do you want us to automatically migrate your Systemd service configuration to match our latest template (y/N) ').lower() == 'y':
@@ -158,4 +160,5 @@ if __name__ == "__main__":
     
     if auto_fix:
         rebuild_latest_systemd()
+        auto_fix = False
     
