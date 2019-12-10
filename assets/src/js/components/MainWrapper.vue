@@ -5,7 +5,7 @@
             <!-- Top nav -->
             <div class="bg-gray-800" :class="{ 'shadow-md' : hide, 'lg:shadow-md':!hide }">
                 <div class="mx-auto px-4">
-                    <div class="flex items-center lg:justify-between py-2 md:py-0">
+                    <div class="flex items-center lg:justify-between py-3">
                         <div class="w-1/4 lg:hidden">
                             <div href="#" @click="hide = !hide">
                                 <mg-menu-icon class="w-8 h-8 text-white text-5xl"></mg-menu-icon>
@@ -16,9 +16,15 @@
                             <template v-else>{{appName}}</template>
                         </div>
                         <div class="hidden md:block md:w-2/3">
-                            <input type="text" name="search" placeholder="Search..." class="bg-gray-200 shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-gray-600"/>
+                            <!-- <input type="text" name="search" placeholder="Search..." class="bg-gray-200 shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-gray-600"/> -->
                         </div>
                         <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-gray-500" title="Log out">
+                            <a :href="config.app_support" class="text-gray-500 hover:text-white pr-3" target="_blank">
+                                <mg-help-icon class="w-6 h-6"></mg-help-icon>
+                            </a>
+                            <a :href="config.app_feedback" class="text-gray-500 hover:text-white pr-3" target="_blank">
+                                <mg-feedback-icon class="w-6 h-6"></mg-feedback-icon>
+                            </a>
                             <router-link to="/profile" class="text-gray-500 hover:text-white pr-3">
                                 <mg-account-circle-icon class="w-6 h-6"></mg-account-circle-icon>
                             </router-link>
@@ -111,7 +117,7 @@
                         <hr class="border-b" v-if="user.is_staff">
                         <div class="flex -mb-px" v-if="user.is_staff" @click="hideMenu()">
                             <router-link to="/admin/notifications" active-class="active" class="nav-link">
-                                <mg-settings-icon class="w-6 h-6 mr-2"></mg-settings-icon>
+                                <mg-notification-icon class="w-6 h-6 mr-2"></mg-notification-icon>
                                 Notification Manager
                             </router-link>
                         </div>
@@ -139,6 +145,9 @@ export default {
     computed: {
         computeClasses() {
             return (this.hide) ? "hidden" : "";
+        },
+        config() {
+            return window.mailguardian;
         },
         ...mapGetters(['isLoggedIn', 'user'])
     },

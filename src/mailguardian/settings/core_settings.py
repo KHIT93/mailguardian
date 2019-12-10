@@ -227,3 +227,5 @@ QUARANTINE_RETENTION = 60
 BRAND_NAME = 'MailGuardian'
 BRAND_TAGLINE = 'Securing your email'
 BRAND_LOGO = ''
+BRAND_SUPPORT = 'https://github.com/khit93/mailguardian/issues'
+BRAND_FEEDBACK = 'https://github.com/khit93/mailguardian-feedback'

@@ -41,7 +41,9 @@ class InstalledAPIView(APIView):
             'multi_node': multi_node,
             'host': settings.APP_HOSTNAME,
             'app_name': settings.BRAND_NAME,
-            'app_logo': settings.BRAND_LOGO
+            'app_logo': settings.BRAND_LOGO,
+            'app_feedback': settings.BRAND_FEEDBACK,
+            'app_support': settings.BRAND_SUPPORT
         }, 200)
 
 class InitializeDatabaseAPIView(APIView):
