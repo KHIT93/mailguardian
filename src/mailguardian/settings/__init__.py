@@ -1,5 +1,8 @@
 from .core_settings import *
-from .local import *
+try:
+    from .local import *
+except:
+    pass
 
 # Caching
 # https://docs.djangoproject.com/en/2.0/topics/cache/#database-caching
@@ -47,8 +50,3 @@ REST_FRAMEWORK = {
 REST_AUTH_SERIALIZERS = {
     'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailGuardianPasswordResetSerializer'
 }
-
-# try:
-#     from .local import *
-# except:
-#     pass
