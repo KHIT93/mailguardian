@@ -129,6 +129,8 @@ if __name__ == "__main__":
             f.write(mailguardian_env_contents)
 
         print('We have now migrated the contents of your configuration file into the new format')
+        print('Please note that from version 1.5.0 and onwards, a new option for providing a custom support link and user feedback link are available')
+        print('Specify the BRAND_SUPPORT and BRAND_FEEDBACK options in {} to take advantage of this'.format(os.path.join(BASE_DIR, 'mailguardian','config', 'local.py')))
         print('Deleting old configuration file at {}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
         os.remove(os.path.join(APP_DIR, 'mailguardian-env.json'))
         print('Old configuration data removed. Now we will perform remaining upgrade tasks')
