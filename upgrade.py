@@ -125,7 +125,7 @@ if __name__ == "__main__":
         ]
         mailguardian_env_contents = "\n".join(env_contents)
         # Write out the new configuration file
-        with open(os.path.join(BASE_DIR, 'mailguardian','config', 'local.py'), 'w') as f:
+        with open(os.path.join(BASE_DIR, 'mailguardian','settings', 'local.py'), 'w') as f:
             f.write(mailguardian_env_contents)
 
         print('We have now migrated the contents of your configuration file into the new format')
