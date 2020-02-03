@@ -169,19 +169,27 @@ sub ListenForMessages {
         my $spam_id = $ug->create_str();
         my $isrblspam = 0;
         if ($$message{isrblspam} ne undef) {
-            $isrblspam = !! $$message{isrblspam};
+            if (!! $$message{isrblspam}) {
+                $isrblspam = 1;
+            }
         }
         my $issaspam = 0;
         if ($$message{issaspam} ne undef) {
-            $issaspam = !! $$message{issaspam};
+            if(!! $$message{issaspam}) {
+                $issaspam = 1;
+            }
         }
         my $issamcp = 0;
         if ($$message{issamcp} ne undef) {
-            $issamcp = !! $$message{issamcp};
+            if (!! $$message{issamcp}) {
+                $issamcp = 1;
+            }
         }
         my $scanmail = 0;
         if ($$message{scanmail} ne undef) {
-            $scanmail = !! $$message{scanmail};
+            if(!! $$message{scanmail}) {
+                $scanmail = 1;
+            }
         }
         $sth_mail->execute(
             $message_id,
