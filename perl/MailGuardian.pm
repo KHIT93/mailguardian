@@ -215,7 +215,7 @@ sub ListenForMessages {
             $$message{mcpsascore},
             $$message{date},
             0,
-            $$message{scanmail}
+            $scanmail
         );
         
         # Uncomment this row for debugging
