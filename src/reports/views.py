@@ -9,13 +9,26 @@ from .filters import MessageQuerySetFilter
 from .serializers import MessagesByDateSerializer, MessageRelaysSerializer, MessagesPerHourSerializer, TopSendersByQuantitySerializer, TopSendersByVolumeSerializer, TopRecipientsByQuantitySerializer, TopRecipientsByVolumeSerializer, TopSenderDomainsByQuantitySerializer, TopSenderDomainsByVolumeSerializer, TopRecipientDomainsByQuantitySerializer, TopRecipientDomainsByVolumeSerializer
 from mailguardian.pagination import PageNumberPaginationWithPageCount
 import json, datetime
+from django.db.models import Q
 
 class SummaryApiView(APIView):
     permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+
     def post(self, request, format=None):
         filters = request.data
         response_data = {}
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.all(), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset(), filters, request.user)
         try:
             response_data = {
                 'latest': qs.latest().date,
@@ -34,96 +47,240 @@ class MessageListApiView(ListAPIView):
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticated,)
     pagination_class = PageNumberPaginationWithPageCount
+
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.all(), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset(), filters, request.user)
         self.queryset = qs
         return self.list(request)
 
 class MessagesByDateApiView(APIView):
     permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('date'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('date'), filters, request.user)
         serializer = MessagesByDateSerializer(qs.annotate(Count('id')).annotate(is_spam_count=Count(Case(When(is_spam=True, then=1)))).annotate(Sum('size')).annotate(infected_count=Count(Case(When(infected=True, then=1)))).order_by('date'), many=True)
         return Response(serializer.data, 200)
 
 class TopMailRelaysApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('client_ip'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('client_ip'), filters, request.user)
         serializer = MessageRelaysSerializer(qs.annotate(Count('id')).annotate(is_spam_count=Count(Case(When(is_spam=True, then=1)))).annotate(Sum('size')).annotate(infected_count=Count(Case(When(infected=True, then=1)))).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class MessagesPerHourApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('timestamp').filter(timestamp__range=[datetime.datetime.now() - datetime.timedelta(days=1), datetime.datetime.now()]), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('timestamp').filter(timestamp__range=[datetime.datetime.now() - datetime.timedelta(days=1), datetime.datetime.now()]), filters, request.user)
         serializer = MessagesPerHourSerializer(qs.annotate(Count('id')).annotate(is_spam_count=Count(Case(When(is_spam=True, then=1)))).annotate(Sum('size')).annotate(infected_count=Count(Case(When(infected=True, then=1)))).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSendersByQuantityApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_address'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('from_address'), filters, request.user)
         serializer = TopSendersByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSendersByVolumeApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_address'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('from_address'), filters, request.user)
         serializer = TopSendersByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientsByQuantityApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_address'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('to_address'), filters, request.user)
         serializer = TopRecipientsByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientsByVolumeApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_address'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('to_address'), filters, request.user)
         serializer = TopRecipientsByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSenderDomainsByQuantityApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_domain'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('from_domain'), filters, request.user)
         serializer = TopSenderDomainsByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopSenderDomainsByVolumeApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('from_domain'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('from_domain'), filters, request.user)
         serializer = TopSenderDomainsByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientDomainsByQuantityApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_domain'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('to_domain'), filters, request.user)
         serializer = TopRecipientDomainsByQuantitySerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-id__count')[:10], many=True)
         return Response(serializer.data, 200)
 
 class TopRecipientDomainsByVolumeApiView(APIView):
     permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        qs = Message.objects.all()
+        if self.request.user.is_staff:
+            return qs
+        elif self.request.user.is_domain_admin:
+            domains = [domain.name for domain in self.request.user.domains.all()]
+            qs = qs.filter(Q(from_domain__in=domains) | Q(to_domain__in=domains))
+        else:
+            qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
+        return qs
+    
     def post(self, request, format=None):
         filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, Message.objects.values('to_domain'), filters, request.user)
+        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset().values('to_domain'), filters, request.user)
         serializer = TopRecipientDomainsByVolumeSerializer(qs.annotate(Count('id')).annotate(Sum('size')).order_by('-size__sum')[:10], many=True)
         return Response(serializer.data, 200)
