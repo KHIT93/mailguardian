@@ -9,6 +9,9 @@ class ListEntrySerializer(serializers.HyperlinkedModelSerializer):
         
     def validate(self, data):
         current_user = self.context['request'].user
+        qs = ListEntry.objects.filter(**data).exists()
+        if not qs:
+            raise serializers.ValidationError(_('A listing entry for this already exists'))
         if current_user.is_staff:
             return data
         elif current_user.is_domain_admin:

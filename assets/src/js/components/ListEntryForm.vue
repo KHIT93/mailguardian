@@ -181,10 +181,7 @@ export default {
                 this.$emit('close');
                 this.notify(this.createNotification('Entry created', `A ${this.listingType} entry has been created for email from ${this.form.from_address} to ${this.form.to_address}`, 'success'));
             }).catch(error => {
-                if (error.request.status_code != 400)
-                {
-                    this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
-                }
+                this.notify(this.createNotification('An error occurred', `${error}`, 'error'));
             });
         },
         from_reset() {
