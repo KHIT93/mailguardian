@@ -31,7 +31,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <button type="button" class="cursor-pointer underline" @click.prevent="show_password_modal = true">Change password</button>
+                        <button type="button" class="cursor-pointer underline" @click="show_password_modal">Change password</button>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4" v-if="user.is_staff">
@@ -158,7 +158,6 @@
                 </div>
             </form>
         </div>
-        <mg-change-password-modal @close="show_password_modal = false" @submit="show_password_modal = false" :show="show_password_modal" :user-id="entity.id"></mg-change-password-modal>
     </div>
 </mg-page>
 </template>
@@ -178,8 +177,7 @@ export default {
     data: () => {
         return {
             entity: {},
-            form: {},
-            show_password_modal: false
+            form: {}
         }
     },
     created() {
@@ -310,6 +308,14 @@ export default {
         },
         removeDomain(domain) {
             this.form.domains.splice(this.form.domains.findIndex(d => d === domain), 1);
+        },
+        show_password_modal() {
+            this.$modal.show(ChangePasswordModal,{},
+            {
+                clickToClose: false,
+                adaptive: true,
+                height: 'auto'
+            });
         },
         ...mapMutations(['notify', 'setLoading'])
     }
