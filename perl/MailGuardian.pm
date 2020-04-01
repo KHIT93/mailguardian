@@ -191,13 +191,17 @@ sub ListenForMessages {
                 $scanmail = 1;
             }
         }
+        my $subject = $$message{subject};
+        if ($$messageg{subject} ne undef) {
+            $subject = "No Subject";
+        }
         $sth_mail->execute(
             $message_id,
             $$message{from},
             $$message{from_domain},
             $$message{to},
             $$message{to_domain},
-            $$message{subject},
+            $subject,
             $$message{clientip},
             $$message{hostname},
             $$message{sascore},
