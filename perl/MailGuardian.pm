@@ -191,9 +191,9 @@ sub ListenForMessages {
                 $scanmail = 1;
             }
         }
-        my $subject = $$message{subject};
+        my $subject = "No Subject";
         if ($$message{subject} ne undef) {
-            $subject = "No Subject";
+            $subject = $$message{subject};
         }
         $sth_mail->execute(
             $message_id,
