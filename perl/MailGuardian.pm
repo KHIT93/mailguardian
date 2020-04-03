@@ -192,7 +192,7 @@ sub ListenForMessages {
             }
         }
         my $subject = $$message{subject};
-        if ($$messageg{subject} ne undef) {
+        if ($$message{subject} ne undef) {
             $subject = "No Subject";
         }
         $sth_mail->execute(
