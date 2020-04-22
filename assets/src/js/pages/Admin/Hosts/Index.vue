@@ -1,6 +1,6 @@
 <template>
 <mg-page>
-    <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
+    <div class="sm:container mx-auto sm:px-2 pt-6 pb-8">
         <div class="card p-2">
             <h2 class="font-normal text-center mb-2">Host management</h2>
             <p>Here you can manage the hosts that are part of your multi-node deployment</p>

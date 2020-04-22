@@ -1,6 +1,6 @@
 <template>
 <mg-page>
-    <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
+    <div class="sm:container mx-auto sm:px-2 pt-6 pb-8">
         <div class="card p-2">
             <h2 class="font-normal text-center mb-2">Application settings</h2>
             <p class="text-center">Configure the application to your liking</p>

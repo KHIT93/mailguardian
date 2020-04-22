@@ -1,6 +1,6 @@
 <template>
 <mg-page>
-    <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
+    <div class="sm:container mx-auto sm:px-2 pt-6 pb-8">
         <div class="card p-2">
             <form @submit.prevent="submit">
                 <div class="md:flex md:items-center mb-6 mt-4">

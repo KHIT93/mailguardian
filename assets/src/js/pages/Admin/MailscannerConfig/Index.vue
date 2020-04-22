@@ -1,6 +1,6 @@
 <template>
 <mg-page>
-    <div class="sm:container mx-auto sm:px-2 pt-2 pb-8">
+    <div class="sm:container mx-auto sm:px-2 pt-6 pb-8">
         <div class="card p-2">
             <h2 class="font-normal text-center mb-2">MailScanner Configuration</h2>
             <p class="text-center">Here you can search, add, edit or remove data from the MailScanner configuration files</p>

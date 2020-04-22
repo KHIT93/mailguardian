@@ -18,17 +18,17 @@
                         <div class="hidden md:block md:w-2/3">
                             <!-- <input type="text" name="search" placeholder="Search..." class="bg-gray-200 shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-gray-600"/> -->
                         </div>
-                        <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-gray-500" title="Log out">
-                            <a :href="config.app_support" class="text-gray-500 hover:text-white pr-3" target="_blank">
+                        <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-gray-500">
+                            <a :href="config.app_support" class="text-gray-500 hover:text-white pr-3" target="_blank" title="Get support">
                                 <mg-help-icon class="w-6 h-6"></mg-help-icon>
                             </a>
-                            <a :href="config.app_feedback" class="text-gray-500 hover:text-white pr-3" target="_blank">
+                            <a :href="config.app_feedback" class="text-gray-500 hover:text-white pr-3" target="_blank" title="Give feedback">
                                 <mg-feedback-icon class="w-6 h-6"></mg-feedback-icon>
                             </a>
-                            <router-link to="/profile" class="text-gray-500 hover:text-white pr-3">
+                            <router-link to="/profile" class="text-gray-500 hover:text-white pr-3" title="Your account">
                                 <mg-account-circle-icon class="w-6 h-6"></mg-account-circle-icon>
                             </router-link>
-                            <div class="hover:text-white cursor-pointer" @click="logout">
+                            <div class="hover:text-white cursor-pointer" @click="logout" title="Log out">
                                 <mg-exit-to-app-icon class="w-6 h-6"></mg-exit-to-app-icon>
                             </div>
                         </div>
