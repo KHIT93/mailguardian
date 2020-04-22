@@ -78,7 +78,7 @@ sub InitMailGuardianLogging {
         if ($pid) {
             # MailScanner child process
             waitpid $pid, 0;
-            MailScanner::Log::InfoLog("MailWatch: Started MailGuardian SQL Logging child");
+            MailScanner::Log::InfoLog("MailGuardian: Started MailGuardian SQL Logging child");
         } else {
             # New process
             # Detach from parent, make connections, and listen for requests
