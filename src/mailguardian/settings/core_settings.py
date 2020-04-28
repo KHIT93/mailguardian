@@ -31,7 +31,7 @@ FIELD_ENCRYPTION_KEY = 'UNSECURE_ENCRYPTION_KEY'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 APP_HOSTNAME = platform.node()
-APP_VERSION = '1.5.1'
+APP_VERSION = '1.5.2'
 LOCAL_CONFIG_VERSION = '0.0.0'
 ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
 
