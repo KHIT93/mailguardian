@@ -60,10 +60,27 @@ class MessageListApiView(ListAPIView):
         return qs
     
     def post(self, request, format=None):
-        filters = request.data
-        qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset(), filters, request.user)
-        self.queryset = qs
+        # filters = request.data
+        # qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset(), filters, request.user)
+        # print(len(qs))
+        # self.queryset = qs
         return self.list(request)
+
+    """
+    List a queryset.
+    Overrides rest_framework.mixins.ListModelMixin.list, as it recreates the queryset without our filters
+    """
+    def list(self, request, *args, **kwargs):
+        filters = request.data
+        queryset = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset(), filters, request.user)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class MessagesByDateApiView(APIView):
     permission_classes = (IsAuthenticated,)
