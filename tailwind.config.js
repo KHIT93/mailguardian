@@ -90,5 +90,8 @@ module.exports = {
         backgroundRepeat: false,
         backgroundSize: false,
         backgroundAttachment: false,
-    }
+    },
+    plugins: [
+        require('@tailwindcss/ui'),
+    ]
 }
