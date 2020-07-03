@@ -110,3 +110,4 @@ mailguardian-env.json
 mix-manifest.json
 .DS_Store
 local.py
+pyvenv.cfg
