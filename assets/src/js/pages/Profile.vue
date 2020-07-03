@@ -31,7 +31,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <button type="button" class="cursor-pointer underline" @click.prevent="show_password_modal = true">Change password</button>
+                        <button type="button" class="cursor-pointer underline" @click.prevent="show_password_modal">Change password</button>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -161,7 +161,6 @@
                 </div>
             </form>
         </div>
-        <mg-change-password-modal @close="show_password_modal = false" @submit="show_password_modal = false" :show="show_password_modal" :user-id="user.id"></mg-change-password-modal>
     </div>
 </mg-page>
 </template>
@@ -175,12 +174,8 @@ import ChangePasswordModal from '../components/ChangePasswordModal.vue';
 import Enable2FAModal from '../components/Enable2FAModal.vue';
 import Show2FABackupCodesModal from '../components/Show2FABackupCodesModal.vue';
 export default {
-    components: {
-        'mg-change-password-modal': ChangePasswordModal
-    },
     data: () => {
         return {
-            show_password_modal: false,
             form: {}
         }
     },
@@ -247,6 +242,14 @@ export default {
         },
         get_backup_codes() {
             this.$modal.show(Show2FABackupCodesModal,{},
+            {
+                clickToClose: false,
+                adaptive: true,
+                height: 'auto'
+            });
+        },
+        show_password_modal() {
+            this.$modal.show(ChangePasswordModal,{},
             {
                 clickToClose: false,
                 adaptive: true,
