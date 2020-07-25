@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         if not os.access(settings.MTA_LOGFILE, os.R_OK):
-            print(_('You are not authorized to read the file %(file)s. Please verify that you have the correct permissions or that you are running this command as root') % settings.MTA_LOGFILE)
+            print(_('You are not authorized to read the file %(file)s. Please verify that you have the correct permissions or that you are running this command as root' % settings.MTA_LOGFILE))
         else:
             mta_log_processor = PostfixLogProcessor()
             mta_log_processor.execute()
