@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@tailwindcss/ui": "^0.3.0",
+    "@tailwindcss/ui": "^0.3.1",
     "axios": "^0.18.1",
     "chart.js": "^2.9.3",
     "cross-env": "^5.2.1",
@@ -11,7 +11,7 @@
     "moment": "^2.27.0",
     "portal-vue": "^1.5.1",
     "qrious": "^4.0.2",
-    "tailwindcss": "^1.4.6",
+    "tailwindcss": "^1.5.2",
     "uuid": "^3.4.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",
