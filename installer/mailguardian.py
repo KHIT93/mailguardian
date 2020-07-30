@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
-        exit()
+        exit(255)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
     APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.environ['MAILGUARDIAN_APP_DIR'] = APP_DIR
@@ -90,45 +90,38 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    distro = platform.linux_distribution()
-    if distro[0] == 'CentOS Linux':
+    distro = 'LINUX'
+    distro_version = '0'
+    distro_version_codename = 'Core'
+    with open('/etc/os-release', 'r') as f:
+        for l in f.readlines():
+            if l[:3] == 'ID=':
+                distro = l.replace('ID=','').replace('"', '').strip()
+            if l[:11] == 'VERSION_ID=':
+                distro_version = l.replace('VERSION_ID=', '').replace('"', '').strip()
+            if l[:17] == 'VERSION_CODENAME=':
+                distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
+    if distro == 'centos':
         PKG_MGR = which('yum')
-        if int(distro[1].replace('.', '')) >= 730000:
+        if distro_version == '7':
             NGINX_PATH = '/etc/nginx/conf.d/'
             NGINX_EXTENSION = '.conf'
-    elif distro[0] == 'debian':
+    elif distro == 'debian':
         PKG_MGR = which('apt')
-        if int(distro[1].replace('.', '')) >= 90:
+        if distro_version in ['9', '10']:
             NGINX_PATH = '/etc/nginx/sites-enabled/'
         else:
             print('Your version of Debian is not supported')
-    elif distro[0] == 'Ubuntu':
+    elif distro == 'ubuntu':
         PKG_MGR = which('apt')
-        if int(distro[1].replace('.', '')) >= 1604:
+        if distro_version in ['16.04', '18.04', '20.04']:
             NGINX_PATH = '/etc/nginx/sites-enabled/'
         else:
             print('Your version of Ubuntu is not supported')
     else:
         print('Your Linux distribution or version is not supported')
         print(distro)
-        exit()
-
-    if input('Did you run \'pip install -r requirements.txt\' to before you started the installation scrpt (y/N) ').lower() == 'n':
-        print('Please relaunch this script after running \'pip install -r requirements.txt\' ')
-        exit()
-    os.system('clear')
-    if os.geteuid() != 0:
-        print('You need to run the installation script as root. Without root elevation, we are unable to configure the system for you')
-        print('You can still continue the execution of the installation script, but choose to leave out the parts that require root elevation')
-        print(chr(13))
-        if input('Do you want to skip steps that require root elevation and allow the script to continue? (y/N) ').lower() == 'y':
-            print('We will continue execution but skip the parts that require root elevation')
-            CONFIGURE_CERTBOT = False
-            CONFIGURE_NGINX = False
-            CONFIGURE_SYSTEMD = False
-        else:
-            print('Please run the script again as root or with sudo, to elevate execution')
-            exit()
+        exit(255)
     os.system('clear')
     print('We will now ask you a series of questions to properly configure the application for you')
     print('Do not worry, as we will not make any changes before all questions have been answered and confirmed by you')
@@ -163,10 +156,13 @@ if __name__ == "__main__":
         if DB_USER == '':
             DB_USER = 'mailguardian'
     print(chr(13))
-    while DB_PASS is None:
-        DB_PASS = input('Please provide us the password for the PostgreSQL user specified above: ')
-        if DB_PASS == '':
-            DB_PASS = None
+    if not DB_HOST in ['localhost', '127.0.0.1']:
+        while DB_PASS is None:
+            DB_PASS = input('Please provide us the password for the PostgreSQL user specified above: ')
+            if DB_PASS == '':
+                DB_PASS = None
+    else:
+        DB_PASS = os.environ['ENV_DB_PASS']
     print(chr(13))
     while DB_NAME is None:
         DB_NAME = input('Please provide us the name of the PostgreSQL database [mailguardian]: ')
@@ -185,11 +181,13 @@ if __name__ == "__main__":
     os.system('clear')
     print('Please provide us with your timezone. This is usually the same as you chose during installation of your operating system. It is usually typed as Region/City. Fx. US/Eastern or Europe/Berlin')
     while True:
-        TZ_INPUT = input('Please type in your timezone. To get a list of available timezones type \'?\': ')
+        TZ_INPUT = input('Please type in your timezone [UTC]: ')
         if TZ_INPUT != '' or TZ_INPUT is not None:
             if TZ_INPUT in pytz.all_timezones:
                 TZ = TZ_INPUT
                 break
+        else:
+            TZ = 'UTC'
     os.system('clear')
     APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % APP_HOSTNAME)
     if APP_HOSTNAME_INPUT != '' and APP_HOSTNAME_INPUT is not None:
@@ -201,7 +199,7 @@ if __name__ == "__main__":
     if input('Should this server be part of a configuration that contains multiple servers? (y/N) ').lower() == 'y':
         MULTI_NODE = True
         print(chr(13))
-        if input('Is this the server running the webinterface for users and administrators? (y/n) ').lower() == 'y':
+        if input('Is this the server running the webinterface for users and administrators? (y/N) ').lower() == 'y':
             API_ONLY_MODE = False
         else:
             API_ONLY_MODE = True
@@ -209,14 +207,6 @@ if __name__ == "__main__":
         API_ONLY_MODE = False
     os.system('clear')
     if not MULTI_NODE or API_ONLY_MODE:
-        print('Available MTA\'s (Mail Transport Agent)')
-        print('sendmail')
-        print('postfix')
-        print('exim')
-        MTA_INPUT = input('Which MTA do you want to use? [{0}] '.format(MTA))
-        if MTA_INPUT == '' and MTA_INPUT is None:
-            MTA = MTA_INPUT
-        os.system('clear')
         MS_CONF_DIR_INPUT = input('Where are your MailScanner configuration files located? [{0}] '.format(MS_CONF_DIR))
         if MS_CONF_DIR_INPUT != '' and MS_CONF_DIR_INPUT is not None:
             MS_CONF_DIR = MS_CONF_DIR_INPUT
@@ -247,7 +237,7 @@ if __name__ == "__main__":
     os.system('clear')
 
     env_contents = [
-        '# Quick-start development settings - unsuitable for production',
+        '# Quick-start production settings',
         '# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/',
         '',
         '# SECURITY WARNING: keep the secret key used in production secret!',
@@ -258,7 +248,7 @@ if __name__ == "__main__":
         '',
         'APP_HOSTNAME = "{}"'.format(APP_HOSTNAME),
         'DEBUG = False',
-        'LOCAL_CONFIG_VERSION = "1.5.0"',
+        'LOCAL_CONFIG_VERSION = "2.0.0"',
         '',
         '#MailGuardian specific settings',
         'TMP_DIR = "/tmp"',
@@ -358,7 +348,7 @@ if __name__ == "__main__":
     print(chr(13))
     if input('Are the above settings correct and can we continue? (Y/n) ').lower() == 'n':
         print('Installation has been aborted. Please rerun the installation script to try again')
-        exit()
+        exit(255)
     os.system('clear')
     print('Writing configuration file {0}'.format(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
     with open(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
@@ -375,16 +365,13 @@ if __name__ == "__main__":
                 # Check if certbot is installed and if not, then we install it
                 if not which('certbot'):
                     if platform.linux_distribution()[0] == 'debian':
-                        os.system(PKG_MGR + ' install certbot -t stretch-backports -y')
+                        os.system(PKG_MGR + ' install certbot -t {distro}-backports -y'.format(distro=distro_version_codename))
                     else:
                         os.system(PKG_MGR + ' install certbot -y')
                 # Request a certificate and note the path
                 PRIVKEY_PATH = '/etc/letsencrypt/live/{0}/privkey.pem'.format(APP_HOSTNAME)
                 CERT_PATH = '/etc/letsencrypt/live/{0}/fullchain.pem'.format(APP_HOSTNAME)
                 os.system(which('certbot') + ' certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
-                print('If the certificate was successfully created, please make sure to manually add this cronjob using sudo crontab -e')
-                print("0 6,18 * * * python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew")
-                print('This will make sure that we try to renew your LetsEncrypt Certificate twice a day and random minutes')
             elif input('Do you want to use an existing certificate? (y/N) ').lower() == 'y':
                 os.system('clear')
                 PRIVKEY_PATH_INPUT = input('Please provide us the path to your SSL/TLS private key [{0}]: '.format(PRIVKEY_PATH))
@@ -431,9 +418,7 @@ if __name__ == "__main__":
 
         # Enable systemd service unit on startup
         os.system(SYSTEMCTL_BIN + ' enable mailguardian.service')
-        os.system('clear')
-        if input('Should we start the MailGuardian services for you now? (Y/n) ').lower() == 'y':
-            os.system(SYSTEMCTL_BIN + ' start mailguardian.service')
+        os.system(SYSTEMCTL_BIN + ' start mailguardian.service')
     os.system('clear')
     print('The installation script has finished. Any errors that occurred during installation need to be fixed manually')
     print('You can now access MailGuardian and perform the last steps of the setup here: {0}://{1}'.format('https' if HTTP_SECURE else 'http', APP_HOSTNAME))

@@ -33,18 +33,21 @@ if __name__ == "__main__":
     if distro[0] == 'CentOS Linux':
         PKG_MGR = which('yum')
         setup_rhel()
+        exit(0)
     elif distro[0] == 'debian':
         PKG_MGR = which('apt')
         if int(distro[1].replace('.', '')) <= 90:
             print('Your version of Debian is not supported')
             exit(255)
         setup_deb()
+        exit(0)
     elif distro[0] == 'Ubuntu':
         PKG_MGR = which('apt')
         if int(distro[1].replace('.', '')) <= 1604:
             print('Your version of Ubuntu is not supported')
             exit(255)
         setup_deb()
+        exit(0)
     else:
         print('Your Linux distribution or version is not supported')
         print(distro)
@@ -61,7 +64,6 @@ def setup_deb():
     print('Adding PostgreSQL repository')
     os.system('echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list')
     os.system('wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -')
-    os.system('{apt} update'.format(apt=PKG_MGR))
     os.system('{apt} update'.format(apt=PKG_MGR))
     if not which('python3'):
         print('python3 was not found on your system. Exitting')
