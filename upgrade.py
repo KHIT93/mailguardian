@@ -47,7 +47,7 @@ if __name__ == "__main__":
                 config = json.loads(f.read())
             if os.path.isdir(os.path.join(APP_DIR, 'installer', 'upgrade', version)):
                 if os.path.isfile(os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py')):
-                    spec = importlib.util.spec_from_file_location('upgrade.Upgrade', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
+                    spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
                     upgrade = upgrader.Upgrade(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
@@ -60,10 +60,10 @@ if __name__ == "__main__":
         for version in os.listdir(os.path.join(APP_DIR,'installer','upgrade')):
             if os.path.isdir(os.path.join(APP_DIR, 'installer', 'upgrade', version)):
                 if os.path.isfile(os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py')):
-                    spec = importlib.util.spec_from_file_location('upgrade.Upgrade', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
+                    spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
-                    upgrade = upgrader.Upgrade(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
+                    upgrade = upgrader.Upgrade(settings, app_dir=APP_DIR, src_dir=BASE_DIR, version=settings.LOCAL_CONFIG_VERSION or '1.0.0')
                     if upgrade.applicable():
                         upgrade.upgrade()
                         DESTINATION_VERSION = upgrade.applied_version
