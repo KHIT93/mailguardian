@@ -55,7 +55,7 @@ useradd -m mailguardian
 echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
-su - mailguardian -c 'git clone https://github.com/khit93/maillguardian /home/mailguardian/mailguardian --branch feature-new -install-scripts'
+su - mailguardian -c 'git clone https://github.com/khit93/maillguardian /home/mailguardian/mailguardian --branch feature-new-install-scripts'
 cd /home/mailguardian/mailguardian
 echo 'Installing required packages...'
 source bin/activate
