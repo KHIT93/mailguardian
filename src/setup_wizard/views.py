@@ -71,14 +71,19 @@ class InitializeDatabaseAPIView(APIView):
             Setting.objects.update_or_create(key='quarantine.report.subject', defaults={'key' : 'quarantine.report.subject', 'value' : serializer.data['quarantine_report_subject']})
             response['createsettings'] = _('Initial settings have been configured')
             # Last update guardianware-env.json with the branding information of the application
-            data = ''
-            with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'r') as f:
-                data = f.read()
-            data.replace('"name": "MailGuardian"', '"name": "{0}"'.format(serializer.data['branding_name']))
-            data.replace('"tagline": "Securing your email"', '"tagline": "{0}"'.format(serializer.data['branding_tagline']))
-            data.replace('"logo": ""', '"logo": "{0}"'.format(serializer.data['branding_logo']))
-            with open(os.path.join(os.path.dirname(settings.BASE_DIR), "mailguardian-env.json"), 'w') as f:
-                f.write(data)
-            response['update_env'] = _('Environment file succesfully updated. Please run "sudo systemctl restart mailguardian.service"')
+            data = []
+            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'mailguardian', 'settings', 'local.py'), 'r') as f:
+                data = f.readlines()
+            for index, line in enumerate(data):
+                if line[:10] == 'BRAND_NAME':
+                    data[index] = 'BRAND_NAME = "{}"'.format(serializer.data['branding_name'])
+                if line[:13] == 'BRAND_TAGLINE':
+                    data[index] = 'BRAND_TAGLINE = "{}"'.format(serializer.data['branding_tagline'])
+                if line[:10] == 'BRAND_LOGO':
+                    data[index] = 'BRAND_LOGO = "{}'.format(serializer.data['branding_logo'])
+            
+            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'mailguardian', 'settings', 'local.py'), 'w') as f:
+                f.write("\n".join(data))
+            response['update_env'] = _('Settings file succesfully updated. Please run "sudo systemctl restart mailguardian.service"')
             return Response(response, status=status.HTTP_200_OK)
 
