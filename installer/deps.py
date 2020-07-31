@@ -21,6 +21,7 @@ def which(program):
 def setup_deb():
     print('Setting up on debian-based distro')
     os.system('{apt} update'.format(apt=PKG_MGR))
+    os.system('{apt} purge postfix -y'.format(apt=PKG_MGR))
     os.system('{apt} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev lsb-release -y'.format(apt=PKG_MGR))
     if platform.linux_distribution()[0] == 'debian':
         print('Adding additional repositories')
@@ -37,7 +38,7 @@ def setup_deb():
     pgsql_packages = 'postgresql-server-dev-12 postgresql-client-12'
     if input('Does this system run the PostgreSQL database server? (y/N) ').lower() == 'y':
         pgsql_packages += 'postgresql-12'
-    os.system('{apt} {packages} -y'.format(apt=PKG_MGR, packages=pgsql_packages))
+    os.system('{apt} install {packages} -y'.format(apt=PKG_MGR, packages=pgsql_packages))
     os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.noarch.deb')
     os.system('cd /tmp; dpkg -i MailScanner-5.3.3-1.noarch.deb')
     os.system('/usr/sbin/ms-configure --MTA=postfix --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
