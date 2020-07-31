@@ -51,7 +51,7 @@ then
     $LNX_PKG_MGR install -y python3 python3-setuptools
 fi
 echo 'Creating application user...'
-useradd mailguardian
+useradd -m mailguardian
 echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
