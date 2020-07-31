@@ -51,7 +51,7 @@ then
     $LNX_PKG_MGR install -y python3 python3-setuptools
 fi
 echo 'Creating application user...'
-useradd -G mtagroup,postfix mailguardian
+useradd mailguardian
 echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
@@ -60,6 +60,7 @@ cd /home/mailguardian/mailguardian
 echo 'Installing required packages...'
 source bin/activate
 python3 ./installer/deps.py
+usermod -a -G mtagroup,postfix mailguardian
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
