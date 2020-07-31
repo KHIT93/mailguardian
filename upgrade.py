@@ -4,19 +4,21 @@
 #
 from django.core.management.utils import get_random_secret_key
 from src.core.helpers import which
-import os, json, platform
+import os
+import json
+import platform
 from distutils.version import StrictVersion
-import cryptography.fernet
+import importlib.util
 import argparse
+try:
+    from src.mailguardian import settings
+except:
+    pass
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-y','--yes', help='Answer yes to every question and perform update with no interaction', action="store_true")
 
 args = parser.parse_args()
-
-def generate_encryption_key():
-    key = cryptography.fernet.Fernet.generate_key()
-    return key.decode()
 
 def rebuild_latest_nginx():
     pass
@@ -33,110 +35,42 @@ if __name__ == "__main__":
     # Get the current directory of this script to determine the path to use
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
     BASE_DIR = os.path.join(APP_DIR,'src')
+    DESTINATION_VERSION = '1.0.0'
     if input('This script will evaluate your curren MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
         exit(0)
     os.system('clear')
+    # Check for legacy configuration file
     if os.path.exists(os.path.join(APP_DIR, 'mailguardian-env.json')):
-        print('Configuration file prior to version 1.5.0 has been detected')
-        print('COnfiguration file will be converted to new format')
-        CONFIG = {}
-        with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'r') as f:
-            CONFIG = json.loads(f.read())
-        # Check if config_version is available in CONFIG
-        if not 'config_version' in CONFIG:
-            # If not there, then we asume a version prior to 1.3.0
-            CONFIG_VERSION = '1.0.0'
-        else:
-            CONFIG_VERSION = CONFIG['config_version']
-        # Check if we are below 1.3.0
-        if StrictVersion(CONFIG_VERSION) < StrictVersion('1.3.0'):
-            if not 'encryption_key' in CONFIG:
-                CONFIG['encryption_key'] = generate_encryption_key()
-        print('Generating new configuration file')
-        env_contents = [
-            'from .core_settings import BASE_DIR, ASSETS_DIR',
-            'import os',
-            '# Quick-start development settings - unsuitable for production',
-            '# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/',
-            '',
-            '# SECURITY WARNING: keep the secret key used in production secret!',
-            'SECRET_KEY = "{}"'.format(CONFIG['app_key']),
-            '# SECURITY WARNING: keep the field encryption key used in production secret!',
-            '# We use the SECRET_KEY as a fallback for compatibility with existing installations',
-            'FIELD_ENCRYPTION_KEY = "{}"'.format(CONFIG['encryption_key']),
-            '',
-            'APP_HOSTNAME = "{}"'.format(CONFIG['hostname']),
-            'DEBUG = {}'.format(CONFIG['debug']),
-            'LOCAL_CONFIG_VERSION = "1.5.0"',
-            '',
-            '#MailGuardian specific settings',
-            'TMP_DIR = "/tmp"',
-            'MTA = "{}"'.format(CONFIG['mta']),
-            'MTA_LOGFILE = "{}"'.format(CONFIG['hostconfig']['mta_logfile']),
-            'SENDMAIL_BIN = "{}"'.format(CONFIG['hostconfig']['sendmail_bin']),
-            'POSTQUEUE_BIN = "{}"'.format(CONFIG['hostconfig']['postqueue_bin'] if 'postqueue_bin' in CONFIG['hostconfig'] else which('postqueue')),
-            'AUDIT_LOGGING = {}'.format(CONFIG['audit_log']),
-            'API_ONLY = {}'.format(CONFIG['api_only_mode']),
-            'CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), "configuration")',
-            '',
-            '#MailScanner settings',
-            'MAILSCANNER_BIN = "{}"'.format(CONFIG['hostconfig']['mailscanner_bin']),
-            'MAILSCANNER_CONFIG_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_config_dir']),
-            'MAILSCANNER_SHARE_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_share_dir']),
-            'MAILSCANNER_LIB_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_lib_dir']),
-            'MAILSCANNER_QUARANTINE_DIR = "{}"'.format(CONFIG['hostconfig']['mailscanner_quarantine_dir']),
-            '',
-            '# SpamAssassin settings',
-            'SALEARN_BIN = "{}"'.format(CONFIG['hostconfig']['salearn_bin']),
-            'SA_BIN = "{}"'.format(CONFIG['hostconfig']['sa_bin']),
-            'SA_RULES_DIR = "{}"'.format(CONFIG['hostconfig']['sa_rules_dir']),
-            'SA_PREF = MAILSCANNER_CONFIG_DIR+"/spamassassin.conf"',
-            '',
-            '# Retention policy',
-            'RECORD_RETENTION = {}'.format(CONFIG['retention']['records']),
-            'AUDIT_RETENTION = {}'.format(CONFIG['retention']['audit']),
-            'QUARANTINE_RETENTION = {}'.format(CONFIG['retention']['quarantine']),
-            '',
-            '# Branding',
-            'BRAND_NAME = "{}"'.format(CONFIG['branding']['name']),
-            'BRAND_TAGLINE = "{}"'.format(CONFIG['branding']['tagline']),
-            'BRAND_LOGO = "{}"'.format(CONFIG['branding']['logo']),
-            '',
-            '# Internationalization',
-            '# https://docs.djangoproject.com/en/2.2/topics/i18n/',
-            'LANGUAGE_CODE = "{}"'.format(CONFIG['language_code']),
-            '',
-            'TIME_ZONE = "{}"'.format(CONFIG['time_zone']),
-            '# Database',
-            '# https://docs.djangoproject.com/en/2.2/ref/settings/#databases',
-            'DATABASES = {',
-            '    "default": {',
-            '        "ENGINE": "django.db.backends.postgresql",',
-            '        "NAME": "{}",'.format(CONFIG['database']['name']),
-            '        "USER": "{}",'.format(CONFIG['database']['user']),
-            '        "PASSWORD": "{}",'.format(CONFIG['database']['password']),
-            '        "HOST": "{}",'.format(CONFIG['database']['host']),
-            '        "PORT": "{}",'.format(CONFIG['database']['port']),
-            '        "OPTIONS": {',
-            '            "sslmode": "{}"'.format("require" if CONFIG['database']['options']['sslmode'] else "prefer"),
-            '        },',
-            '    }',
-            '}'
-        ]
-        mailguardian_env_contents = "\n".join(env_contents)
-        # Write out the new configuration file
-        with open(os.path.join(BASE_DIR, 'mailguardian','settings', 'local.py'), 'w') as f:
-            f.write(mailguardian_env_contents)
-
-        print('We have now migrated the contents of your configuration file into the new format')
-        print('Please note that from version 1.5.0 and onwards, a new option for providing a custom support link and user feedback link are available')
-        print('Specify the BRAND_SUPPORT and BRAND_FEEDBACK options in {} to take advantage of this'.format(os.path.join(BASE_DIR, 'mailguardian','config', 'local.py')))
-        print('Deleting old configuration file at {}'.format(os.path.join(APP_DIR, 'mailguardian-env.json')))
-        os.remove(os.path.join(APP_DIR, 'mailguardian-env.json'))
-        print('Old configuration data removed. Now we will perform remaining upgrade tasks')
-
-    print('Performing upgrade tasks for version 1.5.0')
-
+        config = {}
+        for version in os.listdir(os.path.join(APP_DIR,'installer','upgrade')):
+            with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'r') as f:
+                config = json.loads(f.read())
+            if os.path.isdir(os.path.join(APP_DIR, 'installer', 'upgrade', version)):
+                if os.path.isfile(os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py')):
+                    spec = importlib.util.spec_from_file_location('upgrade.Upgrade', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
+                    upgrader = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(upgrader)
+                    upgrade = upgrader.Upgrade(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
+                    if upgrade.applicable() and upgrade.legacy:
+                        upgrade.upgrade()
+                        DESTINATION_VERSION = upgrade.applied_version
+    
+    # Check if we have new configuration system
+    if settings:
+        for version in os.listdir(os.path.join(APP_DIR,'installer','upgrade')):
+            if os.path.isdir(os.path.join(APP_DIR, 'installer', 'upgrade', version)):
+                if os.path.isfile(os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py')):
+                    spec = importlib.util.spec_from_file_location('upgrade.Upgrade', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
+                    upgrader = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(upgrader)
+                    upgrade = upgrader.Upgrade(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
+                    if upgrade.applicable():
+                        upgrade.upgrade()
+                        DESTINATION_VERSION = upgrade.applied_version
+    else:
+        print('Could not import application configuration. Aborting')
+        exit(255)
+    
     print('Now we will perform actions that need to be performed after any file changes')
 
     # Apply changes that require configuration file changes to have been persisted
@@ -163,4 +97,7 @@ if __name__ == "__main__":
     if auto_fix:
         rebuild_latest_systemd()
         auto_fix = False
+
+    print('Your installation has been upgraded to version {version}'.format(version=DESTINATION_VERSION))
+    print('If you expected a higher version, please insepct the output from this script to find out what has went wrong')
     
