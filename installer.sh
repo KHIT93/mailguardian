@@ -56,16 +56,15 @@ echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch feature-new-install-scripts'
+su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && source bin/activate && pip install -r requirements.txt'
 cd /home/mailguardian/mailguardian
 echo 'Installing required packages...'
-source bin/activate
-python3 ./installer/deps.py
+bin/python ./installer/deps.py
 usermod -a -G mtagroup,postfix mailguardian
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && source bin/activate && pip install -r requirements.txt'
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
@@ -87,29 +86,28 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-python3 ./installer/mailguardian.py
+bin/python ./installer/mailguardian.py
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Configure Postfix...'
-python3 ./installer/postfix.py
+bin/python ./installer/postfix.py
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Configure MailScanner...'
-python3 ./installer/mailscanner.py
+bin/python ./installer/mailscanner.py
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Installation and initial configuration completed. Now we will perform some cleanup...'
-python3 ./installer/cleanup.py
+bin/python ./installer/cleanup.py
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-deactivate
 echo 'Installation has finished. Please finish application configuration in your web browser'
 exit 0
