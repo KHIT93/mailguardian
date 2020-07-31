@@ -58,6 +58,7 @@ echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/khit93/maillguardian /home/mailguardian/mailguardian'
 cd /home/mailguardian/mailguardian
 echo 'Installing required packages...'
+source bin/activate
 python3 ./installer/deps.py
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
@@ -108,5 +109,6 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
+deactivate
 echo 'Installation has finished. Please finish application configuration in your web browser'
 exit 0
