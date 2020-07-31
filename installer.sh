@@ -56,15 +56,15 @@ echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch feature-new-install-scripts'
-su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && source bin/activate && pip install -r requirements.txt'
 cd /home/mailguardian/mailguardian
 echo 'Installing required packages...'
-bin/python ./installer/deps.py
+python3 ./installer/deps.py
 usermod -a -G mtagroup,postfix mailguardian
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
+su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && source bin/activate && pip install -r requirements.txt'
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
