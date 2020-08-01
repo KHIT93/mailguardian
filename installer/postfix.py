@@ -64,7 +64,7 @@ if __name__ == "__main__":
     os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR))
 
     print('Configure PostgreSQL integrations')
-    with open(os.path.join(POSTFIX_DIR, 'pgsql-transport.cf')) as f:
+    with open(os.path.join(POSTFIX_DIR, 'pgsql-transport.cf'), 'w') as f:
         f.writelines([
             "user = {}".format(os.environ.get('MAILGUARDIAN_DB_USER')),
             "password = {}".format(os.environ.get('MAILGUARDIAN_DB_PASS')),
@@ -73,7 +73,7 @@ if __name__ == "__main__":
             "query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='\%\s' AND active = '1';",
         ])
 
-    with open(os.path.join(POSTFIX_DIR, 'pgsql-mynetworks.cf')) as f:
+    with open(os.path.join(POSTFIX_DIR, 'pgsql-mynetworks.cf'), 'w') as f:
         f.writelines([
             "user = {}".format(os.environ.get('MAILGUARDIAN_DB_USER')),
             "password = {}".format(os.environ.get('MAILGUARDIAN_DB_PASS')),
