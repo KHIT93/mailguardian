@@ -64,7 +64,7 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && /home/mailguardian/bin/pip install -r requirements.txt'
+su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && bin/pip install -r requirements.txt'
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
