@@ -22,7 +22,6 @@ if __name__ == "__main__":
     del os.environ['MAILGUARDIAN_APP_DIR']
     del os.environ['MAILGUARDIAN_DB_HOST']
     del os.environ['MAILGUARDIAN_DB_USER']
-    del os.environ['MAILGUARDIAN_DB_PASS']
     del os.environ['MAILGUARDIAN_DB_NAME']
     del os.environ['MAILGUARDIAN_DB_PORT']
     del os.environ['MAILGUARDIAN_APP_HOSTNAME']

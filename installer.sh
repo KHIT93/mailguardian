@@ -114,4 +114,6 @@ if [ "$?" -ne 0 ]; then
     exit 1
 fi
 echo 'Installation has finished. Please finish application configuration in your web browser'
+echo 'Should you need to access your PostgreSQL database from other nodes, the password is' + $MAILGUARDIAN_DB_PASS
+python3 -c "import os; del os.environ['MAILGUARDIAN_DB_PASS']"
 exit 0
