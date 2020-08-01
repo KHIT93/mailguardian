@@ -36,7 +36,7 @@ if __name__ == "__main__":
     os.environ['MAILGUARDIAN_APP_DIR'] = APP_DIR
     
     # Define some paths needed later
-    SYSTEMD_PATH = '/lib/systemd/system/'
+    SYSTEMD_PATH = '/etc/systemd/system/'
     NGINX_PATH = None
     NGINX_EXTENSION = ''
     PKG_MGR = None
@@ -162,7 +162,7 @@ if __name__ == "__main__":
             if DB_PASS == '':
                 DB_PASS = None
     else:
-        DB_PASS = os.environ['ENV_DB_PASS']
+        DB_PASS = os.environ.get('ENV_DB_PASS')
     print(chr(13))
     while DB_NAME is None:
         DB_NAME = input('Please provide us the name of the PostgreSQL database [mailguardian]: ')
