@@ -175,8 +175,6 @@ if __name__ == "__main__":
     else:
         DB_PORT = 5432
     print(chr(13))
-    if input('Does you PostgreSQL server support SSL (Y/n) '.lower() == 'n'):
-        DB_SSL = False
     # Next we configure the timezone settings
     os.system('clear')
     print('Please provide us with your timezone. This is usually the same as you chose during installation of your operating system. It is usually typed as Region/City. Fx. US/Eastern or Europe/Berlin')
