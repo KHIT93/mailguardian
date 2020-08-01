@@ -37,7 +37,7 @@ def setup_deb():
     os.system('{python} /usr/lib/python3/dist-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
     pgsql_packages = 'postgresql-server-dev-12 postgresql-client-12'
     if input('Does this system run the PostgreSQL database server? (y/N) ').lower() == 'y':
-        pgsql_packages += 'postgresql-12'
+        pgsql_packages += ' postgresql-12'
     os.system('{apt} install {packages} -y'.format(apt=PKG_MGR, packages=pgsql_packages))
     os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.noarch.deb')
     os.system('cd /tmp; dpkg -i MailScanner-5.3.3-1.noarch.deb')
