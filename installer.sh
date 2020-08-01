@@ -103,6 +103,10 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
+
+spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint
+MailScanner --lint
+
 echo 'Installation and initial configuration completed. Now we will perform some cleanup...'
 bin/python ./installer/cleanup.py
 if [ "$?" -ne 0 ]; then

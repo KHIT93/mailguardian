@@ -309,7 +309,7 @@ if __name__ == "__main__":
     os.environ['MAILGUARDIAN_DB_USER'] = DB_USER
     os.environ['MAILGUARDIAN_DB_PASS'] = DB_PASS
     os.environ['MAILGUARDIAN_DB_NAME'] = DB_NAME
-    os.environ['MAILGUARDIAN_DB_PORT'] = DB_PORT
+    os.environ['MAILGUARDIAN_DB_PORT'] = str(DB_PORT)
     os.environ['MAILGUARDIAN_APP_HOSTNAME'] = APP_HOSTNAME
     os.environ['MAILSCANNER_SHARE_DIR'] = MS_SHARED
     os.environ['MAILSCANNER_CONFIG_DIR'] = MS_CONF_DIR
