@@ -360,8 +360,10 @@ if __name__ == "__main__":
                 conf.append('Milter Ignore Loopback = no')
     with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'w') as f:
         f.writelines(conf)
-    os.makedirs(os.path.join('/','var','spool','MailScanner','milterin'))
-    os.makedirs(os.path.join('/','var','spool','MailScanner','milterout'))
+    if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterin')):
+        os.makedirs(os.path.join('/','var','spool','MailScanner','milterin'))
+    if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterout')):
+        os.makedirs(os.path.join('/','var','spool','MailScanner','milterout'))
     os.system('chown postfix:mtagroup /var/spool/MailScanner/milterin')
     os.system('chown postfix:mtagroup /var/spool/MailScanner/milterout')
     os.system('chown postfix:mtagroup /var/spool/MailScanner/incoming')
