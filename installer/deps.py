@@ -21,13 +21,13 @@ def which(program):
 CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'DBD::Pg', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
 PKG_MGR = False
 
-def setup_deb():
+def setup_deb(pkg_mgr, os_release):
     print('Setting up on debian-based distro')
-    PKG_MGR = which(PKG_MGR)
+    PKG_MGR = which(pkg_mgr)
     os.system('{pkg} update'.format(pkg=PKG_MGR))
     os.system('{pkg} purge postfix -y'.format(pkg=PKG_MGR))
     os.system('{pkg} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev lsb-release build-essential -y'.format(pkg=PKG_MGR))
-    if os.environ.get('LNX_OS_RELEASE') == 'debian':
+    if os_release == 'debian':
         print('Adding additional repositories')
         os.system('echo "deb http://deb.debian.org/debian $(lsb_release -cs)-backports main" > /etc/apt/sources.list.d/debian-backports.list')
         os.system('{pkg} update'.format(pkg=PKG_MGR))
@@ -54,9 +54,9 @@ def setup_deb():
     for dep in CPAN_DEPS:
         os.system('cpan -i {dep}'.format(dep=dep))
 
-def setup_rhel():
+def setup_rhel(pkg_mgr, os_release):
     print('Setting up on RHEL-based distro')
-    PKG_MGR = which(PKG_MGR)
+    PKG_MGR = which(pkg_mgr)
     # os.sytem('curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -')
     # os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
 
@@ -82,15 +82,15 @@ if __name__ == "__main__":
                 distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
     if distro == 'centos':
         PKG_MGR = 'yum'
-        setup_rhel()
+        setup_rhel(PKG_MGR, distro)
         exit(0)
     elif distro == 'debian':
         PKG_MGR = 'apt'
-        setup_deb()
+        setup_deb(PKG_MGR, distro)
         exit(0)
     elif distro.lower() == 'ubuntu':
         PKG_MGR = 'apt'
-        setup_deb()
+        setup_deb(PKG_MGR, distro)
         exit(0)
     else:
         print('Your Linux distribution or version is not supported')
