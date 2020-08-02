@@ -38,7 +38,7 @@ def setup_deb(pkg_mgr, os_release):
     print('Adding Node.js')
     os.system('curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -')
     os.system('{pkg} update'.format(pkg=PKG_MGR))
-    os.system('{pkg} install nodejs'.format(pkg=PKG_MGR))
+    os.system('{pkg} install nodejs -y'.format(pkg=PKG_MGR))
 
     if not which('python3'):
         print('python3 was not found on your system. Exitting')
