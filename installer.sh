@@ -58,6 +58,7 @@ echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch feature-new-install-scripts'
 cd /home/mailguardian/mailguardian
 echo 'Installing required packages...'
+touch /home/mailguardian/mailguardian/installer.ini
 python3 ./installer/deps.py
 usermod -a -G mtagroup,postfix mailguardian
 if [ "$?" -ne 0 ]; then
@@ -86,19 +87,19 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-bin/python ./installer/mailguardian.py
+bin/python ./installer/mailguardian.py -f /home/mailguardian/mailguardian/installer.ini
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Configure Postfix...'
-bin/python ./installer/postfix.py
+bin/python ./installer/postfix.py -f /home/mailguardian/mailguardian/installer.ini
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Configure MailScanner...'
-bin/python ./installer/mailscanner.py
+bin/python ./installer/mailscanner.py -f /home/mailguardian/mailguardian/installer.ini
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
@@ -108,7 +109,7 @@ spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint
 MailScanner --lint
 
 echo 'Installation and initial configuration completed. Now we will perform some cleanup...'
-bin/python ./installer/cleanup.py
+rm -rf /home/mailguardian/mailguardian/installer.ini
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1

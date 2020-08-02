@@ -4,6 +4,13 @@
 #
 import os, sys, platform
 from django.conf import settings
+import configparser
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
+
+args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
@@ -24,9 +31,11 @@ if __name__ == "__main__":
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit()
+    installer_config = configparser.ConfigParser()
+    installer_config.read(args.config_file)
     PKG_MGR = None
     POSTFIX_DIR = '/etc/postfix'
-    APP_DIR  = os.environ.get('MAILGUARDIAN_APP_DIR')
+    APP_DIR  = installer_config['mailguardian']['app_dir']
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
@@ -59,25 +68,25 @@ if __name__ == "__main__":
     main_cf.append('transport_maps = regexp:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
     with open(os.path.join(POSTFIX_DIR, 'main.cf'), 'w') as f:
         f.writelines(main_cf)
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=os.environ.get('MAILGUARDIAN_APP_HOSTNAME')))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=os.environ.get('MAILGUARDIAN_APP_HOSTNAME')))
+    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['app_dir']))
+    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['app_dir']))
     os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR))
 
     print('Configure PostgreSQL integrations')
     with open(os.path.join(POSTFIX_DIR, 'pgsql-transport.cf'), 'w') as f:
         f.writelines([
-            "user = {}".format(os.environ.get('MAILGUARDIAN_DB_USER')),
-            "password = {}".format(os.environ.get('MAILGUARDIAN_DB_PASS')),
-            "hosts = {}".format(os.environ.get('MAILGUARDIAN_DB_HOST')),
-            "dbname = {}".format(os.environ.get('MAILGUARDIAN_DB_NAME')),
+            "user = {}".format(installer_config['database']['user']),
+            "password = {}".format(installer_config['database']['pass']),
+            "hosts = {}".format(installer_config['database']['fqdn']),
+            "dbname = {}".format(installer_config['database']['name']),
             "query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='\%\s' AND active = '1';",
         ])
 
     with open(os.path.join(POSTFIX_DIR, 'pgsql-mynetworks.cf'), 'w') as f:
         f.writelines([
-            "user = {}".format(os.environ.get('MAILGUARDIAN_DB_USER')),
-            "password = {}".format(os.environ.get('MAILGUARDIAN_DB_PASS')),
-            "hosts = {}".format(os.environ.get('MAILGUARDIAN_DB_HOST')),
-            "dbname = {}".format(os.environ.get('MAILGUARDIAN_DB_NAME')),
+            "user = {}".format(installer_config['database']['user']),
+            "password = {}".format(installer_config['database']['pass']),
+            "hosts = {}".format(installer_config['database']['fqdn']),
+            "dbname = {}".format(installer_config['database']['name']),
             "query = query = SELECT ip_address from mail_smtprelay where (ip_address='\%\s' or hostname='\%\s') AND active = '1';",
         ])

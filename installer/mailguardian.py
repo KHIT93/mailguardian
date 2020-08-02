@@ -4,7 +4,14 @@
 #
 import os, sys, platform, pytz, json, pwd, grp
 from django.core.management.utils import get_random_secret_key
+import configparser
+import argparse
 import cryptography.fernet
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
+
+args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
@@ -33,7 +40,6 @@ if __name__ == "__main__":
         exit(255)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
     APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    os.environ['MAILGUARDIAN_APP_DIR'] = APP_DIR
     
     # Define some paths needed later
     SYSTEMD_PATH = '/etc/systemd/system/'
@@ -303,14 +309,34 @@ if __name__ == "__main__":
         '}'
     ]
     mailguardian_env_contents = "\n".join(env_contents)
-    os.environ['MAILGUARDIAN_DB_HOST'] = DB_HOST
-    os.environ['MAILGUARDIAN_DB_USER'] = DB_USER
-    os.environ['MAILGUARDIAN_DB_PASS'] = DB_PASS
-    os.environ['MAILGUARDIAN_DB_NAME'] = DB_NAME
-    os.environ['MAILGUARDIAN_DB_PORT'] = str(DB_PORT)
-    os.environ['MAILGUARDIAN_APP_HOSTNAME'] = APP_HOSTNAME
-    os.environ['MAILSCANNER_SHARE_DIR'] = MS_SHARED
-    os.environ['MAILSCANNER_CONFIG_DIR'] = MS_CONF_DIR
+    installer_config = configparser.ConfigParser()
+    installer_config['mailguardian'] = {
+        'app_dir': APP_DIR,
+        'hostname': APP_HOSTNAME
+    }
+    installer_config['database'] = {
+        'host': DB_HOST,
+        'user': DB_USER,
+        'pass': DB_PASS,
+        'name': DB_NAME,
+        'port': DB_PORT,
+        'fqdn': DB_HOST + ':' + DB_PORT if str(DB_PORT) != '5432' else DB_HOST
+    }
+    installer_config['mailscanner'] = {
+        'bin': MS_BIN,
+        'config': MS_CONF_DIR,
+        'shared': MS_SHARED,
+        'lib': MS_LIB,
+        'quarantine': MS_QUARANTINE_DIR
+    }
+    installer_config['spamassassin'] = {
+        'sa_learn': SALEARN_BIN,
+        'bin': SA_BIN,
+        'rules': SA_RULES_DIR
+    }
+
+    with open(args.config_file, 'w') as f:
+        installer_config.write(f)
 
     # Print the configuration settings
     print('Hostname: {0}'.format(APP_HOSTNAME))

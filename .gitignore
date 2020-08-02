@@ -107,6 +107,7 @@ pip-selfcheck.json
 node_modules/
 .vscode/
 mailguardian-env.json
+installer.ini
 mix-manifest.json
 .DS_Store
 local.py

@@ -4,6 +4,13 @@
 #
 import os, sys, platform
 from django.conf import settings
+import configparser
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
+
+args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
@@ -24,9 +31,11 @@ if __name__ == "__main__":
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit()
+    installer_config = configparser.ConfigParser()
+    installer_config.read(args.config_file)
     PKG_MGR = None
     POSTFIX_DIR = '/etc/postfix'
-    APP_DIR  = os.environ.get('MAILGUARDIAN_APP_DIR')
+    APP_DIR  = installer_config['mailguardian']['app_dir']
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
@@ -54,22 +63,22 @@ if __name__ == "__main__":
         conf = f.readlines()
     for index, line in enumerate(conf):
         if line.strip() == "my ($db_name) = 'mailguardian';":
-            conf[index] = "my ($db_name) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_NAME'))
+            conf[index] = "my ($db_name) = '{}';".format(installer_config['database']['name'])
         if line.strip() == "my ($db_host) = 'localhost';":
-            conf[index] = "my ($db_host) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_HOST'))
+            conf[index] = "my ($db_host) = '{}';".format(installer_config['database']['fqdn'])
         if line.strip() == "my ($db_user) = 'mailguardian';":
-            conf[index] = "my ($db_user) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_USER'))
+            conf[index] = "my ($db_user) = '{}';".format(installer_config['database']['user'])
         if line.strip() == "my ($db_pass) = 'mailguardian';":
-            conf[index] = "my ($db_pass) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_PASS'))
-    with open(os.path.join(os.environ.get('MAILSCANNER_SHARE_DIR'), 'perl', 'custom', 'MailGuardianConf.pm'), 'w') as f:
+            conf[index] = "my ($db_pass) = '{}';".format(installer_config['database']['pass'])
+    with open(os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardianConf.pm'), 'w') as f:
         f.writelines(conf)
     
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'MailGuardian.pm'), dest=os.path.join(os.environ.get('MAILSCANNER_SHARE_DIR'), 'perl', 'custom', 'MailGuardian.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLBlackWhiteList.pm'), dest=os.path.join(os.environ.get('MAILSCANNER_SHARE_DIR'), 'perl', 'custom', 'SQLBlackWhiteList.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=os.path.join(os.environ.get('MAILSCANNER_SHARE_DIR'), 'perl', 'custom', 'SQLSpamSettings.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'MailGuardian.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLBlackWhiteList.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlackWhiteList.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLSpamSettings.pm')))        
     
     conf = []
-    with open(os.path.join(os.environ.get('MAILSCANNER_CONFIG_DIR'), 'MailScanner.conf'), 'r') as f:
+    with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'r') as f:
         conf = f.readlines()
 
     config_control = [
@@ -157,7 +166,7 @@ if __name__ == "__main__":
             conf[index] = 'Place New Headers At Top Of Message = yes'
         if line[:8] == 'Hostname':
             config_check.append('Hostname')
-            conf[index] = 'Hostname = {}'.format(os.environ.get('MAILGUARDIAN_APP_HOSTNAME'))
+            conf[index] = 'Hostname = {}'.format(installer_config['mailguardian']['hostname'])
         if line[:19] == 'Sign Clean Messages':
             config_check.append('Sign Clean Messages')
             conf[index] = 'Sign Clean Messages = no'
@@ -282,7 +291,7 @@ if __name__ == "__main__":
             if 'Place New Headers At Top Of Message' == c:
                 conf.append('Place New Headers At Top Of Message = yes')
             if 'Hostname' == c:
-                conf.append('Hostname = {}'.format(os.environ.get('MAILGUARDIAN_APP_HOSTNAME')))
+                conf.append('Hostname = {}'.format(installer_config['mailguardian']['hostname']))
             if 'Sign Clean Messages' == c:
                 conf.append('Sign Clean Messages = no')
             if 'Dont Sign HTML If Headers Exist' == c:
@@ -349,7 +358,7 @@ if __name__ == "__main__":
                 conf.append('MSMail Delivery Method = QMQP')
             if 'Milter Ignore Loopback' == c:
                 conf.append('Milter Ignore Loopback = no')
-    with open(os.path.join(os.environ.get('MAILSCANNER_CONFIG_DIR'), 'MailScanner.conf'), 'w') as f:
+    with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'w') as f:
         f.writelines(conf)
     os.makedirs(os.path.join('/','var','spool','MailScanner','milterin'))
     os.makedirs(os.path.join('/','var','spool','MailScanner','milterout'))
