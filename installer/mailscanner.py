@@ -373,9 +373,10 @@ if __name__ == "__main__":
     os.system('echo "smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
     os.system("sed -i 's/run_mailscanner=0/run_mailscanner=1/g' /etc/MailScanner/defaults")
 
-    os.sytem('mkdir /etc/MailScanner/bayes')
+    if not os.path.exists('/etc/MailScanner/bayes'):
+        os.sytem('mkdir /etc/MailScanner/bayes')
     os.system('chown postfix:mtagroup /etc/MailScanner/bayes')
-    os.sytem('chmod g+rws /etc/MailScanner/bayes')
+    os.system('chmod g+rws /etc/MailScanner/bayes')
     if os.path.exists('/root/.spamassasin'):
         os.system('cp /root/.spamassassin/bayes_* /etc/MailScanner/bayes')
         os.system('chown postfix:mtagroup /etc/MailScanner/bayes/bayes_*')
