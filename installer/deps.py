@@ -18,19 +18,27 @@ def which(program):
                 return exe_file
     return None
 
+CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'DBD::Pg', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
+
 def setup_deb():
     print('Setting up on debian-based distro')
-    os.system('{apt} update'.format(apt=PKG_MGR))
-    os.system('{apt} purge postfix -y'.format(apt=PKG_MGR))
-    os.system('{apt} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev lsb-release -y'.format(apt=PKG_MGR))
-    if platform.linux_distribution()[0] == 'debian':
+    PKG_MGR = which(os.environ.get('LNX_PKG_MGR'))
+    os.system('{pkg} update'.format(pkg=PKG_MGR))
+    os.system('{pkg} purge postfix -y'.format(pkg=PKG_MGR))
+    os.system('{pkg} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev lsb-release build-essential -y'.format(pkg=PKG_MGR))
+    if os.environ.get('LNX_OS_RELEASE') == 'debian':
         print('Adding additional repositories')
         os.system('echo "deb http://deb.debian.org/debian $(lsb_release -cs)-backports main" > /etc/apt/sources.list.d/debian-backports.list')
-        os.system('{apt} update'.format(apt=PKG_MGR))
+        os.system('{pkg} update'.format(pkg=PKG_MGR))
     print('Adding PostgreSQL repository')
     os.system('echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list')
     os.system('wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -')
-    os.system('{apt} update'.format(apt=PKG_MGR))
+    os.system('{pkg} update'.format(pkg=PKG_MGR))
+    print('Adding Node.js')
+    os.system('curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -')
+    os.system('{pkg} update'.format(pkg=PKG_MGR))
+    os.system('{pkg} install nodejs'.format(pkg=PKG_MGR))
+
     if not which('python3'):
         print('python3 was not found on your system. Exitting')
         exit(255)
@@ -38,7 +46,7 @@ def setup_deb():
     pgsql_packages = 'postgresql-server-dev-12 postgresql-client-12'
     if input('Does this system run the PostgreSQL database server? (y/N) ').lower() == 'y':
         pgsql_packages += ' postgresql-12'
-    os.system('{apt} install {packages} -y'.format(apt=PKG_MGR, packages=pgsql_packages))
+    os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
     os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.noarch.deb')
     os.system('cd /tmp; dpkg -i MailScanner-5.3.3-1.noarch.deb')
     os.system('/usr/sbin/ms-configure --MTA=postfix --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
@@ -47,35 +55,27 @@ def setup_deb():
 
 def setup_rhel():
     print('Setting up on RHEL-based distro')
+    PKG_MGR = which(os.environ.get('LNX_PKG_MGR'))
+    # os.sytem('curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -')
+    # os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
 
 if __name__ == "__main__":
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit()
-    PKG_MGR = None
-    CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'DBD::Pg', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    distro = platform.linux_distribution()
-    if distro[0] == 'CentOS Linux':
-        PKG_MGR = which('yum')
+    distro = os.environ.get('LNX_OS_RELEASE')
+    if distro == 'centos':
         setup_rhel()
         exit(0)
-    elif distro[0] == 'debian':
-        PKG_MGR = which('apt')
-        if int(distro[1].replace('.', '')) <= 90:
-            print('Your version of Debian is not supported')
-            exit(255)
+    elif distro == 'debian':
         setup_deb()
         exit(0)
-    elif distro[0] == 'Ubuntu':
-        PKG_MGR = which('apt')
-        if int(distro[1].replace('.', '')) <= 1604:
-            print('Your version of Ubuntu is not supported')
-            exit(255)
+    elif distro == 'ubuntu':
         setup_deb()
         exit(0)
     else:

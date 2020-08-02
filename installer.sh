@@ -10,6 +10,7 @@ then
         exit 255
     else
         LNX_OS_RELEASE=$(python2 -c 'import platform; print platform.linux_distribution()[0]')
+        export $LNX_OS_RELEASE
     fi
 else
     HAS_PY3=1
@@ -28,6 +29,7 @@ EOM
         echo 'Unable to determine Linux version'
         exit 255
     fi
+    export $LNX_OS_RELEASE
 fi
 if [[ $LNX_OS_RELEASE -eq 'ubuntu' ]]
 then
@@ -42,6 +44,7 @@ else
     echo 'Unable to determine Linux distribution. Only Debian, Ubuntu and CentOS are supported for this script'
     exit 255
 fi
+export $LNX_PKG_MGR
 read -p 'Press [Enter] to continue...'
 echo ''
 echo 'Installing...'

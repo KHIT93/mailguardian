@@ -67,26 +67,26 @@ if __name__ == "__main__":
     main_cf.append('relay_domains = regexp:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
     main_cf.append('transport_maps = regexp:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
     with open(os.path.join(POSTFIX_DIR, 'main.cf'), 'w') as f:
-        f.writelines(main_cf)
+        f.write("\n".join(main_cf))
     os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['app_dir']))
     os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['app_dir']))
     os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR))
 
     print('Configure PostgreSQL integrations')
     with open(os.path.join(POSTFIX_DIR, 'pgsql-transport.cf'), 'w') as f:
-        f.writelines([
+        f.write("\n".join([
             "user = {}".format(installer_config['database']['user']),
             "password = {}".format(installer_config['database']['pass']),
             "hosts = {}".format(installer_config['database']['fqdn']),
             "dbname = {}".format(installer_config['database']['name']),
             "query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='\%\s' AND active = '1';",
-        ])
+        ]))
 
     with open(os.path.join(POSTFIX_DIR, 'pgsql-mynetworks.cf'), 'w') as f:
-        f.writelines([
+        f.write("\n".join([
             "user = {}".format(installer_config['database']['user']),
             "password = {}".format(installer_config['database']['pass']),
             "hosts = {}".format(installer_config['database']['fqdn']),
             "dbname = {}".format(installer_config['database']['name']),
             "query = query = SELECT ip_address from mail_smtprelay where (ip_address='\%\s' or hostname='\%\s') AND active = '1';",
-        ])
+        ]))

@@ -71,7 +71,7 @@ if __name__ == "__main__":
         if line.strip() == "my ($db_pass) = 'mailguardian';":
             conf[index] = "my ($db_pass) = '{}';".format(installer_config['database']['pass'])
     with open(os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardianConf.pm'), 'w') as f:
-        f.writelines(conf)
+        f.write("\n".join(conf))
     
     os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'MailGuardian.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm')))        
     os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLBlackWhiteList.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlackWhiteList.pm')))        
@@ -359,7 +359,7 @@ if __name__ == "__main__":
             if 'Milter Ignore Loopback' == c:
                 conf.append('Milter Ignore Loopback = no')
     with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'w') as f:
-        f.writelines(conf)
+        f.write("\n".join(conf))
     if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterin')):
         os.makedirs(os.path.join('/','var','spool','MailScanner','milterin'))
     if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterout')):
