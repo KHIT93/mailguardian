@@ -412,7 +412,7 @@ if __name__ == "__main__":
                 os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
                 os.chown(PRIVKEY_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
                 os.chown(CSR_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-                os.system(OPENSSL_BIN + 'x509 -req -days 3650 -in {csr} -signkey {key} -out {crt}'.format(csr=CSR_PATH, key=PRIVKEY_PATH, crt=CERT_PATH))
+                os.system(OPENSSL_BIN + ' x509 -req -days 3650 -in {csr} -signkey {key} -out {crt}'.format(csr=CSR_PATH, key=PRIVKEY_PATH, crt=CERT_PATH))
                 os.chown(CERT_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
             print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
             print('Please note that this step can take up to 30 minutes to complete')
