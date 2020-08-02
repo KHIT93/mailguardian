@@ -68,7 +68,7 @@ if __name__ == "__main__":
         f.writelines([
             "user = {}".format(os.environ.get('MAILGUARDIAN_DB_USER')),
             "password = {}".format(os.environ.get('MAILGUARDIAN_DB_PASS')),
-            "hosts = {}".format(os.environ.get('MAILGUARDIAN_DB_HOST') + ':' + os.environ.get('MAILGUARDIAN_DB_PORT') if os.environ.get('MAILGUARDIAN_DB_PORT', '') != '5432' else os.environ.get('MAILGUARDIAN_DB_HOST')),
+            "hosts = {}".format(os.environ.get('MAILGUARDIAN_DB_HOST') + ':' + os.environ.get('MAILGUARDIAN_DB_PORT') if os.environ.get('MAILGUARDIAN_DB_PORT', '') != None and os.environ.get('MAILGUARDIAN_DB_PORT', '') != '5432' else os.environ.get('MAILGUARDIAN_DB_HOST')),
             "dbname = {}".format(os.environ.get('MAILGUARDIAN_DB_NAME')),
             "query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='\%\s' AND active = '1';",
         ])
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         f.writelines([
             "user = {}".format(os.environ.get('MAILGUARDIAN_DB_USER')),
             "password = {}".format(os.environ.get('MAILGUARDIAN_DB_PASS')),
-            "hosts = {}".format(os.environ.get('MAILGUARDIAN_DB_HOST') + ':' + os.environ.get('MAILGUARDIAN_DB_PORT') if os.environ.get('MAILGUARDIAN_DB_PORT', '') != '5432' else os.environ.get('MAILGUARDIAN_DB_HOST')),
+            "hosts = {}".format(os.environ.get('MAILGUARDIAN_DB_HOST') + ':' + os.environ.get('MAILGUARDIAN_DB_PORT') if os.environ.get('MAILGUARDIAN_DB_PORT', '') != None and os.environ.get('MAILGUARDIAN_DB_PORT', '') != '5432' else os.environ.get('MAILGUARDIAN_DB_HOST')),
             "dbname = {}".format(os.environ.get('MAILGUARDIAN_DB_NAME')),
             "query = query = SELECT ip_address from mail_smtprelay where (ip_address='\%\s' or hostname='\%\s') AND active = '1';",
         ])
