@@ -19,10 +19,11 @@ def which(program):
     return None
 
 CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'DBD::Pg', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
+PKG_MGR = False
 
 def setup_deb():
     print('Setting up on debian-based distro')
-    PKG_MGR = which(os.environ.get('LNX_PKG_MGR'))
+    PKG_MGR = which(PKG_MGR)
     os.system('{pkg} update'.format(pkg=PKG_MGR))
     os.system('{pkg} purge postfix -y'.format(pkg=PKG_MGR))
     os.system('{pkg} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev lsb-release build-essential -y'.format(pkg=PKG_MGR))
@@ -55,7 +56,7 @@ def setup_deb():
 
 def setup_rhel():
     print('Setting up on RHEL-based distro')
-    PKG_MGR = which(os.environ.get('LNX_PKG_MGR'))
+    PKG_MGR = which(PKG_MGR)
     # os.sytem('curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -')
     # os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
 
@@ -80,12 +81,15 @@ if __name__ == "__main__":
             if l[:17] == 'VERSION_CODENAME=':
                 distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
     if distro == 'centos':
+        PKG_MGR = 'yum'
         setup_rhel()
         exit(0)
     elif distro == 'debian':
+        PKG_MGR = 'apt'
         setup_deb()
         exit(0)
     elif distro.lower() == 'ubuntu':
+        PKG_MGR = 'apt'
         setup_deb()
         exit(0)
     else:
