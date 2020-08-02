@@ -40,7 +40,17 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    distro = os.environ.get('LNX_OS_RELEASE')
+    distro = 'LINUX'
+    distro_version = '0'
+    distro_version_codename = 'Core'
+    with open('/etc/os-release', 'r') as f:
+        for l in f.readlines():
+            if l[:3] == 'ID=':
+                distro = l.replace('ID=','').replace('"', '').strip()
+            if l[:11] == 'VERSION_ID=':
+                distro_version = l.replace('VERSION_ID=', '').replace('"', '').strip()
+            if l[:17] == 'VERSION_CODENAME=':
+                distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
     if distro.lower() == 'centos':
         PKG_MGR = which('yum')
     elif distro.lower() == 'debian':
