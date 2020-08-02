@@ -56,7 +56,7 @@ if __name__ == "__main__":
         if line.strip() == "my ($db_name) = 'mailguardian';":
             conf[index] = "my ($db_name) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_NAME'))
         if line.strip() == "my ($db_host) = 'localhost';":
-            conf[index] = "my ($db_host) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_HOST') + ':' + os.environ.get('MAILGUARDIAN_DB_PORT') if os.environ.get('MAILGUARDIAN_DB_PORT', '') != None and os.environ.get('MAILGUARDIAN_DB_PORT', '') != '5432' else os.environ.get('MAILGUARDIAN_DB_HOST'))
+            conf[index] = "my ($db_host) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_HOST'))
         if line.strip() == "my ($db_user) = 'mailguardian';":
             conf[index] = "my ($db_user) = '{}';".format(os.environ.get('MAILGUARDIAN_DB_USER'))
         if line.strip() == "my ($db_pass) = 'mailguardian';":
