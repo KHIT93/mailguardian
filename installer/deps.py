@@ -75,7 +75,7 @@ if __name__ == "__main__":
     elif distro == 'debian':
         setup_deb()
         exit(0)
-    elif distro == 'ubuntu':
+    elif distro.lower() == 'ubuntu':
         setup_deb()
         exit(0)
     else:

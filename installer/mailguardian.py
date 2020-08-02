@@ -118,7 +118,7 @@ if __name__ == "__main__":
             NGINX_PATH = '/etc/nginx/sites-enabled/'
         else:
             print('Your version of Debian is not supported')
-    elif distro == 'ubuntu':
+    elif distro.lower() == 'ubuntu':
         PKG_MGR = which('apt')
         if distro_version in ['16.04', '18.04', '20.04']:
             NGINX_PATH = '/etc/nginx/sites-enabled/'

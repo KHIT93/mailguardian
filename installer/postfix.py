@@ -40,19 +40,13 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    distro = platform.linux_distribution()
-    if distro[0] == 'CentOS Linux':
+    distro = os.environ.get('LNX_OS_RELEASE')
+    if distro.lower() == 'centos':
         PKG_MGR = which('yum')
-    elif distro[0] == 'debian':
+    elif distro.lower() == 'debian':
         PKG_MGR = which('apt')
-        if int(distro[1].replace('.', '')) <= 90:
-            print('Your version of Debian is not supported')
-            exit(255)
-    elif distro[0] == 'Ubuntu':
+    elif distro.lower() == 'ubuntu':
         PKG_MGR = which('apt')
-        if int(distro[1].replace('.', '')) <= 1604:
-            print('Your version of Ubuntu is not supported')
-            exit(255)
     else:
         print('Your Linux distribution or version is not supported')
         print(distro)

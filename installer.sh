@@ -31,7 +31,10 @@ EOM
     fi
     export $LNX_OS_RELEASE
 fi
-if [[ $LNX_OS_RELEASE -eq 'ubuntu' ]]
+if [[ $LNX_OS_RELEASE -eq 'Ubuntu' ]]
+then
+    LNX_PKG_MGR='apt'
+elif [[ $LNX_OS_RELEASE -eq 'ubuntu' ]]
 then
     LNX_PKG_MGR='apt'
 elif [[ $LNX_OS_RELEASE -eq 'debian' ]]
