@@ -21,7 +21,7 @@ def which(program):
 CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'DBD::Pg', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
 PKG_MGR = False
 
-def setup_deb(pkg_mgr, os_release):
+def setup_deb(pkg_mgr, os_release, os_version):
     print('Setting up on debian-based distro')
     PKG_MGR = which(pkg_mgr)
     os.system('{pkg} update'.format(pkg=PKG_MGR))
@@ -50,15 +50,75 @@ def setup_deb(pkg_mgr, os_release):
     os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
     os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.noarch.deb')
     os.system('cd /tmp; dpkg -i MailScanner-5.3.3-1.noarch.deb')
-    os.system('/usr/sbin/ms-configure --MTA=postfix --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
+    os.system('/usr/sbin/ms-configure --MTA=none --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
     for dep in CPAN_DEPS:
-        os.system('cpan -i {dep}'.format(dep=dep))
+        os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
 
-def setup_rhel(pkg_mgr, os_release):
+def setup_rhel(pkg_mgr, os_release, os_version):
     print('Setting up on RHEL-based distro')
     PKG_MGR = which(pkg_mgr)
-    # os.sytem('curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -')
-    # os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
+    os.system('Installing EPEL...')
+    os.system('{pkg} install -y epel-release centos-release-scl'.format(pkg=PKG_MGR))
+    os.system("{sed} -i 's/SELINUX=enforcing/SELINUX=permissive/g /etc/sysconfig/selinux".format(sed=which('sed')))
+    if os_version == '7':
+        print('Adding GhettoForge repo...')
+        # GhettoForge currently give postfix 3.5.3
+        gf = [
+            "[gf]",
+            "name=Ghettoforge packages that won't overwrite core distro packages.",
+            "mirrorlist=http://mirrorlist.ghettoforge.org/el/7/gf/$basearch/mirrorlist",
+            "enabled=1",
+            "gpgcheck=1",
+            "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-gf.el7",
+            "failovermethod=priority",
+
+            "[gf-plus]",
+            "name=Ghettoforge packages that will overwrite core distro packages.",
+            "mirrorlist=http://mirrorlist.ghettoforge.org/el/7/plus/$basearch/mirrorlist",
+            "# Please read http://ghettoforge.org/index.php/Usage *before* enabling this repository!",
+            "enabled=1",
+            "gpgcheck=1",
+            "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-gf.el7",
+            "failovermethod=priority",
+        ]
+        with open(os.path.join('/', 'etc', 'yum.repos.d', 'gf.repo'), 'w') as f:
+            f.write("\n".join(gf))
+        os.system('{pkg} clean all'.format(pkg=PKG_MGR))
+        os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
+        os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm'.format(pkg=PKG_MGR))
+        os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install -y postfix3 postfix3-pgsql'.format(pkg=PKG_MGR))
+        os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx libpq5-devel openssl ca-certificates libpng-devel redhat-lsb-core sudo')
+        if not which('python3'):
+            print('python3 was not found on your system. Exitting')
+            exit(255)
+        os.system('{python} /usr/lib/python3.6/site-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
+
+    elif os_version == '8':
+        PKG_MGR = which('dnf')
+        # First modify CentOS Base repo to exclude postfix packages
+        # Next enable centosplus repo as this has postfix-pgsql packages
+        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm'.format(pkg=PKG_MGR))
+        os.system('{pkg} -qy module disable postgresql'.format(pkg=PKG_MGR))
+        os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
+        os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
+    else:
+        print('Your version of CentOS is unfortunately not supported')
+        exit(255)
+    os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
+    os.system('{systemctl} enable postgresql-12'.format(systemctl=which('systemctl')))
+    os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
+    os.sytem('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
+    os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
+    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
+    os.system('/usr/sbin/ms-configure --installEPEL=Y --MTA=none --installClamav=Y --installCPAN=Y --ramdiskSize=0 --SELPermissive=Y --installDf=Y --installUnrar=Y --installTNEF=Y --configClamav=Y --installPowerTools=Y')
+    for dep in CPAN_DEPS:
+        os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
+    os.system('{systemctl} enable mailscanner'.format(systemctl=which('systemctl')))
+    os.system('{systemctl} enable msmilter'.format(systemctl=which('systemctl')))
 
 if __name__ == "__main__":
     # First make sure that we are running on Linux
@@ -82,15 +142,15 @@ if __name__ == "__main__":
                 distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
     if distro == 'centos':
         PKG_MGR = 'yum'
-        setup_rhel(PKG_MGR, distro)
+        setup_rhel(PKG_MGR, distro, distro_version)
         exit(0)
     elif distro == 'debian':
         PKG_MGR = 'apt'
-        setup_deb(PKG_MGR, distro)
+        setup_deb(PKG_MGR, distro, distro_version)
         exit(0)
     elif distro.lower() == 'ubuntu':
         PKG_MGR = 'apt'
-        setup_deb(PKG_MGR, distro)
+        setup_deb(PKG_MGR, distro, distro_version)
         exit(0)
     else:
         print('Your Linux distribution or version is not supported')

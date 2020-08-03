@@ -53,6 +53,8 @@ if __name__ == "__main__":
                 distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
     if distro.lower() == 'centos':
         PKG_MGR = which('yum')
+        if distro_version == '8':
+            PKG_MGR = which('dnf')
     elif distro.lower() == 'debian':
         PKG_MGR = which('apt')
     elif distro.lower() == 'ubuntu':

@@ -83,7 +83,7 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-echo 'create user mailguardian with encrypted password "' + $ENV_DB_PASS + '";' | su - postgres -c psql
+echo "create user mailguardian with encrypted password '$ENV_DB_PASS';" | su - postgres -c psql
 if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
@@ -120,5 +120,5 @@ if [ "$?" -ne 0 ]; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-echo 'Installation has finished. Please finish application configuration in your web browser'
+echo 'Installation has finished. Please reboot your system and finish the application configuration in your web browser'
 exit 0
