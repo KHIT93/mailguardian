@@ -119,6 +119,8 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
     os.system('{systemctl} enable mailscanner'.format(systemctl=which('systemctl')))
     os.system('{systemctl} enable msmilter'.format(systemctl=which('systemctl')))
+    os.system('{cmd} --add-service={smtp,smtps,http,https} --permanent'.format(cmd=which('firewall-cmd')))
+    os.system('{cmd} --reload'.format(cmd=which('firewall-cmd')))
 
 if __name__ == "__main__":
     # First make sure that we are running on Linux
