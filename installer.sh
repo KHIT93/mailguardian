@@ -12,49 +12,28 @@ then
 else
     HAS_PY3=1
 fi
-LNX_OS_RELEASE=$(grep '^ID=' < /etc/os-release | sed 's/ID="//g' | sed 's/"//g')
+LNX_OS_RELEASE=$(grep '^ID="' < /etc/os-release | sed 's/ID="//g' | sed 's/"//g')
 if [ -z "$LNX_OS_RELEASE" ]
 then
     echo 'Unable to determine Linux version'
     exit 255
 fi
 export LNX_OS_RELEASE
-if [ $LNX_OS_RELEASE == 'centos' ];
+if [[ $LNX_OS_RELEASE -eq 'centos' ]]
 then
-    echo 'Running on CentOS'
-elif [ $LNX_OS_RELEASE == 'Ubuntu' ];
+    LNX_PKG_MGR='yum'
+elif [[ $LNX_OS_RELEASE -eq 'Ubuntu' ]]
 then
-    echo 'Running on Ubuntu'
-elif [ $LNX_OS_RELEASE == 'ubuntu' ];
+    LNX_PKG_MGR='apt'
+elif [[ $LNX_OS_RELEASE -eq 'ubuntu' ]]
 then
-    echo 'Running on ubuntu'
-elif [ $LNX_OS_RELEASE == 'debian' ];
+    LNX_PKG_MGR='apt'
+elif [[ $LNX_OS_RELEASE -eq 'debian' ]]
 then
-    echo 'Running on debian'
-elif [ $LNX_OS_RELEASE == "pop" ];
-then
-    echo 'Running on Pop_OS'
+    LNX_PKG_MGR='apt'
 else
-    LNX_OS_RELEASE=$(grep '^ID=' < /etc/os-release | sed 's/ID=//g')
-    if [ $LNX_OS_RELEASE == 'centos' ];
-    then
-        echo 'Running on CentOS'
-    elif [ $LNX_OS_RELEASE == 'Ubuntu' ];
-    then
-        echo 'Running on Ubuntu'
-    elif [ $LNX_OS_RELEASE == 'ubuntu' ];
-    then
-        echo 'Running on ubuntu'
-    elif [ $LNX_OS_RELEASE == 'debian' ];
-    then
-        echo 'Running on debian'
-    elif [ $LNX_OS_RELEASE == "pop" ];
-    then
-        echo 'Running on Pop_OS'
-    else
-        echo 'Unable to determine Linux distribution. Only Debian, Ubuntu and CentOS are supported for this script'
-        exit 255
-    fi
+    echo 'Unable to determine Linux distribution. Only Debian, Ubuntu and CentOS are supported for this script'
+    exit 255
 fi
 export LNX_PKG_MGR
 echo ''
