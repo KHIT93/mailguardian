@@ -86,7 +86,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} clean all'.format(pkg=PKG_MGR))
         os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
         os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm'.format(pkg=PKG_MGR))
+        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y postfix3 postfix3-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
@@ -100,7 +100,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         PKG_MGR = which('dnf')
         # First modify CentOS Base repo to exclude postfix packages
         # Next enable centosplus repo as this has postfix-pgsql packages
-        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm'.format(pkg=PKG_MGR))
+        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
         os.system('{pkg} -qy module disable postgresql'.format(pkg=PKG_MGR))
         os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
@@ -111,7 +111,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
     os.system('{systemctl} enable postgresql-12'.format(systemctl=which('systemctl')))
     os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
-    os.sytem('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
+    os.system('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
     os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
     os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
     os.system('/usr/sbin/ms-configure --installEPEL=Y --MTA=none --installClamav=Y --installCPAN=Y --ramdiskSize=0 --SELPermissive=Y --installDf=Y --installUnrar=Y --installTNEF=Y --configClamav=Y --installPowerTools=Y')
