@@ -78,7 +78,6 @@ cd /home/mailguardian/mailguardian || exit
 echo 'Installing required packages...'
 touch /home/mailguardian/mailguardian/installer.ini
 python3 ./installer/deps.py
-usermod -a -G mtagroup,postfix mailguardian
 if ! usermod -a -G mtagroup,postfix mailguardian; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
