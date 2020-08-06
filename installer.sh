@@ -1,17 +1,7 @@
 #!/bin/bash
 echo 'This script will install MailGuardian, MailScanner and other required components onto the system'
 echo ''
-if ! command -v python3 &> /dev/null
-then
-    HAS_PY3=0
-    if ! command -v python2 &> /dev/null
-    then
-        echo 'Unable to determine installed python version'
-        exit 255
-    fi
-else
-    HAS_PY3=1
-fi
+
 LNX_OS_RELEASE=$(grep '^ID=' < /etc/os-release | sed 's/ID="//g' | sed 's/"//g')
 if [ -z "$LNX_OS_RELEASE" ]
 then
@@ -31,9 +21,6 @@ then
 elif [ $LNX_OS_RELEASE == 'debian' ];
 then
     LNX_PKG_MGR='apt'
-elif [ $LNX_OS_RELEASE == "pop" ];
-then
-    echo 'Running on Pop_OS'
 else
     LNX_OS_RELEASE=$(grep '^ID=' < /etc/os-release | sed 's/ID=//g')
     if [ $LNX_OS_RELEASE == 'centos' ];
@@ -48,13 +35,21 @@ else
     elif [ $LNX_OS_RELEASE == 'debian' ];
     then
         LNX_PKG_MGR='apt'
-    elif [ $LNX_OS_RELEASE == "pop" ];
-    then
-        echo 'Running on Pop_OS'
     else
         echo 'Unable to determine Linux distribution. Only Debian, Ubuntu and CentOS are supported for this script'
         exit 255
     fi
+fi
+if ! command -v python3 &> /dev/null
+then
+    HAS_PY3=0
+    if ! command -v python2 &> /dev/null
+    then
+        echo 'Unable to determine installed python version. We will assume that it is not there'
+        HAS_PY3=0
+    fi
+else
+    HAS_PY3=1
 fi
 export LNX_PKG_MGR
 echo ''
