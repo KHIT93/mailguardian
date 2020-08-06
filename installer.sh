@@ -83,7 +83,6 @@ if ! usermod -a -G mtagroup,postfix mailguardian; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && bin/pip install -r requirements.txt'
 if ! su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p python3 . && bin/pip install -r requirements.txt'; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
@@ -91,34 +90,28 @@ fi
 echo 'Installing MailGuardian...'
 ENV_DB_PASS=$(date +%s | sha256sum | base64 | head -c 32)
 export ENV_DB_PASS
-echo 'create database mailguardian;' | su - postgres -c psql
 if ! echo 'create database mailguardian;' | su - postgres -c psql; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-echo "create user mailguardian with encrypted password '$ENV_DB_PASS';" | su - postgres -c psql
 if ! echo "create user mailguardian with encrypted password '$ENV_DB_PASS';" | su - postgres -c psql; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-echo 'grant all privileges on database mailguardian to mailguardian;' | su - postgres -c psql
 if ! echo 'grant all privileges on database mailguardian to mailguardian;' | su - postgres -c psql; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
-bin/python ./installer/mailguardian.py -f /home/mailguardian/mailguardian/installer.ini
 if ! bin/python ./installer/mailguardian.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Configure Postfix...'
-bin/python ./installer/postfix.py -f /home/mailguardian/mailguardian/installer.ini
 if ! bin/python ./installer/postfix.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
 echo 'Configure MailScanner...'
-bin/python ./installer/mailscanner.py -f /home/mailguardian/mailguardian/installer.ini
 if ! bin/python ./installer/mailscanner.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
