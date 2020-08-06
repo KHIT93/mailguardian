@@ -62,6 +62,10 @@ echo 'Installing...'
 if [[ $HAS_PY3 -eq 0 ]]
 then
     echo 'Installing Python 3...'
+    if [ $LNX_OS_RELEASE == 'centos' ];
+    then
+        $LNX_PKG_MGR install -y epel-release
+    fi
     $LNX_PKG_MGR install -y python3 python3-setuptools
 fi
 echo 'Creating application user...'
