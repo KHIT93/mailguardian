@@ -63,34 +63,15 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     if os_version == '7':
         print('Adding GhettoForge repo...')
         # GhettoForge currently give postfix 3.5.3
-        gf = [
-            "[gf]",
-            "name=Ghettoforge packages that won't overwrite core distro packages.",
-            "mirrorlist=http://mirrorlist.ghettoforge.org/el/7/gf/$basearch/mirrorlist",
-            "enabled=1",
-            "gpgcheck=1",
-            "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-gf.el7",
-            "failovermethod=priority",
-
-            "[gf-plus]",
-            "name=Ghettoforge packages that will overwrite core distro packages.",
-            "mirrorlist=http://mirrorlist.ghettoforge.org/el/7/plus/$basearch/mirrorlist",
-            "# Please read http://ghettoforge.org/index.php/Usage *before* enabling this repository!",
-            "enabled=1",
-            "gpgcheck=1",
-            "gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-gf.el7",
-            "failovermethod=priority",
-        ]
-        with open(os.path.join('/', 'etc', 'yum.repos.d', 'gf.repo'), 'w') as f:
-            f.write("\n".join(gf))
+        os.system('{pkg} --nogpg install https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm'.format(pgk=PKG_MGR))
         os.system('{pkg} clean all'.format(pkg=PKG_MGR))
         os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
         os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 libpq5 libpq5-devel -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y postfix3 postfix3-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx libpq5-devel openssl ca-certificates libpng-devel redhat-lsb-core sudo')
+        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo')
         if not which('python3'):
             print('python3 was not found on your system. Exitting')
             exit(255)
