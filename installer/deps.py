@@ -63,7 +63,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     if os_version == '7':
         print('Adding GhettoForge repo...')
         # GhettoForge currently give postfix 3.5.3
-        os.system('{pkg} --nogpg install https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm'.format(pgk=PKG_MGR))
+        os.system('{pkg} --nogpg install https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm'.format(pkg=PKG_MGR))
         os.system('{pkg} clean all'.format(pkg=PKG_MGR))
         os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
         os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
