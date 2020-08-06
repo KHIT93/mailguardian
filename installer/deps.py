@@ -71,7 +71,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 libpq5 libpq5-devel -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y postfix3 postfix3-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo')
+        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
         if not which('python3'):
             print('python3 was not found on your system. Exitting')
             exit(255)
