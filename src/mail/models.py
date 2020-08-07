@@ -1,7 +1,6 @@
 import uuid
 from django.db import models
 from django.conf import settings
-from auditlog.registry import auditlog
 import os, datetime, subprocess
 from django.utils.translation import gettext_lazy as _
 
@@ -163,7 +162,3 @@ class SmtpRelay(models.Model):
     hostname = models.CharField(_('Hostname'), max_length=255, db_index=True, default='')
     active = models.BooleanField(_('Active'), default=0)
     comment = models.TextField(_('Comment'))
-
-if settings.AUDIT_LOGGING:
-    auditlog.register(Message)
-    auditlog.register(SmtpRelay)

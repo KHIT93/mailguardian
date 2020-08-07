@@ -15,7 +15,6 @@ from .serializers import (
     MailScannerConfigurationSerializer,
     SettingsSerializer,
     ChangePasswordSerializer,
-    AuditLogSerializer,
     MailScannerHostSerializer,
     ApplicationTaskSerializer,
     ApplicationNotificationSerializer,
@@ -29,7 +28,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from domains.serializers import DomainSerializer
 from .permissions import IsDomainAdminOrStaff, IsAdminUserOrReadOnly
-from auditlog.models import LogEntry as AuditLog
 from rest_framework.permissions import AllowAny
 from django.conf import settings
 import datetime, pyotp
@@ -104,12 +102,6 @@ class SettingsViewSet(viewsets.ModelViewSet):
         entity = get_object_or_404(Setting, key=request.data['key'])
         serializer = SettingsSerializer(entity, context={'request': request})
         return Response(serializer.data)
-
-class AuditLogViewSet(viewsets.ModelViewSet):
-    queryset = AuditLog.objects.all()
-    serializer_class = AuditLogSerializer
-    permission_classes = (IsAdminUser,)
-    model = AuditLog
 
 class MailScannerHostViewSet(viewsets.ModelViewSet):
     queryset = MailScannerHost.objects.all()

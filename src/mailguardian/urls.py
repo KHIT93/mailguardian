@@ -23,7 +23,6 @@ from core.viewsets import (
     UserViewSet,
     MailScannerConfigurationViewSet,
     SettingsViewSet,
-    AuditLogViewSet,
     MailScannerHostViewSet,
     ApplicationTaskViewSet,
     ApplicationNotificationViewSet,
@@ -85,7 +84,6 @@ router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
 router.register(r'hosts', MailScannerHostViewSet)
 router.register(r'settings', SettingsViewSet)
-router.register(r'audit-log', AuditLogViewSet)
 router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
 router.register(r'two-factor', TwoFactorConfigurationViewSet)

@@ -12,7 +12,6 @@ from domains.models import Domain
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
-from auditlog.registry import auditlog
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
@@ -267,13 +266,6 @@ class TwoFactorBackupCode(models.Model):
             code = TwoFactorBackupCode.objects.create(user=user, code=get_random_string(16, 'abcdefghijklmnopqrstuvwxyz0123456789'))
             codes.append(code.code)
         return codes
-
-if settings.AUDIT_LOGGING:
-    auditlog.register(User)
-    auditlog.register(MailScannerConfiguration)
-    auditlog.register(Setting)
-    auditlog.register(MailScannerHost)
-    auditlog.register(ApplicationTask)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'guardian',
-    'auditlog',
     'encrypted_model_fields',
     'django_premailer',
     'core',
@@ -71,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'auditlog.middleware.AuditlogMiddleware',
 ]
 
 ROOT_URLCONF = 'mailguardian.urls'
