@@ -90,6 +90,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         if not which('python3'):
             print('python3 was not found on your system. Exitting')
             exit(255)
+        os.system('{mkdir} -p /usr/local/lib/python3.6/site-packages/'.format(mkdir=which('mkdir')))
         os.system('{python} /usr/lib/python3.6/site-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
     else:
         print('Your version of CentOS is unfortunately not supported')
