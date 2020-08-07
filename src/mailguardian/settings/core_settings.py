@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'guardian',
-    'encrypted_model_fields',
+    #'encrypted_model_fields',
     'django_premailer',
     'core',
     'frontend',

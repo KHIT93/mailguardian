@@ -17,7 +17,6 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
-from encrypted_model_fields import fields as encrypted_fields
 from django.utils.crypto import get_random_string
 
 # Create your models here.
@@ -249,7 +248,7 @@ class TwoFactorConfiguration(models.Model):
         verbose_name_plural = _('two factor configuration')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
-    totp_key = encrypted_fields.EncryptedCharField(_('Timebased Onetime Password Key'),max_length=255)
+    totp_key = models.CharField(_('Timebased Onetime Password Key'),max_length=255)
 
 class TwoFactorBackupCode(models.Model):
     class Meta:
@@ -257,7 +256,7 @@ class TwoFactorBackupCode(models.Model):
         verbose_name_plural = _('two factor backup codes')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
-    code = encrypted_fields.EncryptedCharField(_('Two Factor Backup Code'), max_length=255)
+    code = models.CharField(_('Two Factor Backup Code'), max_length=255)
 
     def generate_codes(self, user):
         existing = TwoFactorBackupCode.objects.filter(user=user).values_list('code', flat=True)
