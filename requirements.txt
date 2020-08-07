@@ -1,7 +1,7 @@
 amqp==2.6.1
 anyjson==0.3.3
 argon2-cffi==20.1.0
-asgiref==3.2.3
+asgiref==3.2.10
 asn1crypto==1.4.0
 billiard==3.6.3.0
 cachetools==4.1.1
@@ -12,7 +12,7 @@ coreschema==0.0.4
 cryptography==3.0
 cssselect==1.1.0
 cssutils==1.0.2
-Django==3.0.9
+Django==3.1
 django-appconf==1.0.4
 django-cryptography==1.0
 django-extensions==3.0.4

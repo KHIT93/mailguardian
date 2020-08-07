@@ -15,7 +15,6 @@ from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.crypto import get_random_string
 from django_cryptography.fields import encrypt
@@ -225,7 +224,7 @@ class ApplicationTask(models.Model):
     content_type = models.ForeignKey(to='contenttypes.ContentType', on_delete=models.CASCADE, related_name='+', verbose_name=_("content type"))
     object_pk = models.CharField(db_index=True, max_length=255, verbose_name=_("object primary key"))
     method = models.CharField(max_length=255, verbose_name=_("method"))
-    params = JSONField(blank=True, null=True, verbose_name=_("parameters"))
+    params = models.JSONField(blank=True, null=True, verbose_name=_("parameters"))
 
 class ApplicationNotification(models.Model):
     notification_types = [
