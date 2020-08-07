@@ -109,9 +109,8 @@ if __name__ == "__main__":
                 distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
     if distro == 'centos':
         PKG_MGR = which('yum')
-        if distro_version == '7':
-            NGINX_PATH = '/etc/nginx/conf.d/'
-            NGINX_EXTENSION = '.conf'
+        NGINX_PATH = '/etc/nginx/conf.d/'
+        NGINX_EXTENSION = '.conf'
     elif distro == 'debian':
         PKG_MGR = which('apt')
         if distro_version in ['9', '10']:
