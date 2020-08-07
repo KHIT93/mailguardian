@@ -391,7 +391,7 @@ if __name__ == "__main__":
     if distro == 'centos':
         os.system("{sed} -i '/^Example/ c\#Example' /etc/freshclam.conf".format(sed=which('sed')))
         os.system("{sed} -i '/^Example/ c\#Example' /etc/clamd.d/scan.conf".format(sed=which('sed')))
-        os.system("{sed} -i '/#LocalSocket \/var\/run\/clamd.scan\/clamd.sock/ c\LocalSocket /var/run/clamd.scan/clamd.sock' /etc/clamd.d/scan.conf".format(sed=which('sed')))
+        os.system("{sed} -i '/#LocalSocket \/run\/clamd.scan\/clamd.sock/ c\LocalSocket /var/run/clamd.scan/clamd.sock' /etc/clamd.d/scan.conf".format(sed=which('sed')))
         os.system('{chown} -R clamscan:mtagroup /var/run/clamd.scan'.format(chown=which('chown')))
         os.system('{echo} "d /var/run/clamd.scan 0750 clamscan mtagroup -" > /usr/lib/tmpfiles.d/clamd.scan.conf'.format(echo=which('echo')))
         os.system('{touch} /var/log/clamd.scan'.format(touch=which('touch')))
