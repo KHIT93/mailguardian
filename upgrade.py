@@ -31,7 +31,7 @@ if __name__ == "__main__":
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
-        exit()
+        exit(255)
     # Get the current directory of this script to determine the path to use
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
     BASE_DIR = os.path.join(APP_DIR,'src')
@@ -50,7 +50,7 @@ if __name__ == "__main__":
                     spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
-                    upgrade = upgrader.Upgrade(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
+                    upgrade = upgrader.Upgrader(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
                     if upgrade.applicable() and upgrade.legacy:
                         upgrade.upgrade()
                         DESTINATION_VERSION = upgrade.applied_version
@@ -63,7 +63,7 @@ if __name__ == "__main__":
                     spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
-                    upgrade = upgrader.Upgrade(settings, app_dir=APP_DIR, src_dir=BASE_DIR, version=settings.LOCAL_CONFIG_VERSION or '1.0.0')
+                    upgrade = upgrader.Upgrader(settings, app_dir=APP_DIR, src_dir=BASE_DIR, version=settings.LOCAL_CONFIG_VERSION or '1.0.0')
                     if upgrade.applicable():
                         upgrade.upgrade()
                         DESTINATION_VERSION = upgrade.applied_version
