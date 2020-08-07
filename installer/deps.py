@@ -57,7 +57,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
 def setup_rhel(pkg_mgr, os_release, os_version):
     print('Setting up on RHEL-based distro')
     PKG_MGR = which(pkg_mgr)
-    os.system('Installing EPEL...')
+    print('Installing EPEL...')
     os.system('{pkg} install -y epel-release centos-release-scl'.format(pkg=PKG_MGR))
     os.system("{sed} -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux".format(sed=which('sed')))
     if os_version == '7':
