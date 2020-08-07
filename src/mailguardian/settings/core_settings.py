@@ -24,9 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'UNSECURE_SECRET_KEY'
-# SECURITY WARNING: keep the field encryption key used in production secret!
-# We use the SECRET_KEY as a fallback for compatibility with existing installations
-FIELD_ENCRYPTION_KEY = 'UNSECURE_ENCRYPTION_KEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -50,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_auth',
     'guardian',
-    #'encrypted_model_fields',
     'django_premailer',
     'core',
     'frontend',
