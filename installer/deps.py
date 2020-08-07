@@ -86,6 +86,11 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
+        if not which('python3'):
+            print('python3 was not found on your system. Exitting')
+            exit(255)
+        os.system('{python} /usr/lib/python3.6/site-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
     else:
         print('Your version of CentOS is unfortunately not supported')
         exit(255)
@@ -100,7 +105,10 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
     os.system('{systemctl} enable mailscanner'.format(systemctl=which('systemctl')))
     os.system('{systemctl} enable msmilter'.format(systemctl=which('systemctl')))
-    os.system('{cmd} --add-service={smtp,smtps,http,https} --permanent'.format(cmd=which('firewall-cmd')))
+    os.system('{cmd} --add-service=smtp --permanent'.format(cmd=which('firewall-cmd')))
+    os.system('{cmd} --add-service=smtps --permanent'.format(cmd=which('firewall-cmd')))
+    os.system('{cmd} --add-service=http --permanent'.format(cmd=which('firewall-cmd')))
+    os.system('{cmd} --add-service=https --permanent'.format(cmd=which('firewall-cmd')))
     os.system('{cmd} --reload'.format(cmd=which('firewall-cmd')))
 
 if __name__ == "__main__":
