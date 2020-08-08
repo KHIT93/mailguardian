@@ -7,7 +7,7 @@ from calendar import monthrange
 from django.utils.translation import gettext_lazy as _
 
 class Job(MonthlyJob):
-    help = _('Monthly job for sending monthly quarantine reports to users and administrators')
+    help = 'Monthly job for sending monthly quarantine reports to users and administrators'
 
     def execute(self):
         # Find out if we should run anything at all

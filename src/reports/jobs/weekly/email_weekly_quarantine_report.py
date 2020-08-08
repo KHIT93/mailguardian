@@ -5,7 +5,7 @@ from reports.email_reports import QuarantinedEmailReport
 from django.utils.translation import gettext_lazy as _
 
 class Job(WeeklyJob):
-    help = _('Weekly job for sending weekly quarantine reports to users and administrators')
+    help = 'Weekly job for sending weekly quarantine reports to users and administrators'
 
     def execute(self):
         run_weekly = Setting.objects.filter(key='quarantine.report.weekly').get().value

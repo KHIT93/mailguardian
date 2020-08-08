@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 class Job(DailyJob):
-    help = _('Daily database maintenance to remove mail.models.Message entries that have passed the retention policy days')
+    help = 'Daily database maintenance to remove mail.models.Message entries that have passed the retention policy days'
 
     def execute(self):
         host_count = MailScannerHost.objects.count()
