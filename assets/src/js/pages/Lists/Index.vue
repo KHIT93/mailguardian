@@ -119,7 +119,7 @@ export default {
         },
         show_blocklist_modal() {
             this.$modal.show(ListEntryForm,{
-                listingType: 'blocklisted'
+                listingType: 'blocked'
             },
             {
                 clickToClose: false,
@@ -129,7 +129,7 @@ export default {
         },
         show_allowlist_modal() {
             this.$modal.show(ListEntryForm,{
-                listingType: 'allowlisted'
+                listingType: 'allowed'
             },
             {
                 clickToClose: false,
