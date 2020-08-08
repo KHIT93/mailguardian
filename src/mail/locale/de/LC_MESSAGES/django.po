@@ -110,12 +110,12 @@ msgid "Mailqueue identification"
 msgstr "Mailqueue-Identifikation"
 
 #: mail/models.py:74
-msgid "Whitelisted"
-msgstr "Whitelisted"
+msgid "Allowed"
+msgstr "Erlaubt"
 
 #: mail/models.py:75
-msgid "Blacklisted"
-msgstr "Blacklisted"
+msgid "Blocked"
+msgstr "Blockiert"
 
 #: mail/models.py:76
 msgid "Is Spam"

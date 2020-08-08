@@ -72,7 +72,7 @@ my ($db_pass) = MailGuardian_get_db_password();
 
 sub InitMailGuardianLogging {
     # Detect if MailScanner Milter is calling this custom function and do not spawn
-    # MSMilter uses the blacklists and whitelists, but not the logger
+    # MSMilter uses the blocklists and allowlists, but not the logger
     if ($0 !~ /MSMilter/) {
         my $pid = fork();
         if ($pid) {
@@ -159,7 +159,7 @@ sub ListenForMessages {
 
         # Check to make sure DB connection is still valid
         InitConnection unless $dbh->ping;
-        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, whitelisted, blacklisted, is_spam, is_rbl_listed, stored, infected, size, mailq_id, is_mcp, mcp_score, date, released, scanned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Error: %s", $DBI::errstr);
+        my $sth_mail = $dbh->prepare("INSERT INTO mail_message (id, from_address, from_domain, to_address, to_domain, subject, client_ip, mailscanner_hostname, spam_score, timestamp, token, allowed, blocked, is_spam, is_rbl_listed, stored, infected, size, mailq_id, is_mcp, mcp_score, date, released, scanned) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") or MailScanner::Log::WarnLog("MailGuardian: Message Error: %s", $DBI::errstr);
         # Log message
         my $message_id = $ug->create_str();
         my $header_id = $ug->create_str();
@@ -207,8 +207,8 @@ sub ListenForMessages {
             $$message{sascore},
             $$message{timestamp},
             $$message{token},
-            $$message{spamwhitelisted},
-            $$message{spamblacklisted},
+            $$message{spamallowed},
+            $$message{spamblocked},
             $issaspam,
             $isrblspam,
             $$message{quarantined},
@@ -356,7 +356,7 @@ sub MailGuardianLogging {
     $subject =~ s/\t/ /g;  # and no TAB characters
     $subject =~ s/\r/ /g;  # and no CR characters
 
-    # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
+    # Uncommet the folloging line when debugging SQLBlockAllowList.pm
     #MailScanner::Log::WarnLog("MailGuardian: Debug: var subject: %s", Dumper($subject));
 
     # Get rid of control chars and tidy-up SpamAssassin report
@@ -426,12 +426,12 @@ sub MailGuardianLogging {
     my $clientip = $message->{clientip};
     $clientip =~ s/^(\d+\.\d+\.\d+\.\d+)(\.\d+)$/$1/;
 
-    # Integrate SpamAssassin Whitelist/Blacklist reporting
+    # Integrate SpamAssassin Allowlist/Blocklist reporting
     if ($spamreport =~ /USER_IN_WHITELIST/) {
-        $message->{spamwhitelisted} = 1;
+        $message->{spamallowed} = 1;
     }
     if ($spamreport =~ /USER_IN_BLACKLIST/) {
-        $message->{spamblacklisted} = 1;
+        $message->{spamblocked} = 1;
     }
 
     # Get the first domain from the list of recipients
@@ -461,15 +461,15 @@ sub MailGuardianLogging {
     $msg{ishigh} = $message->{ishigh};
     $msg{issaspam} = $message->{issaspam};
     $msg{isrblspam} = $message->{isrblspam};
-    $msg{spamwhitelisted} = $message->{spamwhitelisted};
-    $msg{spamblacklisted} = $message->{spamblacklisted};
+    $msg{spamallowed} = $message->{spamallowed};
+    $msg{spamblocked} = $message->{spamblocked};
     $msg{sascore} = $message->{sascore};
     $msg{spamreport} = $spamreport;
     $msg{ismcp} = $message->{ismcp};
     $msg{ishighmcp} = $message->{ishighmcp};
     $msg{issamcp} = $message->{issamcp};
-    $msg{mcpwhitelisted} = $message->{mcpwhitelisted};
-    $msg{mcpblacklisted} = $message->{mcpblacklisted};
+    $msg{mcpallowed} = $message->{mcpallowed};
+    $msg{mcpblocked} = $message->{mcpblocked};
     $msg{mcpsascore} = $mcpsascore;
     $msg{mcpreport} = $mcpreport;
     $msg{virusinfected} = $message->{virusinfected};

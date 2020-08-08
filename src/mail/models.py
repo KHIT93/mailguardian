@@ -16,38 +16,38 @@ class Message(models.Model):
             models.Index(fields=['from_address', 'to_domain']),
             models.Index(fields=['to_address', 'from_domain']),
             models.Index(fields=['client_ip', 'mailscanner_hostname']),
-            models.Index(fields=['from_address', 'blacklisted']),
-            models.Index(fields=['from_address', 'whitelisted']),
+            models.Index(fields=['from_address', 'blocked']),
+            models.Index(fields=['from_address', 'allowed']),
             models.Index(fields=['from_address', 'infected']),
             models.Index(fields=['from_address', 'is_spam']),
             models.Index(fields=['from_address', 'stored']),
             models.Index(fields=['from_address', 'is_rbl_listed']),
-            models.Index(fields=['to_address', 'blacklisted']),
-            models.Index(fields=['to_address', 'whitelisted']),
+            models.Index(fields=['to_address', 'blocked']),
+            models.Index(fields=['to_address', 'allowed']),
             models.Index(fields=['to_address', 'infected']),
             models.Index(fields=['to_address', 'is_spam']),
             models.Index(fields=['to_address', 'stored']),
             models.Index(fields=['to_address', 'is_rbl_listed']),
-            models.Index(fields=['from_domain', 'blacklisted']),
-            models.Index(fields=['from_domain', 'whitelisted']),
+            models.Index(fields=['from_domain', 'blocked']),
+            models.Index(fields=['from_domain', 'allowed']),
             models.Index(fields=['from_domain', 'infected']),
             models.Index(fields=['from_domain', 'is_spam']),
             models.Index(fields=['from_domain', 'stored']),
             models.Index(fields=['from_domain', 'is_rbl_listed']),
-            models.Index(fields=['to_domain', 'blacklisted']),
-            models.Index(fields=['to_domain', 'whitelisted']),
+            models.Index(fields=['to_domain', 'blocked']),
+            models.Index(fields=['to_domain', 'allowed']),
             models.Index(fields=['to_domain', 'infected']),
             models.Index(fields=['to_domain', 'is_spam']),
             models.Index(fields=['to_domain', 'stored']),
             models.Index(fields=['to_domain', 'is_rbl_listed']),
-            models.Index(fields=['client_ip', 'blacklisted']),
-            models.Index(fields=['client_ip', 'whitelisted']),
+            models.Index(fields=['client_ip', 'blocked']),
+            models.Index(fields=['client_ip', 'allowed']),
             models.Index(fields=['client_ip', 'infected']),
             models.Index(fields=['client_ip', 'is_spam']),
             models.Index(fields=['client_ip', 'stored']),
             models.Index(fields=['client_ip', 'is_rbl_listed']),
-            models.Index(fields=['mailscanner_hostname', 'blacklisted']),
-            models.Index(fields=['mailscanner_hostname', 'whitelisted']),
+            models.Index(fields=['mailscanner_hostname', 'blocked']),
+            models.Index(fields=['mailscanner_hostname', 'allowed']),
             models.Index(fields=['mailscanner_hostname', 'infected']),
             models.Index(fields=['mailscanner_hostname', 'is_spam']),
             models.Index(fields=['mailscanner_hostname', 'stored']),
@@ -70,8 +70,8 @@ class Message(models.Model):
     size = models.FloatField(_('Size'), default=0)
     token = models.CharField(_('Token'), max_length=255, null=True)
     mailq_id = models.TextField(_("Mailqueue identification"), null=True)
-    whitelisted = models.BooleanField(_('Whitelisted'), db_index=True, default=False)
-    blacklisted = models.BooleanField(_('Blacklisted'), db_index=True, default=False)
+    allowed = models.BooleanField(_('Allowed'), db_index=True, default=False)
+    blocked = models.BooleanField(_('Blocked'), db_index=True, default=False)
     is_spam = models.BooleanField(_('Is Spam'), db_index=True, default=False)
     is_mcp = models.BooleanField(_('Is MCP'), db_index=True, default=False)
     is_rbl_listed = models.BooleanField(_("Listed in RBL"), db_index=True, default=False)

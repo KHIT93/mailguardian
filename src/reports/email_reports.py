@@ -31,7 +31,7 @@ class QuarantinedEmailReport:
             if not user.is_staff and not user.is_domain_admin:
                 messages = messages.filter(Q(from_address=user.email) | Q(to_address=user.email))
             if not self.show_all_messages:
-                messages = messages.filter(Q(is_spam=True) | Q(blacklisted=True) | Q(is_mcp=True) | Q(is_rbl_listed=True) | Q(infected=True))
+                messages = messages.filter(Q(is_spam=True) | Q(blocked=True) | Q(is_mcp=True) | Q(is_rbl_listed=True) | Q(infected=True))
             
             context = {
                 'brand_name': settings.BRAND_NAME,

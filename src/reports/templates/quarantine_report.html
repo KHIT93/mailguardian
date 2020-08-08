@@ -39,7 +39,7 @@
             {% if message.is_mcp %}{% translate "MCP" %}{% endif %}
             {% if message.infected %}{% translate "Infected" %}{% endif %}
             {% if message.is_rbl_listed %}{% translate "Listed in RBL" %}{% endif %}
-            {% if message.blacklisted %}{% translate "Blacklisted" %}{% endif %}
+            {% if message.blocked %}{% translate "Blocked" %}{% endif %}
         </td>
         <td>
             <a href="{{ protocol }}://{{ domain }}/messages/{{message.id}}">{% translate "View" %}</a>

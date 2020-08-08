@@ -136,8 +136,8 @@ msgstr "In RBL aufgeführt"
 
 #: reports/templates/quarantine_report.html:42
 #: reports/templates/quarantine_report.txt:15
-msgid "Blacklisted"
-msgstr "Blacklisted"
+msgid "Blocked"
+msgstr "Blockiert"
 
 #: reports/templates/quarantine_report.html:45
 msgid "View"

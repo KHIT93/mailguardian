@@ -34,7 +34,7 @@
                     </div>
                     <div class="py-2 flex">
                         <div class="pr-1">
-                            <button @click="createListing(message.from_address, message.to_address, 'whitelisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
+                            <button @click="createListing(message.from_address, message.to_address, 'allowed')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                 <div class="inline-flex content-center">
                                     <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <defs>
@@ -45,19 +45,19 @@
                                         </clipPath>
                                         <path clip-path="url(#b)" d="M14 10H2v2h12v-2zm0-4H2v2h12V6zM2 16h8v-2H2v2zm19.5-4.5L23 13l-6.99 7-4.51-4.5L13 14l3.01 3 5.49-5.5z"/>
                                     </svg>
-                                    <span class="pl-1">Add to Whitelist</span>
+                                    <span class="pl-1">Add to allowlist</span>
                                 </div>
                             </button>
                         </div>
 
                         <div>
-                            <button @click="createListing(message.from_address, message.to_address, 'blacklisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
+                            <button @click="createListing(message.from_address, message.to_address, 'blocked')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                 <div class="inline-flex content-center">
                                     <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 0h24v24H0z" fill="none"/>
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"/>
                                     </svg>
-                                    <span class="pl-1">Add to blacklist</span>
+                                    <span class="pl-1">Add to blocklist</span>
                                 </div>
                             </button>
                         </div>
@@ -93,7 +93,7 @@
                     </div>
                     <div class="py-2 flex">
                         <div class="pr-1">
-                            <button @click="createListing(message.to_address, message.from_address, 'whitelisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
+                            <button @click="createListing(message.to_address, message.from_address, 'allowed')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                 <div class="inline-flex content-center">
                                     <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <defs>
@@ -104,19 +104,19 @@
                                         </clipPath>
                                         <path clip-path="url(#b)" d="M14 10H2v2h12v-2zm0-4H2v2h12V6zM2 16h8v-2H2v2zm19.5-4.5L23 13l-6.99 7-4.51-4.5L13 14l3.01 3 5.49-5.5z"/>
                                     </svg>
-                                    <span class="pl-1">Add to Whitelist</span>
+                                    <span class="pl-1">Add to allowlist</span>
                                 </div>
                             </button>
                         </div>
 
                         <div>
-                            <button @click="createListing(message.to_address, message.from_address, 'blacklisted')" class="btn btn-xs btn-blue-outline font-semibold shadow">
+                            <button @click="createListing(message.to_address, message.from_address, 'blocked')" class="btn btn-xs btn-blue-outline font-semibold shadow">
                                 <div class="inline-flex content-center">
                                     <svg class="fill-current h-3 w-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M0 0h24v24H0z" fill="none"/>
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"/>
                                     </svg>
-                                    <span class="pl-1">Add to blacklist</span>
+                                    <span class="pl-1">Add to blocklist</span>
                                 </div>
                             </button>
                         </div>
@@ -196,12 +196,12 @@
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
                                 <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
-                                    Whitelisted:
+                                    allowed:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': message.whitelisted, 'bg-gray-500': !message.whitelisted }" >
-                                            {{ message.whitelisted | yesno }}
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-green-500': message.allowed, 'bg-gray-500': !message.allowed }" >
+                                            {{ message.allowed | yesno }}
                                         </span>
                                     </div>
                                 </div>
@@ -210,12 +210,12 @@
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
                                 <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
-                                    Blacklisted:
+                                    blocked:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
-                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': message.blacklisted, 'bg-gray-500': !message.blacklisted }" >
-                                            {{ message.blacklisted | yesno }}
+                                        <span class="flex rounded-full uppercase px-2 py-1 text-xs font-bold" :class="{ 'bg-red-500': message.blocked, 'bg-gray-500': !message.blocked }" >
+                                            {{ message.blocked | yesno }}
                                         </span>
                                     </div>
                                 </div>

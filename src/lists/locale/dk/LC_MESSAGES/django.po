@@ -37,9 +37,9 @@ msgid "Listing type"
 msgstr "Listningstype"
 
 #: lists/models.py:25
-msgid "Blacklisted"
-msgstr "Blacklisted"
+msgid "Blocked"
+msgstr "Blokeret"
 
 #: lists/models.py:26
-msgid "Whitelisted"
-msgstr "Whitelisted"
+msgid "Allowed"
+msgstr "Tilladt"
