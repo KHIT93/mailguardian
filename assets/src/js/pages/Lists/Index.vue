@@ -5,10 +5,10 @@
             <div class="sm:w-1/2">
                 <div class="p-2">
                     <button @click="show_blocklist_modal" class="btn btn-black shadow" type="button">
-                        Add blocklist entry
+                        Add block list entry
                     </button>
                     <button @click="show_allowlist_modal" class="btn btn-gray-lightest shadow" type="button">
-                        Add allowlist entry
+                        Add allow list entry
                     </button>
                 </div>
             </div>
@@ -33,11 +33,11 @@
         </div>
         <div class="sm:flex mt-4 sm:pr-2">
             <div class="card sm:w-1/2 p-2 sm:mr-1">
-                <h2 class="font-normal text-center border-b">allowlist</h2>
+                <h2 class="font-normal text-center border-b">Allow list</h2>
                 <mg-lists-table :list="allowlist" @next="next_allowlist" @previous="previous_allowlist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
             <div class="card sm:w-1/2 p-2 sm:ml-1">
-                <h2 class="font-normal text-center border-b">blocklist</h2>
+                <h2 class="font-normal text-center border-b">Block list</h2>
                 <mg-lists-table :list="blocklist" @next="next_blocklist" @previous="previous_blocklist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
         </div>
