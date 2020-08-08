@@ -82,15 +82,15 @@ if __name__ == "__main__":
     MTA = 'postfix'
     MTA_LOG = "/var/log/mail.log"
     MS_CONF_DIR = '/etc/MailScanner'
-    MS_BIN = which('MailScanner') or subprocess.check_output('which MailScanner', shell=True).strip().decode()
+    MS_BIN = which('MailScanner') or '/usr/sbin/MailScanner'
     MS_LIB = '/usr/lib/MailScanner'
     MS_SHARED = '/usr/share/MailScanner'
     MS_QUARANTINE_DIR = "/var/spool/MailScanner/quarantine"
-    SALEARN_BIN = which('sa-learn') or subprocess.check_output('which sa-learn', shell=True).strip().decode()
-    SA_BIN = which('spamassassin') or subprocess.check_output('which spamassassin', shell=True).strip().decode()
+    SALEARN_BIN = which('sa-learn') or '/usr/local/bin/sa-learn'
+    SA_BIN = which('spamassassin') or '/usr/local/bin/spamassassin'
     SA_RULES_DIR = '/var/lib/spamassassin'
-    SENDMAIL_BIN = which('sendmail') or subprocess.check_output('which sendmail', shell=True).strip().decode()
-    POSTQUEUE_BIN = which('postqueue') or subprocess.check_output('which postqueue', shell=True).strip().decode()
+    SENDMAIL_BIN = which('sendmail') or '/usr/sbin/sendmail'
+    POSTQUEUE_BIN = which('postqueue') or '/usr/sbin/postqueue'
 
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
