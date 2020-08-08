@@ -12,14 +12,12 @@ from domains.models import Domain
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.mail import send_mail
-from auditlog.registry import auditlog
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ObjectDoesNotExist
-from encrypted_model_fields import fields as encrypted_fields
 from django.utils.crypto import get_random_string
+from django_cryptography.fields import encrypt
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -226,7 +224,7 @@ class ApplicationTask(models.Model):
     content_type = models.ForeignKey(to='contenttypes.ContentType', on_delete=models.CASCADE, related_name='+', verbose_name=_("content type"))
     object_pk = models.CharField(db_index=True, max_length=255, verbose_name=_("object primary key"))
     method = models.CharField(max_length=255, verbose_name=_("method"))
-    params = JSONField(blank=True, null=True, verbose_name=_("parameters"))
+    params = models.JSONField(blank=True, null=True, verbose_name=_("parameters"))
 
 class ApplicationNotification(models.Model):
     notification_types = [
@@ -250,7 +248,7 @@ class TwoFactorConfiguration(models.Model):
         verbose_name_plural = _('two factor configuration')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
-    totp_key = encrypted_fields.EncryptedCharField(_('Timebased Onetime Password Key'),max_length=255)
+    totp_key = encrypt(models.CharField(_('Timebased Onetime Password Key'),max_length=255))
 
 class TwoFactorBackupCode(models.Model):
     class Meta:
@@ -258,7 +256,7 @@ class TwoFactorBackupCode(models.Model):
         verbose_name_plural = _('two factor backup codes')
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
-    code = encrypted_fields.EncryptedCharField(_('Two Factor Backup Code'), max_length=255)
+    code = encrypt(models.CharField(_('Two Factor Backup Code'), max_length=255))
 
     def generate_codes(self, user):
         existing = TwoFactorBackupCode.objects.filter(user=user).values_list('code', flat=True)
@@ -267,13 +265,6 @@ class TwoFactorBackupCode(models.Model):
             code = TwoFactorBackupCode.objects.create(user=user, code=get_random_string(16, 'abcdefghijklmnopqrstuvwxyz0123456789'))
             codes.append(code.code)
         return codes
-
-if settings.AUDIT_LOGGING:
-    auditlog.register(User)
-    auditlog.register(MailScannerConfiguration)
-    auditlog.register(Setting)
-    auditlog.register(MailScannerHost)
-    auditlog.register(ApplicationTask)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

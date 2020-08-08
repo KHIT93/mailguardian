@@ -17,8 +17,8 @@ export default {
             client_ip: null,
             mailscanner_hostname: null,
             date: null,
-            whitelisted: null,
-            blacklisted: null,
+            allowed: null,
+            blocked: null,
             is_spam: null,
             is_rbl_listed: null,
             quarantined: null,
@@ -90,14 +90,14 @@ export default {
                 ],
                 field_type: 'date'
             },
-            whitelisted: {
+            allowed: {
                 operators: [
                     { label: 'yes', value: 1},
                     { label: 'no', value: 0}
                 ],
                 field_type: 'boolean'
             },
-            blacklisted: {
+            blocked: {
                 operators: [
                     { label: 'yes', value: 1},
                     { label: 'no', value: 0}

@@ -11,7 +11,7 @@ router.beforeEach(async (to, from, next) => {
     store.commit('setLoading', true);
     console.log('router before each is called');
     let result = {};
-    let whitelisted = [
+    let allowed = [
         '/password-reset',
         '/setup'
     ];
@@ -32,7 +32,7 @@ router.beforeEach(async (to, from, next) => {
         }
         return;
     })
-    if (!whitelisted.some(w => to.path.startsWith(w))) {
+    if (!allowed.some(w => to.path.startsWith(w))) {
         window.axios.post('/api/current-user/').then(response => {
             if (to.matched.some(record => record.meta.requiresAuth)) {
                 if (response.status == 403 && to.path != '/login') {

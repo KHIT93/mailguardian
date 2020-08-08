@@ -3,7 +3,6 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import encrypted_model_fields.fields
 
 
 class Migration(migrations.Migration):
@@ -158,7 +157,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='twofactorbackupcode',
             name='code',
-            field=encrypted_model_fields.fields.EncryptedCharField(verbose_name='Two Factor Backup Code'),
+            field=models.CharField(verbose_name='Two Factor Backup Code'),
         ),
         migrations.AlterField(
             model_name='twofactorbackupcode',
@@ -168,7 +167,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='twofactorconfiguration',
             name='totp_key',
-            field=encrypted_model_fields.fields.EncryptedCharField(verbose_name='Timebased Onetime Password Key'),
+            field=models.CharField(verbose_name='Timebased Onetime Password Key'),
         ),
         migrations.AlterField(
             model_name='twofactorconfiguration',

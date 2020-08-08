@@ -31,8 +31,8 @@
                                 <span v-if="item.is_rbl_listed">RBL</span>
                                 <span v-if="item.infected">Infected</span>
                             </template>
-                            <span v-if="item.blacklisted">Blacklisted</span>
-                            <span v-if="item.whitelisted">Whitelisted</span>
+                            <span v-if="item.blocked">Blocked</span>
+                            <span v-if="item.allowed">Allowed</span>
                         </td>
                     </tr>
                 </tbody>
@@ -64,10 +64,10 @@ export default {
             if (item.is_rbl_listed) {
                 return 'bg-orange-500';
             }
-            if (item.blacklisted) {
+            if (item.blocked) {
                 return 'bg-gray-900 text-white';
             }
-            if (item.whitelisted) {
+            if (item.allowed) {
                 return 'bg-green-200';
             }
         }

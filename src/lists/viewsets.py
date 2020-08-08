@@ -26,8 +26,8 @@ class ListEntryViewSet(viewsets.ModelViewSet):
             qs = qs.filter(Q(from_domain__icontains=self.request.user.email.split('@')[-1]) | Q(to_domain__icontains=self.request.user.email.split('@')[-1]))
         return qs
 
-class BlacklistEntryViewSet(ListEntryViewSet):
-    queryset = ListEntry.objects.filter(listing_type='blacklisted')
+class BlocklistEntryViewSet(ListEntryViewSet):
+    queryset = ListEntry.objects.filter(listing_type='blocked')
 
-class WhitelistEntryViewSet(ListEntryViewSet):
-    queryset = ListEntry.objects.filter(listing_type='whitelisted')
+class AllowlistEntryViewSet(ListEntryViewSet):
+    queryset = ListEntry.objects.filter(listing_type='allowed')

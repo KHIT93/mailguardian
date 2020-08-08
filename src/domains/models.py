@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
@@ -31,16 +30,3 @@ class Domain(models.Model):
 
     def __str__(self):
         return self.name
-
-# class Forwarder(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     source = models.CharField(max_length=80, unique=True)
-#     destination = models.TextField()
-
-# class Transport(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     domain = models.CharField(max_length=128, unique=True)
-#     transport = models.CharField(max_length=128)
-
-if settings.AUDIT_LOGGING:
-    auditlog.register(Domain)

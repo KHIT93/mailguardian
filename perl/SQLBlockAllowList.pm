@@ -5,7 +5,7 @@
 # Copyright (C) 2014-2017  MailWatch Team (https://github.com/MailWatch/1.2.0/graphs/contributors)
 # Copyright (C) 2018 @KHIT93 (https://github.com/khit93/mailguardian/contributers.md)
 #
-#   Custom Module SQLBlackWhiteList
+#   Custom Module SQLBlockAllowList
 #
 #   Version 1.0
 #
@@ -36,14 +36,14 @@ no  strict 'subs'; # Allow bare words for parameter %'s
 
 use vars qw($VERSION);
 
-# Uncommet the folloging line when debugging SQLBlackWhiteList.pm
+# Uncommet the folloging line when debugging SQLAllowBlockList.pm
 #use Data::Dumper;
 
 ### The package version, both in 1.23 style *and* usable by MakeMaker:
-$VERSION = substr q$Revision: 1.0 $, 10;
+$VERSION = substr q$Revision: 2.0 $, 10;
 
 use DBI;
-my (%Whitelist, %Blacklist);
+my (%Allowlist, %Blocklist);
 my ($wtime, $btime);
 my ($dbh);
 my ($sth);
@@ -62,58 +62,58 @@ my ($db_pass) = MailGuardian_get_db_password();
 my ($bwl_refresh_time) =  MailGuardian_get_BWL_refresh_time();
 
 #
-# Initialise SQL spam whitelist and blacklist
+# Initialise SQL spam allowlist and blocklist
 #
-sub InitSQLWhitelist {
-    MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Whitelist");
-    my $entries = CreateList('whitelisted', \%Whitelist);
-    MailScanner::Log::InfoLog("MailGuardian: Read %d whitelist entries", $entries);
+sub InitSQLAllowlist {
+    MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Allowlist");
+    my $entries = CreateList('allowed', \%Allowlist);
+    MailScanner::Log::InfoLog("MailGuardian: Read %d allowlist entries", $entries);
     $wtime = time();
 }
 
-sub InitSQLBlacklist {
-    MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Blacklist");
-    my $entries = CreateList('blacklisted', \%Blacklist);
-    MailScanner::Log::InfoLog("MailGuardian: Read %d blacklist entries", $entries);
+sub InitSQLBlocklist {
+    MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Blocklist");
+    my $entries = CreateList('blocked', \%Blocklist);
+    MailScanner::Log::InfoLog("MailGuardian: Read %d blocklist entries", $entries);
     $btime = time();
 }
 
 #
-# Lookup a message in the by-domain whitelist and blacklist
+# Lookup a message in the by-domain allowlist and blocklist
 #
-sub SQLWhitelist {
+sub SQLAllowlist {
     # Do we need to refresh the data?
     if ((time() - $wtime) >= ($bwl_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("MailGuardian: Whitelist refresh time reached");
-        InitSQLWhitelist();
+        MailScanner::Log::InfoLog("MailGuardian: Allowlist refresh time reached");
+        InitSQLAllowlist();
     }
     my ($message) = @_;
-    return LookupList($message, \%Whitelist);
+    return LookupList($message, \%Allowlist);
 }
 
-sub SQLBlacklist {
+sub SQLBlocklist {
     # Do we need to refresh the data?
     if ((time() - $btime) >= ($bwl_refresh_time * 60)) {
-        MailScanner::Log::InfoLog("MailGuardian: Blacklist refresh time reached");
-        InitSQLBlacklist();
+        MailScanner::Log::InfoLog("MailGuardian: Blocklist refresh time reached");
+        InitSQLBlocklist();
     }
     my ($message) = @_;
-    return LookupList($message, \%Blacklist);
+    return LookupList($message, \%Blocklist);
 }
 
 #
-# Close down the SQL whitelist and blacklist
+# Close down the SQL allowlist and blocklist
 #
-sub EndSQLWhitelist {
-    MailScanner::Log::InfoLog("MailGuardian: Closing down MailGuardian SQL Whitelist");
+sub EndSQLAllowlist {
+    MailScanner::Log::InfoLog("MailGuardian: Closing down MailGuardian SQL Allowlist");
 }
 
-sub EndSQLBlacklist {
-    MailScanner::Log::InfoLog("MailGuardian: Closing down MailGuardian SQL Blacklist");
+sub EndSQLBlocklist {
+    MailScanner::Log::InfoLog("MailGuardian: Closing down MailGuardian SQL Blocklist");
 }
 
 sub CreateList {
-    my ($type, $BlackWhite) = @_;
+    my ($type, $BlockAllow) = @_;
     my ($sql, $to_address, $from_address, $count, $filter);
 
     $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
@@ -121,15 +121,15 @@ sub CreateList {
         { PrintError => 0, AutoCommit => 1, RaiseError => 1}
     );
     if (!$dbh) {
-        MailScanner::Log::WarnLog("MailGuardian: SQLBlackWhiteList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
+        MailScanner::Log::WarnLog("MailGuardian: SQLBlockAllowList::CreateList::: Unable to initialise database connection: %s", $DBI::errstr);
     }
 
-    # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
-    #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
+    # Uncommet the folloging line when debugging SQLBlockAllowList.pm
+    #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlockAllowList: CreateList: %s", Dumper($BlockAllow));
     
     # Remove old entries
-    for (keys %$BlackWhite) {
-        delete $BlackWhite->{$_};
+    for (keys %$BlockAllow) {
+        delete $BlockAllow->{$_};
     }
     
     $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type='$type'";
@@ -139,11 +139,11 @@ sub CreateList {
     $count = 0;
     
     while($sth->fetch()) {
-        $BlackWhite->{lc($to_address)}{lc($from_address)} = 1; # Store entry
+        $BlockAllow->{lc($to_address)}{lc($from_address)} = 1; # Store entry
         $count++;
     }
-    # Uncommet the folloging line when debugging SQLBlackWhiteList.pm
-    #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlackWhiteList: CreateList: %s", Dumper($BlackWhite));
+    # Uncommet the folloging line when debugging SQLBlockAllowList.pm
+    #MailScanner::Log::WarnLog("MailGuardian: DEBUG SQLBlockAllowList: CreateList: %s", Dumper($BlockAllow));
     
     # Close connections
     $sth->finish();
@@ -153,11 +153,11 @@ sub CreateList {
 }
 
 #
-# Based on the address it is going to, choose the right spam white/blacklist.
-# Return 1 if the "from" address is white/blacklisted, 0 if not.
+# Based on the address it is going to, choose the right spam allow/blocklist.
+# Return 1 if the "from" address is allowed/blocked, 0 if not.
 #
 sub LookupList {
-    my ($message, $BlackWhite) = @_;
+    my ($message, $BlockAllow) = @_;
 
     return 0 unless $message; # Sanity check the input
 
@@ -203,19 +203,19 @@ sub LookupList {
     # or a subdomain match of the form *.subdomain.example.com is listed
     foreach (@keys) {
         $i = $_;
-        return 1 if $BlackWhite->{$i}{$from};
-        return 1 if $BlackWhite->{$i}{$fromdomain};
-        return 1 if $BlackWhite->{$i}{'@'.$fromdomain};
-        return 1 if $BlackWhite->{$i}{$ip};
-        return 1 if $BlackWhite->{$i}{$ip3};
-        return 1 if $BlackWhite->{$i}{$ip3c};
-        return 1 if $BlackWhite->{$i}{$ip2};
-        return 1 if $BlackWhite->{$i}{$ip2c};
-        return 1 if $BlackWhite->{$i}{$ip1};
-        return 1 if $BlackWhite->{$i}{$ip1c};
-        return 1 if $BlackWhite->{$i}{'*'};
+        return 1 if $BlockAllow->{$i}{$from};
+        return 1 if $BlockAllow->{$i}{$fromdomain};
+        return 1 if $BlockAllow->{$i}{'@'.$fromdomain};
+        return 1 if $BlockAllow->{$i}{$ip};
+        return 1 if $BlockAllow->{$i}{$ip3};
+        return 1 if $BlockAllow->{$i}{$ip3c};
+        return 1 if $BlockAllow->{$i}{$ip2};
+        return 1 if $BlockAllow->{$i}{$ip2c};
+        return 1 if $BlockAllow->{$i}{$ip1};
+        return 1 if $BlockAllow->{$i}{$ip1c};
+        return 1 if $BlockAllow->{$i}{'*'};
         foreach (@subdomains) {
-            return 1 if $BlackWhite->{$i}{$_};
+            return 1 if $BlockAllow->{$i}{$_};
         }
     }
 

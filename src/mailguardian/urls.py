@@ -23,7 +23,6 @@ from core.viewsets import (
     UserViewSet,
     MailScannerConfigurationViewSet,
     SettingsViewSet,
-    AuditLogViewSet,
     MailScannerHostViewSet,
     ApplicationTaskViewSet,
     ApplicationNotificationViewSet,
@@ -41,7 +40,7 @@ from mail.viewsets import (
     SmtpRelayViewSet
 )
 from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView
-from lists.viewsets import ListEntryViewSet, BlacklistEntryViewSet, WhitelistEntryViewSet
+from lists.viewsets import ListEntryViewSet, BlocklistEntryViewSet, AllowlistEntryViewSet
 from reports.views import (
     SummaryApiView,
     MessageListApiView,
@@ -79,13 +78,12 @@ router.register(r'transport-logs', TransportLogViewSet)
 router.register(r'smtp-relays', SmtpRelayViewSet)
 router.register(r'sa-rules', RuleViewSet)
 router.register(r'sa-rule-descriptions', RuleDescriptionViewSet)
-router.register(r'blacklist', BlacklistEntryViewSet)
-router.register(r'whitelist', WhitelistEntryViewSet)
+router.register(r'blocklist', BlocklistEntryViewSet)
+router.register(r'allowlist', AllowlistEntryViewSet)
 router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
 router.register(r'hosts', MailScannerHostViewSet)
 router.register(r'settings', SettingsViewSet)
-router.register(r'audit-log', AuditLogViewSet)
 router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
 router.register(r'two-factor', TwoFactorConfigurationViewSet)

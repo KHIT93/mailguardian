@@ -4,11 +4,11 @@
         <div class="sm:flex card p-2 mb-2">
             <div class="sm:w-1/2">
                 <div class="p-2">
-                    <button @click="show_blacklist_modal" class="btn btn-black shadow" type="button">
-                        Add blacklist entry
+                    <button @click="show_blocklist_modal" class="btn btn-black shadow" type="button">
+                        Add block list entry
                     </button>
-                    <button @click="show_whitelist_modal" class="btn btn-gray-lightest shadow" type="button">
-                        Add whitelist entry
+                    <button @click="show_allowlist_modal" class="btn btn-gray-lightest shadow" type="button">
+                        Add allow list entry
                     </button>
                 </div>
             </div>
@@ -33,12 +33,12 @@
         </div>
         <div class="sm:flex mt-4 sm:pr-2">
             <div class="card sm:w-1/2 p-2 sm:mr-1">
-                <h2 class="font-normal text-center border-b">Whitelist</h2>
-                <mg-lists-table :list="whitelist" @next="next_whitelist" @previous="previous_whitelist" @confirmDelete="delete_entry_modal"></mg-lists-table>
+                <h2 class="font-normal text-center border-b">Allow list</h2>
+                <mg-lists-table :list="allowlist" @next="next_allowlist" @previous="previous_allowlist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
             <div class="card sm:w-1/2 p-2 sm:ml-1">
-                <h2 class="font-normal text-center border-b">Blacklist</h2>
-                <mg-lists-table :list="blacklist" @next="next_blacklist" @previous="previous_blacklist" @confirmDelete="delete_entry_modal"></mg-lists-table>
+                <h2 class="font-normal text-center border-b">Block list</h2>
+                <mg-lists-table :list="blocklist" @next="next_blocklist" @previous="previous_blocklist" @confirmDelete="delete_entry_modal"></mg-lists-table>
             </div>
         </div>
     </div>
@@ -58,8 +58,8 @@ export default {
     data: () => {
         return {
             search_query: null,
-            blacklist: [],
-            whitelist: [],
+            blocklist: [],
+            allowlist: [],
             entry_to_delete: {},
             delete_modal: false,
         }
@@ -72,10 +72,10 @@ export default {
     },
     methods: {
         get(query = null) {
-            this.get_whitelist(query);
-            this.get_blacklist(query);
+            this.get_allowlist(query);
+            this.get_blocklist(query);
         },
-        get_blacklist(query = null, page = null) {
+        get_blocklist(query = null, page = null) {
             this.setLoading(true);
             let qs = '';
             if (query) {
@@ -87,14 +87,14 @@ export default {
             if (query && page) {
                 qs = '?search='+query+'&page='+page;
             }
-            axios.get('/api/blacklist/'+qs).then(response => {
-                this.blacklist = response.data;
+            axios.get('/api/blocklist/'+qs).then(response => {
+                this.blocklist = response.data;
                 this.setLoading(false);
             }).catch(error => {
                 this.setLoading(false);
             });
         },
-        get_whitelist(query = null, page = null) {
+        get_allowlist(query = null, page = null) {
             this.setLoading(true);
             let qs = '';
             if (query) {
@@ -106,8 +106,8 @@ export default {
             if (query && page) {
                 qs = '?search='+query+'&page='+page;
             }
-            axios.get('/api/whitelist/'+qs).then(response => {
-                this.whitelist = response.data;
+            axios.get('/api/allowlist/'+qs).then(response => {
+                this.allowlist = response.data;
                 this.setLoading(false);
             }).catch(error => {
                 this.setLoading(false);
@@ -117,9 +117,9 @@ export default {
             await this.get(this.search_query);
             this.search_query = null;
         },
-        show_blacklist_modal() {
+        show_blocklist_modal() {
             this.$modal.show(ListEntryForm,{
-                listingType: 'blacklisted'
+                listingType: 'blocked'
             },
             {
                 clickToClose: false,
@@ -127,9 +127,9 @@ export default {
                 height: 'auto'
             });
         },
-        show_whitelist_modal() {
+        show_allowlist_modal() {
             this.$modal.show(ListEntryForm,{
-                listingType: 'whitelisted'
+                listingType: 'allowed'
             },
             {
                 clickToClose: false,
@@ -164,25 +164,25 @@ export default {
             ]
         });
     },
-        next_whitelist(event) {
+        next_allowlist(event) {
             let page = 0;
-            page = this.whitelist.next.split("?page=")[1];
-            this.get_whitelist(this.search_query, page);
+            page = this.allowlist.next.split("?page=")[1];
+            this.get_allowlist(this.search_query, page);
         },
-        previous_whitelist(event) {
+        previous_allowlist(event) {
             let page = 0;
-            page = this.whitelist.previous.split("?page=")[1];
-            this.get_whitelist(this.search_query, page);
+            page = this.allowlist.previous.split("?page=")[1];
+            this.get_allowlist(this.search_query, page);
         },
-        next_blacklist(event) {
+        next_blocklist(event) {
             let page = 0;
-            page = this.blacklist.next.split("?page=")[1];
-            this.get_blacklist(this.search_query, page);
+            page = this.blocklist.next.split("?page=")[1];
+            this.get_blocklist(this.search_query, page);
         },
-        previous_blacklist(event) {
+        previous_blocklist(event) {
             let page = 0;
-            page = this.blacklist.previous.split("?page=")[1];
-            this.get_blacklist(this.search_query, page);
+            page = this.blocklist.previous.split("?page=")[1];
+            this.get_blocklist(this.search_query, page);
         },
         ...mapMutations(['toggleLoading', 'setLoading', 'notify'])
     }

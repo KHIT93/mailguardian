@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from auditlog.registry import auditlog
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
@@ -23,8 +22,8 @@ class ListEntry(models.Model):
     to_address = models.CharField(_("To"), max_length=511, default="", db_index=True)
     to_domain = models.CharField(_("To"), max_length=255, null=True, blank=True, default="", db_index=True)
     listing_type = models.CharField(_('Listing type'), max_length=12, choices=(
-        ('blacklisted', _('Blacklisted')),
-        ('whitelisted', _('Whitelisted'))
+        ('blocked', _('Blocked')),
+        ('allowed', _('Allowed'))
     ), db_index=True)
 
     def save(self, *args, **kwargs):
@@ -33,6 +32,3 @@ class ListEntry(models.Model):
         if '@' in self.from_address:
             self.from_domain = self.from_address.split('@')[-1]
         super(ListEntry, self).save(*args, **kwargs)
-
-if settings.AUDIT_LOGGING:
-    auditlog.register(ListEntry)

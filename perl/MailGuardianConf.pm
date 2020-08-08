@@ -16,7 +16,7 @@ my ($db_pass) = 'mailguardian';
 # Change the value below for SQLSpamSettings.pm (default = 15)
 my ($ss_refresh_time) = 15;       # Time in minutes before lists are refreshed
 
-# Change the value below for SQLBlackWhiteList.pm (default = 15)
+# Change the value below for SQLBlockAllowList.pm (default = 15)
 my ($bwl_refresh_time) = 15;      # Time in minutes before lists are refreshed
 
 

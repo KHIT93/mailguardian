@@ -11,7 +11,6 @@ from .models import (
 )
 from rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
-from auditlog.models import LogEntry as AuditLog
 import json
 from rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
 from django.utils.translation import gettext_lazy as _
@@ -61,38 +60,6 @@ class SettingsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Setting
         fields = ('id', 'url', 'key', 'value')
-
-class AuditLogSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = AuditLog
-        fields = ('id', 'url', 'module', 'object_pk', 'object_id', 'object_repr', 'action', 'action_name', 'changes', 'actor_id', 'actor_email', 'remote_addr', 'timestamp', 'additional_data')
-    module = serializers.SerializerMethodField()
-    actor_email = serializers.SerializerMethodField()
-    changes = serializers.SerializerMethodField()
-    action_name = serializers.SerializerMethodField()
-
-    def get_module(self, obj):
-        return obj.content_type.app_label + ':' + obj.content_type.model
-
-    def get_actor_email(self, obj):
-        return obj.actor.email if obj.actor else _('System')
-    
-    def get_changes(self, obj):
-        return json.loads(obj.changes)
-
-    def get_action_name(self, obj):
-        if obj.action == 0:
-            return 'Create'
-        elif obj.action == 1:
-            if 'last_login' in self.get_changes(obj) and obj.content_type.model == 'user':
-                return _('Login')
-            elif 'password' in self.get_changes(obj) and obj.content_type.model == 'user':
-                return _('Change password')
-            elif 'released' in self.get_changes(obj) and self.get_changes(obj).released[1] == True and obj.content_type == 'message':
-                return _('Message released')
-            return _('Update')
-        elif obj.action == 2:
-            return _('Delete')
 
 class ChangePasswordSerializer(serializers.Serializer):
     """

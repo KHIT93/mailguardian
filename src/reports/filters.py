@@ -109,17 +109,17 @@ class MessageQuerySetFilter(QuerySetFilter):
             elif filters['date']['operator'] == 'lte':
                 qs = qs.filter(date__lte=filters['date']['value'])
 
-        if 'whitelisted' in filters:
-            if filters['whitelisted']['operator'] == 1:
-                qs = qs.filter(whitelisted__exact=True)
-            if filters['whitelisted']['operator'] == 0:
-                qs = qs.filter(whitelisted__exact=False)
+        if 'allowed' in filters:
+            if filters['allowed']['operator'] == 1:
+                qs = qs.filter(allowed__exact=True)
+            if filters['allowed']['operator'] == 0:
+                qs = qs.filter(allowed__exact=False)
         
-        if 'blacklisted' in filters:
-            if filters['blacklisted']['operator'] == 1:
-                qs = qs.filter(blacklisted__exact=True)
-            if filters['blacklisted']['operator'] == 0:
-                qs = qs.filter(blacklisted__exact=False)
+        if 'blocked' in filters:
+            if filters['blocked']['operator'] == 1:
+                qs = qs.filter(blocked__exact=True)
+            if filters['blocked']['operator'] == 0:
+                qs = qs.filter(blocked__exact=False)
 
         if 'is_spam' in filters:
             if filters['is_spam']['operator'] == 1:

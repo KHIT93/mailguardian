@@ -40,7 +40,7 @@
                                 There are currently no messages to display
                             </td>
                         </tr>
-                        <tr v-for="item in messages" :key="item.id" class="text-gray-700" @click="item.selected = !item.selected" v-else :class="{ 'bg-blue-200 hover:bg-blue-500': item.selected, 'bg-red-500': item.is_spam, 'bg-orange-500': item.is_rbl_listed, 'bg-gray-900 text-white': item.blacklisted, 'bg-green-200': item.whitelisted }">
+                        <tr v-for="item in messages" :key="item.id" class="text-gray-700" @click="item.selected = !item.selected" v-else :class="{ 'bg-blue-200 hover:bg-blue-500': item.selected, 'bg-red-500': item.is_spam, 'bg-orange-500': item.is_rbl_listed, 'bg-gray-900 text-white': item.blocked, 'bg-green-200': item.allowed }">
                             <td>{{ item.from_address }}</td>
                             <td>{{ item.to_address }}</td>
                             <td class="hidden md:table-cell">{{ item.subject }}</td>
@@ -52,8 +52,8 @@
                                     <span v-if="item.is_rbl_listed">RBL</span>
                                     <span v-if="item.infected">Infected</span>
                                 </template>
-                                <span v-if="item.blacklisted">Blacklisted</span>
-                                <span v-if="item.whitelisted">Whitelisted</span>
+                                <span v-if="item.blocked">blocked</span>
+                                <span v-if="item.allowed">allowed</span>
                             </td>
                         </tr>
                     </tbody>
