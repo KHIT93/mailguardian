@@ -399,9 +399,9 @@ if __name__ == "__main__":
         os.system('{usermod} -G mtagroup,virusgroup,clamupdate clamscan'.format(usermod=which('usermod')))
         os.system("{sed} -i '/#LogFile \/var\/log\/clamd.scan/ c\LogFile /var/log/clamd.scan' /etc/clamd.d/scan.conf".format(sed=which('sed')))
         os.system('{systemctl} enable clamd@scan'.format(systemctl=which('systemctl')))
-        os.system('{systemctl} start clamd@scan'.format(systemctl=which('systemctl')))
+        os.system('{systemctl} restart clamd@scan'.format(systemctl=which('systemctl')))
 
     if distro.lower() in ['ubuntu', 'debian']:
         os.system('{systemctl} enable clamav-daemon.service'.format(systemctl=which('systemctl')))
-        os.system('{systemctl} start clamav-daemon.service'.format(systemctl=which('systemctl')))
+        os.system('{systemctl} restart clamav-daemon.service'.format(systemctl=which('systemctl')))
     

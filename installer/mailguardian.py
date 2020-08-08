@@ -446,7 +446,6 @@ if __name__ == "__main__":
         # Enable systemd service unit on startup
         os.system(SYSTEMCTL_BIN + ' enable mailguardian.service')
         os.system(SYSTEMCTL_BIN + ' start mailguardian.service')
-        os.system(SYSTEMCTL_BIN + ' restart clamav-daemon.service')
     os.system('clear')
     print('The installation script has finished. Any errors that occurred during installation need to be fixed manually')
     print('You can now access MailGuardian and perform the last steps of the setup here: {0}://{1}'.format('https' if HTTP_SECURE else 'http', APP_HOSTNAME))
