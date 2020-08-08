@@ -2,17 +2,17 @@
 {% load i18n %}
 
 {% block content %}
-{% trans "Quarantine Report" %}
+{% translate "Quarantine Report" %}
 {% if messages %}
-{% trans "Please find below your Quarantine Report for the last" %} {{ period }} {% trans "day(s)" %}.
-{% trans "We have" %} {% if show_all %}{% trans "processed" %}{% else %}{% trans "quarantined" %}{% endif %} {{ message_count }} {% trans "messages and listed them below" %}. {% trans "All quarantined messages will be kept for" %} {{ retention_days }} {% trans "day(s)" %}
+{% translate "Please find below your Quarantine Report for the last" %} {{ period }} {% translate "day(s)" %}.
+{% translate "We have" %} {% if show_all %}{% translate "processed" %}{% else %}{% translate "quarantined" %}{% endif %} {{ message_count }} {% translate "messages and listed them below" %}. {% translate "All quarantined messages will be kept for" %} {{ retention_days }} {% translate "day(s)" %}
 {% else %}
-{% trans "During the last" %} {{ period }} {% trans "day(s)" %}, {% trans "we did not find any messages that needed to be quarantined"%}
+{% translate "During the last" %} {{ period }} {% translate "day(s)" %}, {% translate "we did not find any messages that needed to be quarantined"%}
 {% endif %}
 -----------------------------------------------
 
 {% for message in messages %}
-{{ message.timestamp }} - {{ message.from_address }} - {{ message.to_address }} - {{ message.subject}} - {% if message.is_spam %}{% trans "Spam" %}{% endif %} {% if message.is_mcp %}{% trans "MCP" %}{% endif %} {% if message.infected %}{% trans "Infected" %}{% endif %} {% if message.is_rbl_listed %}{% trans "Listed in RBL" %}{% endif %} {% if message.blacklisted %}{% trans "Blacklisted" %}{% endif %} - {{ protocol }}://{{ domain }}/messages/{{message.id}}
+{{ message.timestamp }} - {{ message.from_address }} - {{ message.to_address }} - {{ message.subject}} - {% if message.is_spam %}{% translate "Spam" %}{% endif %} {% if message.is_mcp %}{% translate "MCP" %}{% endif %} {% if message.infected %}{% translate "Infected" %}{% endif %} {% if message.is_rbl_listed %}{% translate "Listed in RBL" %}{% endif %} {% if message.blacklisted %}{% translate "Blacklisted" %}{% endif %} - {{ protocol }}://{{ domain }}/messages/{{message.id}}
 {% endfor %}
 -----------------------------------------------
 {% endblock %}
