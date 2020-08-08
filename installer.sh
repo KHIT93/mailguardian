@@ -68,7 +68,7 @@ useradd -m mailguardian
 echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
-su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch feature-new-install-scripts'
+su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch master'
 cd /home/mailguardian/mailguardian || exit
 echo 'Installing required packages...'
 touch /home/mailguardian/mailguardian/installer.ini
