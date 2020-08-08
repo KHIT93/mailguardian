@@ -2,7 +2,7 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform
+import os, sys, platform, subprocess
 
 def which(program):
     def is_exe(fpath):

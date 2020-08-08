@@ -2,7 +2,7 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform
+import os, sys, platform, subprocess
 from django.conf import settings
 import configparser
 import argparse

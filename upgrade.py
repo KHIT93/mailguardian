@@ -7,6 +7,7 @@ from src.core.helpers import which
 import os
 import json
 import platform
+import subprocess
 from distutils.version import StrictVersion
 import importlib.util
 import argparse
