@@ -25,7 +25,7 @@ def which(program):
             exe_file = os.path.join(path, program)
             if is_exe(exe_file):
                 return exe_file
-    return None
+    return False
 
 def generate_encryption_key():
     key = cryptography.fernet.Fernet.generate_key()
@@ -46,9 +46,9 @@ if __name__ == "__main__":
     NGINX_PATH = None
     NGINX_EXTENSION = ''
     PKG_MGR = None
-    OPENSSL_BIN = which('openssl')
-    NGINX_BIN = which('nginx')
-    SYSTEMCTL_BIN = which('systemctl')
+    OPENSSL_BIN = which('openssl') or subprocess.check_output('which openssl', shell=True).strip().decode()
+    NGINX_BIN = which('nginx') or subprocess.check_output('which nginx', shell=True).strip().decode()
+    SYSTEMCTL_BIN = which('systemctl') or subprocess.check_output('which systemctl', shell=True).strip().decode()
 
     # Define some variables to store whether we need to skip some steps
     CONFIGURE_NGINX = True
@@ -82,15 +82,15 @@ if __name__ == "__main__":
     MTA = 'postfix'
     MTA_LOG = "/var/log/mail.log"
     MS_CONF_DIR = '/etc/MailScanner'
-    MS_BIN = which('MailScanner')
+    MS_BIN = which('MailScanner') or subprocess.check_output('which MailScanner', shell=True).strip().decode()
     MS_LIB = '/usr/lib/MailScanner'
     MS_SHARED = '/usr/share/MailScanner'
     MS_QUARANTINE_DIR = "/var/spool/MailScanner/quarantine"
-    SALEARN_BIN = which('sa-learn')
-    SA_BIN = which('spamassassin')
+    SALEARN_BIN = which('sa-learn') or subprocess.check_output('which sa-learn', shell=True).strip().decode()
+    SA_BIN = which('spamassassin') or subprocess.check_output('which spamassassin', shell=True).strip().decode()
     SA_RULES_DIR = '/var/lib/spamassassin'
-    SENDMAIL_BIN = which('sendmail')
-    POSTQUEUE_BIN = which('postqueue')
+    SENDMAIL_BIN = which('sendmail') or subprocess.check_output('which sendmail', shell=True).strip().decode()
+    POSTQUEUE_BIN = which('postqueue') or subprocess.check_output('which postqueue', shell=True).strip().decode()
 
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
