@@ -69,10 +69,16 @@ echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch master'
-cd /home/mailguardian/mailguardian || exit
+cd /home/mailguardian/mailguardian || exit 1
 echo 'Installing required packages...'
-touch /home/mailguardian/mailguardian/installer.ini
-python3 ./installer/deps.py
+if ! touch /home/mailguardian/mailguardian/installer.ini; then
+    echo 'We are really sorry, but it appears as if we are unable to create the configuration file for the installation script. Please check the error above and try again'
+    exit 1
+fi
+if ! python3 ./installer/deps.py; then
+    echo 'We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again'
+    exit 1
+fi
 if ! usermod -a -G mtagroup,postfix mailguardian; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
@@ -110,11 +116,12 @@ if ! bin/python ./installer/mailscanner.py -f /home/mailguardian/mailguardian/in
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
+echo 'Waiting a short moment to allow startup of virus scanners'
+bin python -c 'import time; time.sleep(5)'
 
 spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint
+
 MailScanner --lint
 
-echo 'Installation and initial configuration completed. Now we will perform some cleanup...'
-rm -rf /home/mailguardian/mailguardian/installer.ini
 echo 'Installation has finished. Please reboot your system and finish the application configuration in your web browser'
 exit 0

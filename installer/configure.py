@@ -36,6 +36,8 @@ if __name__ == "__main__":
     CONFIGURE_NGINX = True
     CONFIGURE_SYSTEMD = True
     CONFIGURE_CERTBOT = True
+    CONFIGURE_LETSENCRYPT = True
+    CONFIGURE_OWN_CERT = False
     HTTP_SECURE = True
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = platform.node()
@@ -205,12 +207,67 @@ if __name__ == "__main__":
         SA_RULES_DIR_INPUT = input('Please type in the location of your SpamAssassin rules configuration [{0}] '.format(SA_RULES_DIR))
         if SA_RULES_DIR_INPUT != '' and SA_RULES_DIR_INPUT is not None:
             SA_RULES_DIR = SA_RULES_DIR_INPUT
+
+    if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
+        if HTTP_SECURE:
+            if input('Would you like us to automatically generate a LetsEncrypt certificate for you? (Y/n) ').lower() != 'y':
+                CONFIGURE_LETSENCRYPT = False
+                print('Please note that during the request for a LetsEncrypt certificate, you will be asked to accept the Terms of Service of LetsEncrypt as well as input your email')
+                print('This data is not shared with any third party, outside what is mentioned in the LetsEncrypt Terms of Service')
+            elif input('Do you want to use an existing certificate? (y/N) ').lower() == 'y':
+                CONFIGURE_OWN_CERT = True
+            else:
+                print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
+            
+    # Print the configuration settings
+    print('Hostname: {0}'.format(APP_HOSTNAME))
+    print('Database name: {0}'.format(DB_NAME))
+    print('Database user: {0}'.format(DB_USER))
+    print('Database password: {0}'.format(DB_PASS))
+    print('Database host: {0}'.format(DB_HOST))
+    print('Database TCP port: {0}'.format(DB_PORT))
+    print('Use SSL/TLS for database: {0}'.format('Yes' if DB_SSL else 'No'))
+    print('Timezone: {0}'.format(TZ))
+    if MULTI_NODE and API_ONLY_MODE:
+        print('Node type: Multi-node installation (Processing node)')
+    elif MULTI_NODE and not API_ONLY_MODE:
+        print('Node type: Multi-node installation (Web interface node)')
+    else:
+        print('Node type: Single-node installation')
+    print('Location of \'sa-learn\' binary: {0}'.format(SALEARN_BIN))
+    print('Location of \'spamassassin\' binary: {0}'.format(SA_BIN))
+    print('Location of \'MailScanner\' binary: {0}'.format(MS_BIN))
+    print('Location of MailScanner configuration files: {0}'.format(MS_CONF_DIR))
+    print('Location of MailScanner shared data: {0}'.format(MS_SHARED))
+    print('Location of MailScanner shared libraries: {0}'.format(MS_LIB))
+    print('Location of SpamAssassin rules: {0}'.format(SA_RULES_DIR))
+    print('Location of \'sendmail\' binary: {0}'.format(SENDMAIL_BIN))
+    print('Location of the MailScanner Quarantine: {0}'.format(MS_QUARANTINE_DIR))
+    print('MTA (Mail Transport Agent): {0}'.format(MTA))
+    print('Location of your MTA logfile: {0}'.format(MTA_LOG))
+    print('Retention policy: Store for {0} day(s)'.format(RETENTION_DAYS))
+
+    print('The above will be saved in the configuration file that we will located at {0}'.format(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
+    print(chr(13))
+    print('After this point everything we do is commited to disk immediately')
+    print(chr(13))
+    if input('Are the above settings correct and can we continue? (Y/n) ').lower() == 'n':
+        print('Installation has been aborted. Please rerun the installation script to try again')
+        exit(255)
+    os.system('clear')
     
     installer_config = configparser.ConfigParser()
     installer_config['mailguardian'] = {
         'app_dir': APP_DIR,
         'hostname': APP_HOSTNAME,
-        'https': HTTP_SECURE
+        'user': APP_USER,
+        'https': HTTP_SECURE,
+        'tz': TZ,
+        'multi_node': MULTI_NODE,
+        'api_only': API_ONLY_MODE,
+        'mta': MTA,
+        'mta_log': MTA_LOG,
+        'retention': RETENTION_DAYS
     }
     installer_config['database'] = {
         'host': DB_HOST,
@@ -218,19 +275,43 @@ if __name__ == "__main__":
         'pass': DB_PASS,
         'name': DB_NAME,
         'port': DB_PORT,
-        'fqdn': DB_HOST + ':' + DB_PORT if str(DB_PORT) != '5432' else DB_HOST
+        'fqdn': DB_HOST + ':' + DB_PORT if str(DB_PORT) != '5432' else DB_HOST,
+        'ssl': 'prefer'
     }
     installer_config['mailscanner'] = {
         'bin': MS_BIN,
         'config': MS_CONF_DIR,
         'shared': MS_SHARED,
         'lib': MS_LIB,
-        'quarantine': MS_QUARANTINE_DIR
+        'quarantine': MS_QUARANTINE_DIR,
+        'sendmail': SENDMAIL_BIN,
+        'postqueue': POSTQUEUE_BIN
     }
     installer_config['spamassassin'] = {
         'sa_learn': SALEARN_BIN,
         'bin': SA_BIN,
         'rules': SA_RULES_DIR
+    }
+    installer_config['installation'] = {
+        'nginx': CONFIGURE_NGINX,
+        'certbot': CONFIGURE_CERTBOT,
+        'systemd': CONFIGURE_SYSTEMD,
+        'letsencrypt': CONFIGURE_LETSENCRYPT,
+        'own_cert': CONFIGURE_OWN_CERT,
+        'privkey': PRIVKEY_PATH,
+        'cert': CERT_PATH,
+        'csr': CSR_PATH,
+        'dhparam': DHPARAM_PATH,
+    }
+    installer['nginx'] = {
+        'path': NGINX_PATH,
+        'extension': NGINX_EXTENSION
+    }
+    installer_config['bin'] = {
+        'openssl': OPENSSL_BIN,
+        'nginx': NGINX_BIN,
+        'systemctl': SYSTEMCTL_BIN,
+        'pkg': PKG_MGR
     }
 
     with open(args.config_file, 'w') as f:

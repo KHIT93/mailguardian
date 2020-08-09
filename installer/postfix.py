@@ -33,7 +33,7 @@ if __name__ == "__main__":
         exit()
     installer_config = configparser.ConfigParser()
     installer_config.read(args.config_file)
-    PKG_MGR = None
+    PKG_MGR = installer_config['bin']['pkg']
     POSTFIX_DIR = '/etc/postfix'
     APP_DIR  = installer_config['mailguardian']['app_dir']
     # Detect the Linux distribution
@@ -51,15 +51,7 @@ if __name__ == "__main__":
                 distro_version = l.replace('VERSION_ID=', '').replace('"', '').strip()
             if l[:17] == 'VERSION_CODENAME=':
                 distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
-    if distro.lower() == 'centos':
-        PKG_MGR = which('yum')
-        if distro_version == '8':
-            PKG_MGR = which('dnf')
-    elif distro.lower() == 'debian':
-        PKG_MGR = which('apt')
-    elif distro.lower() == 'ubuntu':
-        PKG_MGR = which('apt')
-    else:
+    if distro.lower() not in ['centos', 'debian', 'ubuntu']:
         print('Your Linux distribution or version is not supported')
         print(distro)
         exit(255)
@@ -74,8 +66,8 @@ if __name__ == "__main__":
     main_cf.append('transport_maps = regexp:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
     with open(os.path.join(POSTFIX_DIR, 'main.cf'), 'w') as f:
         f.write("\n".join(main_cf))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['app_dir']))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['app_dir']))
+    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname']))
+    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname']))
     os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR))
 
     print('Configure PostgreSQL integrations')
