@@ -51,10 +51,10 @@ if __name__ == "__main__":
                     spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
-                    upgrade = upgrader.Upgrader(config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
+                    upgrade = upgrader.Upgrader(config=config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
                     if upgrade.applicable() and upgrade.legacy:
-                        upgrade.upgrade()
-                        DESTINATION_VERSION = upgrade.applied_version
+                        if upgrade.upgrade():
+                            DESTINATION_VERSION = upgrade.applied_version
     
     # Check if we have new configuration system
     if settings:
@@ -64,10 +64,10 @@ if __name__ == "__main__":
                     spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
-                    upgrade = upgrader.Upgrader(settings, app_dir=APP_DIR, src_dir=BASE_DIR, version=settings.LOCAL_CONFIG_VERSION or '1.0.0')
+                    upgrade = upgrader.Upgrader(config=settings, app_dir=APP_DIR, src_dir=BASE_DIR, version=settings.LOCAL_CONFIG_VERSION or '1.0.0')
                     if upgrade.applicable():
-                        upgrade.upgrade()
-                        DESTINATION_VERSION = upgrade.applied_version
+                        if upgrade.upgrade():
+                            DESTINATION_VERSION = upgrade.applied_version
     else:
         print('Could not import application configuration. Aborting')
         exit(255)
@@ -79,8 +79,8 @@ if __name__ == "__main__":
     if os.path.exists(os.path.join(APP_DIR, 'mix-manifest.json')) and which('npm'):
         # If we run the frontend, then we will have to perform node updates
         print('Web frontend detected. Rebuilding static assets. This may take some time')
-        os.system('npm install')
-        os.system('npm run production')
+        # os.system('npm install')
+        # os.system('npm run production')
     auto_fix = args.yes
 
     if not auto_fix:

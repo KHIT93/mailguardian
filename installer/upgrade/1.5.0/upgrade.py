@@ -106,3 +106,6 @@ class Upgrader(object):
             print('Specify the BRAND_SUPPORT and BRAND_FEEDBACK options in {} to take advantage of this'.format(os.path.join(self.src_dir, 'mailguardian','config', 'local.py')))
             print('Deleting old configuration file at {}'.format(os.path.join(self.app_dir, 'mailguardian-env.json')))
             os.remove(os.path.join(self.app_dir, 'mailguardian-env.json'))
+            return True
+        else:
+            return False

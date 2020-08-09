@@ -26,6 +26,9 @@ class Upgrader(object):
             self.config['encryption_key'] = self._generate_encryption_key()
             with open(os.path.join(app_dir, 'mailguardian-env.json'), 'w') as f:
                 f.write(json.dumps(self.config))
+            return True
+        else:
+            return False
     
     def applicable(self):
         return StrictVersion(self.version) < StrictVersion(self.applied_version)

@@ -21,12 +21,11 @@ class Upgrader(object):
         self.src_dir = src_dir
         self.version = version
     def upgrade(self):
-        if StrictVersion(self.version) >= StrictVersion('1.5.0'):
+        if StrictVersion(self.version) <= StrictVersion('1.5.0'):
+            print('Current version detected as {version}'.format(version=self.version))
             print('Unable to upgrade MailGuardian to {version} as it is required to be at version 1.5.0 first'.format(version=self.applied_version))
             return False
         if StrictVersion(self.version) < StrictVersion('2.0.0'):
-            pass
+            return True
     def applicable(self):
         return StrictVersion(self.version) < StrictVersion(self.applied_version) and StrictVersion(self.version) >= StrictVersion('1.5.0')
-
-# /home/kenneth/Code/mailguardian/installer/upgrade/2.0.0/upgrade.py
