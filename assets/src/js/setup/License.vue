@@ -2,12 +2,12 @@
     <div>
         <h1 class="text-2xl mb-2 text-center border-b pb-1">License Agreement</h1>
         <div class="h-64 overflow-scroll"><nl2br tag="p" :text="license" /></div>
-        <label class="md:w-2/3 block font-bold">
-            <input class="mr-2" type="checkbox" v-model="checked" @change="complete">
-            <span class="text-sm">
-                I accept the license terms for usage of this application
-            </span>
-        </label>
+        <div class="text-gray-700 text-sm">
+            <label class="inline-flex items-center">
+                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="checked" name="checked" @change="complete">
+                <span class="ml-2">I accept the license terms for usage of this application</span>
+            </label>
+        </div>
     </div>
 </template>
 

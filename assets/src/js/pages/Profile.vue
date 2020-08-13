@@ -92,30 +92,36 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
-                            <input v-model="form.daily_quarantine_report" class="mr-2" type="checkbox" />
-                            <span class="text-sm">Send daily quarantine reports</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.daily_quarantine_report" name="daily_quarantine_report">
+                                <span class="ml-2">Send daily quarantine reports</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
-                            <input v-model="form.weekly_quarantine_report" class="mr-2" type="checkbox" />
-                            <span class="text-sm">Send weekly quarantine reports</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.weekly_quarantine_report" name="weekly_quarantine_report">
+                                <span class="ml-2">Send weekly quarantine reports</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
-                            <input v-model="form.monthly_quarantine_report" class="mr-2" type="checkbox" />
-                            <span class="text-sm">Send monthly quarantine reports</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.monthly_quarantine_report" name="monthly_quarantine_report">
+                                <span class="ml-2">Send monthly quarantine reports</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -140,7 +146,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_score" class="form-input" name="custom_spam_score" id="custom_spam_score" type="number" placeholder="5.0">
+                        <input v-model="form.custom_spam_score" class="form-input w-full my-1" name="custom_spam_score" id="custom_spam_score" type="number" placeholder="5.0">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
@@ -150,7 +156,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_highscore" class="form-input" name="custom_spam_highscore" id="custom_spam_highscore" type="number" placeholder="15.0">
+                        <input v-model="form.custom_spam_highscore" class="form-input w-full my-1" name="custom_spam_highscore" id="custom_spam_highscore" type="number" placeholder="15.0">
                     </div>
                 </div>
 

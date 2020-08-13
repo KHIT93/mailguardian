@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.hostname" class="form-input" name="hostname" id="hostname" type="text" placeholder="mailnode-01.example.com" required>
+                        <input v-model="form.hostname" class="form-input w-full my-1" name="hostname" id="hostname" type="text" placeholder="mailnode-01.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.ip_address" class="form-input" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1" required>
+                        <input v-model="form.ip_address" class="form-input w-full my-1" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,25 +30,29 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.priority" class="form-input" name="priority" id="priority" type="number" placeholder="10" required>
+                        <input v-model="form.priority" class="form-input w-full my-1" name="priority" id="priority" type="number" placeholder="10" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="use_tls">
-                            <input v-model="form.use_tls" class="mr-2" type="checkbox" name="use_tls" />
-                            <span class="text-sm">Communicate with this host using SSL/TLS encryption</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.use_tls" name="use_tls">
+                                <span class="ml-2">Communicate with this host using SSL/TLS encryption</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="use_tls">
-                            <input v-model="form.passive" class="mr-2" type="checkbox" name="use_tls" />
-                            <span class="text-sm">This host is passive</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.passive" name="passive">
+                                <span class="ml-2">This host is passive</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

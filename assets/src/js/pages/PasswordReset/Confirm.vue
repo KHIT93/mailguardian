@@ -12,7 +12,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.new_password1" class="form-input" name="new_password1" id="new_password1" type="password" placeholder="******************">
+                        <input v-model="form.new_password1" class="form-input w-full my-1" name="new_password1" id="new_password1" type="password" placeholder="******************">
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('new_password1')">{{ form.errors.get('new_password1') }}</p>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.new_password2" class="form-input" name="new_password2" id="new_password2" type="password" placeholder="******************">
+                        <input v-model="form.new_password2" class="form-input w-full my-1" name="new_password2" id="new_password2" type="password" placeholder="******************">
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('new_password2')">{{ form.errors.get('new_password2') }}</p>
                     </div>
                 </div>

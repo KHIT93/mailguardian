@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./components/layout.css";
+@import "./components/navigation.css";
+@import "./components/notifications.css";
+@import "./components/tables.css";
+@import "./components/buttons.css";
+ 
+[v-cloak] { display:none; }
+
+.loader {
+  @apply .m-0;
+  right: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

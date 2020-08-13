@@ -13,7 +13,7 @@ let tailwindcss = require('tailwindcss');
  */
 mix.setPublicPath(path.resolve('./'));
 mix.js('./assets/src/js/app.js', './assets/dist/js')
-   .less('./assets/src/css/app.less', './assets/dist/css').options({
+   .postCss('./assets/src/css/app.css', './assets/dist/css').options({
        postCss: [
            tailwindcss('./tailwind.config.js'),
        ]

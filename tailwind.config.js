@@ -11,6 +11,36 @@ module.exports = {
             center: true,
             padding: '2rem',
         },
+        customForms: theme => ({
+            default: {
+                select: {
+                    backgroundColor: theme('colors.cool-gray.200'),
+                    borderColor: theme('colors.cool-gray.200'),
+                    paddingLeft: theme('spacing.4'),
+                    paddingRight: theme('spacing.4'),
+                    fontSize: theme('fontSize.sm'),
+                    '&:hover': {
+                        borderColor: theme('colors.blue.500')
+                    },
+                    '&:focus': {
+                        borderColor: theme('colors.blue.500')
+                    }
+                },
+                'input, textarea': {
+                    backgroundColor: theme('colors.cool-gray.200'),
+                    borderColor: theme('colors.cool-gray.200'),
+                    paddingLeft: theme('spacing.4'),
+                    paddingRight: theme('spacing.4'),
+                    fontSize: theme('fontSize.sm'),
+                    '&:hover': {
+                        borderColor: theme('colors.blue.500')
+                    },
+                    '&:focus': {
+                        borderColor: theme('colors.blue.500')
+                    }
+                }
+            }
+        })
     },
     variants: {
         appearance: [],

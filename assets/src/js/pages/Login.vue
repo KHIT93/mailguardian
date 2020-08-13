@@ -14,7 +14,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.email" class="form-input" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
+                        <input v-model="form.email" class="form-input w-full my-1" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.password" class="form-input" name="password" id="password" type="password" placeholder="******************" required>
+                        <input v-model="form.password" class="form-input w-full my-1" name="password" id="password" type="password" placeholder="******************" required>
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('password')">{{ form.errors.get('password') }}</p>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.two_factor_token" class="form-input" name="two_factor_token" id="two_factor_token" type="text" required>
+                        <input v-model="form.two_factor_token" class="form-input w-full my-1" name="two_factor_token" id="two_factor_token" type="text" required>
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('two_factor_token')">{{ form.errors.get('two_factor_token') }}</p>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.backup_code" class="form-input" name="backup_code" id="backup_code" type="text" required>
+                        <input v-model="form.backup_code" class="form-input w-full my-1" name="backup_code" id="backup_code" type="text" required>
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('backup_code')">{{ form.errors.get('backup_code') }}</p>
                     </div>
                 </div>

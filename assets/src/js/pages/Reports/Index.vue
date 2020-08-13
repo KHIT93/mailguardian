@@ -57,30 +57,15 @@
                         <h2 class="font-normal text-lg text-center">Add a new filter</h2>
                         <hr>
                         <form @submit.prevent="add_filter">
-                            <div class="relative">
-                                <select v-model="filter_form.filter" class="form-select" required>
-                                    <option value="">Select field to filter on</option>
-                                    <option v-for="(value, key) in availableFilters" :key="key" :value="key">{{ key.replace('_', ' ') }}</option>
-                                </select>
-                                <div class="form-select-icon">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="relative">
-                                <select v-model="filter_form.operator" class="form-select" required>
-                                    <option value="">Select filter operator</option>
-                                    <option v-for="option in selectedFilterOptions.operators" :key="option.value" :value="option.value">{{ option.label }}</option>
-                                </select>
-                                <div class="form-select-icon">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="">
-                                <input class="form-input" name="value" v-model="filter_form.value" id="value" :type="selectedFilterType" placeholder="Value to filter by">
-                            </div>
-                            <hr>
+                            <select v-model="filter_form.filter" class="form-select w-full my-1" required>
+                                <option value="">Select field to filter on</option>
+                                <option v-for="(value, key) in availableFilters" :key="key" :value="key">{{ key.replace('_', ' ') }}</option>
+                            </select>
+                            <select v-model="filter_form.operator" class="form-select w-full my-1" required>
+                                <option value="">Select filter operator</option>
+                                <option v-for="option in selectedFilterOptions.operators" :key="option.value" :value="option.value">{{ option.label }}</option>
+                            </select>
+                            <input class="form-input w-full my-1" name="value" v-model="filter_form.value" id="value" :type="selectedFilterType" placeholder="Value to filter by">
                             <div class="flex flex-row-reverse">
                                 <button type="submit" class="btn btn-blue shadow">
                                     Add

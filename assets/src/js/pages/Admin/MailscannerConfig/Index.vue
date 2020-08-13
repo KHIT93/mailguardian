@@ -18,21 +18,16 @@
                     <div class="flex text-sm items-center">
                         <div class="text-gray-700 w-3/4 md:w-5/6 p-2">
                             <div class="font-semibold">
-                                <input type="text" name="search" class="form-input" v-model="search_query" placeholder="Type something here..."/>
+                                <input type="text" name="search" class="form-input w-full my-1" v-model="search_query" placeholder="Type something here..."/>
                             </div>
                         </div>
                         <div>
                             <div class="md:flex md:ml-2">
                                 <div class="">
-                                    <div class="relative">
-                                        <select v-model="search_file" class="form-select">
-                                            <option value="">-- Select file --</option>
-                                            <option v-for="file in files" :key="file" :value="file">{{ file }}</option>
-                                        </select>
-                                        <div class="form-select-icon">
-                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                        </div>
-                                    </div>
+                                    <select v-model="search_file" class="form-select w-full my-1">
+                                        <option value="">-- Select file --</option>
+                                        <option v-for="file in files" :key="file" :value="file">{{ file }}</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

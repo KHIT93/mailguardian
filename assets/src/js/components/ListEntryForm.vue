@@ -10,16 +10,11 @@
                     </label>
                 </div>
                 <div class="md:w-3/4">
-                    <div class="relative">
-                        <select v-model="listing_choice_from" @change="from_reset" name="from_select" class="form-select" required>
-                            <option value="">-- Select From --</option>
-                            <option value="from_address">Senders email address or domain</option>
-                            <option value="from_ip_address">Senders IP-address</option>
-                        </select>
-                        <div class="form-select-icon">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                        </div>
-                    </div>
+                    <select v-model="listing_choice_from" @change="from_reset" name="from_select" class="form-select w-full my-1" required>
+                        <option value="">-- Select From --</option>
+                        <option value="from_address">Senders email address or domain</option>
+                        <option value="from_ip_address">Senders IP-address</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -44,7 +39,7 @@
                 </label>
             </div>
             <div class="md:w-3/4">
-                <input class="form-input" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_from == 'from_ip_address'">
+                <input class="form-input w-full my-1" name="from_ip_address" v-model="from_ip_address" id="from_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_from == 'from_ip_address'">
             </div>
         </div>
 
@@ -56,16 +51,11 @@
                     </label>
                 </div>
                 <div class="md:w-3/4">
-                    <div class="relative">
-                        <select v-model="listing_choice_to" @change="to_reset" name="to_select" class="form-select" required>
-                            <option value="">-- Select To --</option>
-                            <option value="to_address">Recipients email address or domain</option>
-                            <option value="to_ip_address">Recipients IP-address</option>
-                        </select>
-                        <div class="form-select-icon">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                        </div>
-                    </div>
+                    <select v-model="listing_choice_to" @change="to_reset" name="to_select" class="form-select w-full my-1" required>
+                        <option value="">-- Select To --</option>
+                        <option value="to_address">Recipients email address or domain</option>
+                        <option value="to_ip_address">Recipients IP-address</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -79,7 +69,7 @@
             <div class="md:w-3/4 inline-flex">
                 <input class="bg-gray-200 appearance-none border border-gray-200 hover:border-blue-500 rounded py-2 px-4 text-gray-700" name="to_address" v-model="to" id="to_address" type="text" placeholder="JohnDoe">
                 <span class="select-none bg-gray-200 appearance-none border border-gray-200 py-2 px-4 text-gray-700">@</span>
-                <input class="form-input" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com" :required="listing_choice_to == 'to_address'">                    
+                <input class="form-input w-full my-1" name="to_domain" v-model="to_domain" id="to_domain" type="text" placeholder="example.com" :required="listing_choice_to == 'to_address'">                    
             </div>
         </div>
 
@@ -90,7 +80,7 @@
                 </label>
             </div>
             <div class="md:w-3/4">
-                <input class="form-input" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_to == 'to_ip_address'">
+                <input class="form-input w-full my-1" name="to_ip_address" v-model="to_ip_address" id="to_ip_address" type="text" placeholder="111.222.333.444" :required="listing_choice_to == 'to_ip_address'">
             </div>
         </div>
         <div class="px-6 py-4 border-t bg-gray-100 rounded-b">

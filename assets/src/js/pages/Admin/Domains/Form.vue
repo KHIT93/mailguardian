@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.name" class="form-input" name="name" id="name" type="text" placeholder="example.com" required>
+                        <input v-model="form.name" class="form-input w-full my-1" name="name" id="name" type="text" placeholder="example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.destination" class="form-input" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
+                        <input v-model="form.destination" class="form-input w-full my-1" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,16 +30,11 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <div class="relative">
-                            <select v-model="form.relay_type" name="relay_type" class="form-select">
-                                <option value="">Select relay type</option>
-                                <option value="smtp">Deliver to my email server (SMTP)</option>
-                                <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
-                            </select>
-                            <div class="form-select-icon">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
+                        <select v-model="form.relay_type" name="relay_type" class="form-select w-full my-1">
+                            <option value="">Select relay type</option>
+                            <option value="smtp">Deliver to my email server (SMTP)</option>
+                            <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
+                        </select>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="multi_node">
@@ -49,25 +44,22 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <div class="relative">
-                            <select v-model="form.receive_type" name="receive_type" class="form-select">
-                                <option value="">Select Receive type</option>
-                                <option value="load_balanced">Balance between nodes</option>
-                                <option value="failover">Use the primary node and fail over if unavailable</option>
-                            </select>
-                            <div class="form-select-icon">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
+                        <select v-model="form.receive_type" name="receive_type" class="form-select w-full my-1">
+                            <option value="">Select Receive type</option>
+                            <option value="load_balanced">Balance between nodes</option>
+                            <option value="failover">Use the primary node and fail over if unavailable</option>
+                        </select>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="active">
-                            <input v-model="form.active" class="mr-2" type="checkbox" name="active" />
-                            <span class="text-sm">This domain is active</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.active" name="active">
+                                <span class="ml-2">This domain is active</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="entity.active">
@@ -117,7 +109,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.allowed_accounts" class="form-input" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
+                        <input v-model="form.allowed_accounts" class="form-input w-full my-1" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.email" class="form-input" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
+                        <input v-model="form.email" class="form-input w-full my-1" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,8 +20,8 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.first_name" class="form-input mr-1" name="first_name" id="first_name" type="text" placeholder="Jane">
-                        <input v-model="form.last_name" class="form-input" name="last_name" id="last_name" type="text" placeholder="Doe">
+                        <input v-model="form.first_name" class="form-input w-full my-1 mr-1" name="first_name" id="first_name" type="text" placeholder="Jane">
+                        <input v-model="form.last_name" class="form-input w-full my-1" name="last_name" id="last_name" type="text" placeholder="Doe">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -52,19 +52,23 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="is_staff">
-                            <input v-model="form.is_staff" class="mr-2" type="checkbox" name="is_staff" />
-                            <span class="text-sm">This user is a member of the staff</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.is_staff" name="is_staff">
+                                <span class="ml-2">This user is a member of the staff</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="is_domain_admin">
-                            <input v-model="form.is_domain_admin" class="mr-2" type="checkbox" name="is_domain_admin" />
-                            <span class="text-sm">This user is the administrator of one or more domains</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.is_domain_admin" name="is_domain_admin">
+                                <span class="ml-2">This user is the administrator of one or more domains</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
@@ -78,40 +82,48 @@
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="daily_quarantine_report">
-                            <input v-model="form.daily_quarantine_report" class="mr-2" type="checkbox" name="daily_quarantine_report" />
-                            <span class="text-sm">Send daily quarantine reports</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.daily_quarantine_report" name="daily_quarantine_report">
+                                <span class="ml-2">Send daily quarantine reports</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="weekly_quarantine_report">
-                            <input v-model="form.weekly_quarantine_report" class="mr-2" type="checkbox" name="weekly_quarantine_report" />
-                            <span class="text-sm">Send weekly quarantine reports</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.weekly_quarantine_report" name="weekly_quarantine_report">
+                                <span class="ml-2">Send weekly quarantine reports</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="monthly_quarantine_report">
-                            <input v-model="form.monthly_quarantine_report" class="mr-2" type="checkbox" name="monthly_quarantine_report" />
-                            <span class="text-sm">Send monthly quarantine reports</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.monthly_quarantine_report" name="monthly_quarantine_report">
+                                <span class="ml-2">Send monthly quarantine reports</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="skip_scan">
-                            <input v-model="form.skip_scan" class="mr-2" type="checkbox" name="skip_scan" />
-                            <span class="text-sm">Do not scan email for this user</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.skip_scan" name="skip_scan">
+                                <span class="ml-2">Do not scan email for this user</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
@@ -121,7 +133,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_score" class="form-input" name="custom_spam_score" id="custom_spam_score" type="text" placeholder="Doe">
+                        <input v-model="form.custom_spam_score" class="form-input w-full my-1" name="custom_spam_score" id="custom_spam_score" type="text" placeholder="Doe">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
@@ -131,7 +143,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_highscore" class="form-input" name="custom_spam_highscore" id="custom_spam_highscore" type="text" placeholder="Doe">
+                        <input v-model="form.custom_spam_highscore" class="form-input w-full my-1" name="custom_spam_highscore" id="custom_spam_highscore" type="text" placeholder="Doe">
                     </div>
                 </div>
 

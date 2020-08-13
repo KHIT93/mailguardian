@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.score" class="form-input" name="score" id="score" type="text" placeholder="4.57" required>
+                        <input v-model="form.score" class="form-input w-full my-1" name="score" id="score" type="text" placeholder="4.57" required>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

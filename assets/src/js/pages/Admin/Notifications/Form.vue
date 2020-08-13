@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.title" class="form-input" name="title" id="title" type="text" required>
+                        <input v-model="form.title" class="form-input w-full my-1" name="title" id="title" type="text" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <textarea v-model="form.body" class="form-input" name="body" id="body" required></textarea>
+                        <textarea v-model="form.body" class="form-input w-full my-1" name="body" id="body" required></textarea>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,16 +30,11 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <div class="relative">
-                            <select v-model="form.notification_type" name="relay_type" class="form-select">
-                                <option value="">-- Select Notification type --</option>
-                                <option value="login">Login</option>
-                                <option value="dashboard">Dashboard</option>
-                            </select>
-                            <div class="form-select-icon">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
+                        <select v-model="form.notification_type" name="relay_type" class="form-select w-full my-1">
+                            <option value="">-- Select Notification type --</option>
+                            <option value="login">Login</option>
+                            <option value="dashboard">Dashboard</option>
+                        </select>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -49,7 +44,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.date_start" class="form-input" name="date_start" id="date_start" type="date" required>
+                        <input v-model="form.date_start" class="form-input w-full my-1" name="date_start" id="date_start" type="date" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -59,7 +54,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.date_end" class="form-input" name="date_end" id="date_end" type="date" required>
+                        <input v-model="form.date_end" class="form-input w-full my-1" name="date_end" id="date_end" type="date" required>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

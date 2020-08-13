@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.key" class="form-input" name="key" id="key" type="text" required>
+                        <input v-model="form.key" class="form-input w-full my-1" name="key" id="key" type="text" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.value" class="form-input" name="value" id="value" type="text">
+                        <input v-model="form.value" class="form-input w-full my-1" name="value" id="value" type="text">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -31,15 +31,10 @@
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
                         <div v-if="form.id" class="text-gray-400">{{ form.filepath }}</div>
-                        <div class="relative" v-else>
-                            <select v-model="form.filepath" class="form-select">
-                                <option value="">-- Select file --</option>
-                                <option v-for="f in filepaths" :key="f.filepath" :value="f.filepath">{{ f.filepath }}</option>
-                            </select>
-                            <div class="form-select-icon">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                            </div>
-                        </div>
+                        <select v-model="form.filepath" class="form-select w-full my-1" v-else>
+                            <option value="">-- Select file --</option>
+                            <option v-for="f in filepaths" :key="f.filepath" :value="f.filepath">{{ f.filepath }}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

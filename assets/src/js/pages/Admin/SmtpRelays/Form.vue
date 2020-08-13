@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.ip_address" class="form-input" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1/32" required>
+                        <input v-model="form.ip_address" class="form-input w-full my-1" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1/32" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,16 +20,18 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.hostname" class="form-input" name="hostname" id="hostname" type="text" placeholder="mail.example.com" required>
+                        <input v-model="form.hostname" class="form-input w-full my-1" name="hostname" id="hostname" type="text" placeholder="mail.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
                     <div class="md:w-1/4"></div>
                     <div class="md:w-1/2">
-                        <label class="block text-gray-700 font-bold mb-1 md:mb-0 pr-4" for="active">
-                            <input v-model="form.active" class="mr-2" type="checkbox" />
-                            <span class="text-sm">This Relay is enabled and can send mail through our server(s)</span>
-                        </label>
+                        <div class="text-gray-700 text-sm">
+                            <label class="inline-flex items-center">
+                                <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.active" name="active">
+                                <span class="ml-2">This relay is enabled and can send mail through our server(s)</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -39,7 +41,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.comment" class="form-input" name="comment" id="comment" type="text" required>
+                        <input v-model="form.comment" class="form-input w-full my-1" name="comment" id="comment" type="text" required>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

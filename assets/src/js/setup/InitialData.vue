@@ -14,7 +14,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.admin_email" class="form-input" name="admin_email" id="admin_email" type="email" placeholder="JaneDoe@example.com" required>
+                    <input v-model="form.admin_email" class="form-input w-full my-1" name="admin_email" id="admin_email" type="email" placeholder="JaneDoe@example.com" required>
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('admin_email')">{{ form.errors.get('admin_email') }}</p>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.admin_password" class="form-input" name="admin_password" id="admin_password" type="password" placeholder="" required>
+                    <input v-model="form.admin_password" class="form-input w-full my-1" name="admin_password" id="admin_password" type="password" placeholder="" required>
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('admin_password')">{{ form.errors.get('admin_password') }}</p>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.branding_name" class="form-input" name="branding_name" id="branding_name" type="text">
+                    <input v-model="form.branding_name" class="form-input w-full my-1" name="branding_name" id="branding_name" type="text">
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('branding_name')">{{ form.errors.get('branding_name') }}</p>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.branding_tagline" class="form-input" name="branding_tagline" id="branding_tagline" type="text">
+                    <input v-model="form.branding_tagline" class="form-input w-full my-1" name="branding_tagline" id="branding_tagline" type="text">
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('branding_tagline')">{{ form.errors.get('branding_tagline') }}</p>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.branding_logo" class="form-input" name="branding_logo" id="branding_logo" type="text" placeholder="https://example.com/images/logo.svg">
+                    <input v-model="form.branding_logo" class="form-input w-full my-1" name="branding_logo" id="branding_logo" type="text" placeholder="https://example.com/images/logo.svg">
                     <p class="text-xs pt-1"> Here you can provide us a link to a custom logo for the application</p>
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('branding_logo')">{{ form.errors.get('branding_logo') }}</p>
                 </div>
@@ -73,7 +73,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.quarantine_report_from" class="form-input" name="quarantine_report_from" id="quarantine_report_from" type="email" placeholder="postmaster@example.com" required>
+                    <input v-model="form.quarantine_report_from" class="form-input w-full my-1" name="quarantine_report_from" id="quarantine_report_from" type="email" placeholder="postmaster@example.com" required>
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('quarantine_report_from')">{{ form.errors.get('quarantine_report_from') }}</p>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <input v-model="form.quarantine_report_subject" class="form-input" name="quarantine_report_subject" id="quarantine_report_subject" type="text">
+                    <input v-model="form.quarantine_report_subject" class="form-input w-full my-1" name="quarantine_report_subject" id="quarantine_report_subject" type="text">
                     <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('quarantine_report_subject')">{{ form.errors.get('quarantine_report_subject') }}</p>
                 </div>
             </div>
@@ -95,12 +95,12 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <label class="block font-bold">
-                        <input class="mr-2" type="checkbox" v-model="form.quarantine_report_daily">
-                        <span class="text-sm">
-                            Yes, allow users to get a daily quarantine report email from the application
-                        </span>
-                    </label>
+                    <div class="text-gray-700 text-sm">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.quarantine_report_daily" name="quarantine_report_daily">
+                            <span class="ml-2">Yes, allow users to get a daily quarantine report email from the application</span>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="md:flex md:items-center mt-2">
@@ -110,12 +110,12 @@
                 </label>
                 </div>
                 <div class="md:w-2/3">
-                    <label class="block font-bold">
-                        <input class="mr-2" type="checkbox" v-model="form.quarantine_report_non_spam_hide">
-                        <span class="text-sm">
-                            Yes, please hide messages, that are not stopped, from the email report
-                        </span>
-                    </label>
+                    <div class="text-gray-700 text-sm">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox h-4 w-4" v-model="form.quarantine_report_non_spam_hide" name="quarantine_report_non_spam_hide">
+                            <span class="ml-2">Yes, please hide messages, that are not stopped, from the email report</span>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="flex flex-row-reverse items-center justify-between pt-2">
