@@ -72,7 +72,7 @@ if __name__ == "__main__":
         f.write("\n".join(conf))
     
     os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'MailGuardian.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLBlackWhiteList.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlackWhiteList.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLBlockAllowList.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlockAllowList.pm')))        
     os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLSpamSettings.pm')))        
     
     conf = []
@@ -188,10 +188,10 @@ if __name__ == "__main__":
             conf[index] = 'Send Notices = no'
         if line[:22] == 'Is Definitely Not Spam':
             config_check.append('Is Definitely Not Spam')
-            conf[index] = 'Is Definitely Not Spam = &SQLWhitelist'
+            conf[index] = 'Is Definitely Not Spam = &SQLAllowlist'
         if line[:18] == 'Is Definitely Spam':
             config_check.append('Is Definitely Spam')
-            conf[index] = 'Is Definitely Spam = &SQLBlacklist'
+            conf[index] = 'Is Definitely Spam = &SQLBlocklist'
         if line[:29] == 'Definite Spam Is High Scoring':
             config_check.append('Definite Spam Is High Scoring')
             conf[index] = 'Definite Spam Is High Scoring = yes'
@@ -305,9 +305,9 @@ if __name__ == "__main__":
             if 'Send Notices' == c:
                 conf.append('Send Notices = no')
             if 'Is Definitely Not Spam' == c:
-                conf.append('Is Definitely Not Spam = &SQLWhitelist')
+                conf.append('Is Definitely Not Spam = &SQLAllowlist')
             if 'Is Definitely Spam' == c:
-                conf.append('Is Definitely Spam = &SQLBlacklist')
+                conf.append('Is Definitely Spam = &SQLBlocklist')
             if 'Definite Spam Is High Scoring' == c:
                 conf.append('Definite Spam Is High Scoring = yes')
             if 'Required SpamAssassin Score' == c:
