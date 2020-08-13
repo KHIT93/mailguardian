@@ -1,5 +1,5 @@
 .nav-link {
-    @apply .no-underline .text-white .opacity-50 .flex .items-center .py-4 .border-b .border-transparent;
+    @apply .no-underline .text-white .opacity-50 .flex .items-center .py-4 .border-b .border-transparent transition duration-300;
 }
 
 .nav-link:hover, .nav-link:focus {
@@ -7,14 +7,14 @@
 }
 
 .nav-link.active {
-    @apply .no-underline .opacity-100 .text-white .flex .items-center .py-4;
+    @apply .no-underline .opacity-100 .text-white .flex .items-center .py-4 transition duration-300;
 }
 
 @screen lg {
     .nav-link {
-        @apply .text-gray-600 .py-2;
+        @apply .text-gray-500 .py-2;
     }
     .nav-link.active {
-        @apply .text-blue-600 .py-2; 
+        @apply .text-blue-500 .py-2; 
     }
 }
