@@ -11,7 +11,7 @@
     "moment": "^2.27.0",
     "portal-vue": "^1.5.1",
     "qrious": "^4.0.2",
-    "tailwindcss": "^1.6.2",
+    "tailwindcss": "^1.7.2",
     "uuid": "^3.4.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.0",

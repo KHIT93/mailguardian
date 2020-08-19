@@ -6,7 +6,7 @@ asn1crypto==1.4.0
 billiard==3.6.3.0
 cachetools==4.1.1
 certifi==2020.6.20
-cffi==1.14.1
+cffi==1.14.2
 chardet==3.0.4
 coreschema==0.0.4
 cryptography==3.0
@@ -14,8 +14,10 @@ cssselect==1.1.0
 cssutils==1.0.2
 Django==3.1
 django-appconf==1.0.4
+django-auditlog==0.4.7
 django-cryptography==1.0
-django-extensions==3.0.4
+django-encrypted-model-fields==0.5.8
+django-extensions==3.0.5
 django-filter==2.3.0
 django-guardian==2.3.0
 django-jsonfield==1.4.0
