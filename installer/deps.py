@@ -71,6 +71,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
         f.write("\n".join(pg_hba_conf))
     os.system("{sed} -i 's/listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')))
     os.system('{systemctl} start postgresql@12-main'.format(systemctl=which('systemctl')))
+    os.system('{usermod} -a -G mtagroup nginx')
 
 def setup_rhel(pkg_mgr, os_release, os_version):
     print('Setting up on RHEL-based distro')
@@ -143,6 +144,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     os.system('{cmd} --add-service=http --permanent'.format(cmd=which('firewall-cmd')))
     os.system('{cmd} --add-service=https --permanent'.format(cmd=which('firewall-cmd')))
     os.system('{cmd} --reload'.format(cmd=which('firewall-cmd')))
+    os.system('{usermod} -a -G mtagroup nginx')
 
 if __name__ == "__main__":
     # First make sure that we are running on Linux

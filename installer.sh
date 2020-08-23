@@ -65,6 +65,7 @@ then
 fi
 echo 'Creating application user...'
 useradd -m mailguardian
+chmod 750 /home/mailguardian
 echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
@@ -120,6 +121,8 @@ if ! bin/python ./installer/mailscanner.py -f /home/mailguardian/mailguardian/in
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1
 fi
+echo 'Performing initial compilation of MailGuardian...'
+su - mailguardian -c 'cd /home/mailguardian/mailguardian; npm install; npm run production'
 echo 'Waiting a short moment to allow startup of virus scanners'
 bin python -c 'import time; time.sleep(5)'
 
