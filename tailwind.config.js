@@ -6,6 +6,9 @@ module.exports = {
         './assets/src/js/**/*.vue',
         './src/**/*.html'
     ],
+    future: {
+        removeDeprecatedGapUtilities: true
+    },
     theme: {
         container: {
             center: true,
