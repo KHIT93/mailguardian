@@ -70,6 +70,12 @@ $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch master'
 cd /home/mailguardian/mailguardian || exit 1
+ENV_DB_PASS=$(date +%s | sha256sum | base64 | head -c 32)
+export ENV_DB_PASS
+if ! python3 ./installer/Configure.py; then
+    echo 'We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again'
+    exit 1
+fi
 echo 'Installing required packages...'
 if ! touch /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but it appears as if we are unable to create the configuration file for the installation script. Please check the error above and try again'
@@ -88,8 +94,6 @@ if ! su - mailguardian -c 'cd /home/mailguardian/mailguardian && virtualenv -p p
     exit 1
 fi
 echo 'Installing MailGuardian...'
-ENV_DB_PASS=$(date +%s | sha256sum | base64 | head -c 32)
-export ENV_DB_PASS
 if ! echo 'create database mailguardian;' | su - postgres -c psql; then
     echo 'We are really sorry, but something seems to have gone wrong or the script was aborted'
     exit 1

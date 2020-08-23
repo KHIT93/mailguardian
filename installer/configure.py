@@ -16,6 +16,20 @@ parser.add_argument('-f','--config-file', help='Input path to environment config
 
 args = parser.parse_args()
 
+def which(program):
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+    fpath, fname = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+    return None
+
 if __name__ == "__main__":
     os.system('clear')
     # First make sure that we are running on Linux
@@ -276,7 +290,8 @@ if __name__ == "__main__":
         'name': DB_NAME,
         'port': DB_PORT,
         'fqdn': DB_HOST + ':' + DB_PORT if str(DB_PORT) != '5432' else DB_HOST,
-        'ssl': 'prefer'
+        'ssl': 'prefer',
+        'db_local': DB_HOST in ['localhost', '127.0.0.1']
     }
     installer_config['mailscanner'] = {
         'bin': MS_BIN,

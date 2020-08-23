@@ -2,7 +2,7 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, subprocess
+import os, sys, platform, subprocess, argparse, configparser
 
 def which(program):
     def is_exe(fpath):
@@ -20,6 +20,12 @@ def which(program):
 
 CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'DBD::Pg', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
 PKG_MGR = False
+installer_config = False
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
+
+args = parser.parse_args()
 
 def setup_deb(pkg_mgr, os_release, os_version):
     print('Setting up on debian-based distro')
@@ -45,7 +51,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
         exit(255)
     os.system('{python} /usr/lib/python3/dist-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
     pgsql_packages = 'postgresql-server-dev-12 postgresql-client-12'
-    if input('Does this system run the PostgreSQL database server? (y/N) ').lower() == 'y':
+    if installer_config['database']['db_local']:
         pgsql_packages += ' postgresql-12'
     os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
     os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.noarch.deb')
@@ -95,7 +101,10 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         # Next enable centosplus repo as this has postfix-pgsql packages
         os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
         os.system('{pkg} -qy module disable postgresql'.format(pkg=PKG_MGR))
-        os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 libpq5 libpq5-devel -y'.format(pkg=PKG_MGR))
+        pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
+        if installer_config['database']['db_local']:
+            pgsql_packages += 'postgresql12-server'
+        os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
@@ -144,6 +153,8 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
+    installer_config = configparser.ConfigParser()
+    installer_config.read(args.config_file)
     distro = 'LINUX'
     distro_version = '0'
     distro_version_codename = 'Core'
