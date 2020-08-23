@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1 class="text-2xl mb-2 text-center border-b pb-1">License Agreement</h1>
-        <div class="h-64 overflow-scroll"><nl2br tag="p" :text="license" /></div>
+        <div class="h-64 overflow-scroll prose"><nl2br tag="p" :text="license" /></div>
         <div class="text-gray-700 text-sm">
             <label class="inline-flex items-center">
                 <input type="checkbox" class="form-checkbox h-4 w-4" v-model="checked" name="checked" @change="complete">

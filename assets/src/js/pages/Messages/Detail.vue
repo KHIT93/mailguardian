@@ -195,8 +195,8 @@
                     <div class="sm:flex text-sm">
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
-                                    allowed:
+                                <div class="text-gray-700 bg-gray-300 w-1/2 p-3">
+                                    Allowed:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
@@ -209,8 +209,8 @@
                         </div>
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
-                                    blocked:
+                                <div class="text-gray-700 bg-gray-300 w-1/2 p-3">
+                                    Blocked:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
                                     <div class="items-center text-white leading-none lg:rounded-full flex lg:inline-flex">
@@ -226,7 +226,7 @@
                     <div class="sm:flex text-sm">
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-300 w-1/2 p-3">
                                     Stored:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
@@ -240,7 +240,7 @@
                         </div>
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-300 w-1/2 p-3">
                                     Spam:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
@@ -257,7 +257,7 @@
                     <div class="sm:flex text-sm">
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-300 w-1/2 p-3">
                                     Infected:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">
@@ -271,7 +271,7 @@
                         </div>
                         <div class="sm:w-1/2 hover:bg-gray-200">
                             <div class="flex">
-                                <div class="text-gray-700 bg-gray-400 w-1/2 p-3">
+                                <div class="text-gray-700 bg-gray-300 w-1/2 p-3">
                                     RBL listed:
                                 </div>
                                 <div class="text-gray-700 w-1/2 p-2">

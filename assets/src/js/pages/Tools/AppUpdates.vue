@@ -28,8 +28,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-if="releases > 0">
-                                    <td colspan="3">No releases are available. Click "Check for updates" to see what releases are available</td>
+                                <tr v-if="releases == 0">
+                                    <td colspan="3">No new releases are available</td>
                                 </tr>
                                 <tr v-for="release in releases" :key="release.id" v-else>
                                     <td>{{release.name}}</td>
@@ -40,7 +40,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div>
+                        <div class="flex items-center w-full">
                             <button @click="getReleases" type="button" class="bg-blue-500 hover:bg-blue-600 no-underline text-white font-semibold py-2 px-4 border border-blue-500 hover:border-bleu-600 text-sm rounded">Check for updates</button>
                         </div>
                     </div>
@@ -75,11 +75,12 @@ export default {
             axios.get('https://api.github.com/repos/khit93/mailguardian/releases').then(response => {
                 let all = response.data;
                 let current = all.filter(release => {
-                    return release.name == this.app_info.mailguardian_version;
+                    return release.name == this.app_info.app_version;
                 })[0];
+                // this.releases = all;
                 this.releases = all.filter(release => {
-                    return release.created_at > current.created_at;
-                });
+                    return release.published_at > current.published_at;
+                })
                 this.updates_loading = false;
             }).catch(error => {
                 this.updates_loading = false;
