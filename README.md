@@ -58,7 +58,7 @@ For this to be as easy as possible, we have made the below instructions for the 
 To help you get started quickyl, we have a simple installation script, which will take care of everything for you. Simply run the lines below as root on your system
 
 ```
-wget https://raw.githubusercontent.com/KHIT93/mailguardian/feature-new-install-scripts/installer.sh
+wget https://raw.githubusercontent.com/KHIT93/mailguardian/installer/installer.sh
 bash installer.sh
 ```
 
