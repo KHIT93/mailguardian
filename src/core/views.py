@@ -4,13 +4,17 @@ from .serializers import UserSerializer, LoginSerializer
 from .models import MailScannerConfiguration, User, TwoFactorConfiguration, TwoFactorBackupCode
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_auth.views import LoginView as RestAuthBaseLoginView
+from rest_framework.parsers import FileUploadParser
 from rest_framework import status
 from django.conf import settings
 from .exceptions import TwoFactorRequired, TwoFactorInvalid, InvalidBackupCode
 from rest_auth.app_settings import create_token, JWTSerializer
 from rest_auth.utils import jwt_encode
 from .helpers import TOTP
+from lists.models import ListEntry
 import pyotp
+import csv
+from io import StringIO
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
@@ -96,3 +100,31 @@ class LoginView(RestAuthBaseLoginView):
 
         if getattr(settings, 'REST_SESSION_LOGIN', True):
             self.process_login()
+
+class DataImportUploadAPIView(APIView):
+    parser_class = (FileUploadParser,)
+
+    def post(self, request):
+        print(request.data)
+        import_file = request.data.get('file', False)
+        if not import_file:
+            return Response({
+                'non_field_errors': [_('The request did not provide a file to process')]
+            }, status=status.HTTP_400_BAD_REQUEST)
+        import_file.seek(0)
+        datareader = csv.reader(StringIO(import_file.read().decode()), delimiter=';', quotechar='"')
+        model = False
+        for row in datareader:
+            if request.data.get('import_type', False) == 'list_entry':
+                from_address = row[0]
+                from_domain = row[0].split('@')[1]
+                to_address = row[1]
+                to_domain = row[1].split('@')[1]
+                ListEntry.objects.create(**{
+                    'from_address': from_address,
+                    'from_domain': from_domain,
+                    'to_address': to_address,
+                    'to_domain': to_domain,
+                    'listing_type': row[2]
+                })
+        return Response({}, status=status.HTTP_200_OK)

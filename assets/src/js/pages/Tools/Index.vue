@@ -28,9 +28,13 @@
                     SpamAssassin rules status<br/>
                     <span class=" text-xs text-gray-600">See when the SpamAssassin rules were last updated or perform a manual update</span>
                 </router-link>
-                <router-link class="block border-t border-b px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/app-updates">
+                <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/app-updates">
                     Application update status<br/>
                     <span class=" text-xs text-gray-600">Check for updates for the application itself</span>
+                </router-link>
+                <router-link class="block border-t border-b px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/data-import">
+                    Data import<br/>
+                    <span class=" text-xs text-gray-600">Perform import of data into various parts of the application</span>
                 </router-link>
             </div>
             <div>

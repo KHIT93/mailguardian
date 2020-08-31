@@ -39,7 +39,7 @@ from mail.viewsets import (
     TransportLogViewSet,
     SmtpRelayViewSet
 )
-from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView
+from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView, DataImportUploadAPIView
 from lists.viewsets import ListEntryViewSet, BlocklistEntryViewSet, AllowlistEntryViewSet
 from reports.views import (
     SummaryApiView,
@@ -112,6 +112,7 @@ if not settings.API_ONLY:
         path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
         path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
         path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
+        path('api/data-import/', DataImportUploadAPIView.as_view()),
         path('api/license/', LicenseAPIView.as_view()),
         path('api/installed/', InstalledAPIView.as_view()),
         path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
