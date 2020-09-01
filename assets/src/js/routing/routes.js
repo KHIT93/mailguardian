@@ -30,6 +30,8 @@ import SpamAssassinUpdateStatus from '../pages/Tools/SpamAssassinUpdateStatus.vu
 import AppUpdateStatus from '../pages/Tools/AppUpdates.vue';
 import DataImport from '../pages/Tools/DataImport/Index.vue';
 import DataImportLists from '../pages/Tools/DataImport/Lists.vue';
+import DataImportDomains from '../pages/Tools/DataImport/Domains.vue';
+import DataImportRelays from '../pages/Tools/DataImport/Relays.vue';
 import Domains from '../pages/Admin/Domains/Index.vue';
 import DomainForm from '../pages/Admin/Domains/Form.vue';
 import Users from '../pages/Admin/Users/Index.vue';
@@ -83,6 +85,8 @@ export default [
 
     { path: '/tools/data-import', component: DataImport, name: 'tools.data.import', meta: { requiresAdmin: true } },
     { path: '/tools/data-import/lists', component: DataImportLists, name: 'tools.data.import.lists', meta: { requiresAdmin: true } },
+    { path: '/tools/data-import/domains', component: DataImportDomains, name: 'tools.data.import.domains', meta: { requiresAdmin: true } },
+    { path: '/tools/data-import/relays', component: DataImportRelays, name: 'tools.data.import.relays', meta: { requiresAdmin: true } },
 
     { path: '/admin/domains', component: Domains, name: 'admin.domains.index', meta: { requiresAdmin: true } },
     { path: '/admin/domains/add', component: DomainForm, name: 'admin.domains.add', meta: { requiresAdmin: true } },

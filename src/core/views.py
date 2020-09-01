@@ -12,6 +12,8 @@ from rest_auth.app_settings import create_token, JWTSerializer
 from rest_auth.utils import jwt_encode
 from .helpers import TOTP
 from lists.models import ListEntry
+from domains.models import Domain
+from mail.models import SmtpRelay
 import pyotp
 import csv
 from io import StringIO
@@ -126,5 +128,20 @@ class DataImportUploadAPIView(APIView):
                     'to_address': to_address,
                     'to_domain': to_domain,
                     'listing_type': row[2]
+                })
+            elif request.data.get('import_type', False) == 'domain':
+                Domain.objects.create(**{
+                    'name': row[0],
+                    'destination': row[1],
+                    'receive_type': row[2],
+                    'active': row[3],
+                    'allowed_accounts': row[4]
+                })
+            elif request.data.get('smtp_relay', False) == 'smtp_relay':
+                SmtpRelay.objects.create(**{
+                    'ip_address': row[0],
+                    'hostname': row[1],
+                    'active': row[2],
+                    'comment': row[3]
                 })
         return Response({}, status=status.HTTP_200_OK)
