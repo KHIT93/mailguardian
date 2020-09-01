@@ -5,6 +5,7 @@
 import os
 import json
 from distutils.version import StrictVersion
+import cryptography.fernet
 
 class Upgrader(object):
     config = []
@@ -13,6 +14,7 @@ class Upgrader(object):
     version = '1.0.0'
     applied_version = '1.3.0'
     legacy = True
+    notices = []
     
     def __init__(self, config, app_dir='/home/mailguardian/mailguardian', src_dir='/home/mailguardian/mailguardian/src', version='1.0.0'):
         super().__init__()

@@ -37,6 +37,7 @@ if __name__ == "__main__":
     APP_DIR = os.path.dirname(os.path.abspath(__file__))
     BASE_DIR = os.path.join(APP_DIR,'src')
     DESTINATION_VERSION = '1.0.0'
+    notices = []
     if input('This script will evaluate your curren MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
         exit(0)
     os.system('clear')
@@ -55,6 +56,8 @@ if __name__ == "__main__":
                     if upgrade.applicable() and upgrade.legacy:
                         if upgrade.upgrade():
                             DESTINATION_VERSION = upgrade.applied_version
+                            notices += upgrade.notices
+
     
     # Check if we have new configuration system
     if settings:
@@ -68,6 +71,7 @@ if __name__ == "__main__":
                     if upgrade.applicable():
                         if upgrade.upgrade():
                             DESTINATION_VERSION = upgrade.applied_version
+                            notices += upgrade.notices
     else:
         print('Could not import application configuration. Aborting')
         exit(255)
@@ -100,5 +104,10 @@ if __name__ == "__main__":
         auto_fix = False
 
     print('Your installation has been upgraded to version {version}'.format(version=DESTINATION_VERSION))
+    
     print('If you expected a higher version, please insepct the output from this script to find out what has went wrong')
     
+    if len(notices):
+        print('During the upgrade, our upgrade system raised some important information, which is nlisted below')
+        for notice in notices:
+            print(notice)

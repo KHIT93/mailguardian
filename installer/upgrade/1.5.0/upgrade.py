@@ -13,6 +13,7 @@ class Upgrader(object):
     version = '1.0.0'
     applied_version = '1.5.0'
     legacy = False
+    notices = []
 
     def __init__(self, config, app_dir='/home/mailguardian/mailguardian', src_dir='/home/mailguardian/mailguardian/src', version='1.0.0'):
         super().__init__()
