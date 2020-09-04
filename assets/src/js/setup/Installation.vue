@@ -22,7 +22,7 @@
             <h1 class="text-2xl mb-2 text-center border-b pb-1">Confirm installation options</h1>
             <p class="text-center pb-1">
                 Thank you for providing us wit the information necessary to customize the application to your liking.<br/>
-                Please find below you selections and review them.<br/>
+                Please find below your selections and review them.<br/>
                 If you need to go back and change some of the choices, please click the <code class="text-red-500 bg-gray-200 rounded p-1">Previous</code> button in the top right corner
             </p>
             <div>
@@ -48,7 +48,6 @@
                     </div>
                 </div>
                 <h2 class="text-xl text-center border-b pb-1">Branding information</h2>
-                <p class="text-center pt-1">Here you can provide us some details if you want to brand the application in a specific way. You can leave the information is as, if you do not want to rebrand the application</p>
                 <div class="md:flex md:items-center mt-2">
                     <div class="md:w-1/3">
                     <label class="block text-gray-700 font-bold md:text-right mb-1 md:mb-0 pr-4" for="branding_name">
