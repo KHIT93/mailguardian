@@ -8,7 +8,7 @@
             <div v-else class="table-wrapper">
                 <div class="mb-2">
                     Mail queue at {{ moment(loaded_at).format('YYYY-MM-DD HH:mm:ss') }}
-                    <button type="button" class="btn btn-blue shadow" v-if="mails.length">
+                    <button type="button" @click="resend_all" class="btn btn-blue shadow" v-if="mails.length">
                         Resend all
                     </button>
                 </div>

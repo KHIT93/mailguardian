@@ -112,3 +112,6 @@ mix-manifest.json
 .DS_Store
 local.py
 pyvenv.cfg
+
+# GeoLite2
+GeoLite2.mmdb
