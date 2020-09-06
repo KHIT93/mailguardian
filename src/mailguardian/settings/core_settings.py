@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'guardian',
     'django_premailer',
     'core',
+    'compliance',
     'frontend',
     'setup_wizard',
     'domains',
