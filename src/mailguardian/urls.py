@@ -29,6 +29,9 @@ from core.viewsets import (
     TwoFactorConfigurationViewSet,
     TwoFactorBackupCodeViewSet
 )
+from compliance.viewsets import (
+    DataLogEntryViewSet
+)
 from mail.viewsets import (
     MessageViewSet,
     SpamReportViewSet,
@@ -88,6 +91,7 @@ router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
 router.register(r'two-factor', TwoFactorConfigurationViewSet)
 router.register(r'two-factor-codes', TwoFactorBackupCodeViewSet)
+router.register(r'datalog', DataLogEntryViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),

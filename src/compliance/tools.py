@@ -7,20 +7,20 @@ from django.utils.encoding import smart_text
 
 def track_field(field):
     """
-    Returns whether the given field should be tracked by Auditlog.
-    Untracked fields are many-to-many relations and relations to the Auditlog LogEntry model.
+    Returns whether the given field should be tracked by datalog.
+    Untracked fields are many-to-many relations and relations to the datalog LogEntry model.
     :param field: The field to check.
     :type field: Field
     :return: Whether the given field should be tracked.
     :rtype: bool
     """
-    from auditlog.models import LogEntry
+    from .models import DataLogEntry
     # Do not track many to many relations
     if field.many_to_many:
         return False
 
     # Do not track relations to LogEntry
-    if getattr(field, 'remote_field', None) is not None and field.remote_field.model == LogEntry:
+    if getattr(field, 'remote_field', None) is not None and field.remote_field.model == DataLogEntry:
         return False
 
     return True
@@ -80,7 +80,7 @@ def model_instance_diff(old, new):
              as value.
     :rtype: dict
     """
-    from auditlog.registry import auditlog
+    from .registry import datalog
 
     if not (old is None or isinstance(old, Model)):
         raise TypeError("The supplied old instance is not a valid model instance.")
@@ -91,13 +91,13 @@ def model_instance_diff(old, new):
 
     if old is not None and new is not None:
         fields = set(old._meta.fields + new._meta.fields)
-        model_fields = auditlog.get_model_fields(new._meta.model)
+        model_fields = datalog.get_model_fields(new._meta.model)
     elif old is not None:
         fields = set(get_fields_in_model(old))
-        model_fields = auditlog.get_model_fields(old._meta.model)
+        model_fields = datalog.get_model_fields(old._meta.model)
     elif new is not None:
         fields = set(get_fields_in_model(new))
-        model_fields = auditlog.get_model_fields(new._meta.model)
+        model_fields = datalog.get_model_fields(new._meta.model)
     else:
         fields = set()
         model_fields = None

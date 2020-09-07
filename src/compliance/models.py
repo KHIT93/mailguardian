@@ -43,7 +43,7 @@ class LogEntryManager(models.Manager):
 
             # Delete log entries with the same pk as a newly created model. This should only be necessary when an pk is
             # used twice.
-            if kwargs.get('action', None) is DataLogEntry.Action.CREATE:
+            if kwargs.get('action', None) is 'created':
                 if kwargs.get('object_id', None) is not None and self.filter(content_type=kwargs.get('content_type'),
                                                                              object_id=kwargs.get(
                                                                                      'object_id')).exists():
@@ -153,12 +153,14 @@ class DataLogEntry(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name=_("timestamp"))
     additional_data = models.JSONField(blank=True, null=True, verbose_name=_("additional data"))
 
+    objects = LogEntryManager()
+
     def __str__(self):
-        if self.action == self.Action.CREATE:
+        if self.action == 'created':
             fstring = _("Created {repr:s}")
-        elif self.action == self.Action.UPDATE:
+        elif self.action == 'updated':
             fstring = _("Updated {repr:s}")
-        elif self.action == self.Action.DELETE:
+        elif self.action == 'deleted':
             fstring = _("Deleted {repr:s}")
         else:
             fstring = _("Logged {repr:s}")
