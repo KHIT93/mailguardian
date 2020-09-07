@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 import re, uuid, subprocess
 from django.utils.translation import gettext_lazy as _
+from compliance.registry import datalog
 
 # Create your models here.
 class Rule(models.Model):
@@ -34,3 +35,6 @@ class RuleDescription(models.Model):
                 rule.save()
             else:
                 RuleDescription.objects.get_or_create(key=match[0], value=match[1])
+
+datalog.register(model=Rule)
+datalog.register(model=RuleDescription)

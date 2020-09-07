@@ -18,6 +18,7 @@ from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.crypto import get_random_string
 from django_cryptography.fields import encrypt
+from compliance.registry import datalog
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -270,3 +271,10 @@ class TwoFactorBackupCode(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+datalog.register(model=User)
+datalog.register(model=Setting)
+datalog.register(model=MailScannerHost)
+datalog.register(model=ApplicationNotification)
+datalog.register(model=ApplicationTask)
+datalog.register(model=TwoFactorConfiguration)
