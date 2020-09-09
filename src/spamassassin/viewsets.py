@@ -7,6 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
 import datetime
+from compliance.models import DataLogEntry
 
 class RuleViewSet(viewsets.ModelViewSet):
     queryset = Rule.objects.all()
@@ -26,6 +27,7 @@ class RuleDescriptionViewSet(viewsets.ModelViewSet):
             sa = RuleDescription()
             sa.sync_files()
             Setting.objects.update_or_create(key='sa.last_updated', defaults={'value':str(datetime.datetime.now())})
+            DataLogEntry.objects.log_create(None, actor=request.user, changes='SpamAssassin rule update completed')
         except Exception as e:
             return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({}, status=status.HTTP_204_NO_CONTENT)
