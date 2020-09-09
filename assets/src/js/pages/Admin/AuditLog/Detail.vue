@@ -20,7 +20,7 @@
                     </label>
                 </div>
                 <div class="md:w-5/6">
-                    {{ entry.module }}
+                    {{ entry.content_type_name }}
                 </div>
             </div>
             <div class="md:flex md:items-center mb-6 mt-4">
@@ -103,7 +103,7 @@ export default {
     methods: {
         get() {
             this.setLoading(true);
-            axios.get('/api/audit-log/'+this.id+'/').then(response => {
+            axios.get('/api/datalog/'+this.id+'/').then(response => {
                 this.entry = response.data;
                 this.setLoading(false);
             }).catch(error => {

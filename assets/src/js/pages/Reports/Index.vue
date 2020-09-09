@@ -139,10 +139,6 @@
                 <div class="hover:bg-gray-200 text-sm">
                     <router-link to="/reports/sa-rule-hits">Spam rule hits</router-link>
                 </div> -->
-                <router-link v-if="user.is_staff" class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/admin/audit-log">
-                    Audit Log<br/>
-                    <span class=" text-xs text-gray-600">Show the audit log</span>
-                </router-link>
             </div>
         </div>
     </div>
