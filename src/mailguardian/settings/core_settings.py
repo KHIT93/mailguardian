@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-    'guardian',
     'django_premailer',
     'core',
+    'compliance',
     'frontend',
     'setup_wizard',
     'domains',
@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'compliance.middleware.DataLogMiddleware',
 ]
 
 ROOT_URLCONF = 'mailguardian.urls'
@@ -183,7 +184,6 @@ ASSETS_DIR = os.path.join(os.path.dirname(BASE_DIR), "assets")
 # https://django-guardian.readthedocs.io/en/stable/configuration.html#configuration
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # this is default
-    'guardian.backends.ObjectPermissionBackend',
 )
 
 # Django-Premailer

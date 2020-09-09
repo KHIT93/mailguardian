@@ -18,6 +18,10 @@ from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.crypto import get_random_string
 from django_cryptography.fields import encrypt
+from compliance.registry import datalog
+from compliance.models import DataLogEntry
+from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 
 # Create your models here.
 class UserManager(BaseUserManager):
@@ -270,3 +274,25 @@ class TwoFactorBackupCode(models.Model):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+datalog.register(model=User)
+datalog.register(model=Setting)
+datalog.register(model=MailScannerHost)
+datalog.register(model=ApplicationNotification)
+datalog.register(model=ApplicationTask)
+datalog.register(model=TwoFactorConfiguration)
+
+@receiver(user_logged_in)
+def user_logged_in_audit(sender, request, user, **kwargs):
+    print('User has logged in')
+    DataLogEntry.objects.log_create(user, action='updated', changes='User has logged in')
+
+@receiver(user_logged_out)
+def user_logged_out_audit(sender, request, user, **kwargs):
+    print('User has logged out')
+    DataLogEntry.objects.log_create(user, action='deleted', changes='User has logged out')
+
+@receiver(user_login_failed)
+def user_login_failed_audit(sender, credentials, **kwargs):
+    user = User.objects.get(email=kwargs['request'].user)
+    DataLogEntry.objects.log_create(user, changes='Login failed for username {}'.format(credentials['username']))

@@ -16,7 +16,7 @@
                 <tbody>
                     <tr v-for="entry in log" :key="entry.id" @click="detail(entry.id)">
                         <td>{{ entry.timestamp | ago }}</td>
-                        <td>{{ entry.module }}</td>
+                        <td>{{ entry.content_type_name }}</td>
                         <td>{{ entry.object_pk }}</td>
                         <td>{{ entry.action_name }}</td>
                         <td>{{ entry.actor_email }}</td>
@@ -56,7 +56,7 @@ export default {
             if (query && page) {
                 qs = '?search='+query+'&page='+page;
             }
-            axios.get('/api/audit-log/'+qs).then(response => {
+            axios.get('/api/datalog/'+qs).then(response => {
                 this.log = response.data.results;
                 this.setLoading(false);
             }).catch(error => {

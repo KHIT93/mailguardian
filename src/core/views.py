@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer
 from .models import MailScannerConfiguration, User, TwoFactorConfiguration, TwoFactorBackupCode
+from compliance.models import DataLogEntry
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_auth.views import LoginView as RestAuthBaseLoginView
 from rest_framework.parsers import FileUploadParser
@@ -191,4 +192,5 @@ class GeoIPUpdateAPIView(APIView):
                 if os.path.exists(os.path.join(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb')):
                     os.rename(os.path.join(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb'), settings.MAXMIND_DB_FILE)
                     shutil.rmtree(os.path.join(settings.MAXMIND_DB_PATH, path))
+        DataLogEntry.objects.log_create(request.user, changes='User {} has performed an update of the MaxMind GeoLite2 database'.format(request.user.email))
         return Response({}, status=status.HTTP_200_OK)
