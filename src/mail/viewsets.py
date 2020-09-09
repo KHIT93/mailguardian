@@ -11,6 +11,7 @@ from email.parser import BytesParser
 from pymailq.store import PostqueueStore
 from django.conf import settings
 from core.models import Setting, MailScannerHost
+from compliance.models import DataLogEntry
 import datetime
 from django.db.models import Q
 import subprocess
@@ -163,6 +164,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     
     @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='queue', url_name='message-queue')
     def get_queue(self, request):
+        DataLogEntry.objects.log_create(None, changes='User {} requested to view the mail queue'.format(request.user.email))
         host_count = MailScannerHost.objects.count()
         store = PostqueueStore()
         store.load()
@@ -218,7 +220,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 if message['hostname'] == settings.APP_HOSTNAME:
                     command = "{} -i {}".format(settings.POSTQUEUE_BIN, message['qid'])
                     output = subprocess.check_output(command, shell=True)
-                    message.released = True
+                    DataLogEntry.objects.log_create(message, changes='Message {} was resent from the queue'.format(message.id))
                     message.save()
                     response.append({ 'qid':message['qid'], 'command': command, 'output': output })
                 elif host_count > 0 and not settings.API_ONLY:
@@ -306,6 +308,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 if settings.APP_HOSTNAME == message.mailscanner_hostname:
                     command = "{0} -p {1} -r {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
                     output = subprocess.check_output(command, shell=True)
+                    DataLogEntry.objects.log_create(message, action='updated', changes='Message was marked as spam')
                     response.append({ 'id':message_id, 'command': command, 'output': output })
                 elif not settings.API_ONLY:
                     token = Token.objects.get(user=request.user)
@@ -344,6 +347,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 if settings.APP_HOSTNAME == message.mailscanner_hostname:
                     command = "{0} -p {1} -k {2}".format(settings.SA_BIN, settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf', message.file_path())
                     output = subprocess.check_output(command, shell=True)
+                    DataLogEntry.objects.log_create(message, action='updated', changes='Message was marked as not being spam')
                     response.append({ 'id':message_id, 'command': command, 'output': output })
                 elif not settings.API_ONLY:
                     token = Token.objects.get(user=request.user)
