@@ -11,14 +11,14 @@
                                 <mg-menu-icon class="w-8 h-8 text-white text-5xl"></mg-menu-icon>
                             </div>
                         </div>
-                        <div class="w-1/2 lg:w-auto text-center text-white text-xl font-medium">
+                        <div class="w-1/2 hidden sm:block lg:w-auto text-center text-white text-xl font-medium">
                             <img v-if="appLogo" :src="appLogo" class="max-h-full"/>
                             <template v-else>{{appName}}</template>
                         </div>
                         <div class="hidden md:block md:w-2/3">
                             <!-- <input type="text" name="search" placeholder="Search..." class="bg-gray-200 shadow-inner appearance-none opacity-25 focus:opacity-100 w-full p-3 text-gray-600"/> -->
                         </div>
-                        <div class="w-1/4 sm:w-auto flex justify-end text-right h-full text-gray-500">
+                        <div class="w-3/4 sm:w-auto flex justify-end text-right h-full text-gray-500">
                             <a :href="config.app_support" class="text-gray-500 hover:text-white pr-3 transition duration-300" target="_blank" title="Get support">
                                 <mg-help-icon class="w-6 h-6"></mg-help-icon>
                             </a>

@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 import os, datetime, subprocess
 from django.utils.translation import gettext_lazy as _
+from compliance.registry import datalog
 
 # Create your models here.
 class Message(models.Model):
@@ -162,3 +163,12 @@ class SmtpRelay(models.Model):
     hostname = models.CharField(_('Hostname'), max_length=255, db_index=True, default='')
     active = models.BooleanField(_('Active'), default=0)
     comment = models.TextField(_('Comment'))
+
+datalog.register(model=Message)
+datalog.register(model=Headers)
+datalog.register(model=RblReport)
+datalog.register(model=SpamReport)
+datalog.register(model=McpReport)
+datalog.register(model=MailscannerReport)
+datalog.register(model=TransportLog)
+datalog.register(model=SmtpRelay)

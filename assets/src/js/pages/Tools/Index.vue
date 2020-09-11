@@ -20,10 +20,10 @@
                     ClamAV status<br/>
                     <span class=" text-xs text-gray-600">View the status of the ClamAV virus scanner engine/span>
                 </router-link> -->
-                <!-- <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/tasks">
+                <a href="#" class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" @click.prevent="geoip_update">
                     GeoIP update status<br/>
                     <span class=" text-xs text-gray-600">View the current state of the GeoIP database used to find out from which countries, that the given IP-addresses are located in</span>
-                </router-link> -->
+                </a> 
                 <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/sa-status">
                     SpamAssassin rules status<br/>
                     <span class=" text-xs text-gray-600">See when the SpamAssassin rules were last updated or perform a manual update</span>
@@ -31,6 +31,10 @@
                 <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/app-updates">
                     Application update status<br/>
                     <span class=" text-xs text-gray-600">Check for updates for the application itself</span>
+                </router-link>
+                <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/admin/audit-log">
+                    Audit Log<br/>
+                    <span class=" text-xs text-gray-600">Show the audit log</span>
                 </router-link>
                 <router-link class="block border-t border-b px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/data-import">
                     Data import<br/>
@@ -53,7 +57,7 @@
 </mg-page>
 </template>
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
     data: () => {
         return {
@@ -65,6 +69,17 @@ export default {
     },
     computed: {
         ...mapGetters(['isLoggedIn', 'user', 'loading', 'settings'])
+    },
+    methods: {
+        geoip_update() {
+            axios.get('api/geoip/update/').then(response => {
+                this.notify(this.createNotification('GeoIP Update completed', 'Update of MaxMind GeoLite2 database has been completed', 'success'));
+            }).catch(error => {
+                console.log(error);
+                this.notify(this.createNotification('An error occurred while getting the message contents', `${error}`, 'error'));
+            });
+        },
+        ...mapMutations(['notify'])
     }
 }
 </script>

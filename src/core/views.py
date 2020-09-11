@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer
 from .models import MailScannerConfiguration, User, TwoFactorConfiguration, TwoFactorBackupCode
+from compliance.models import DataLogEntry
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_auth.views import LoginView as RestAuthBaseLoginView
 from rest_framework.parsers import FileUploadParser
@@ -16,9 +17,13 @@ from domains.models import Domain
 from mail.models import SmtpRelay
 import pyotp
 import csv
+import os
+import shutil
 from io import StringIO
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
+import urllib
+import geoip2.database
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -144,4 +149,48 @@ class DataImportUploadAPIView(APIView):
                     'active': row[2],
                     'comment': row[3]
                 })
+        return Response({}, status=status.HTTP_200_OK)
+
+class GeoIPLookupAPIView(APIView):
+    def post(self, request):
+        country = False
+        if not request.data.get('ip_addr', False):
+            return Response({
+                'non_field_errors': [_('No IP address was provided')]
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if not settings.MAXMIND_ACCOUNT_API_KEY:
+            return Response({
+                'non_field_errors': [_('MaxMind GeoIP configuration is not complete')]
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if not os.path.exists(settings.MAXMIND_DB_FILE):
+            return Response({
+                'No GeoLite2 database exists on the system'
+            }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        with geoip2.database.Reader(settings.MAXMIND_DB_FILE) as geoip:
+            result = geoip.country(request.data.get('ip_addr'))
+            country = result.country.name or False
+
+        if not country:
+            return Response({
+                'non_field_errors': [
+                    'No country was found matching IP {}'.format(request.data.get('ip_addr'))
+                ]
+            }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        return Response({ 'country':country }, status=status.HTTP_200_OK)
+
+class GeoIPUpdateAPIView(APIView):
+    def get(self, request):
+        if not all([settings.MAXMIND_ACCOUNT_API_KEY, settings.MAXMIND_DB_PATH, settings.MAXMIND_DB_FILE]):
+            return Response({
+                'non_field_errors': ['MaxMind Database configuration is incomplete']
+            }, status=status.HTTP_400_BAD_REQUEST)
+        filepath, headers = urllib.request.urlretrieve('https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={key}&suffix=tar.gz'.format(key=settings.MAXMIND_ACCOUNT_API_KEY))
+        os.system('tar xvzf {} -C {}'.format(filepath, settings.MAXMIND_DB_PATH))
+        for path in os.listdir(settings.MAXMIND_DB_PATH):
+            if path[:16] == 'GeoLite2-Country':
+                if os.path.exists(os.path.join(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb')):
+                    os.rename(os.path.join(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb'), settings.MAXMIND_DB_FILE)
+                    shutil.rmtree(os.path.join(settings.MAXMIND_DB_PATH, path))
+        DataLogEntry.objects.log_create(request.user, changes='User {} has performed an update of the MaxMind GeoLite2 database'.format(request.user.email))
         return Response({}, status=status.HTTP_200_OK)

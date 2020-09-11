@@ -7,7 +7,8 @@ module.exports = {
         './src/**/*.html'
     ],
     future: {
-        removeDeprecatedGapUtilities: true
+        removeDeprecatedGapUtilities: true,
+        purgeLayersByDefault: true
     },
     theme: {
         container: {

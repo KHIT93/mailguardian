@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from compliance.registry import datalog
 
 class ListEntry(models.Model):
     class Meta:
@@ -32,3 +33,5 @@ class ListEntry(models.Model):
         if '@' in self.from_address:
             self.from_domain = self.from_address.split('@')[-1]
         super(ListEntry, self).save(*args, **kwargs)
+
+datalog.register(model=ListEntry)

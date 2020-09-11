@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from compliance.registry import datalog
 
 # https://gist.github.com/solusipse/7ed8e1da104baaee3f05
 
@@ -30,3 +31,5 @@ class Domain(models.Model):
 
     def __str__(self):
         return self.name
+
+datalog.register(model=Domain)

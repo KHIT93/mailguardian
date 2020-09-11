@@ -29,6 +29,9 @@ from core.viewsets import (
     TwoFactorConfigurationViewSet,
     TwoFactorBackupCodeViewSet
 )
+from compliance.viewsets import (
+    DataLogEntryViewSet
+)
 from mail.viewsets import (
     MessageViewSet,
     SpamReportViewSet,
@@ -39,7 +42,7 @@ from mail.viewsets import (
     TransportLogViewSet,
     SmtpRelayViewSet
 )
-from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView, DataImportUploadAPIView
+from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView
 from lists.viewsets import ListEntryViewSet, BlocklistEntryViewSet, AllowlistEntryViewSet
 from reports.views import (
     SummaryApiView,
@@ -88,6 +91,7 @@ router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
 router.register(r'two-factor', TwoFactorConfigurationViewSet)
 router.register(r'two-factor-codes', TwoFactorBackupCodeViewSet)
+router.register(r'datalog', DataLogEntryViewSet)
 
 urlpatterns = [
     path('', IndexTemplateView.as_view()),
@@ -113,6 +117,8 @@ if not settings.API_ONLY:
         path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
         path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
         path('api/data-import/', DataImportUploadAPIView.as_view()),
+        path('api/geoip/lookup/', GeoIPLookupAPIView.as_view()),
+        path('api/geoip/update/', GeoIPUpdateAPIView.as_view()),
         path('api/license/', LicenseAPIView.as_view()),
         path('api/installed/', InstalledAPIView.as_view()),
         path('api/setup/install/', InitializeDatabaseAPIView.as_view()),

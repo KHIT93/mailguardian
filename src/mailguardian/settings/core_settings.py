@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-    'guardian',
     'django_premailer',
     'core',
+    'compliance',
     'frontend',
     'setup_wizard',
     'domains',
@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'compliance.middleware.DataLogMiddleware',
 ]
 
 ROOT_URLCONF = 'mailguardian.urls'
@@ -183,7 +184,6 @@ ASSETS_DIR = os.path.join(os.path.dirname(BASE_DIR), "assets")
 # https://django-guardian.readthedocs.io/en/stable/configuration.html#configuration
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend', # this is default
-    'guardian.backends.ObjectPermissionBackend',
 )
 
 # Django-Premailer
@@ -223,3 +223,8 @@ BRAND_TAGLINE = 'Securing your email'
 BRAND_LOGO = ''
 BRAND_SUPPORT = 'https://github.com/khit93/mailguardian/issues'
 BRAND_FEEDBACK = 'https://github.com/khit93/mailguardian-feedback'
+
+# GeoIP
+MAXMIND_DB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'run')
+MAXMIND_DB_FILE = os.path.join(MAXMIND_DB_PATH, 'GeoLite2.mmdb')
+MAXMIND_ACCOUNT_API_KEY = False

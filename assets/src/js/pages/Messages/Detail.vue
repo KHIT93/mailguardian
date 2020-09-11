@@ -26,7 +26,8 @@
                                 </div>
                                 <div class="text-gray-700 sm:w-1/2">
                                     <div class="">
-                                        {{ message.client_ip }}
+                                        {{ message.client_ip }}<br/>
+                                        <span v-if="client_country">({{ client_country }})</span>
                                     </div>
                                 </div>
                             </div>
@@ -384,11 +385,12 @@ export default {
             listing_type: '',
             message_contents: '',
             file_exists: false,
+            client_country: false
         }
     },
     methods: {
         async getMessage() {
-            axios.get('/api/messages/' + this.uuid + '/').then(response => {
+            await axios.get('/api/messages/' + this.uuid + '/').then(response => {
                 this.message = response.data;
             }).catch(error => {
                 if (error.response.status == 404) {
@@ -397,6 +399,11 @@ export default {
                 else if (error.response.status == 403) {
                     router.push({ name: 'access_denied' });
                 }
+            })
+            axios.post('/api/geoip/lookup/', { 'ip_addr': this.message.client_ip }).then(response => {
+                this.client_country = response.data.country;
+            }).catch(error => {
+                this.notify(this.createNotification('GeoIP Status', 'Query failed', 'error'));
             })
         },
         getMessageHeaders() {
