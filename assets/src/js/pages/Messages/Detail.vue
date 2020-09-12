@@ -403,7 +403,10 @@ export default {
             axios.post('/api/geoip/lookup/', { 'ip_addr': this.message.client_ip }).then(response => {
                 this.client_country = response.data.country;
             }).catch(error => {
-                this.notify(this.createNotification('GeoIP Status', 'Query failed', 'error'));
+                if (error.response.data['non_field_errors']) {
+                    error = error.response.data['non_field_errors'].join('\n');
+                }
+                this.notify(this.createNotification('GeoIP Lookup', `Could not look up GeoIP location: ${error}` , 'error'));
             })
         },
         getMessageHeaders() {

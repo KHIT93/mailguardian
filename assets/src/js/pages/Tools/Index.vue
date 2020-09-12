@@ -75,8 +75,10 @@ export default {
             axios.get('api/geoip/update/').then(response => {
                 this.notify(this.createNotification('GeoIP Update completed', 'Update of MaxMind GeoLite2 database has been completed', 'success'));
             }).catch(error => {
-                console.log(error);
-                this.notify(this.createNotification('An error occurred while getting the message contents', `${error}`, 'error'));
+                if (error.response.data['non_field_errors']) {
+                    error = error.response.data['non_field_errors'].join('\n');
+                }
+                this.notify(this.createNotification('An error occurred while updating the GeoIP database', `${error}`, 'error'));
             });
         },
         ...mapMutations(['notify'])
