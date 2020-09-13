@@ -38,7 +38,7 @@ if __name__ == "__main__":
     BASE_DIR = os.path.join(APP_DIR,'src')
     DESTINATION_VERSION = '1.0.0'
     notices = []
-    if input('This script will evaluate your curren MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
+    if input('This script will evaluate your current MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
         exit(0)
     os.system('clear')
     # Check for legacy configuration file
@@ -83,8 +83,8 @@ if __name__ == "__main__":
     if os.path.exists(os.path.join(APP_DIR, 'mix-manifest.json')) and which('npm'):
         # If we run the frontend, then we will have to perform node updates
         print('Web frontend detected. Rebuilding static assets. This may take some time')
-        # os.system('npm install')
-        # os.system('npm run production')
+        os.system('npm install')
+        os.system('npm run production')
     auto_fix = args.yes
 
     if not auto_fix:
