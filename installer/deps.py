@@ -54,8 +54,8 @@ def setup_deb(pkg_mgr, os_release, os_version):
     if installer_config['database']['db_local']:
         pgsql_packages += ' postgresql-12'
     os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
-    os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.noarch.deb')
-    os.system('cd /tmp; dpkg -i MailScanner-5.3.3-1.noarch.deb')
+    os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.4-1/MailScanner-5.3.4-1.noarch.deb')
+    os.system('cd /tmp; dpkg -i MailScanner-5.3.4-1.noarch.deb')
     os.system('/usr/sbin/ms-configure --MTA=none --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
@@ -133,7 +133,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
     os.system('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
     os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
-    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.3-1/MailScanner-5.3.3-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
+    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.4-1/MailScanner-5.3.4-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
     os.system('/usr/sbin/ms-configure --installEPEL=Y --MTA=none --installClamav=Y --installCPAN=Y --ramdiskSize=0 --SELPermissive=Y --installDf=Y --installUnrar=Y --installTNEF=Y --configClamav=Y --installPowerTools=Y')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
