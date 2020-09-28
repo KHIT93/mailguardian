@@ -74,7 +74,7 @@ cd /home/mailguardian/mailguardian || exit 1
 ENV_DB_PASS=$(date +%s | sha256sum | base64 | head -c 32)
 export ENV_DB_PASS
 pip3 install pytz
-if ! python3 ./installer/configure.py; then
+if ! python3 ./installer/configure.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again'
     exit 1
 fi
@@ -83,7 +83,7 @@ if ! touch /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but it appears as if we are unable to create the configuration file for the installation script. Please check the error above and try again'
     exit 1
 fi
-if ! python3 ./installer/deps.py; then
+if ! python3 ./installer/deps.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again'
     exit 1
 fi

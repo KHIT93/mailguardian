@@ -10,6 +10,7 @@ import json
 import subprocess
 import configparser
 import argparse
+from django.core.management.utils import get_random_secret_key
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = platform.node()
     APP_USER = 'mailguardian'
+    APP_SECRET = False
     RETENTION_DAYS = 60
     DB_HOST = None
     DB_USER = None
@@ -187,10 +189,18 @@ if __name__ == "__main__":
         print(chr(13))
         if input('Is this the server running the webinterface for users and administrators? (y/N) ').lower() == 'y':
             API_ONLY_MODE = False
+            APP_SECRET = get_random_secret_key()
         else:
             API_ONLY_MODE = True
+            # Request data for configuration files such as secrets
+            while not APP_SECRET:
+                os.system('clear')
+                print('We need to know the key for encrypted values, which was generated on the node running the web interface')
+                print('This can be found in the installer.ini file as the value of "secret" in the "mailguardian" section')
+                APP_SECRET = input('Please provide your application secret from node which runs the web interface: ')
     else:
         API_ONLY_MODE = False
+        APP_SECRET = get_random_secret_key()
     
     os.system('clear')
     if not MULTI_NODE or API_ONLY_MODE:
@@ -274,6 +284,7 @@ if __name__ == "__main__":
     installer_config['mailguardian'] = {
         'app_dir': APP_DIR,
         'hostname': APP_HOSTNAME,
+        'secret': APP_SECRET,
         'user': APP_USER,
         'https': HTTP_SECURE,
         'tz': TZ,

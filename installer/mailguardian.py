@@ -2,6 +2,7 @@
 #
 # MailGuardian installation script
 #
+from installer.configure import APP_SECRET
 import os, sys, platform, pytz, json, pwd, grp, subprocess
 from django.core.management.utils import get_random_secret_key
 import configparser
@@ -61,6 +62,7 @@ if __name__ == "__main__":
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = installer_config['mailguardian']['hostname']
     APP_USER = installer_config['mailguardian']['user']
+    APP_SECRET = installer_config['mailguardian']['secret']
     RETENTION_DAYS = installer_config['mailguardian']['retention']
     DB_HOST = installer_config['database']['host']
     DB_USER = installer_config['database']['user']
@@ -121,7 +123,7 @@ if __name__ == "__main__":
         '# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/',
         '',
         '# SECURITY WARNING: keep the secret key used in production secret!',
-        'SECRET_KEY = "{}"'.format(get_random_secret_key()),
+        'SECRET_KEY = "{}"'.format(APP_SECRET),
         '',
         'APP_HOSTNAME = "{}"'.format(APP_HOSTNAME),
         'DEBUG = False',
