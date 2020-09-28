@@ -43,9 +43,9 @@ if __name__ == "__main__":
     NGINX_PATH = None
     NGINX_EXTENSION = ''
     PKG_MGR = None
-    OPENSSL_BIN = which('openssl') or subprocess.check_output('which openssl', shell=True).strip().decode()
-    NGINX_BIN = which('nginx') or subprocess.check_output('which nginx', shell=True).strip().decode()
-    SYSTEMCTL_BIN = which('systemctl') or subprocess.check_output('which systemctl', shell=True).strip().decode()
+    OPENSSL_BIN = which('openssl') or '/usr/bin/openssl'
+    NGINX_BIN = which('nginx') or '/usr/bin/nginx'
+    SYSTEMCTL_BIN = which('systemctl') or '/bin/systemctl'
     # Define some variables to store whether we need to skip some steps
     CONFIGURE_NGINX = True
     CONFIGURE_SYSTEMD = True
