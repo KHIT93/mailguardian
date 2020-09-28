@@ -291,14 +291,14 @@ if __name__ == "__main__":
         'api_only': API_ONLY_MODE,
         'mta': MTA,
         'mta_log': MTA_LOG,
-        'retention': RETENTION_DAYS
+        'retention': str(RETENTION_DAYS)
     }
     installer_config['database'] = {
         'host': DB_HOST,
         'user': DB_USER,
         'pass': DB_PASS,
         'name': DB_NAME,
-        'port': DB_PORT,
+        'port': str(DB_PORT),
         'fqdn': DB_HOST + ':' + DB_PORT if str(DB_PORT) != '5432' else DB_HOST,
         'ssl': 'prefer',
         'db_local': DB_HOST in ['localhost', '127.0.0.1']
@@ -328,7 +328,7 @@ if __name__ == "__main__":
         'csr': CSR_PATH,
         'dhparam': DHPARAM_PATH,
     }
-    installer['nginx'] = {
+    installer_config['nginx'] = {
         'path': NGINX_PATH,
         'extension': NGINX_EXTENSION
     }
