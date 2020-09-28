@@ -250,7 +250,7 @@ if __name__ == "__main__":
     print('Database host: {0}'.format(DB_HOST))
     print('Database TCP port: {0}'.format(DB_PORT))
     print('Use SSL/TLS for database: {0}'.format('Yes' if DB_SSL else 'No'))
-    print('Timezone: {0}'.format(TZ))
+    print('Timezone: {0}'.format(TZ or 'Utc'))
     if MULTI_NODE and API_ONLY_MODE:
         print('Node type: Multi-node installation (Processing node)')
     elif MULTI_NODE and not API_ONLY_MODE:
@@ -286,7 +286,7 @@ if __name__ == "__main__":
         'secret': APP_SECRET,
         'user': APP_USER,
         'https': HTTP_SECURE,
-        'tz': TZ,
+        'tz': TZ or 'Utc',
         'multi_node': MULTI_NODE,
         'api_only': API_ONLY_MODE,
         'mta': MTA,
