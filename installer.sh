@@ -61,8 +61,9 @@ then
     then
         $LNX_PKG_MGR install -y epel-release
     fi
-    $LNX_PKG_MGR install -y python3 python3-setuptools python3-pip
+    $LNX_PKG_MGR install -y python3 python3-setuptools
 fi
+$LNX_PKG_MGR install -y python3-pip
 echo 'Creating application user...'
 useradd -m mailguardian
 chmod 750 /home/mailguardian
