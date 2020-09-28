@@ -62,6 +62,8 @@ if __name__ == "__main__":
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = installer_config['mailguardian']['hostname']
     APP_USER = installer_config['mailguardian']['user']
+    if not installer_config['mailguardian']['secret']:
+        installer_config['mailguardian']['secret'] = get_random_secret_key()
     APP_SECRET = installer_config['mailguardian']['secret']
     RETENTION_DAYS = installer_config['mailguardian']['retention']
     DB_HOST = installer_config['database']['host']
@@ -96,6 +98,8 @@ if __name__ == "__main__":
     SENDMAIL_BIN = installer_config['mailscanner']['sendmail']
     POSTQUEUE_BIN = installer_config['mailscanner']['postqueue']
 
+    with open(args.config_file, 'w') as f:
+        installer_config.write(f)
     # Detect the Linux distribution
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
@@ -120,7 +124,7 @@ if __name__ == "__main__":
 
     env_contents = [
         '# Quick-start production settings',
-        '# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/',
+        '# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/',
         '',
         '# SECURITY WARNING: keep the secret key used in production secret!',
         'SECRET_KEY = "{}"'.format(APP_SECRET),
@@ -163,12 +167,12 @@ if __name__ == "__main__":
         'BRAND_LOGO = ""',
         '',
         '# Internationalization',
-        '# https://docs.djangoproject.com/en/2.2/topics/i18n/',
+        '# https://docs.djangoproject.com/en/3.1/topics/i18n/',
         'LANGUAGE_CODE = "en-us"',
         '',
         'TIME_ZONE = "{}"'.format(TZ),
         '# Database',
-        '# https://docs.djangoproject.com/en/2.2/ref/settings/#databases',
+        '# https://docs.djangoproject.com/en/3.1/ref/settings/#databases',
         'DATABASES = {',
         '    "default": {',
         '        "ENGINE": "django.db.backends.postgresql",',

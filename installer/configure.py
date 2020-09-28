@@ -10,7 +10,6 @@ import json
 import subprocess
 import configparser
 import argparse
-from django.core.management.utils import get_random_secret_key
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -189,7 +188,7 @@ if __name__ == "__main__":
         print(chr(13))
         if input('Is this the server running the webinterface for users and administrators? (y/N) ').lower() == 'y':
             API_ONLY_MODE = False
-            APP_SECRET = get_random_secret_key()
+            APP_SECRET = False
         else:
             API_ONLY_MODE = True
             # Request data for configuration files such as secrets
@@ -200,7 +199,7 @@ if __name__ == "__main__":
                 APP_SECRET = input('Please provide your application secret from node which runs the web interface: ')
     else:
         API_ONLY_MODE = False
-        APP_SECRET = get_random_secret_key()
+        APP_SECRET = False
     
     os.system('clear')
     if not MULTI_NODE or API_ONLY_MODE:
