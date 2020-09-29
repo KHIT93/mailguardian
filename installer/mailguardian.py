@@ -51,7 +51,7 @@ if __name__ == "__main__":
     PKG_MGR = installer_config['bin']['pkg']
     OPENSSL_BIN = installer_config['bin']['openssl']
     NGINX_BIN = installer_config['bin']['nginx']
-    SYSTEMCTL_BIN = installer_config]['bin']['systemctl']
+    SYSTEMCTL_BIN = installer_config['bin']['systemctl']
 
     # Define some variables to store whether we need to skip some steps
     CONFIGURE_NGINX = installer_config['installation']['nginx']

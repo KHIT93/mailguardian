@@ -64,7 +64,7 @@ if __name__ == "__main__":
     DB_NAME = None
     DB_PORT = None
     DB_SSL = True
-    TZ = None
+    TZ = 'Utc'
     PRIVKEY_PATH = APP_DIR + '/' + APP_HOSTNAME + '.key'
     CSR_PATH = APP_DIR + '/' + APP_HOSTNAME + '.csr'
     CERT_PATH = APP_DIR + '/' + APP_HOSTNAME + '.crt'
@@ -235,12 +235,13 @@ if __name__ == "__main__":
         if HTTP_SECURE:
             if input('Would you like us to automatically generate a LetsEncrypt certificate for you? (Y/n) ').lower() != 'y':
                 CONFIGURE_LETSENCRYPT = False
+                if input('Do you want to use an existing certificate? (y/N) ').lower() == 'y':
+                    CONFIGURE_OWN_CERT = True
+                else:
+                    print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
+            else:
                 print('Please note that during the request for a LetsEncrypt certificate, you will be asked to accept the Terms of Service of LetsEncrypt as well as input your email')
                 print('This data is not shared with any third party, outside what is mentioned in the LetsEncrypt Terms of Service')
-            elif input('Do you want to use an existing certificate? (y/N) ').lower() == 'y':
-                CONFIGURE_OWN_CERT = True
-            else:
-                print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
             
     # Print the configuration settings
     print('Hostname: {0}'.format(APP_HOSTNAME))
