@@ -2,7 +2,6 @@
 #
 # MailGuardian installation script
 #
-from installer.configure import APP_SECRET
 import os, sys, platform, pytz, json, pwd, grp, subprocess
 from django.core.management.utils import get_random_secret_key
 import configparser
