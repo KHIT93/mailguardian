@@ -200,7 +200,7 @@ if __name__ == "__main__":
             if installer_config['installation']['letsencrypt']:
                 # Check if certbot is installed and if not, then we install it
                 if not which('certbot'):
-                    if platform.linux_distribution()[0] == 'debian':
+                    if distro == 'debian':
                         os.system(PKG_MGR + ' install certbot -t {distro}-backports -y'.format(distro=distro_version_codename))
                     else:
                         os.system(PKG_MGR + ' install certbot -y')
