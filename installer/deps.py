@@ -86,8 +86,10 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} clean all'.format(pkg=PKG_MGR))
         os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
         os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install postgresql12-server postgresql12-devel postgresql12 libpq5 libpq5-devel -y'.format(pkg=PKG_MGR))
+        pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
+        if installer_config['database']['db_local']:
+            pgsql_packages += ' postgresql12-server'
+        os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install --enablerepo=gf-plus postfix3 postfix3-pgsql -y'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
@@ -104,7 +106,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} -qy module disable postgresql'.format(pkg=PKG_MGR))
         pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
         if installer_config['database']['db_local']:
-            pgsql_packages += 'postgresql12-server'
+            pgsql_packages += ' postgresql12-server'
         os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
