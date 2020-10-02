@@ -86,6 +86,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} clean all'.format(pkg=PKG_MGR))
         os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
         os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
+        os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
         pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
         if installer_config['database']['db_local']:
             pgsql_packages += ' postgresql12-server'
