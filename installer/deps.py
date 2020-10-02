@@ -127,7 +127,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         if line[:6] == '# IPv6':
             pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
     with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
-        f.write("".join(pg_hba_conf))
+        f.write("\n".join(pg_hba_conf))
     os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')))
     os.system('{systemctl} enable postgresql-12'.format(systemctl=which('systemctl')))
     os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
