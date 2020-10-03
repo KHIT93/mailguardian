@@ -59,18 +59,19 @@ def setup_deb(pkg_mgr, os_release, os_version):
     os.system('/usr/sbin/ms-configure --MTA=none --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
-    pg_hba_conf = []
-    with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'r') as f:
-        pg_hba_conf = f.readlines()
-    for index, line in enumerate(pg_hba_conf):
-        if line[:6] == '# IPv4':
-            pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5')
-        if line[:6] == '# IPv6':
-            pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
-    with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'w') as f:
-        f.write("".join(pg_hba_conf))
-    os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')))
-    os.system('{systemctl} start postgresql@12-main'.format(systemctl=which('systemctl')))
+    if installer_config['database']['db_local']:
+        pg_hba_conf = []
+        with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'r') as f:
+            pg_hba_conf = f.readlines()
+        for index, line in enumerate(pg_hba_conf):
+            if line[:6] == '# IPv4':
+                pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5')
+            if line[:6] == '# IPv6':
+                pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
+        with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'w') as f:
+            f.write("".join(pg_hba_conf))
+        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')))
+        os.system('{systemctl} start postgresql@12-main'.format(systemctl=which('systemctl')))
     os.system('{usermod} -a -G mtagroup nginx')
 
 def setup_rhel(pkg_mgr, os_release, os_version):
@@ -120,20 +121,22 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     else:
         print('Your version of CentOS is unfortunately not supported')
         exit(255)
-    os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
-    pg_hba_conf = []
-    with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'r') as f:
-        pg_hba_conf = f.readlines()
-    for index, line in enumerate(pg_hba_conf):
-        if line[:6] == '# IPv4':
-            pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5')
-        if line[:6] == '# IPv6':
-            pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
-    with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
-        f.write("\n".join(pg_hba_conf))
-    os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')))
-    os.system('{systemctl} enable postgresql-12'.format(systemctl=which('systemctl')))
-    os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
+    if installer_config['database']['db_local']:
+        os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
+        pg_hba_conf = []
+        with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'r') as f:
+            pg_hba_conf = f.readlines()
+        for index, line in enumerate(pg_hba_conf):
+            if line[:6] == '# IPv4':
+                pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5')
+            if line[:6] == '# IPv6':
+                pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
+        with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
+            f.write("\n".join(pg_hba_conf))
+        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')))
+        os.system('{systemctl} enable postgresql-12'.format(systemctl=which('systemctl')))
+        os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
+        os.system('{cmd} --add-port=5432/tcp --permanent'.format(cmd=which('firewall-cmd')))
     os.system('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
     os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
     os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.4-1/MailScanner-5.3.4-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
