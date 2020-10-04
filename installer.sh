@@ -126,7 +126,7 @@ fi
 echo 'Performing initial compilation of MailGuardian...'
 su - mailguardian -c 'cd /home/mailguardian/mailguardian; npm install; npm run production'
 echo 'Waiting a short moment to allow startup of virus scanners'
-bin python -c 'import time; time.sleep(5)'
+bin/python -c 'import time; time.sleep(5)'
 
 spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint
 
