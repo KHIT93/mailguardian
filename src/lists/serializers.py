@@ -9,8 +9,7 @@ class ListEntrySerializer(serializers.HyperlinkedModelSerializer):
         
     def validate(self, data):
         current_user = self.context['request'].user
-        qs = ListEntry.objects.filter(**data).exists()
-        if not qs:
+        if ListEntry.objects.filter(**data).exists():
             raise serializers.ValidationError(_('A listing entry for this already exists'))
         if current_user.is_staff:
             return data
@@ -29,25 +28,3 @@ class ListEntrySerializer(serializers.HyperlinkedModelSerializer):
                 return data
             else:
                 raise serializers.ValidationError(_('You are not allowed to add entries for others than yourself'))
-
-    # def validate_from_address(self, value):
-    #     if '@' in value:
-    #         raise serializers.ValidationError("You should only put the information that is in front of the @ symbol in this field")
-    #     return value
-    # def validate_from_domain(self, value):
-    #     if '@' in value:
-    #         raise serializers.ValidationError("You should only put the domain name, which is the part after the @ symbol, in this field")
-    #     if '*' in value and not self.request.user.is_staff:
-    #         raise serializers.ValidationError("Only Administrators/Staff is allowed to add wildcard domains to the list")
-    #     return value
-
-    # def validate_to_address(self, value):
-    #     if '@' in value:
-    #         raise serializers.ValidationError("You should only put the information that is in front of the @ symbol in this field")
-    #     return value
-    # def validate_to_domain(self, value):
-    #     if '@' in value:
-    #         raise serializers.ValidationError("You should only put the domain name, which is the part after the @ symbol, in this field")
-    #     if '*' in value and not self.request.user.is_staff:
-    #         raise serializers.ValidationError("Only Administrators/Staff is allowed to add wildcard domains to the list")
-    #     return value
