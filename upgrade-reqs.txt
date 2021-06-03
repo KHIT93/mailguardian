@@ -15,6 +15,7 @@ coreschema>=0.0.4
 cryptography>=3.1
 cssselect>=1.1.0
 cssutils>=1.0.2
+distro>=1.5.0
 Django>=3.2.*
 django-appconf>=1.0.4
 django-auditlog>=0.4.7

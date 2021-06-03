@@ -3,6 +3,7 @@
 # MailGuardian installation script
 #
 import os, sys, platform, subprocess, argparse, configparser
+import distro as distribution
 
 def which(program):
     def is_exe(fpath):
@@ -163,17 +164,10 @@ if __name__ == "__main__":
     # and your webserver
     installer_config = configparser.ConfigParser()
     installer_config.read(args.config_file)
-    distro = 'LINUX'
-    distro_version = '0'
-    distro_version_codename = 'Core'
-    with open('/etc/os-release', 'r') as f:
-        for l in f.readlines():
-            if l[:3] == 'ID=':
-                distro = l.replace('ID=','').replace('"', '').strip()
-            if l[:11] == 'VERSION_ID=':
-                distro_version = l.replace('VERSION_ID=', '').replace('"', '').strip()
-            if l[:17] == 'VERSION_CODENAME=':
-                distro_version_codename = l.replace('VERSION_CODENAME=', '').replace('"', '').strip()
+    distro_data = distribution.linux_distribution(full_distribution_name=False)
+    distro = distro_data[0] or 'LINUX'
+    distro_version = distro_data[1] or '0'
+    distro_version_codename = distro_data[2] or 'Core'
     if distro == 'centos':
         PKG_MGR = 'yum'
         setup_rhel(PKG_MGR, distro, distro_version)

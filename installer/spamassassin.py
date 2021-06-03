@@ -6,6 +6,7 @@ import os, sys, platform, subprocess
 from django.conf import settings
 import configparser
 import argparse
+import distro as distribution
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
