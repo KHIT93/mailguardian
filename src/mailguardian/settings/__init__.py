@@ -9,7 +9,7 @@ except:
 if DEBUG:
     CACHES = {
         'default': {
-            'BACKEND': 'path.to.backend',
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
         }
     }
 else:
