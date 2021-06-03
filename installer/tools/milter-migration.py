@@ -102,7 +102,7 @@ if __name__ == "__main__":
             conf[index] = 'Place New Headers At Top Of Message = yes'
         if line[:8] == 'Hostname':
             config_check.append('Hostname')
-            conf[index] = 'Hostname = {}'.format(installer_config['mailguardian']['hostname'])
+            conf[index] = 'Hostname = {}'.format(platform.node())
         if line[:19] == 'Sign Clean Messages':
             config_check.append('Sign Clean Messages')
             conf[index] = 'Sign Clean Messages = no'
@@ -227,7 +227,7 @@ if __name__ == "__main__":
             if 'Place New Headers At Top Of Message' == c:
                 conf.append('Place New Headers At Top Of Message = yes')
             if 'Hostname' == c:
-                conf.append('Hostname = {}'.format(installer_config['mailguardian']['hostname']))
+                conf.append('Hostname = {}'.format(platform.node()))
             if 'Sign Clean Messages' == c:
                 conf.append('Sign Clean Messages = no')
             if 'Dont Sign HTML If Headers Exist' == c:
