@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.name" class="form-input w-full my-1" name="name" id="name" type="text" placeholder="example.com" required>
+                        <input v-model="form.name" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="name" id="name" type="text" placeholder="example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.destination" class="form-input w-full my-1" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
+                        <input v-model="form.destination" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="destination" id="destination" type="text" placeholder="mail.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,7 +30,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <select v-model="form.relay_type" name="relay_type" class="form-select w-full my-1">
+                        <select v-model="form.relay_type" name="relay_type" class="form-select border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1">
                             <option value="">Select relay type</option>
                             <option value="smtp">Deliver to my email server (SMTP)</option>
                             <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
@@ -44,7 +44,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <select v-model="form.receive_type" name="receive_type" class="form-select w-full my-1">
+                        <select v-model="form.receive_type" name="receive_type" class="form-select border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1">
                             <option value="">Select Receive type</option>
                             <option value="load_balanced">Balance between nodes</option>
                             <option value="failover">Use the primary node and fail over if unavailable</option>
@@ -109,7 +109,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.allowed_accounts" class="form-input w-full my-1" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
+                        <input v-model="form.allowed_accounts" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="allowed_accounts" id="allowed_accounts" type="number" required min="-1">
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

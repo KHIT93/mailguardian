@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.email" class="form-input w-full my-1" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
+                        <input v-model="form.email" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="email" id="email" type="text" placeholder="JaneDoe@example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,8 +20,8 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.first_name" class="form-input w-full my-1 mr-1" name="first_name" id="first_name" type="text" placeholder="Jane">
-                        <input v-model="form.last_name" class="form-input w-full my-1" name="last_name" id="last_name" type="text" placeholder="Doe">
+                        <input v-model="form.first_name" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1 mr-1" name="first_name" id="first_name" type="text" placeholder="Jane">
+                        <input v-model="form.last_name" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="last_name" id="last_name" type="text" placeholder="Doe">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -133,7 +133,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_score" class="form-input w-full my-1" name="custom_spam_score" id="custom_spam_score" type="text" placeholder="Doe">
+                        <input v-model="form.custom_spam_score" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="custom_spam_score" id="custom_spam_score" type="text" placeholder="Doe">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
@@ -143,7 +143,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_highscore" class="form-input w-full my-1" name="custom_spam_highscore" id="custom_spam_highscore" type="text" placeholder="Doe">
+                        <input v-model="form.custom_spam_highscore" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="custom_spam_highscore" id="custom_spam_highscore" type="text" placeholder="Doe">
                     </div>
                 </div>
 

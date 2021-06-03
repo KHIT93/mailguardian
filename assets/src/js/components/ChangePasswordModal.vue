@@ -9,7 +9,7 @@
                         </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.old_password" class="form-input w-full my-1" name="old_password" id="old_password" type="password">
+                        <input v-model="form.old_password" class="form-inputborder-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="old_password" id="old_password" type="password">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -19,7 +19,7 @@
                         </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.new_password1" class="form-input w-full my-1" name="new_password1" id="new_password1" type="password" required>
+                        <input v-model="form.new_password1" class="form-inputborder-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="new_password1" id="new_password1" type="password" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -29,7 +29,7 @@
                         </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input v-model="form.new_password2" class="form-input w-full my-1" name="new_password2" id="new_password2" type="password" required>
+                        <input v-model="form.new_password2" class="form-inputborder-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="new_password2" id="new_password2" type="password" required>
                     </div>
                 </div>
             </div>

@@ -57,15 +57,15 @@
                         <h2 class="font-normal text-lg text-center">Add a new filter</h2>
                         <hr>
                         <form @submit.prevent="add_filter">
-                            <select v-model="filter_form.filter" class="form-select w-full my-1" required>
+                            <select v-model="filter_form.filter" class="form-select border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" required>
                                 <option value="">Select field to filter on</option>
                                 <option v-for="(value, key) in availableFilters" :key="key" :value="key">{{ key.replace('_', ' ') }}</option>
                             </select>
-                            <select v-model="filter_form.operator" class="form-select w-full my-1" required>
+                            <select v-model="filter_form.operator" class="form-select border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" required>
                                 <option value="">Select filter operator</option>
                                 <option v-for="option in selectedFilterOptions.operators" :key="option.value" :value="option.value">{{ option.label }}</option>
                             </select>
-                            <input class="form-input w-full my-1" name="value" v-model="filter_form.value" id="value" :type="selectedFilterType" placeholder="Value to filter by">
+                            <input class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="value" v-model="filter_form.value" id="value" :type="(selectedFilterType) ? selectedFilterType: 'text'" :disabled="!! selectedFilterType" placeholder="Value to filter by">
                             <div class="flex flex-row-reverse">
                                 <button type="submit" class="btn btn-blue shadow">
                                     Add

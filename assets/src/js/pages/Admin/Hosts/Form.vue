@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.hostname" class="form-input w-full my-1" name="hostname" id="hostname" type="text" placeholder="mailnode-01.example.com" required>
+                        <input v-model="form.hostname" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="hostname" id="hostname" type="text" placeholder="mailnode-01.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.ip_address" class="form-input w-full my-1" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1" required>
+                        <input v-model="form.ip_address" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,7 +30,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.priority" class="form-input w-full my-1" name="priority" id="priority" type="number" placeholder="10" required>
+                        <input v-model="form.priority" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="priority" id="priority" type="number" placeholder="10" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">

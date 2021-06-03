@@ -38,7 +38,7 @@
         </div>
         <div class="lg:flex">
             <!-- Secondary -->
-            <div v-if="isLoggedIn" class="bg-cool-gray-800 lg:block lg:bg-transparent lg:border-b lg:w-1/5 xxl:w-1/6 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
+            <div v-if="isLoggedIn" class="bg-gray-800 lg:block lg:bg-transparent lg:border-b lg:w-1/5 xxl:w-1/6 pt-12 lg:pt-16 lg:h-screen" :class="{ 'hidden' : hide, 'shadow-md' : !hide }">
                 <div class="container mx-auto px-4">
                     <div class="">
                         <div class="flex -mb-px" @click="hideMenu()">

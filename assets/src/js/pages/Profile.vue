@@ -146,7 +146,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_score" class="form-input w-full my-1" name="custom_spam_score" id="custom_spam_score" type="number" placeholder="5.0">
+                        <input v-model="form.custom_spam_score" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="custom_spam_score" id="custom_spam_score" type="number" placeholder="5.0">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6" v-if="!form.skip_scan">
@@ -156,7 +156,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <input v-model="form.custom_spam_highscore" class="form-input w-full my-1" name="custom_spam_highscore" id="custom_spam_highscore" type="number" placeholder="15.0">
+                        <input v-model="form.custom_spam_highscore" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="custom_spam_highscore" id="custom_spam_highscore" type="number" placeholder="15.0">
                     </div>
                 </div>
 

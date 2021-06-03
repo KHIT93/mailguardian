@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.key" class="form-input w-full my-1" name="key" id="key" type="text" required>
+                        <input v-model="form.key" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="key" id="key" type="text" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.value" class="form-input w-full my-1" name="value" id="value" type="text">
+                        <input v-model="form.value" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="value" id="value" type="text">
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -31,7 +31,7 @@
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
                         <div v-if="form.id" class="text-gray-400">{{ form.filepath }}</div>
-                        <select v-model="form.filepath" class="form-select w-full my-1" v-else>
+                        <select v-model="form.filepath" class="form-select border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" v-else>
                             <option value="">-- Select file --</option>
                             <option v-for="f in filepaths" :key="f.filepath" :value="f.filepath">{{ f.filepath }}</option>
                         </select>

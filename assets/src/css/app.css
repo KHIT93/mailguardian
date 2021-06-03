@@ -11,7 +11,7 @@
 [v-cloak] { display:none; }
 
 .loader {
-  @apply .m-0;
+  @apply m-0;
   right: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

@@ -13,7 +13,7 @@
                     </label>
                     </div>
                     <div class="md:w-2/3">
-                        <input :disabled="loading" v-model="form.email" class="form-input w-full my-1" name="email" id="email" type="email" placeholder="john@example.com">
+                        <input :disabled="loading" v-model="form.email" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="email" id="email" type="email" placeholder="john@example.com">
                         <p class="text-sm text-red-500 pt-1" v-if="form.errors.has('email')">{{ form.errors.get('email') }}</p>
                     </div>
                 </div>

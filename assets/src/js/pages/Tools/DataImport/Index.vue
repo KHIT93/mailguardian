@@ -3,7 +3,7 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <div v-if="user.is_staff">
-                <h2 class="p-1 pb-0 font-thin text-lg text-gray-800">Data import</h2>
+                <h2 class="p-1 pb-0 font-extralight text-lg text-gray-800">Data import</h2>
                 <p class="p-1 text-xs text-gray-800">Import data into various parts of the system. Each option shows you how the import file should be structured</p>
                 <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/data-import/lists">
                     List Entries<br/>

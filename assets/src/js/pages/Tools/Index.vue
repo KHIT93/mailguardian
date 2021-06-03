@@ -3,7 +3,7 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <div v-if="user.is_staff">
-                <h2 class="p-1 font-thin text-lg text-gray-800">Admin tools</h2>
+                <h2 class="p-1 font-extralight text-lg text-gray-800">Admin tools</h2>
                 <router-link class="block border-t px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" to="/tools/mailqueue">
                     View mail queue<br/>
                     <span class=" text-xs text-gray-600">View the current messages in the mailqueue</span>
@@ -42,7 +42,7 @@
                 </router-link>
             </div>
             <div>
-                <h2 class="border-b p-1 pt-4 font-thin text-lg text-gray-800">Helpful links</h2>
+                <h2 class="border-b p-1 pt-4 font-extralight text-lg text-gray-800">Helpful links</h2>
                 <a class="block px-4 py-2 hover:bg-gray-200 no-underline text-gray-800" href="http://mxtoolbox.com/NetworkTools.aspx">
                     MXToolBox<br/>
                     <span class=" text-xs text-gray-600">A popular and powerful set of tools, which you can use to find and resolve issues around sending and receiving email</span>

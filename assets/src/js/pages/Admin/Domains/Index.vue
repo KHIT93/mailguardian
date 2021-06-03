@@ -7,7 +7,7 @@
             <div class="w-full py-2">
                 <form @submit.prevent="get_search">
                     <div class="flex text-sm items-center">
-                        <input type="text" name="search" class="form-input w-full my-1" v-model="search" placeholder="Type something here..."/>
+                        <input type="text" name="search" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" v-model="search" placeholder="Type something here..."/>
                         <button type="submit" class="btn btn-blue shadow">
                             Search
                         </button>

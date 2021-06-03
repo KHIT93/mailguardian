@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.ip_address" class="form-input w-full my-1" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1/32" required>
+                        <input v-model="form.ip_address" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="ip_address" id="ip_address" type="text" placeholder="1.1.1.1/32" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.hostname" class="form-input w-full my-1" name="hostname" id="hostname" type="text" placeholder="mail.example.com" required>
+                        <input v-model="form.hostname" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="hostname" id="hostname" type="text" placeholder="mail.example.com" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -41,7 +41,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.comment" class="form-input w-full my-1" name="comment" id="comment" type="text" required>
+                        <input v-model="form.comment" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="comment" id="comment" type="text" required>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

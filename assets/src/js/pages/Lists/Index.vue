@@ -17,7 +17,7 @@
                     <div class="flex text-sm items-center">
                         <div class="text-gray-700 w-3/4 md:w-5/6 p-2">
                             <div class="font-semibold">
-                                <input type="text" name="search" class="form-input w-full my-1" v-model="search_query" placeholder="Type something here..."/>
+                                <input type="text" name="search" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" v-model="search_query" placeholder="Type something here..."/>
                             </div>
                         </div>
                         <div class="text-gray-700 w-1/4 md:w-1/6 p-2">

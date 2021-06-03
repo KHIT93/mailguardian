@@ -10,7 +10,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.title" class="form-input w-full my-1" name="title" id="title" type="text" required>
+                        <input v-model="form.title" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="title" id="title" type="text" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -20,7 +20,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <textarea v-model="form.body" class="form-input w-full my-1" name="body" id="body" required></textarea>
+                        <textarea v-model="form.body" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="body" id="body" required></textarea>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6">
@@ -30,7 +30,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2 md:inline-flex">
-                        <select v-model="form.notification_type" name="relay_type" class="form-select w-full my-1">
+                        <select v-model="form.notification_type" name="relay_type" class="form-select border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1">
                             <option value="">-- Select Notification type --</option>
                             <option value="login">Login</option>
                             <option value="dashboard">Dashboard</option>
@@ -44,7 +44,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.date_start" class="form-input w-full my-1" name="date_start" id="date_start" type="date" required>
+                        <input v-model="form.date_start" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="date_start" id="date_start" type="date" required>
                     </div>
                 </div>
                 <div class="md:flex md:items-center mb-6 mt-4">
@@ -54,7 +54,7 @@
                         </label>
                     </div>
                     <div class="md:w-1/2">
-                        <input v-model="form.date_end" class="form-input w-full my-1" name="date_end" id="date_end" type="date" required>
+                        <input v-model="form.date_end" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="date_end" id="date_end" type="date" required>
                     </div>
                 </div>
                 <div class="flex flex-row-reverse border-t pt-2">

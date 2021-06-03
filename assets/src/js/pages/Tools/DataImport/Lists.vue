@@ -3,12 +3,12 @@
     <div class="sm:container mx-auto sm:px-4 pt-6 pb-8">
         <div class="card p-2">
             <div v-if="user.is_staff">
-                <h2 class="p-1 pb-0 font-thin text-lg text-gray-800">Import List entries</h2>
+                <h2 class="p-1 pb-0 font-extralight text-lg text-gray-800">Import List entries</h2>
                 <hr>
                 <p class="prose-sm">
                     Use the form below to import listing entries to the block list and allow list.
                 </p>
-                <h3 class="p-1 font-thin text-base text-gray-800">Import format</h3>
+                <h3 class="p-1 font-extralight text-base text-gray-800">Import format</h3>
                 <hr>
                 <p class="prose-sm">
                     The data import has to follow these simply structural rules:
@@ -32,7 +32,7 @@
                                 </label>
                             </div>
                             <div class="md:w-1/2">
-                                <input ref="file" class="form-input w-full my-1" name="file" id="file" type="file" @change="handleFileUpload">
+                                <input ref="file" class="form-input border-1 bg-gray-100 text-sm border-gray-100 pl-4 pr-4 text-gray-900 rounded w-full my-1" name="file" id="file" type="file" @change="handleFileUpload">
                             </div>
                         </div>
                         <div class="flex flex-row-reverse border-t pt-2">
