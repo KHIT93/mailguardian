@@ -200,12 +200,13 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False, permission_classes=[IsAdminUser], url_path='queue/resend', url_name='message-queue-resend')
     def post_resend(self, request):
+        messages = []
         if not 'messages' in request.data:
             return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
         if isinstance(request.data['messages'], list):
             messages = request.data['messages']
         elif isinstance(request.data['messages'], types.StringType):
-            messages.append = request.data['messages']
+            messages.append(request.data['messages'])
         response = []
         host_count = MailScannerHost.objects.count()
         # Data is delivered as { 'qid', <POSTFIX_QUEUE_ID>, 'hostname': <SERVER_HOSTNAME>}
