@@ -230,6 +230,7 @@ if __name__ == "__main__":
         if HTTP_SECURE:
             if input('Would you like us to automatically generate a LetsEncrypt certificate for you? (Y/n) ').lower() != 'y':
                 CONFIGURE_LETSENCRYPT = False
+                CONFIGURE_CERTBOT = False
                 if input('Do you want to use an existing certificate? (y/N) ').lower() == 'y':
                     CONFIGURE_OWN_CERT = True
                 else:

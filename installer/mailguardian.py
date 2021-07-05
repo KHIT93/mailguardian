@@ -116,6 +116,8 @@ if __name__ == "__main__":
     os.system('clear')
 
     env_contents = [
+        'import os',
+        'from .core_settings import BASE_DIR',
         '# Quick-start production settings',
         '# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/',
         '',
