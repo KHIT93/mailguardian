@@ -66,7 +66,7 @@ fi
 $LNX_PKG_MGR install -y python3-pip
 echo 'Creating application user...'
 useradd -m mailguardian
-chmod 750 /home/mailguardian
+chmod 755 /home/mailguardian
 echo 'Installing git commandline tools, if not available...'
 $LNX_PKG_MGR install git -y
 echo 'Pulling application sourcecode from GitHub...'
