@@ -230,6 +230,12 @@ if __name__ == "__main__":
             with open(os.path.join(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
                 f.write(conf)
 
+        # Store the systemd socket file
+        with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:
+            conf = t.read()
+            with open(os.path.join(SYSTEMD_PATH, 'mailguardian.socket'), 'w') as f:
+                f.write(conf)
+
         # Store the systemd unit file
         with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
             conf = t.read()
@@ -243,5 +249,4 @@ if __name__ == "__main__":
         os.system(SYSTEMCTL_BIN + ' daemon-reload')
 
         # Enable systemd service unit on startup
-        os.system(SYSTEMCTL_BIN + ' enable mailguardian.service')
-        os.system(SYSTEMCTL_BIN + ' start mailguardian.service')
+        os.system(SYSTEMCTL_BIN + ' enable --now mailguardian.service')

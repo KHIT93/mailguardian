@@ -1,0 +1,8 @@
+[Unit]
+Description=MailGuardian WSGI Socket
+
+[Socket]
+ListenStream=/run/mailguardian.socket
+
+[Install]
+WantedBy=sockets.target
