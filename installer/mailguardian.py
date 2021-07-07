@@ -43,7 +43,7 @@ if __name__ == "__main__":
     installer_config.read(args.config_file)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
     APP_DIR  = installer_config['mailguardian']['app_dir']
-    
+    c
     # Define some paths needed later
     SYSTEMD_PATH = '/etc/systemd/system/'
     NGINX_PATH = installer_config['nginx']['path']
@@ -54,10 +54,10 @@ if __name__ == "__main__":
     SYSTEMCTL_BIN = installer_config['bin']['systemctl']
 
     # Define some variables to store whether we need to skip some steps
-    CONFIGURE_NGINX = installer_config['installation']['nginx']
-    CONFIGURE_SYSTEMD = installer_config['installation']['systemd']
-    CONFIGURE_CERTBOT = installer_config['installation']['certbot']
-    HTTP_SECURE = installer_config['mailguardian']['https']
+    CONFIGURE_NGINX = installer_config['installation'].getboolean('nginx')
+    CONFIGURE_SYSTEMD = installer_config['installation'].getboolean('systemd')
+    CONFIGURE_CERTBOT = installer_config['installation'].getboolean('certbot')
+    HTTP_SECURE = installer_config['mailguardian'].getboolean('https')
 
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = installer_config['mailguardian']['hostname']
@@ -79,8 +79,8 @@ if __name__ == "__main__":
     DHPARAM_PATH = installer_config['installation']['dhparam']
 
     # Stuff related to mulit-node configurations
-    MULTI_NODE = installer_config['mailguardian']['multi_node']
-    API_ONLY_MODE = installer_config['mailguardian']['api_only']
+    MULTI_NODE = installer_config['mailguardian'].getboolean('multi_node')
+    API_ONLY_MODE = installer_config['mailguardian'].getboolean('api_only')
 
     # Define some variables to use for processing nodes
     # These will be relevant for a single-node deployment,
@@ -193,7 +193,7 @@ if __name__ == "__main__":
             print('You are not running the installation with root privileges. The script will now terminate')
             exit()
         if HTTP_SECURE:
-            if installer_config['installation']['letsencrypt']:
+            if installer_config['installation'].getboolean('letsencrypt'):
                 # Check if certbot is installed and if not, then we install it
                 if not which('certbot'):
                     if distro == 'debian':
