@@ -34,7 +34,7 @@ def generate_encryption_key():
 
 
 if __name__ == "__main__":
-    os.system('clear')
+    # os.system('clear')
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         print(distro)
         exit(255)
 
-    os.system('clear')
+    # os.system('clear')
 
     env_contents = [
         'import os',
@@ -186,7 +186,7 @@ if __name__ == "__main__":
     with open(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
         f.write(mailguardian_env_contents)
     os.chown(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-    os.system('clear')
+    # os.system('clear')
     if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
         if os.geteuid() != 0:
             print('You are not running the installation with root privileges. The script will now terminate')

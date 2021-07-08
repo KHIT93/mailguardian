@@ -32,7 +32,7 @@ def which(program):
     return None
 
 if __name__ == "__main__":
-    os.system('clear')
+    # os.system('clear')
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         print('Your Linux distribution or version is not supported')
         print(distro)
         exit(255)
-    os.system('clear')
+    # os.system('clear')
     print('We will now ask you a series of questions to properly configure the application for you')
     print('Do not worry, as we will not make any changes before all questions have been answered and confirmed by you')
 
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         DB_PORT = 5432
     print(chr(13))
     
-    os.system('clear')
+    # os.system('clear')
 
     APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % APP_HOSTNAME)
     if APP_HOSTNAME_INPUT != '' and APP_HOSTNAME_INPUT is not None:
@@ -188,7 +188,7 @@ if __name__ == "__main__":
             API_ONLY_MODE = True
             # Request data for configuration files such as secrets
             while not APP_SECRET:
-                os.system('clear')
+                # os.system('clear')
                 print('We need to know the key for encrypted values, which was generated on the node running the web interface')
                 print('This can be found in the installer.ini file as the value of "secret" in the "mailguardian" section')
                 APP_SECRET = input('Please provide your application secret from node which runs the web interface: ')
@@ -196,32 +196,32 @@ if __name__ == "__main__":
         API_ONLY_MODE = False
         APP_SECRET = False
     
-    os.system('clear')
+    # os.system('clear')
     if not MULTI_NODE or API_ONLY_MODE:
         MS_CONF_DIR_INPUT = input('Where are your MailScanner configuration files located? [{0}] '.format(MS_CONF_DIR))
         if MS_CONF_DIR_INPUT != '' and MS_CONF_DIR_INPUT is not None:
             MS_CONF_DIR = MS_CONF_DIR_INPUT
-        os.system('clear')
+        # os.system('clear')
         MS_BIN_INPUT = input('Please specify the full path to the MailScanner executable file/binary? [{0}] '.format(MS_BIN))
         if MS_BIN_INPUT != '' and MS_BIN_INPUT is not None:
             MS_BIN = MS_BIN_INPUT
-        os.system('clear')
+        # os.system('clear')
         MS_LIB_INPUT = input('Where are the MailScanner application libraries located? [{0}] '.format(MS_LIB))
         if MS_LIB_INPUT != '' and MS_LIB_INPUT is not None:
             MS_LIB = MS_LIB_INPUT
-        os.system('clear')
+        # os.system('clear')
         MS_SHARED_INPUT = input('Please let us know where your MailScanner shared resources are located [{0}] '.format(MS_SHARED))
         if MS_SHARED_INPUT != '' and MS_SHARED_INPUT is not None:
             MS_SHARED = MS_SHARED_INPUT
-        os.system('clear')
+        # os.system('clear')
         SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'sa-learn\' binary is located? [{0}] '.format(SALEARN_BIN))
         if SALEARN_BIN_INPUT != '' and SALEARN_BIN_INPUT is not None:
             SALEARN_BIN = SALEARN_BIN_INPUT
-        os.system('clear')
+        # os.system('clear')
         SA_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'spamassassin\' binary is located? [{0}] '.format(SA_BIN))
         if SA_BIN_INPUT != '' and SA_BIN_INPUT is not None:
             SA_BIN = SA_BIN_INPUT
-        os.system('clear')
+        # os.system('clear')
         SA_RULES_DIR_INPUT = input('Please type in the location of your SpamAssassin rules configuration [{0}] '.format(SA_RULES_DIR))
         if SA_RULES_DIR_INPUT != '' and SA_RULES_DIR_INPUT is not None:
             SA_RULES_DIR = SA_RULES_DIR_INPUT
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     if input('Are the above settings correct and can we continue? (Y/n) ').lower() == 'n':
         print('Installation has been aborted. Please rerun the installation script to try again')
         exit(255)
-    os.system('clear')
+    # os.system('clear')
     
     installer_config = configparser.ConfigParser()
     installer_config['mailguardian'] = {
