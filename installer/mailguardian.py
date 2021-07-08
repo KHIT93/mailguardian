@@ -43,7 +43,6 @@ if __name__ == "__main__":
     installer_config.read(args.config_file)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
     APP_DIR  = installer_config['mailguardian']['app_dir']
-    c
     # Define some paths needed later
     SYSTEMD_PATH = '/etc/systemd/system/'
     NGINX_PATH = installer_config['nginx']['path']
