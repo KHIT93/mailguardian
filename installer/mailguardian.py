@@ -187,65 +187,64 @@ if __name__ == "__main__":
         f.write(mailguardian_env_contents)
     os.chown(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     # os.system('clear')
-    if CONFIGURE_CERTBOT and CONFIGURE_NGINX and CONFIGURE_SYSTEMD:
-        if os.geteuid() != 0:
-            print('You are not running the installation with root privileges. The script will now terminate')
-            exit()
+    if os.geteuid() != 0:
+        print('You are not running the installation with root privileges. The script will now terminate')
+        exit()
+    if HTTP_SECURE:
+        if installer_config['installation'].getboolean('letsencrypt'):
+            # Check if certbot is installed and if not, then we install it
+            if not which('certbot'):
+                if distro == 'debian':
+                    os.system(PKG_MGR + ' install certbot -t {distro}-backports -y'.format(distro=distro_version_codename))
+                else:
+                    os.system(PKG_MGR + ' install certbot -y')
+            # Request a certificate and note the path
+            PRIVKEY_PATH = '/etc/letsencrypt/live/{0}/privkey.pem'.format(APP_HOSTNAME)
+            CERT_PATH = '/etc/letsencrypt/live/{0}/fullchain.pem'.format(APP_HOSTNAME)
+            os.system(which('certbot') + ' certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
+        else:
+            print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
+            # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
+            os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
+            os.chown(PRIVKEY_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+            os.chown(CSR_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+            os.system(OPENSSL_BIN + ' x509 -req -days 3650 -in {csr} -signkey {key} -out {crt}'.format(csr=CSR_PATH, key=PRIVKEY_PATH, crt=CERT_PATH))
+            os.chown(CERT_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+        print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
+        print('Please note that this step can take up to 30 minutes to complete')
+        os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
+        os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+    # Store the nginx configuration file for the application
+    with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
+        conf = t.read()
         if HTTP_SECURE:
-            if installer_config['installation'].getboolean('letsencrypt'):
-                # Check if certbot is installed and if not, then we install it
-                if not which('certbot'):
-                    if distro == 'debian':
-                        os.system(PKG_MGR + ' install certbot -t {distro}-backports -y'.format(distro=distro_version_codename))
-                    else:
-                        os.system(PKG_MGR + ' install certbot -y')
-                # Request a certificate and note the path
-                PRIVKEY_PATH = '/etc/letsencrypt/live/{0}/privkey.pem'.format(APP_HOSTNAME)
-                CERT_PATH = '/etc/letsencrypt/live/{0}/fullchain.pem'.format(APP_HOSTNAME)
-                os.system(which('certbot') + ' certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
-            else:
-                print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
-                # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
-                os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
-                os.chown(PRIVKEY_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-                os.chown(CSR_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-                os.system(OPENSSL_BIN + ' x509 -req -days 3650 -in {csr} -signkey {key} -out {crt}'.format(csr=CSR_PATH, key=PRIVKEY_PATH, crt=CERT_PATH))
-                os.chown(CERT_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-            print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
-            print('Please note that this step can take up to 30 minutes to complete')
-            os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
-            os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-        # Store the nginx configuration file for the application
-        with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
-            conf = t.read()
-            if HTTP_SECURE:
-                conf = conf.replace('/home/mailguardian/cert/domain.tld.crt', CERT_PATH).replace('/home/mailguardian/cert/domain.tld.key', PRIVKEY_PATH).replace('/home/mailguardian/cert/dhparam.pem', DHPARAM_PATH)
-            else:
-                conf = conf.replace('listen 443 ssl http2;', '# listen 443 ssl http2;').replace('if ($scheme = "http") { set $redirect_https 1; }','# if ($scheme = "http") { set $redirect_https 1; }').replace('if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }', '# if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }').replace('if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }', '# if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }').replace('ssl on;','# ssl on;').replace('ssl_certificate /home/mailguardian/cert/domain.tld.crt;','# ssl_certificate /home/mailguardian/cert/domain.tld.crt;').replace('ssl_certificate_key /home/mailguardian/cert/domain.tld.key;','# ssl_certificate_key /home/mailguardian/cert/domain.tld.key;').replace('ssl_dhparam /home/mailguardian/cert/dhparam.pem;', '# ssl_dhparam /home/mailguardian/cert/dhparam.pem;').replace('ssl_session_cache shared:SSL:50m;','# ssl_session_cache shared:SSL:50m;').replace('ssl_session_timeout 30m;','# ssl_session_timeout 30m;').replace('ssl_protocols TLSv1.1 TLSv1.2;','# ssl_protocols TLSv1.1 TLSv1.2;').replace('ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";','# ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";').replace('ssl_prefer_server_ciphers on;','# ssl_prefer_server_ciphers on;')
-            conf = conf.replace('server_name domain.tld;', 'server_name {0};'.format(APP_HOSTNAME)).replace('access_log /var/log/nginx/domain.tld.access.log;', 'access_log /var/log/nginx/{0}.access.log;'.format(APP_HOSTNAME)).replace('error_log /var/log/nginx/domain.tld.error.log;', 'error_log /var/log/nginx/{0}.error.log;'.format(APP_HOSTNAME))
-            if distro == 'centos':
-                if distro_version == '8':
-                    conf.replace('include proxy_params;', '#include proxy_params;')
-            with open(os.path.join(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
-                f.write(conf)
+            conf = conf.replace('/home/mailguardian/cert/domain.tld.crt', CERT_PATH).replace('/home/mailguardian/cert/domain.tld.key', PRIVKEY_PATH).replace('/home/mailguardian/cert/dhparam.pem', DHPARAM_PATH)
+        else:
+            conf = conf.replace('listen 443 ssl http2;', '# listen 443 ssl http2;').replace('if ($scheme = "http") { set $redirect_https 1; }','# if ($scheme = "http") { set $redirect_https 1; }').replace('if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }', '# if ($request_uri ~ ^/.well-known/acme-challenge/) { set $redirect_https 0; }').replace('if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }', '# if ($redirect_https) { rewrite ^ https://$server_name$request_uri? permanent; }').replace('ssl on;','# ssl on;').replace('ssl_certificate /home/mailguardian/cert/domain.tld.crt;','# ssl_certificate /home/mailguardian/cert/domain.tld.crt;').replace('ssl_certificate_key /home/mailguardian/cert/domain.tld.key;','# ssl_certificate_key /home/mailguardian/cert/domain.tld.key;').replace('ssl_dhparam /home/mailguardian/cert/dhparam.pem;', '# ssl_dhparam /home/mailguardian/cert/dhparam.pem;').replace('ssl_session_cache shared:SSL:50m;','# ssl_session_cache shared:SSL:50m;').replace('ssl_session_timeout 30m;','# ssl_session_timeout 30m;').replace('ssl_protocols TLSv1.1 TLSv1.2;','# ssl_protocols TLSv1.1 TLSv1.2;').replace('ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";','# ssl_ciphers "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS";').replace('ssl_prefer_server_ciphers on;','# ssl_prefer_server_ciphers on;')
+        conf = conf.replace('server_name domain.tld;', 'server_name {0};'.format(APP_HOSTNAME)).replace('access_log /var/log/nginx/domain.tld.access.log;', 'access_log /var/log/nginx/{0}.access.log;'.format(APP_HOSTNAME)).replace('error_log /var/log/nginx/domain.tld.error.log;', 'error_log /var/log/nginx/{0}.error.log;'.format(APP_HOSTNAME))
+        if distro == 'centos':
+            if distro_version == '8':
+                conf.replace('include proxy_params;', '#include proxy_params;')
+        with open(os.path.join(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
+            f.write(conf)
 
-        # Store the systemd socket file
-        with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:
-            conf = t.read()
-            with open(os.path.join(SYSTEMD_PATH, 'mailguardian.socket'), 'w') as f:
-                f.write(conf)
+    # Store the systemd socket file
+    with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:
+        conf = t.read()
+        with open(os.path.join(SYSTEMD_PATH, 'mailguardian.socket'), 'w') as f:
+            f.write(conf)
 
-        # Store the systemd unit file
-        with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
-            conf = t.read()
-            conf = conf.replace('/home/mailguardian/mailguardian', APP_DIR).replace('mailguardian', APP_USER)
-            with open(os.path.join(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
-                f.write(conf)
-        os.system('mkdir -p {0}'.format(os.path.join('var', 'log', 'mailguardian')))
-        os.system('touch {0}'.format(os.path.join('var', 'log', 'mailguardian', 'app.log')))
-        os.system('chown 777 {}:{}'.format(APP_USER, 'mtagroup'))
-        # Reload systemd unit cache
-        os.system(SYSTEMCTL_BIN + ' daemon-reload')
+    # Store the systemd unit file
+    with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
+        conf = t.read()
+        conf = conf.replace('/home/mailguardian/mailguardian', APP_DIR).replace('mailguardian', APP_USER)
+        with open(os.path.join(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
+            f.write(conf)
+    os.system('mkdir -p {0}'.format(os.path.join('var', 'log', 'mailguardian')))
+    os.system('touch {0}'.format(os.path.join('var', 'log', 'mailguardian', 'app.log')))
+    os.system('chown 777 {}:{}'.format(APP_USER, 'mtagroup'))
+    # Reload systemd unit cache
+    os.system(SYSTEMCTL_BIN + ' daemon-reload')
 
-        # Enable systemd service unit on startup
-        os.system(SYSTEMCTL_BIN + ' enable --now mailguardian.service')
+    # Enable systemd service unit on startup
+    os.system(SYSTEMCTL_BIN + ' enable --now mailguardian.service')
