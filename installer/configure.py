@@ -65,7 +65,7 @@ if __name__ == "__main__":
     DB_NAME = None
     DB_PORT = None
     DB_SSL = True
-    TZ = 'Utc'
+    TZ = 'UTC'
     PRIVKEY_PATH = APP_DIR + '/' + APP_HOSTNAME + '.key'
     CSR_PATH = APP_DIR + '/' + APP_HOSTNAME + '.csr'
     CERT_PATH = APP_DIR + '/' + APP_HOSTNAME + '.crt'
