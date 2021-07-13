@@ -30,7 +30,7 @@ DEBUG = False
 APP_HOSTNAME = platform.node()
 APP_VERSION = '2.0.0'
 LOCAL_CONFIG_VERSION = '0.0.0'
-ALLOWED_HOSTS = [APP_HOSTNAME] if APP_HOSTNAME else []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
