@@ -230,3 +230,17 @@ BRAND_FEEDBACK = 'https://github.com/khit93/mailguardian-feedback'
 MAXMIND_DB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'run')
 MAXMIND_DB_FILE = os.path.join(MAXMIND_DB_PATH, 'GeoLite2.mmdb')
 MAXMIND_ACCOUNT_API_KEY = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
