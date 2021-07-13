@@ -65,7 +65,19 @@ class InitializeDatabaseAPIView(APIView):
             user = User.objects.create_superuser(serializer.data['admin_email'], serializer.data['admin_password'])
             response['createsuperuser'] = UserSerializer(user, context={'request': request}).data
             # Next create initial core.models.Setting entries based on the remaining data provided by the user
+            Setting.objects.update_or_create(key='quarantine.report.days', defaults={'key' : 'quarantine.report.days', 'value' : '7'})
+            Setting.objects.update_or_create(key='quarantine.report.unknown.hide', defaults={'key' : 'quarantine.report.unknown.hide', 'value' : '1'})
+            Setting.objects.update_or_create(key='sa.last_updated', defaults={'key' : 'sa.last_updated', 'value' : ''})
+            Setting.objects.update_or_create(key='quarantine.release.body', defaults={'key' : 'quarantine.release.body', 'value' : 'Please find the original message that was quarantined attached to this mail.Regards,Postmaster'})
+            Setting.objects.update_or_create(key='quarantine.filters.combine', defaults={'key' : 'quarantine.filters.combine', 'value' : '1'})
+            Setting.objects.update_or_create(key='mailscanner.configuration.edit', defaults={'key' : 'mailscanner.configuration.edit', 'value' : '0'})
+            Setting.objects.update_or_create(key='mailscanner.rules.edit', defaults={'key' : 'mailscanner.rules.edit', 'value' : '0'})
+            Setting.objects.update_or_create(key='mail.spamassassin.score', defaults={'key' : 'mail.spamassassin.score', 'value' : '5'})
+            Setting.objects.update_or_create(key='mail.spamassassin.highscore', defaults={'key' : 'mail.spamassassin.highscore', 'value' : '15'})
+
             Setting.objects.update_or_create(key='quarantine.report.daily', defaults={'key' : 'quarantine.report.daily', 'value' : serializer.data['quarantine_report_daily']})
+            Setting.objects.update_or_create(key='quarantine.report.weekly', defaults={'key' : 'quarantine.report.weekly', 'value' : True})
+            Setting.objects.update_or_create(key='quarantine.report.monthly', defaults={'key' : 'quarantine.report.monthly', 'value' : False})
             Setting.objects.update_or_create(key='quarantine.report.from', defaults={'key' : 'quarantine.report.from', 'value' : serializer.data['quarantine_report_from']})
             Setting.objects.update_or_create(key='quarantine.report.non_spam.hide', defaults={'key' : 'quarantine.report.non_spam.hide', 'value' : serializer.data['quarantine_report_non_spam_hide']})
             Setting.objects.update_or_create(key='quarantine.report.subject', defaults={'key' : 'quarantine.report.subject', 'value' : serializer.data['quarantine_report_subject']})
