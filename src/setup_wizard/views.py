@@ -94,7 +94,7 @@ class InitializeDatabaseAPIView(APIView):
                 if line[:10] == 'BRAND_LOGO':
                     data[index] = 'BRAND_LOGO = "{}'.format(serializer.data['branding_logo'])
             
-            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'mailguardian', 'settings', 'local.py'), 'w') as f:
+            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
                 f.write("\n".join(data))
             response['update_env'] = _('Settings file succesfully updated. Please run "sudo systemctl restart mailguardian.service"')
             return Response(response, status=status.HTTP_200_OK)
