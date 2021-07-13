@@ -74,7 +74,7 @@ su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home
 cd /home/mailguardian/mailguardian || exit 1
 ENV_DB_PASS=$(date +%s | sha256sum | base64 | head -c 32)
 export ENV_DB_PASS
-pip3 install pytz
+pip3 install pytz distro
 if ! python3 ./installer/configure.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again'
     exit 1
@@ -126,7 +126,7 @@ fi
 echo 'Performing initial compilation of MailGuardian...'
 su - mailguardian -c 'cd /home/mailguardian/mailguardian; npm install; npm run production'
 echo 'Waiting a short moment to allow startup of virus scanners'
-bin/python -c 'import time; time.sleep(5)'
+bin/python -c 'import time; time.sleep(10)'
 
 spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint
 
