@@ -84,7 +84,7 @@ class InitializeDatabaseAPIView(APIView):
             response['createsettings'] = _('Initial settings have been configured')
             # Last update guardianware-env.json with the branding information of the application
             data = []
-            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'mailguardian', 'settings', 'local.py'), 'r') as f:
+            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'src', 'mailguardian', 'settings', 'local.py'), 'r') as f:
                 data = f.readlines()
             for index, line in enumerate(data):
                 if line[:10] == 'BRAND_NAME':
