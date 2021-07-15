@@ -55,8 +55,8 @@ def setup_deb(pkg_mgr, os_release, os_version):
     if installer_config['database']['db_local']:
         pgsql_packages += ' postgresql-12'
     os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
-    os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.4-1/MailScanner-5.3.4-1.noarch.deb')
-    os.system('cd /tmp; dpkg -i MailScanner-5.3.4-1.noarch.deb')
+    os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.4-3/MailScanner-5.3.4-3.noarch.deb')
+    os.system('cd /tmp; dpkg -i MailScanner-5.3.4-3.noarch.deb')
     os.system('/usr/sbin/ms-configure --MTA=none --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
@@ -67,9 +67,9 @@ def setup_deb(pkg_mgr, os_release, os_version):
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
-                pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5')
+                pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
-                pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
+                pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
         with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'w') as f:
             f.write("".join(pg_hba_conf))
         os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')))
@@ -127,9 +127,9 @@ def setup_rhel(pkg_mgr, os_release, os_version):
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
-                pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5')
+                pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
-                pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5')
+                pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
         with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
             f.write("\n".join(pg_hba_conf))
         os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')))
@@ -138,7 +138,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{cmd} --add-port=5432/tcp --permanent'.format(cmd=which('firewall-cmd')))
     os.system('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
     os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
-    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.4-1/MailScanner-5.3.4-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
+    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.3.4-3/MailScanner-5.3.4-3.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
     os.system('/usr/sbin/ms-configure --installEPEL=Y --MTA=none --installClamav=Y --installCPAN=Y --ramdiskSize=0 --SELPermissive=Y --installDf=Y --installUnrar=Y --installTNEF=Y --configClamav=Y --installPowerTools=Y')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
