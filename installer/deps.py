@@ -33,7 +33,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
     PKG_MGR = which(pkg_mgr)
     os.system('{pkg} update'.format(pkg=PKG_MGR))
     os.system('{pkg} purge postfix -y'.format(pkg=PKG_MGR))
-    os.system('{pkg} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev libpq-dev nginx ca-certificates openssl libpng-dev lsb-release build-essential -y'.format(pkg=PKG_MGR))
+    os.system('{pkg} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev python3-pip libpq-dev nginx ca-certificates openssl libpng-dev lsb-release build-essential -y'.format(pkg=PKG_MGR))
     if os_release == 'debian':
         print('Adding additional repositories')
         os.system('echo "deb http://deb.debian.org/debian $(lsb_release -cs)-backports main" > /etc/apt/sources.list.d/debian-backports.list')
@@ -50,7 +50,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
     if not which('python3'):
         print('python3 was not found on your system. Exitting')
         exit(255)
-    os.system('{python} /usr/lib/python3/dist-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
+    os.system('{pip3} install virtualenv'.format(pip3=which('pip3')))
     pgsql_packages = 'postgresql-server-dev-12 postgresql-client-12'
     if installer_config['database']['db_local']:
         pgsql_packages += ' postgresql-12'
@@ -96,16 +96,14 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install --enablerepo=gf-plus postfix3 postfix3-pgsql -y'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
+        os.system('{pkg} install -y python3 python3-devel python3-pip python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
         if not which('python3'):
             print('python3 was not found on your system. Exitting')
             exit(255)
-        os.system('{python} /usr/lib/python3.6/site-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
+        os.system('{pip3} install virtualenv'.format(pip3=which('pip3')))
 
     elif os_version == '8':
         PKG_MGR = which('dnf')
-        # First modify CentOS Base repo to exclude postfix packages
-        # Next enable centosplus repo as this has postfix-pgsql packages
         os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
         os.system('{pkg} -qy module disable postgresql'.format(pkg=PKG_MGR))
         pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
@@ -114,14 +112,13 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
-        os.system('{pkg} install -y python3 python3-devel python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
+        os.system('{pkg} install -y python3 python3-devel python3-pip python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR))
         if not which('python3'):
             print('python3 was not found on your system. Exitting')
             exit(255)
-        os.system('{mkdir} -p /usr/local/lib/python3.6/site-packages/'.format(mkdir=which('mkdir')))
-        os.system('{python} /usr/lib/python3.6/site-packages/easy_install.py virtualenv pip'.format(python=which('python3')))
+        os.system('{pip3} install virtualenv'.format(pip3=which('pip3')))
     else:
-        print('Your version of CentOS is unfortunately not supported')
+        print('Your version is unfortunately not supported')
         exit(255)
     if installer_config['database']['db_local']:
         os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
@@ -170,9 +167,9 @@ if __name__ == "__main__":
     distro = distro_data[0] or 'LINUX'
     distro_version = distro_data[1] or '0'
     distro_version_codename = distro_data[2] or 'Core'
-    if distro == 'centos':
-        PKG_MGR = 'yum'
-        setup_rhel(PKG_MGR, distro, distro_version)
+    if distro in ['centos', 'rocky', 'almalinux', 'rhel']:
+        PKG_MGR = 'dnf' if distro_version[0] == '8' else 'yum'
+        setup_rhel(PKG_MGR, distro, distro_version[0])
         exit(0)
     elif distro == 'debian':
         PKG_MGR = 'apt'

@@ -12,6 +12,15 @@ export LNX_OS_RELEASE
 if [ $LNX_OS_RELEASE == 'centos' ];
 then
     LNX_PKG_MGR='yum'
+elif [ $LNX_OS_RELEASE == 'almalinux' ];
+then
+    LNX_PKG_MGR='dnf'
+elif [ $LNX_OS_RELEASE == 'rocky' ];
+then
+    LNX_PKG_MGR='dnf'
+elif [ $LNX_OS_RELEASE == 'rhel' ];
+then
+    LNX_PKG_MGR='yum'
 elif [ $LNX_OS_RELEASE == 'Ubuntu' ];
 then
     LNX_PKG_MGR='apt'
@@ -26,6 +35,15 @@ else
     if [ $LNX_OS_RELEASE == 'centos' ];
     then
         LNX_PKG_MGR='yum'
+    elif [ $LNX_OS_RELEASE == 'almalinux' ];
+    then
+        LNX_PKG_MGR='dnf'
+    elif [ $LNX_OS_RELEASE == 'rocky' ];
+    then
+        LNX_PKG_MGR='dnf'
+    elif [ $LNX_OS_RELEASE == 'rhel' ];
+    then
+        LNX_PKG_MGR='dnf'
     elif [ $LNX_OS_RELEASE == 'Ubuntu' ];
     then
         LNX_PKG_MGR='apt'

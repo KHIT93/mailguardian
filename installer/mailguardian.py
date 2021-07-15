@@ -107,7 +107,7 @@ if __name__ == "__main__":
     distro = distro_data[0] or 'LINUX'
     distro_version = distro_data[1] or '0'
     distro_version_codename = distro_data[2] or 'Core'
-    if distro.lower() not in ['centos', 'debian', 'ubuntu']:
+    if distro.lower() not in ['centos', 'debian', 'ubuntu', 'almalinux', 'rocky', 'rhel']:
         print('Your Linux distribution or version is not supported')
         print(distro)
         exit(255)
