@@ -150,7 +150,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     os.system('{cmd} --add-service=http --permanent'.format(cmd=which('firewall-cmd')))
     os.system('{cmd} --add-service=https --permanent'.format(cmd=which('firewall-cmd')))
     os.system('{cmd} --reload'.format(cmd=which('firewall-cmd')))
-    os.system('{usermod} -a -G mtagroup nginx'.format(usermod=which('usermod')))
+    os.system('{usermod} -a -G mail nginx'.format(usermod=which('usermod')))
 
 if __name__ == "__main__":
     # First make sure that we are running on Linux
