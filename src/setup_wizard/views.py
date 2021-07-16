@@ -92,7 +92,7 @@ class InitializeDatabaseAPIView(APIView):
                 if line[:13] == 'BRAND_TAGLINE':
                     data[index] = 'BRAND_TAGLINE = "{}"'.format(serializer.data['branding_tagline'])
                 if line[:10] == 'BRAND_LOGO':
-                    data[index] = 'BRAND_LOGO = "{}'.format(serializer.data['branding_logo'])
+                    data[index] = 'BRAND_LOGO = "{}"'.format(serializer.data['branding_logo'])
             
             with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
                 f.write("\n".join(data))
