@@ -80,7 +80,8 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     print('Setting up on RHEL-based distro')
     PKG_MGR = which(pkg_mgr)
     print('Installing EPEL...')
-    os.system('{pkg} install -y epel-release centos-release-scl'.format(pkg=PKG_MGR))
+    os.system('{pkg} install -y epel-release'.format(pkg=PKG_MGR))
+    os.system('{pkg} install -y centos-release-scl'.format(pkg=PKG_MGR))
     os.system("{sed} -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux".format(sed=which('sed')))
     if os_version == '7':
         print('Adding GhettoForge repo...')
