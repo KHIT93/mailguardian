@@ -176,7 +176,7 @@ if __name__ == "__main__":
         '        "HOST": "{}",'.format(DB_HOST),
         '        "PORT": "{}",'.format(DB_PORT),
         '        "OPTIONS": {',
-        '            "sslmode": "{}"'.format("require" if DB_SSL else "prefer"),
+        '            "sslmode": "prefer"',
         '        },',
         '    }',
         '}'
