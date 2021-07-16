@@ -179,9 +179,6 @@ if __name__ == "__main__":
     if APP_HOSTNAME_INPUT != '' and APP_HOSTNAME_INPUT is not None:
         APP_HOSTNAME = APP_HOSTNAME_INPUT
 
-    if input('Would you like to enable HTTP/2 and SSL/TLS (HTTPS) encryption for this instance? (Y/n) ').lower() != 'y':
-        HTTP_SECURE = False
-
     if input('Should this server be part of a configuration that contains multiple servers? (y/N) ').lower() == 'y':
         MULTI_NODE = True
         print(chr(13))
