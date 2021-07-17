@@ -35,7 +35,6 @@ server {
 
     ## Redirect all MailGuardian traffic to the MailGuardian instance ##
     location / {
-        include proxy_params;
         proxy_pass http://unix:/run/mailguardian.socket;
     }
     
