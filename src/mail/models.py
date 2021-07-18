@@ -4,6 +4,7 @@ from django.conf import settings
 import os, datetime, subprocess
 from django.utils.translation import gettext_lazy as _
 from compliance.registry import datalog
+from pathlib import Path
 
 # Create your models here.
 class Message(models.Model):
@@ -87,13 +88,13 @@ class Message(models.Model):
     def file_path(self):
         if self.mailq_id:
             folder = "nonspam" if not self.is_spam else "spam"
-            return os.path.join(settings.MAILSCANNER_QUARANTINE_DIR, str(self.date).replace('-',''), folder, self.mailq_id)
+            return Path(settings.MAILSCANNER_QUARANTINE_DIR, str(self.date).replace('-',''), folder, self.mailq_id)
         else:
             return None
     
     def queue_file_exists(self):
         if self.file_path():
-            if os.path.isfile(self.file_path()):
+            if Path(self.file_path()).is_file():
                 return True
         return False
 

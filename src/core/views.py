@@ -24,6 +24,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 import urllib
 import geoip2.database
+from pathlib import Path
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -162,7 +163,7 @@ class GeoIPLookupAPIView(APIView):
             return Response({
                 'non_field_errors': [_('MaxMind GeoIP configuration is not complete')]
             }, status=status.HTTP_400_BAD_REQUEST)
-        if not os.path.exists(settings.MAXMIND_DB_FILE):
+        if not settings.MAXMIND_DB_FILE.exists():
             return Response({
                 'No GeoLite2 database exists on the system'
             }, status=status.HTTP_503_SERVICE_UNAVAILABLE)
@@ -189,8 +190,8 @@ class GeoIPUpdateAPIView(APIView):
         os.system('tar xvzf {} -C {}'.format(filepath, settings.MAXMIND_DB_PATH))
         for path in os.listdir(settings.MAXMIND_DB_PATH):
             if path[:16] == 'GeoLite2-Country':
-                if os.path.exists(os.path.join(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb')):
-                    os.rename(os.path.join(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb'), settings.MAXMIND_DB_FILE)
-                    shutil.rmtree(os.path.join(settings.MAXMIND_DB_PATH, path))
+                if Path(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb').exists():
+                    Path(settings.MAXMIND_DB_PATH, 'GeoLite2-Country.mmdb').rename(settings.MAXMIND_DB_FILE)
+                    shutil.rmtree(Path(settings.MAXMIND_DB_PATH, path))
         DataLogEntry.objects.log_create(request.user, changes='User {} has performed an update of the MaxMind GeoLite2 database'.format(request.user.email))
         return Response({}, status=status.HTTP_200_OK)

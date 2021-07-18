@@ -2,21 +2,26 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, subprocess, argparse, configparser
+import os
+import platform
+import subprocess
+import argparse
+import configparser
 import distro as distribution
+from pathlib import Path
 
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    fpath, fname = os.path.split(program)
-    if fpath:
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
         if is_exe(program):
             return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path, program)
             if is_exe(exe_file):
-                return exe_file
+                return str(exe_file)
     return None
 
 CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
@@ -62,16 +67,16 @@ def setup_deb(pkg_mgr, os_release, os_version):
     os.system('{pkg} install libdbd-pg-perl -y'.format(pkg=PKG_MGR))
     if installer_config['database']['db_local']:
         pg_hba_conf = []
-        with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'r') as f:
+        with open(Path('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'r') as f:
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
                 pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
-        with open(os.path.join('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'w') as f:
+        with open(Path('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'w') as f:
             f.write("".join(pg_hba_conf))
-        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')))
+        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=Path('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')))
         os.system('{systemctl} start postgresql@12-main'.format(systemctl=which('systemctl')))
     os.system('{usermod} -a -G mtagroup nginx'.format(usermod=which('usermod')))
 
@@ -123,16 +128,16 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     if installer_config['database']['db_local']:
         os.system('/usr/pgsql-12/bin/postgresql-12-setup initdb')
         pg_hba_conf = []
-        with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'r') as f:
+        with open(Path('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'r') as f:
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
                 pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
-        with open(os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
+        with open(Path('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
             f.write("\n".join(pg_hba_conf))
-        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')))
+        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=Path('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')))
         os.system('{systemctl} enable postgresql-12'.format(systemctl=which('systemctl')))
         os.system('{systemctl} start postgresql-12'.format(systemctl=which('systemctl')))
         os.system('{cmd} --add-port=5432/tcp --permanent'.format(cmd=which('firewall-cmd')))

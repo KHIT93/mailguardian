@@ -2,11 +2,14 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, subprocess
+import os
+import platform
+import subprocess
 from django.conf import settings
 import configparser
 import argparse
 import distro as distribution
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -15,16 +18,16 @@ args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    fpath, fname = os.path.split(program)
-    if fpath:
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
         if is_exe(program):
             return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path, program)
             if is_exe(exe_file):
-                return exe_file
+                return str(exe_file)
     return None
 
 if __name__ == "__main__":
@@ -51,7 +54,7 @@ if __name__ == "__main__":
         exit(255)
 
     conf = []
-    with open(os.path.join(APP_DIR, 'perl', 'MailGuardianConf.pm'), 'r') as f:
+    with open(Path(APP_DIR, 'perl', 'MailGuardianConf.pm'), 'r') as f:
         conf = f.readlines()
     for index, line in enumerate(conf):
         if line.strip() == "my ($db_name) = 'mailguardian';":
@@ -62,15 +65,15 @@ if __name__ == "__main__":
             conf[index] = "my ($db_user) = '{}';".format(installer_config['database']['user'])
         if line.strip() == "my ($db_pass) = 'mailguardian';":
             conf[index] = "my ($db_pass) = '{}';".format(installer_config['database']['pass'])
-    with open(os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardianConf.pm'), 'w') as f:
+    with open(Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardianConf.pm'), 'w') as f:
         f.write("\n".join(conf))
     
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'MailGuardian.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLBlockAllowList.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlockAllowList.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=os.path.join(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=os.path.join(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLSpamSettings.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'MailGuardian.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'SQLBlockAllowList.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlockAllowList.pm')))        
+    os.system('ln -sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLSpamSettings.pm')))        
     
     conf = []
-    with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'r') as f:
+    with open(Path(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'r') as f:
         conf = f.readlines()
 
     config_control = [
@@ -350,12 +353,12 @@ if __name__ == "__main__":
                 conf.append('MSMail Delivery Method = QMQP')
             if 'Milter Ignore Loopback' == c:
                 conf.append('Milter Ignore Loopback = no')
-    with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'w') as f:
+    with open(Path(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'w') as f:
         f.write("\n".join(conf))
-    if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterin')):
-        os.makedirs(os.path.join('/','var','spool','MailScanner','milterin'))
-    if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterout')):
-        os.makedirs(os.path.join('/','var','spool','MailScanner','milterout'))
+    if not Path('/','var','spool','MailScanner','milterin').exists():
+        Path('/','var','spool','MailScanner','milterin').mkdir()
+    if not Path('/','var','spool','MailScanner','milterout').exists():
+        Path('/','var','spool','MailScanner','milterout').mkdir()
     os.system('chown postfix:mtagroup /var/spool/MailScanner/milterin')
     os.system('chown postfix:mtagroup /var/spool/MailScanner/milterout')
     os.system('chown postfix:mtagroup /var/spool/MailScanner/incoming')
@@ -365,11 +368,11 @@ if __name__ == "__main__":
     os.system('echo "smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
     os.system("sed -i 's/run_mailscanner=0/run_mailscanner=1/g' /etc/MailScanner/defaults")
 
-    if not os.path.exists('/etc/MailScanner/bayes'):
+    if not Path('/etc/MailScanner/bayes').exists():
         os.system('mkdir /etc/MailScanner/bayes')
     os.system('chown postfix:mtagroup /etc/MailScanner/bayes')
     os.system('chmod g+rws /etc/MailScanner/bayes')
-    if os.path.exists('/root/.spamassasin'):
+    if Path('/root/.spamassasin').exists():
         os.system('cp /root/.spamassassin/bayes_* /etc/MailScanner/bayes')
         os.system('chown postfix:mtagroup /etc/MailScanner/bayes/bayes_*')
         os.system('chmod g+rw /etc/MailScanner/bayes/bayes_*')

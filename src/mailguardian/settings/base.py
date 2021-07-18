@@ -10,13 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-import os
 import platform
-from django.core.management.utils import get_random_secret_key
+from pathlib import Path
 
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,7 +26,7 @@ SECRET_KEY = 'UNSECURE_SECRET_KEY'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 APP_HOSTNAME = platform.node()
-APP_VERSION = '2.0.0'
+APP_VERSION = '3.0.0'
 LOCAL_CONFIG_VERSION = '0.0.0'
 ALLOWED_HOSTS = ['*']
 
@@ -43,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -61,6 +60,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -180,7 +180,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/assets/'
-ASSETS_DIR = os.path.join(os.path.dirname(BASE_DIR), "assets")
+ASSETS_DIR = Path(BASE_DIR.parent, 'assets')
 
 # Guardian Authentication backends
 # https://django-guardian.readthedocs.io/en/stable/configuration.html#configuration
@@ -199,7 +199,7 @@ SENDMAIL_BIN = '/usr/sbin/sendmail'
 POSTQUEUE_BIN = '/usr/sbin/postqueue'
 AUDIT_LOGGING = True
 API_ONLY = False
-CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), "configuration")
+CONF_DIR = Path(BASE_DIR.parent, "configuration")
 
 #MailScanner settings
 MAILSCANNER_BIN = '/usr/sbin/MailScanner'
@@ -224,11 +224,11 @@ BRAND_NAME = 'MailGuardian'
 BRAND_TAGLINE = 'Securing your email'
 BRAND_LOGO = ''
 BRAND_SUPPORT = 'https://github.com/khit93/mailguardian/issues'
-BRAND_FEEDBACK = 'https://github.com/khit93/mailguardian-feedback'
+BRAND_FEEDBACK = 'https://github.com/khit93/mailguardian/issues'
 
 # GeoIP
-MAXMIND_DB_PATH = os.path.join(os.path.dirname(BASE_DIR), 'run')
-MAXMIND_DB_FILE = os.path.join(MAXMIND_DB_PATH, 'GeoLite2.mmdb')
+MAXMIND_DB_PATH = Path(BASE_DIR.parent, 'run')
+MAXMIND_DB_FILE = Path(MAXMIND_DB_PATH, 'GeoLite2.mmdb')
 MAXMIND_ACCOUNT_API_KEY = False
 
 LOGGING = {
@@ -244,3 +244,11 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+CORS_ALLOW_ALL_ORIGINS = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 60
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS  = True
+SECURE_HSTS_PRELOAD = True

@@ -2,11 +2,14 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, subprocess
+import os
+import platform
+import subprocess
 from django.conf import settings
 import configparser
 import argparse
 import distro as distribution
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -24,11 +27,11 @@ if __name__ == "__main__":
     APP_DIR  = installer_config['mailguardian']['app_dir']
     if not installer_config['mailguardian']['api_only']:
         os.system('su postgres -c "createlang plpgsql {}"'.format(installer_config['database']['name']))
-        os.system('psql -U {} -f {} {}'.format(installer_config['database']['user'], os.path.join(APP_DIR, 'installer', 'tools', 'bayes.sql')), installer_config['database']['name'])
+        os.system('psql -U {} -f {} {}'.format(installer_config['database']['user'], Path(APP_DIR, 'installer', 'tools', 'bayes.sql')), installer_config['database']['name'])
 
     conf = []
     conf_index = 0
-    with open(os.path.join(installer_config['mailscanner']['config'], 'spamassassin.conf'), 'r') as f:
+    with open(Path(installer_config['mailscanner']['config'], 'spamassassin.conf'), 'r') as f:
         conf = f.readlines()
 
     # TODO: Make version of this that can migrate old data as a django manage.py command

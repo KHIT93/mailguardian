@@ -11,6 +11,7 @@ import subprocess
 import configparser
 import argparse
 import distro as distribution
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -19,16 +20,16 @@ args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    fpath, fname = os.path.split(program)
-    if fpath:
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
         if is_exe(program):
             return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path, program)
             if is_exe(exe_file):
-                return exe_file
+                return str(exe_file)
     return None
 
 if __name__ == "__main__":
@@ -38,7 +39,7 @@ if __name__ == "__main__":
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit(255)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
-    APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    APP_DIR = Path(__file__).resolve()
     # Define some paths needed later
     SYSTEMD_PATH = '/etc/systemd/system/'
     NGINX_PATH = None
@@ -267,7 +268,7 @@ if __name__ == "__main__":
     print('Location of your MTA logfile: {0}'.format(MTA_LOG))
     print('Retention policy: Store for {0} day(s)'.format(RETENTION_DAYS))
 
-    print('The above will be saved in the configuration file that we will located at {0}'.format(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
+    print('The above will be saved in the configuration file that we will located at {0}'.format(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
     print(chr(13))
     print('After this point everything we do is commited to disk immediately')
     print(chr(13))

@@ -1,4 +1,4 @@
-from .core_settings import *
+from .base import *
 try:
     from .local import *
 except:
@@ -22,10 +22,10 @@ else:
 
 if DEBUG:
     STATICFILES_DIRS = [
-        os.path.join(ASSETS_DIR, "dist")
+        Path(ASSETS_DIR, "dist")
     ]
 else:
-    STATIC_ROOT = os.path.join(ASSETS_DIR, "dist")
+    STATIC_ROOT = Path(ASSETS_DIR, "dist")
 
 # REST Framework configuration
 # http://www.django-rest-framework.org/#example

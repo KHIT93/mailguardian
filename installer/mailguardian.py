@@ -2,12 +2,17 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, pytz, json, pwd, grp, subprocess
+import os
+import platform
+import pwd
+import grp
+import subprocess
 from django.core.management.utils import get_random_secret_key
 import configparser
 import argparse
 import distro as distribution
 import cryptography.fernet
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -16,17 +21,17 @@ args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    fpath, fname = os.path.split(program)
-    if fpath:
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
         if is_exe(program):
             return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path, program)
             if is_exe(exe_file):
-                return exe_file
-    return False
+                return str(exe_file)
+    return None
 
 def generate_encryption_key():
     key = cryptography.fernet.Fernet.generate_key()
@@ -34,7 +39,7 @@ def generate_encryption_key():
 
 
 if __name__ == "__main__":
-    # os.system('clear')
+    os.system('clear')
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
@@ -112,7 +117,7 @@ if __name__ == "__main__":
         print(distro)
         exit(255)
 
-    # os.system('clear')
+    os.system('clear')
 
     env_contents = [
         'import os',
@@ -135,7 +140,6 @@ if __name__ == "__main__":
         'POSTQUEUE_BIN = "{}"'.format(POSTQUEUE_BIN),
         'AUDIT_LOGGING = True',
         'API_ONLY = {}'.format(API_ONLY_MODE),
-        'CONF_DIR = os.path.join(os.path.dirname(BASE_DIR), "configuration")',
         '',
         '#MailScanner settings',
         'MAILSCANNER_BIN = "{}"'.format(MS_BIN),
@@ -148,7 +152,7 @@ if __name__ == "__main__":
         'SALEARN_BIN = "{}"'.format(SALEARN_BIN),
         'SA_BIN = "{}"'.format(SA_BIN),
         'SA_RULES_DIR = "{}"'.format(SA_RULES_DIR),
-        'SA_PREF = MAILSCANNER_CONFIG_DIR+"/spamassassin.conf"',
+        'SA_PREF = MAILSCANNER_CONFIG_DIR + "/spamassassin.conf"',
         '',
         '# Retention policy',
         'RECORD_RETENTION = {}'.format(RETENTION_DAYS),
@@ -182,11 +186,11 @@ if __name__ == "__main__":
         '}'
     ]
     mailguardian_env_contents = "\n".join(env_contents)
-    print('Writing configuration file {0}'.format(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
-    with open(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
+    print('Writing configuration file {0}'.format(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
+    with open(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
         f.write(mailguardian_env_contents)
-    os.chown(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-    # os.system('clear')
+    os.chown(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
+    os.system('clear')
     if os.geteuid() != 0:
         print('You are not running the installation with root privileges. The script will now terminate')
         exit()
@@ -215,7 +219,7 @@ if __name__ == "__main__":
         os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
         os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     # Store the nginx configuration file for the application
-    with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
+    with open(Path(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
         conf = t.read()
         if HTTP_SECURE:
             conf = conf.replace('/home/mailguardian/cert/domain.tld.crt', CERT_PATH).replace('/home/mailguardian/cert/domain.tld.key', PRIVKEY_PATH).replace('/home/mailguardian/cert/dhparam.pem', DHPARAM_PATH)
@@ -225,20 +229,20 @@ if __name__ == "__main__":
         if distro == 'centos':
             if distro_version == '8':
                 conf.replace('include proxy_params;', '#include proxy_params;')
-        with open(os.path.join(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
+        with open(Path(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
             f.write(conf)
 
     # Store the systemd socket file
-    with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:
+    with open(Path(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:
         conf = t.read()
-        with open(os.path.join(SYSTEMD_PATH, 'mailguardian.socket'), 'w') as f:
+        with open(Path(SYSTEMD_PATH, 'mailguardian.socket'), 'w') as f:
             f.write(conf)
 
     # Store the systemd unit file
-    with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
+    with open(Path(APP_DIR, 'configuration', 'examples','systemd','mailguardian.service'), 'r') as t:
         conf = t.read()
         conf = conf.replace('/home/mailguardian/mailguardian', APP_DIR).replace('mailguardian', APP_USER)
-        with open(os.path.join(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
+        with open(Path(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
             f.write(conf)
     # Reload systemd unit cache
     os.system(SYSTEMCTL_BIN + ' daemon-reload')

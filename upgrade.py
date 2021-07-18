@@ -2,13 +2,12 @@
 #
 # MailGuardian upgrade script
 #
-from django.core.management.utils import get_random_secret_key
 from src.core.helpers import which
 import os
+from pathlib import Path
 import json
 import platform
 import subprocess
-from distutils.version import StrictVersion
 import importlib.util
 import argparse
 try:
@@ -34,22 +33,22 @@ if __name__ == "__main__":
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit(255)
     # Get the current directory of this script to determine the path to use
-    APP_DIR = os.path.dirname(os.path.abspath(__file__))
-    BASE_DIR = os.path.join(APP_DIR,'src')
+    APP_DIR = Path(__file__).resolve()
+    BASE_DIR = Path(APP_DIR, 'src')
     DESTINATION_VERSION = '1.0.0'
     notices = []
     if input('This script will evaluate your current MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
         exit(0)
     os.system('clear')
     # Check for legacy configuration file
-    if os.path.exists(os.path.join(APP_DIR, 'mailguardian-env.json')):
+    if Path(APP_DIR, 'mailguardian-env.json').exists():
         config = {}
-        for version in os.listdir(os.path.join(APP_DIR,'installer','upgrade')):
-            with open(os.path.join(APP_DIR, 'mailguardian-env.json'), 'r') as f:
+        for version in Path(APP_DIR, 'installer', 'upgrade').iterdir():
+            with open(Path(APP_DIR, 'mailguardian-env.json'), 'r') as f:
                 config = json.loads(f.read())
-            if os.path.isdir(os.path.join(APP_DIR, 'installer', 'upgrade', version)):
-                if os.path.isfile(os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py')):
-                    spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
+            if version.is_dir():
+                if Path(version, 'upgrade.py').is_file():
+                    spec = importlib.util.spec_from_file_location('upgrade.Upgrader', Path(version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
                     upgrade = upgrader.Upgrader(config=config, app_dir=APP_DIR, src_dir=BASE_DIR, version=config['config_version'] if 'config_version' in config else '1.0.0')
@@ -61,10 +60,10 @@ if __name__ == "__main__":
     
     # Check if we have new configuration system
     if settings:
-        for version in os.listdir(os.path.join(APP_DIR,'installer','upgrade')):
-            if os.path.isdir(os.path.join(APP_DIR, 'installer', 'upgrade', version)):
-                if os.path.isfile(os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py')):
-                    spec = importlib.util.spec_from_file_location('upgrade.Upgrader', os.path.join(APP_DIR, 'installer', 'upgrade', version, 'upgrade.py'))
+        for version in Path(APP_DIR, 'installer', 'upgrade').iterdir():
+            if version.is_dir():
+                if Path(version, 'upgrade.py').is_file():
+                    spec = importlib.util.spec_from_file_location('upgrade.Upgrader', Path(version, 'upgrade.py'))
                     upgrader = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(upgrader)
                     upgrade = upgrader.Upgrader(config=settings, app_dir=APP_DIR, src_dir=BASE_DIR, version=settings.LOCAL_CONFIG_VERSION or '1.0.0')
@@ -80,7 +79,7 @@ if __name__ == "__main__":
 
     # Apply changes that require configuration file changes to have been persisted
     os.system('{0} src/manage.py migrate'.format(which('python')))
-    if os.path.exists(os.path.join(APP_DIR, 'mix-manifest.json')) and which('npm'):
+    if Path(APP_DIR, 'mix-manifest.json').exists() and which('npm'):
         # If we run the frontend, then we will have to perform node updates
         print('Web frontend detected. Rebuilding static assets. This may take some time')
         os.system('npm install')

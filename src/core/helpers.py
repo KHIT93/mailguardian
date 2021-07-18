@@ -1,4 +1,5 @@
 import os, time
+from pathlib import Path
 from pyotp import TOTP as BaseTOTP
 
 class MailGuardianConfiguration:
@@ -37,16 +38,16 @@ class MailGuardianConfiguration:
 
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    fpath, fname = os.path.split(program)
-    if fpath:
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
         if is_exe(program):
             return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path, program)
             if is_exe(exe_file):
-                return exe_file
+                return str(exe_file)
     return None
 
 class TOTP(BaseTOTP):
