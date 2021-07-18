@@ -68,9 +68,10 @@ if __name__ == "__main__":
     with open(Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardianConf.pm'), 'w') as f:
         f.write("\n".join(conf))
     
-    os.system('ln -sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'MailGuardian.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'SQLBlockAllowList.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlockAllowList.pm')))        
-    os.system('ln -sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLSpamSettings.pm')))        
+    # TODO: Refactor to use pathlib if possible
+    subprocess.call([which('ln'), '-sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'MailGuardian.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'MailGuardian.pm'))])
+    subprocess.call([which('ln'), '-sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'SQLBlockAllowList.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLBlockAllowList.pm'))])
+    subprocess.call([which('ln'), '-sf {src} {dest}'.format(src=Path(APP_DIR, 'perl', 'SQLSpamSettings.pm'), dest=Path(installer_config['mailscanner']['shared'], 'perl', 'custom', 'SQLSpamSettings.pm'))])
     
     conf = []
     with open(Path(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'r') as f:
@@ -359,38 +360,29 @@ if __name__ == "__main__":
         Path('/','var','spool','MailScanner','milterin').mkdir()
     if not Path('/','var','spool','MailScanner','milterout').exists():
         Path('/','var','spool','MailScanner','milterout').mkdir()
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/milterin')
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/milterout')
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/incoming')
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/quarantine')
-    os.system('echo "qmqp      unix  n       -       n       -       -       qmqpd" >> {postfix}/master.cf'.format(postfix=POSTFIX_DIR))
-    os.system('echo "qmqpd_authorized_clients = 127.0.0.1" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
-    os.system('echo "smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
-    os.system("sed -i 's/run_mailscanner=0/run_mailscanner=1/g' /etc/MailScanner/defaults")
-
-    if not Path('/etc/MailScanner/bayes').exists():
-        os.system('mkdir /etc/MailScanner/bayes')
-    os.system('chown postfix:mtagroup /etc/MailScanner/bayes')
-    os.system('chmod g+rws /etc/MailScanner/bayes')
-    if Path('/root/.spamassasin').exists():
-        os.system('cp /root/.spamassassin/bayes_* /etc/MailScanner/bayes')
-        os.system('chown postfix:mtagroup /etc/MailScanner/bayes/bayes_*')
-        os.system('chmod g+rw /etc/MailScanner/bayes/bayes_*')
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/milterin'])
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/milterout'])
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/incoming'])
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/quarantine'])
+    subprocess.call([which('echo'), '"qmqp      unix  n       -       n       -       -       qmqpd" >> {postfix}/master.cf'.format(postfix=POSTFIX_DIR)])
+    subprocess.call([which('echo'), '"qmqpd_authorized_clients = 127.0.0.1" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR)])
+    subprocess.call([which('echo'), '"smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR)])
+    subprocess.call([which('sed'), "-i 's/run_mailscanner=0/run_mailscanner=1/g' /etc/MailScanner/defaults"])
     
-    if distro == 'centos':
-        os.system("{sed} -i '/^Example/ c\#Example' /etc/freshclam.conf".format(sed=which('sed')))
-        os.system("{sed} -i '/^Example/ c\#Example' /etc/clamd.d/scan.conf".format(sed=which('sed')))
-        os.system("{sed} -i '/#LocalSocket \/run\/clamd.scan\/clamd.sock/ c\LocalSocket /var/run/clamd.scan/clamd.sock' /etc/clamd.d/scan.conf".format(sed=which('sed')))
-        os.system('{chown} -R clamscan:mtagroup /var/run/clamd.scan'.format(chown=which('chown')))
-        os.system('{echo} "d /var/run/clamd.scan 0750 clamscan mtagroup -" > /usr/lib/tmpfiles.d/clamd.scan.conf'.format(echo=which('echo')))
-        os.system('{touch} /var/log/clamd.scan'.format(touch=which('touch')))
-        os.system('{chown} clamscan:clamscan /var/log/clamd.scan'.format(chown=which('chown')))
-        os.system('{usermod} -G mtagroup,virusgroup,clamupdate clamscan'.format(usermod=which('usermod')))
-        os.system("{sed} -i '/#LogFile \/var\/log\/clamd.scan/ c\LogFile /var/log/clamd.scan' /etc/clamd.d/scan.conf".format(sed=which('sed')))
-        os.system('{systemctl} enable clamd@scan'.format(systemctl=installer_config['bin']['systemctl']))
-        os.system('{systemctl} restart clamd@scan'.format(systemctl=installer_config['bin']['systemctl']))
+    if distro.lower() in ['centos', 'almalinux', 'rocky', 'rhel']:
+        subprocess.call([which('sed'), "-i '/^Example/ c\#Example' /etc/freshclam.conf"])
+        subprocess.call([which('sed'), "-i '/^Example/ c\#Example' /etc/clamd.d/scan.conf"])
+        subprocess.call([which('sed'), "-i '/#LocalSocket \/run\/clamd.scan\/clamd.sock/ c\LocalSocket /var/run/clamd.scan/clamd.sock' /etc/clamd.d/scan.conf"])
+        subprocess.call([which('chown'), '-R clamscan:mtagroup /var/run/clamd.scan'])
+        subprocess.call([which('echo'), '"d /var/run/clamd.scan 0750 clamscan mtagroup -" > /usr/lib/tmpfiles.d/clamd.scan.conf'])
+        subprocess.call([which('touch'), '/var/log/clamd.scan'])
+        subprocess.call([which('chown'), 'clamscan:clamscan /var/log/clamd.scan'])
+        subprocess.call([which('usermod'), '-G mtagroup,virusgroup,clamupdate clamscan'])
+        subprocess.call([which('sed'), "-i '/#LogFile \/var\/log\/clamd.scan/ c\LogFile /var/log/clamd.scan' /etc/clamd.d/scan.conf"])
+        subprocess.call([which('systemctl'), 'enable clamd@scan'])
+        subprocess.call([which('systemctl'), 'restart clamd@scan'])
 
     if distro.lower() in ['ubuntu', 'debian']:
-        os.system('{systemctl} enable clamav-daemon.service'.format(systemctl=installer_config['bin']['systemctl']))
-        os.system('{systemctl} restart clamav-daemon.service'.format(systemctl=installer_config['bin']['systemctl']))
+        subprocess.call([which('systemctl'), 'enable clamav-daemon.service'])
+        subprocess.call([which('systemctl'), 'restart clamav-daemon.service'])
     

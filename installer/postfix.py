@@ -63,9 +63,9 @@ if __name__ == "__main__":
     main_cf.append('transport_maps = regexp:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
     with open(Path(POSTFIX_DIR, 'main.cf'), 'w') as f:
         f.write("\n".join(main_cf))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname']))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname']))
-    os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR))
+    subprocess.call([which('echo'), '"/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname'])])
+    subprocess.call([which('echo'), '"/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname'])])
+    subprocess.call([which('echo'), '"/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR)])
 
     print('Configure PostgreSQL integrations')
     with open(Path(POSTFIX_DIR, 'pgsql-transport.cf'), 'w') as f:

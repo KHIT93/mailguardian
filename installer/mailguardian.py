@@ -39,7 +39,7 @@ def generate_encryption_key():
 
 
 if __name__ == "__main__":
-    os.system('clear')
+    subprocess.call([which('clear')])
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
@@ -117,7 +117,7 @@ if __name__ == "__main__":
         print(distro)
         exit(255)
 
-    os.system('clear')
+    subprocess.call([which('clear')])
 
     env_contents = [
         'import os',
@@ -190,7 +190,7 @@ if __name__ == "__main__":
     with open(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
         f.write(mailguardian_env_contents)
     os.chown(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py'), pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-    os.system('clear')
+    subprocess.call([which('clear')])
     if os.geteuid() != 0:
         print('You are not running the installation with root privileges. The script will now terminate')
         exit()
@@ -199,24 +199,24 @@ if __name__ == "__main__":
             # Check if certbot is installed and if not, then we install it
             if not which('certbot'):
                 if distro == 'debian':
-                    os.system(PKG_MGR + ' install certbot -t {distro}-backports -y'.format(distro=distro_version_codename))
+                    subprocess.call([PKG_MGR, 'install certbot -t {distro}-backports -y'.format(distro=distro_version_codename)])
                 else:
-                    os.system(PKG_MGR + ' install certbot -y')
+                    subprocess.call([PKG_MGR, 'install certbot -y'])
             # Request a certificate and note the path
             PRIVKEY_PATH = '/etc/letsencrypt/live/{0}/privkey.pem'.format(APP_HOSTNAME)
             CERT_PATH = '/etc/letsencrypt/live/{0}/fullchain.pem'.format(APP_HOSTNAME)
-            os.system(which('certbot') + ' certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
+            subprocess.call([which('certbot'), 'certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN)])
         else:
             print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
             # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
-            os.system(OPENSSL_BIN + ' req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH))
+            subprocess.call([OPENSSL_BIN, 'req -new -newkey rsa:4096 -nodes -keyout {0} -out {1}'.format(PRIVKEY_PATH, CSR_PATH)])
             os.chown(PRIVKEY_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
             os.chown(CSR_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
-            os.system(OPENSSL_BIN + ' x509 -req -days 3650 -in {csr} -signkey {key} -out {crt}'.format(csr=CSR_PATH, key=PRIVKEY_PATH, crt=CERT_PATH))
+            subprocess.call([OPENSSL_BIN, 'x509 -req -days 3650 -in {csr} -signkey {key} -out {crt}'.format(csr=CSR_PATH, key=PRIVKEY_PATH, crt=CERT_PATH)])
             os.chown(CERT_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
         print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
         print('Please note that this step can take up to 30 minutes to complete')
-        os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
+        subprocess.call([OPENSSL_BIN, 'dhparam -out {0} 4096'.format(DHPARAM_PATH)])
         os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     # Store the nginx configuration file for the application
     with open(Path(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
@@ -245,7 +245,7 @@ if __name__ == "__main__":
         with open(Path(SYSTEMD_PATH, 'mailguardian.service'), 'w') as f:
             f.write(conf)
     # Reload systemd unit cache
-    os.system(SYSTEMCTL_BIN + ' daemon-reload')
+    subprocess.call([SYSTEMCTL_BIN, 'daemon-reload'])
 
     # Enable systemd service unit on startup
-    os.system(SYSTEMCTL_BIN + ' enable --now mailguardian.service')
+    subprocess.call([SYSTEMCTL_BIN, 'enable --now mailguardian.service'])

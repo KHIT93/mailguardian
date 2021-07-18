@@ -27,7 +27,7 @@ def rebuild_latest_systemd():
     pass
 
 if __name__ == "__main__":
-    os.system('clear')
+    subprocess.call([which('clear')])
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     notices = []
     if input('This script will evaluate your current MailGuardian installation and apply any changes necessary. Do you want to start? (y/N) ').lower() != 'y':
         exit(0)
-    os.system('clear')
+    subprocess.call([which('clear')])
     # Check for legacy configuration file
     if Path(APP_DIR, 'mailguardian-env.json').exists():
         config = {}
@@ -78,12 +78,12 @@ if __name__ == "__main__":
     print('Now we will perform actions that need to be performed after any file changes')
 
     # Apply changes that require configuration file changes to have been persisted
-    os.system('{0} src/manage.py migrate'.format(which('python')))
+    subprocess.call([which('python'), 'src/manage.py migrate'])
     if Path(APP_DIR, 'mix-manifest.json').exists() and which('npm'):
         # If we run the frontend, then we will have to perform node updates
         print('Web frontend detected. Rebuilding static assets. This may take some time')
-        os.system('npm install')
-        os.system('npm run production')
+        subprocess.call([which('npm'), 'install'])
+        subprocess.call([which('npm'), 'run production'])
     auto_fix = args.yes
 
     if not auto_fix:

@@ -1,3 +1,4 @@
+import subprocess
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer
@@ -25,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 import urllib
 import geoip2.database
 from pathlib import Path
+from core.helpers import which
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -187,7 +189,7 @@ class GeoIPUpdateAPIView(APIView):
                 'non_field_errors': ['MaxMind Database configuration is incomplete']
             }, status=status.HTTP_400_BAD_REQUEST)
         filepath, headers = urllib.request.urlretrieve('https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={key}&suffix=tar.gz'.format(key=settings.MAXMIND_ACCOUNT_API_KEY))
-        os.system('tar xvzf {} -C {}'.format(filepath, settings.MAXMIND_DB_PATH))
+        subprocess.call([which('tar'), 'xvzf {} -C {}'.format(filepath, settings.MAXMIND_DB_PATH)])
         for path in os.listdir(settings.MAXMIND_DB_PATH):
             if path[:16] == 'GeoLite2-Country':
                 if Path(settings.MAXMIND_DB_PATH, path, 'GeoLite2-Country.mmdb').exists():
