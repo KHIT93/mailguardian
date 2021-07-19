@@ -1,5 +1,5 @@
 {% load static %}
-{% load mix %}
+{% load vite %}
 {% load i18n %}
 <!DOCTYPE html>
 <html>
@@ -8,17 +8,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>{% block app_title %}{{ app_name }}{% endblock %}</title>
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{% mix 'css/app.css' %}" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
     </head>
-    <body class="font-sans bg-gray-100 antialiased">
+    <body class="font-sans bg-white antialiased">
         {% block content %}{% endblock %}
-        <script>
-            window.Promise || document.write('<div class="container"><div class="w-1/2 mx-auto"><div class="notification notification-error" role="alert"><div class="flex"><div class="py-1"><svg class="fill-current h-6 w-6 icon mr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"/></svg></div><div><p class="font-bold">{% translate "Your browser is not supported" %}</p><p class="text-sm">{% translate "We are really sorry, but it would seem as if your current browser is not supported. Please use a different one" %}</p><p class="text-sm py-2">{% translate "You can find a supported browser here:" %} <a class="underline font-semibold" href="https://browsehappy.com/">Supported Browsers</a></div></div></div></div></div>');
-        </script>
 
         {% block scripts %}
-        <script src="{% mix 'js/app.js' %}" defer></script>
+        <script type="module" src="{% vite 'main.js' %}"></script>
         {% endblock %}
     </body>
 </html>

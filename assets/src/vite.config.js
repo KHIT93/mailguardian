@@ -1,0 +1,17 @@
+import { resolve } from 'path';
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+    build: {
+        manifest: true, // adds a manifest.json
+        rollupOptions: {
+            input: [
+                resolve(__dirname, './main.js'),
+            ]
+        },
+        outDir: 'dist',
+        assetsDir: 'assets',
+    },
+    plugins: [vue()],
+});
