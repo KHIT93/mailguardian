@@ -39,7 +39,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
     is_clean = serializers.SerializerMethodField()
     
     def get_mailq_path(self, obj):
-        return obj.file_path()
+        return str(obj.file_path())
 
     def get_is_clean(self, obj):
         if not obj.is_spam and not obj.is_rbl_listed and not obj.infected:
