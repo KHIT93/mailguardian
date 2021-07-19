@@ -20,7 +20,6 @@ Django>=3.2.*
 django-appconf>=1.0.4
 django-auditlog>=0.4.7
 django-cryptography>=1.0
-django-encrypted-model-fields>=0.5.8
 django-extensions>=3.0.5
 django-filter>=2.3.0
 django-jsonfield>=1.4.0
