@@ -130,7 +130,8 @@
                             <SearchIcon class="w-4 h-4"/>
                         </span>
                     </div>
-                    <input v-model="searchKey" id="search-key" name="search-key" type="search" class="transition duration-300 focus:ring-blue-500 focus:border-blue-500 block w-1/2 pl-10 pr-2 sm:text-sm border-gray-300 rounded-md" placeholder="Search by name, email or more" />
+                    <input v-model="searchKey" id="search-key" name="search-key" type="search" class="peer placeholder-transparent transition duration-300 focus:ring-blue-500 focus:border-blue-500 block w-1/2 pl-10 pr-2 sm:text-sm border-gray-300 rounded-md" placeholder="Search by name, email or more" />
+                    <label for="search-key" class="absolute flex bg-white px-1 left-2 -top-2.5 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-8 sm:peer-placeholder-shown:text-sm peer-focus:-top-2.5 peer-focus:left-2 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Search by name, email or more</label>
                 </div>
             </div>
             <div class="w-1/2 text-right">

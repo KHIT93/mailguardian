@@ -8,21 +8,21 @@
             </div>
             <form class="mt-8 space-y-6" action="#" method="POST" @submit.prevent="signIn">
                 <div class="shadow overflow-hidden sm:rounded-md" :class="{ 'animate-pulse': signingIn }">
-                    <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                    <div class="px-4 py-5 bg-white space-y-8 sm:p-6">
                         <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                             {{ form.errors.get('non_field_errors') }}
                         </p>
                         <input type="hidden" name="remember" value="true" />
-                        <div>
-                            <label for="email-address" class="text-sm">Email address</label>
-                            <input id="email-address" v-model="form.email.value" name="email" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('email') }" class="transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="john@doe.com" />
+                        <div class="relative">
+                            <input id="email-address" v-model="form.email.value" name="email" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('email') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="john@doe.com" />
+                            <label for="email-address" class="absolute flex bg-white px-1 left-2 -top-2.5 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-2.5 peer-focus:left-2 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Email address</label>
                             <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
                                 {{ form.errors.get('email') }}
                             </p>
                         </div>
-                        <div>
-                            <label for="password" class="text-sm">Password</label>
-                            <input id="password" v-model="form.password.value" name="password" type="password" required="" autocomplete="current-password" :class="{ 'border-red-600': form.errors.has('password') }" class="transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="************" />
+                        <div class="mt-4 relative">
+                            <input id="password" v-model="form.password.value" name="password" type="password" required="" autocomplete="current-password" :class="{ 'border-red-600': form.errors.has('password') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="************" />
+                            <label for="password" class="absolute flex bg-white px-1 left-2 -top-2.5 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-2.5 peer-focus:left-2 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Password</label>
                             <p v-if="form.errors.has('password')" class="text-red-500 text-xs py-1">
                                 {{ form.errors.get('password') }}
                             </p>
