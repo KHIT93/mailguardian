@@ -16,7 +16,7 @@ coreschema==0.0.4
 cryptography==3.4.7
 cssselect==1.1.0
 cssutils==2.3.0
-distro==1.5.0
+distro==1.6.0
 Django==3.2.5
 django-appconf==1.0.4
 django-auditlog==0.4.7
@@ -31,7 +31,7 @@ djangorestframework==3.12.4
 geoip2==4.2.0
 gunicorn==20.1.0
 idna==3.2
-importlib-metadata==4.6.1
+importlib-metadata==4.6.3
 itypes==1.2.0
 Jinja2==3.0.1
 kombu==5.0.2
