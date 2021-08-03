@@ -29,7 +29,7 @@
                         </div>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
-                                <input id="remember_me" v-model="form.remember" name="remember_me" type="checkbox" class="transition duration-300 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                                <input id="remember_me" v-model="form.remember" name="remember_me" type="checkbox" class="transition duration-300 h-4 w-4 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded" />
                                 <label for="remember_me" class="ml-2 block text-sm text-gray-900">
                                 Remember me
                                 </label>
