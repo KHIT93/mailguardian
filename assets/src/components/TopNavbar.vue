@@ -30,6 +30,9 @@
                                     <MenuItem v-for="item in profile" :key="item" v-slot="{ active }">
                                         <a href="#" :class="[active ? 'bg-gray-100' : '', 'transition duration-300 block px-4 py-2 text-sm text-gray-700']">{{ item }}</a>
                                     </MenuItem>
+                                    <MenuItem v-for="item in profile" :key="item" v-slot="{ active }">
+                                        <a href="#" @click="signOut" :class="[active ? 'bg-gray-100' : '', 'transition duration-300 block px-4 py-2 text-sm text-gray-700']">Sign out</a>
+                                    </MenuItem>
                                 </MenuItems>
                             </transition>
                         </Menu>
@@ -47,9 +50,9 @@
         </div>
         <DisclosurePanel class="md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <template v-for="item in navigation" :key="item">
+                <template v-for="item in navigation" :key="item.to">
                     <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                    <router-link to="#" class="transition duration-300 text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">{{ item }}</router-link>
+                    <router-link :to="item.to" :class="'transition duration-300 block px-4 py-2 text-sm text-gray-700'">{{ item.name }}</router-link>
                 </template>
             </div>
             <div class="pt-4 pb-3 border-t border-gray-700">
@@ -67,7 +70,8 @@
                     </button>
                 </div>
                 <div class="mt-3 px-2 space-y-1">
-                    <a v-for="item in profile" :key="item" href="#" class="transition duration-300 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">{{ item }}</a>
+                    <router-link v-for="item in profile" :key="item.to" :to="item.to" class="transition duration-300 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">{{ item.name }}</router-link>
+                    <a href="#" @click="signOut" class="transition duration-300 block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Sign out</a>
                 </div>
             </div>
         </DisclosurePanel>
@@ -79,6 +83,8 @@ import { ref } from 'vue'
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { BellIcon, MenuIcon, XIcon, ShieldCheckIcon, MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon } from '@heroicons/vue/outline'
 import { UserCircleIcon } from '@heroicons/vue/solid'
+import navigation from '../data/menu'
+import profile from '../data/profile'
 export default {
     components: {
         Disclosure,
@@ -103,12 +109,17 @@ export default {
     },
     setup(props) {
         let open = ref(false)
-        let navigation = ['Dashboard', 'Lists', 'Statistics', 'Users', 'Domains', 'Cluster', 'Audit', 'SpamAssassin Rules', 'Settings', 'Notification Manager']
-        let profile = ['Settings', 'Sign out']
+        // let navigation = ['Dashboard', 'Lists', 'Statistics', 'Users', 'Domains', 'Cluster', 'Audit', 'SpamAssassin Rules', 'Settings', 'Notification Manager']
+        // let profile = ['Settings', 'Sign out']
         return {
             navigation,
             profile,
             open
+        }
+    },
+    methods: {
+        signOut() {
+            this.$auth.logout()
         }
     }
 }
