@@ -17,8 +17,7 @@
                 </div>
                 <span class="font-lg text-gray-700 font-bold">All Emails</span>
                 <div class="px-8">
-                    <div class="border-t-4 border-blue-400 rounded-t-full" v-if="!messageType"/>
-                    <div class="border-t-4 border-transparent rounded-t-full" v-else/>
+                    <div :class="{'border-blue-400': !messageType, 'border-transparent': messageType}" class="border-t-4 rounded-t-full transition-all duration-150"/>
                 </div>
             </button>
             <button type="button" @click.native="messageType = 'is_clean'">
@@ -37,8 +36,7 @@
                 </div>
                 <span class="font-lg text-gray-700">General</span>
                 <div class="px-8">
-                    <div class="border-t-4 border-blue-400 rounded-t-full" v-if="messageType == 'is_clean'"/>
-                    <div class="border-t-4 border-transparent rounded-t-full" v-else/>
+                    <div :class="{'border-blue-400': messageType == 'is_clean', 'border-transparent': messageType != 'is_clean'}" class="border-t-4 rounded-t-full transition-all duration-150"/>
                 </div>
             </button>
             <button type="button">
@@ -57,8 +55,7 @@
                 </div>
                 <span class="font-lg text-gray-700">Important</span>
                 <div class="px-8">
-                    <div class="border-t-4 border-blue-400 rounded-t-full" v-if="messageType == 'important'"/>
-                    <div class="border-t-4 border-transparent rounded-t-full" v-else/>
+                    <div :class="{'border-blue-400': messageType == 'important', 'border-transparent': messageType != 'important'}" class="border-t-4 rounded-t-full transition-all duration-150"/>
                 </div>
             </button>
             <button type="button">
@@ -77,8 +74,7 @@
                 </div>
                 <span class="font-lg text-gray-700">Flagged</span>
                 <div class="px-8">
-                    <div class="border-t-4 border-blue-400 rounded-t-full" v-if="messageType == 'flagged'"/>
-                    <div class="border-t-4 border-transparent rounded-t-full" v-else/>
+                    <div :class="{'border-blue-400': messageType == 'flagged', 'border-transparent': messageType != 'flagged'}" class="border-t-4 rounded-t-full transition-all duration-150"/>
                 </div>
             </button>
             <button type="button" @click.native="messageType = 'is_spam'">
@@ -97,8 +93,7 @@
                 </div>
                 <span class="font-lg text-gray-700">Spam</span>
                 <div class="px-8">
-                    <div class="border-t-4 border-blue-400 rounded-t-full" v-if="messageType == 'is_spam'"/>
-                    <div class="border-t-4 border-transparent rounded-t-full" v-else/>
+                    <div :class="{'border-blue-400': messageType == 'is_spam', 'border-transparent': messageType != 'is_spam'}" class="border-t-4 rounded-t-full transition-all duration-150"/>
                 </div>
             </button>
             <button type="button" @click.native="messageType = 'infected'">
@@ -117,8 +112,7 @@
                 </div>
                 <span class="font-lg text-gray-700">Viruses</span>
                 <div class="px-8">
-                    <div class="border-t-4 border-blue-400 rounded-t-full" v-if="messageType == 'infected'"/>
-                    <div class="border-t-4 border-transparent rounded-t-full" v-else/>
+                    <div :class="{'border-blue-400': messageType == 'infected', 'border-transparent': messageType != 'infected'}" class="border-t-4 rounded-t-full transition-all duration-150"/>
                 </div>
             </button>
         </div>
@@ -141,7 +135,7 @@
             </div>
         </div>
         <div class="flex flex-col pt-4">
-            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="-my-2 overflow-x-visible sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div class="border-b border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -159,53 +153,41 @@
                                     <th scope="col" class="px-6 pt-3 pb-1 text-left text-xs font-medium text-gray-400 tracking-wider">
                                         Subject
                                     </th>
-                                    <th scope="col" class="px-6 pt-3 pb-1 text-left text-xs font-medium text-gray-400 tracking-wider">
-                                        Actions
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
                                 <template v-if="messagesLoading">
-                                    <tr class="animate-pulse" v-for="num in 10" :key="num">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <tr class="animate-pulse border-b" v-for="num in 20" :key="num">
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
                                             <div class="h-4 bg-cool-gray-300 rounded"></div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700" colspan="2">
                                             <div class="h-4 bg-cool-gray-300 rounded"></div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            <div class="h-4 bg-cool-gray-300 rounded"></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            <div class="h-4 bg-cool-gray-300 rounded"></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
                                             <div class="h-4 bg-cool-gray-300 rounded"></div>
                                         </td>
                                     </tr>
                                 </template>
                                 <tr v-else-if="filteredMessages.length == 0">
-                                    <td class="px-6 py-4 whitespace-nowrap" colspan="99">
+                                    <td class="px-6 py-2 whitespace-nowrap" colspan="99">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold">
                                             No messages are matching your search
                                         </span>
                                     </td>
                                 </tr>
-                                <tr v-for="message in filteredMessages" :key="message.id" v-else @click.native="goToMessage(message.id)" class="border-b transition duration-300 hover:shadow-lg hover:font-bold">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ message.date }}
+                                <tr v-for="message in filteredMessages" :key="message.id" v-else @click.native="goToMessage(message.id)" class="cursor-pointer border-b transition duration-300 hover:shadow-lg hover:font-bold">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                        {{ (new Date(message.date).toLocaleDateString()) }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
                                         {{ message.from_address }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
                                         {{ message.to_address }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                    <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
                                         {{ message.subject }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-blue-600 hover:text-blue-900">Edit</a>
                                     </td>
                                 </tr>
                             </tbody>
