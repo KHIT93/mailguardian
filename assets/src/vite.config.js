@@ -10,8 +10,9 @@ export default defineConfig({
                 resolve(__dirname, './main.js'),
             ]
         },
-        outDir: 'dist',
-        assetsDir: 'assets',
+        outDir: '../dist',
+        emptyOutDir: true,
+        assetsDir: '',
     },
     plugins: [vue()],
 });
