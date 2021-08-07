@@ -2,8 +2,9 @@
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Sign in to your account
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-700">
+                    <ShieldCheckIcon class="h-10 w-10 text-blue-500 inline-block" aria-hidden="true"/>
+                    <span class="">MailGuardian</span>
                 </h2>
             </div>
             <form class="mt-8 space-y-6" action="#" method="POST" @submit.prevent="signIn">
@@ -62,11 +63,13 @@
 
 <script>
 import { LockClosedIcon } from '@heroicons/vue/solid'
+import { ShieldCheckIcon } from '@heroicons/vue/outline'
 import { ref } from 'vue'
 import Form from '../classes/Form'
 export default {
     components: {
-        LockClosedIcon
+        LockClosedIcon,
+        ShieldCheckIcon
     },
     setup(props) {
         let form = new Form({
