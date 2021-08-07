@@ -4,7 +4,7 @@ import './main.css'
 import router from './router'
 import auth from './auth'
 import axios from 'axios'
-import * as Cookies from "js-cookie"
+import Cookies from 'js-cookie'
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
