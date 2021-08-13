@@ -1,37 +1,45 @@
+import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon } from '@heroicons/vue/outline'
 export default [
     {
         name: 'Dashboard',
-        to : '/',
-        admin: false
+        path: '/',
+        admin: false,
+        icon: MailIcon
     },
     {
         name: 'Allow/Deny lists',
-        to : '/lists',
-        admin: false
+        path: '/lists',
+        admin: false,
+        icon: LockClosedIcon
     },
     {
         name: 'Statistics',
-        to : '/statistics',
-        admin: false
+        path: '/statistics',
+        admin: false,
+        icon: ChartBarIcon
     },
     {
         name: 'Users',
-        to : '/users',
-        admin: true
+        path: '/users',
+        admin: true,
+        icon: UserGroupIcon
     },
     {
         name: 'Domains',
-        to : '/domains',
-        admin: true
+        path: '/domains',
+        admin: true,
+        icon: GlobeIcon
     },
     {
         name: 'Cluster',
-        to : '/cluster',
-        admin: true
+        path: '/cluster',
+        admin: true,
+        icon: ServerIcon
     },
     {
         name: 'Audit',
-        to : '/audit',
-        admin: true
+        path: '/audit',
+        admin: true,
+        icon: DocumentSearchIcon
     },
 ]

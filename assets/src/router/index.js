@@ -3,6 +3,8 @@ import PagesIndex from '../pages/Index.vue'
 import PagesLogin from '../pages/Login.vue'
 import Messages from '../pages/messages/_id.vue'
 import ListIndex from '../pages/lists/Index.vue'
+import ListEdit from '../pages/lists/_id/edit.vue'
+import PageNotFound from '../pages/404.vue'
 
 let routes = [
     {
@@ -36,6 +38,20 @@ let routes = [
         meta: {
             auth: true
         }
+    },
+    {
+        path: '/lists/:id/edit',
+        name: 'lists.edit',
+        component: ListEdit,
+        meta: {
+            auth: true
+        }
+    },
+
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: PageNotFound
     }
 ]
 

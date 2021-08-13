@@ -1,7 +1,7 @@
 export default [
     {
         name: 'Settings',
-        to : '/settings',
+        path: '/settings',
         admin: false
     }
 ]

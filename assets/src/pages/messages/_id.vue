@@ -1,5 +1,8 @@
 <template>
     <MainLayout>
+        <div class="flex w-full pb-4">
+            <router-link to="/" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></router-link>
+        </div>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">
@@ -224,6 +227,7 @@ import { onMounted, ref, computed, toRefs } from 'vue'
 import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
+import { ArrowLeftIcon } from '@heroicons/vue/outline'
 import { BanIcon } from '@heroicons/vue/outline'
 import MainLayout from '../../components/MainLayout.vue'
 import { bytesToHuman, boolToHuman } from '../../filters'
@@ -233,6 +237,7 @@ export default {
         Disclosure,
         DisclosureButton,
         DisclosurePanel,
+        ArrowLeftIcon,
         ChevronDownIcon,
         BanIcon
     },
@@ -275,7 +280,8 @@ export default {
             getMessageHeaders,
             getMessageSpamReport,
             bytesToHuman,
-            boolToHuman
+            boolToHuman,
+            useRouter
         }
     }
 }
