@@ -1,4 +1,4 @@
-import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon } from '@heroicons/vue/outline'
+import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon, DocumentTextIcon, CogIcon } from '@heroicons/vue/outline'
 export default [
     {
         name: 'Dashboard',
@@ -40,6 +40,20 @@ export default [
         name: 'Audit',
         path: '/audit',
         admin: true,
-        icon: DocumentSearchIcon
+        icon: DocumentSearchIcon,
+        children: [
+            {
+                name: 'Log',
+                path: '/audit/log',
+                admin: true,
+                icon: DocumentTextIcon
+            },
+            {
+                name: 'Settings',
+                path: '/audit/settings',
+                admin: true,
+                icon: CogIcon
+            }
+        ]
     },
 ]
