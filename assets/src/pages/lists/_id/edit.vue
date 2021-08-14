@@ -5,38 +5,50 @@
         </div>
         <div class="shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 bg-white space-y-8 sm:p-6">
-                <form method="POST">
-                    <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
-                        {{ form.errors.get('non_field_errors') }}
-                    </p>
-                    <div class="relative" v-if="entry.from_entry_type == 'email'">
-                        <input id="from_address" v-model="form.from_address.value" name="from_address" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('from_address') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Senders email" />
-                        <label for="from_address" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Senders email</label>
-                        <p v-if="form.errors.has('from_address')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('from_address') }}
+                <form method="POST" class="space-y-8 sm:space-y-5 divide-y divide-gray-200">
+                    <div class="">
+                        <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
+                            {{ form.errors.get('non_field_errors') }}
                         </p>
+                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.from_entry_type == 'email'">
+                            <label for="from_address" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
+                            <input type="text" name="from_address" id="from_address" v-model="form.from_address.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
+                            <p v-if="form.errors.has('from_address')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('from_address') }}
+                            </p>
+                        </div>
+                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.from_entry_type == 'domain' || entry.from_entry_type == 'ip_address'">
+                            <label for="from_domain" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
+                            <input type="text" name="from_domain" id="from_domain" v-model="form.from_domain.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
+                            <p v-if="form.errors.has('from_domain')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('from_domain') }}
+                            </p>
+                        </div>
+                        <hr class="my-4"/>
+                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.to_entry_type == 'email'">
+                            <label for="to_address" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
+                            <input type="text" name="to_address" id="to_address" v-model="form.to_address.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
+                            <p v-if="form.errors.has('to_address')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('to_address') }}
+                            </p>
+                        </div>
+                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.to_entry_type == 'domain' || entry.to_entry_type == 'ip_address'">
+                            <label for="to_domain" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
+                            <input type="text" name="to_domain" id="to_domain" v-model="form.to_domain.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
+                            <p v-if="form.errors.has('to_domain')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('to_domain') }}
+                            </p>
+                        </div>
                     </div>
-                    <div class="relative" v-if="entry.from_entry_type == 'domain' || entry.from_entry_type == 'ip_address'">
-                        <input id="from_domain" v-model="form.from_domain.value" name="from_domain" type="text" required="" :class="{ 'border-red-600': form.errors.has('from_domain') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Senders domain" />
-                        <label for="from_domain" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Senders domain</label>
-                        <p v-if="form.errors.has('from_domain')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('from_domain') }}
-                        </p>
-                    </div>
-                    <hr class="my-4"/>
-                    <div class="relative" v-if="entry.to_entry_type == 'email'">
-                        <input id="to_address" v-model="form.to_address.value" name="to_address" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('to_address') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Recipient email" />
-                        <label for="to_address" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Recipient email</label>
-                        <p v-if="form.errors.has('to_address')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('to_address') }}
-                        </p>
-                    </div>
-                    <div class="relative" v-if="entry.to_entry_type == 'domain' || entry.to_entry_type == 'ip_address'">
-                        <input id="to_domain" v-model="form.to_domain.value" name="to_domain" type="text" required="" :class="{ 'border-red-600': form.errors.has('to_domain') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Recipient domain" />
-                        <label for="to_domain" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Recipient domain</label>
-                        <p v-if="form.errors.has('to_domain')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('to_domain') }}
-                        </p>
+                    <div class="pt-5">
+                        <div class="flex justify-end">
+                            <button type="button" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Cancel
+                            </button>
+                            <button type="submit" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Save
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -69,20 +81,17 @@ export default {
         let getEntry = (async () => {
             loading.value = true
             let res = (await axios.get(`/api/lists/${id}/`)).data
-            entry.value = res
-            form = new Form({
-                from_address: entry.from_address,
-                from_domain: entry.from_domain,
-                to_address: entry.to_address,
-                to_domain: entry.to_domain,
-                listing_type: entry.listing_type,
-            })
+            form.from_address.value = res.from_address
+            form.from_domain.value = res.from_domain
+            form.to_address.value = res.to_address
+            form.to_domain.value = res.to_domain
+            form.listing_type.value = res.listing_type
             loading.value = false
             return res
         })
 
-        onMounted(() => {
-            getEntry()
+        onMounted(async () => {
+            entry.value = (await getEntry())
         })
 
         return {

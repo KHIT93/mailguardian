@@ -5,11 +5,11 @@
                 <Tab as="template" v-slot="{ selected }">
                     <button
                         :class="[
-                        'w-full py-2.5 text-sm leading-5 font-medium text-blue-500 transition-all',
+                        'w-full py-2.5 border-b-2 text-sm leading-5 font-medium text-blue-500 transition-all',
                         'focus:outline-none ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
                         selected
-                            ? 'border-blue-500 border-b-2 hover:bg-blue-500/[0.12]'
-                            : 'text-blue-100 hover:bg-gray-300/[0.12] hover:text-blue-400',
+                            ? 'border-blue-500 hover:bg-blue-500/[0.12]'
+                            : 'border-transparent text-blue-300 hover:bg-gray-300/[0.12] hover:text-blue-400',
                         ]"
                     >
                         Blocked
@@ -18,11 +18,11 @@
                 <Tab as="template" v-slot="{ selected }">
                     <button
                         :class="[
-                        'w-full py-2.5 text-sm leading-5 font-medium text-blue-500 transition-all',
+                        'w-full py-2.5 border-b-2 text-sm leading-5 font-medium text-blue-500 transition-all',
                         'focus:outline-none ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
                         selected
-                            ? 'border-blue-500 border-b-2 hover:bg-blue-500/[0.12]'
-                            : 'text-blue-100 hover:bg-gray-300/[0.12] hover:text-blue-400',
+                            ? 'border-blue-500 hover:bg-blue-500/[0.12]'
+                            : 'border-transparent text-blue-300 hover:bg-gray-300/[0.12] hover:text-blue-400',
                         ]"
                     >
                         Allowed

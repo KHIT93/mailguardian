@@ -21,10 +21,30 @@
                         </div>
                         <div class="mt-5 flex-1 h-0 overflow-y-auto">
                             <nav class="px-2 space-y-1">
-                                <router-link v-for="item in navigation" :key="item.path" :to="item.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                    <component :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
-                                    {{ item.name }}
-                                </router-link>
+                                <template v-for="item in navigation" :key="item.path">
+                                    <div v-if="!item.children">
+                                        <router-link :to="item.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                            <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                            {{ item.name }}
+                                        </router-link>
+                                    </div>
+                                    <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
+                                        <DisclosureButton class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group w-full flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                            <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                            <span class="flex-1 text-left">
+                                                {{ item.name }}
+                                            </span>
+                                            <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                            <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                        </DisclosureButton>
+                                        <DisclosurePanel class="space-y-1">
+                                            <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="ml-4 border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                                <component v-if="child.icon" :is="child.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                                {{ child.name }}
+                                            </router-link>
+                                        </DisclosurePanel>
+                                    </Disclosure>
+                                </template>
                             </nav>
                         </div>
                     </div>
@@ -45,10 +65,30 @@
                     </div>
                     <div class="mt-5 flex-grow flex flex-col">
                         <nav class="flex-1 pr-2 bg-white space-y-1">
-                            <router-link v-for="item in navigation" :key="item.path" :to="item.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="transition duration-300 flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-blue-gray-200">
-                                <component :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
-                                {{ item.name }}
-                            </router-link>
+                            <template v-for="item in navigation" :key="item.path">
+                                <div v-if="!item.children">
+                                    <router-link :to="item.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="transition duration-300 border-l-4 border-transparent flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-blue-gray-200">
+                                        <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                        {{ item.name }}
+                                    </router-link>
+                                </div>
+                                <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
+                                    <DisclosureButton class="transition duration-300 border-l-4 border-transparent group w-full flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-blue-gray-200">
+                                        <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                        <span class="flex-1 text-left">
+                                            {{ item.name }}
+                                        </span>
+                                        <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                        <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                    </DisclosureButton>
+                                    <DisclosurePanel class="space-y-1">
+                                        <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-blue-gray-200">
+                                            <component v-if="child.icon" :is="child.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                            {{ child.name }}
+                                        </router-link>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                            </template>
                         </nav>
                     </div>
                 </div>
@@ -113,9 +153,11 @@ import {
   MenuItems,
   TransitionChild,
   TransitionRoot,
+  DisclosurePanel,
+  Disclosure,
+  DisclosureButton
 } from '@headlessui/vue'
-import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon, ShieldCheckIcon, XIcon, BellIcon, MenuAlt2Icon } from '@heroicons/vue/outline'
-import { UserCircleIcon } from '@heroicons/vue/solid'
+import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon, ShieldCheckIcon, XIcon, BellIcon, MenuAlt2Icon, UserCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline'
 import navigation from '../data/menu'
 import profile from '../data/profile'
 export default {
@@ -128,6 +170,9 @@ export default {
         MenuItems,
         TransitionRoot,
         TransitionChild,
+        DisclosureButton,
+        DisclosurePanel,
+        Disclosure,
         MailIcon,
         LockClosedIcon,
         ChartBarIcon,
@@ -139,7 +184,9 @@ export default {
         XIcon,
         BellIcon,
         UserCircleIcon,
-        MenuAlt2Icon
+        MenuAlt2Icon,
+        ChevronUpIcon,
+        ChevronDownIcon
     },
     setup(props) {
         let open = ref(false)
