@@ -85,8 +85,8 @@ $LNX_PKG_MGR install -y python3-pip
 echo 'Creating application user...'
 useradd -m mailguardian
 chmod 755 /home/mailguardian
-echo 'Installing git commandline tools, if not available...'
-$LNX_PKG_MGR install git -y
+echo 'Installing git commandline tools curl and wget...'
+$LNX_PKG_MGR install git curl wget -y
 echo 'Pulling application sourcecode from GitHub...'
 su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home/mailguardian/mailguardian --branch master'
 cd /home/mailguardian/mailguardian || exit 1
