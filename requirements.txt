@@ -50,7 +50,7 @@ python-dateutil==2.6.0
 pytz==2021.1
 requests==2.25.1
 six==1.16.0
-sqlparse==0.4.1
+sqlparse==0.4.2
 typing==3.7.4.3
 typing-extensions==3.7.4.3
 uritemplate==3.0.1
