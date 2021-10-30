@@ -61,7 +61,7 @@ if __name__ == "__main__":
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = installer_config['mailguardian']['hostname']
     APP_USER = installer_config['mailguardian']['user']
-    if not installer_config['mailguardian']['secret']:
+    if not installer_config['mailguardian'].getboolean('secret'):
         installer_config['mailguardian']['secret'] = get_random_secret_key()
     APP_SECRET = installer_config['mailguardian']['secret']
     RETENTION_DAYS = installer_config['mailguardian']['retention']
