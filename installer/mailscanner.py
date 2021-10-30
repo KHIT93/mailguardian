@@ -8,6 +8,8 @@ import configparser
 import argparse
 import distro as distribution
 
+from installer.mailguardian import SYSTEMCTL_BIN
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
 
@@ -374,6 +376,8 @@ if __name__ == "__main__":
         os.system('chown postfix:mtagroup /etc/MailScanner/bayes/bayes_*')
         os.system('chmod g+rw /etc/MailScanner/bayes/bayes_*')
     
+    os.system('{systemctl} enable --now msmilter.service'.format(systemctl=installer_config['bin']['systemctl']))
+
     if distro == 'centos':
         os.system("{sed} -i '/^Example/ c\#Example' /etc/freshclam.conf".format(sed=which('sed')))
         os.system("{sed} -i '/^Example/ c\#Example' /etc/clamd.d/scan.conf".format(sed=which('sed')))
