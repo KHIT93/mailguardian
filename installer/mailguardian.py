@@ -227,6 +227,8 @@ if __name__ == "__main__":
                 conf.replace('include proxy_params;', '#include proxy_params;')
         with open(os.path.join(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
             f.write(conf)
+        if os.path.exists(NGINX_PATH + '/default'):
+            os.system('rm {}/default'.format(NGINX_PATH))
 
     # Store the systemd socket file
     with open(os.path.join(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:
