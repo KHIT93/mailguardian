@@ -280,7 +280,7 @@ if __name__ == "__main__":
     installer_config['mailguardian'] = {
         'app_dir': APP_DIR,
         'hostname': APP_HOSTNAME,
-        'secret': APP_SECRET,
+        'secret': APP_SECRET or 0,
         'user': APP_USER,
         'https': HTTP_SECURE,
         'tz': TZ or 'Utc',
