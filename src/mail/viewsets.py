@@ -164,7 +164,8 @@ class MessageViewSet(viewsets.ModelViewSet):
     
     @action(methods=['get'], detail=False, permission_classes=[IsAdminUser], url_path='queue', url_name='message-queue')
     def get_queue(self, request):
-        DataLogEntry.objects.log_create(request.user, changes='User {} requested to view the mail queue'.format(request.user.email))
+        if not settings.API_ONLY:
+            DataLogEntry.objects.log_create(request.user, changes='User {} requested to view the mail queue'.format(request.user.email))
         host_count = MailScannerHost.objects.count()
         store = PostqueueStore()
         store.load()
