@@ -16,12 +16,11 @@ from rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
 from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
             'id',
-            'url',
             'email',
             'is_staff',
             'is_domain_admin',
@@ -50,6 +49,36 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     def get_has_two_factor(self, obj):
         return obj.get_has_two_factor()
             
+
+class AccountUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'email',
+            'is_staff',
+            'is_domain_admin',
+            'is_active',
+            'first_name',
+            'last_name',
+            'full_name',
+            'date_joined',
+            'domains',
+            'daily_quarantine_report',
+            'weekly_quarantine_report',
+            'monthly_quarantine_report',
+            'custom_spam_score',
+            'custom_spam_highscore',
+            'skip_scan',
+            'has_two_factor'
+        )
+        read_only_fields = (
+            'is_staff',
+            'is_domain_admin',
+            'is_active',
+            'date_joined',
+        )
+
 
 class MailScannerConfigurationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

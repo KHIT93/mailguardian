@@ -195,6 +195,14 @@ export default {
             profile,
             open
         }
+    },
+    methods: {
+        signOut() {
+            this.$auth.logout({
+                makeRequest: true,
+                redirect: '/login'
+            })
+        }
     }
 }
 </script>

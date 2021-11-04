@@ -46,7 +46,3 @@ REST_FRAMEWORK = {
         REST_RENDERERS
     )
 }
-
-REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailGuardianPasswordResetSerializer'
-}
