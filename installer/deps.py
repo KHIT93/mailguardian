@@ -161,7 +161,7 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config.read(args.config_file)
     distro_data = distribution.linux_distribution(full_distribution_name=False)
     distro = distro_data[0] or 'LINUX'

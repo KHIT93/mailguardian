@@ -276,7 +276,7 @@ if __name__ == "__main__":
         exit(255)
     os.system('clear')
     
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config['mailguardian'] = {
         'app_dir': APP_DIR,
         'hostname': APP_HOSTNAME,

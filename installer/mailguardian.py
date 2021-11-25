@@ -39,7 +39,7 @@ if __name__ == "__main__":
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit(255)
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config.read(args.config_file)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
     APP_DIR  = installer_config['mailguardian']['app_dir']
