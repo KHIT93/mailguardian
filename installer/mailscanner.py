@@ -8,8 +8,6 @@ import configparser
 import argparse
 import distro as distribution
 
-from installer.mailguardian import SYSTEMCTL_BIN
-
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
 
