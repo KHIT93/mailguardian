@@ -71,7 +71,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
         with open(os.path.join('/', 'etc', 'postgresql', '13', 'main', 'pg_hba.conf'), 'w') as f:
             f.write("".join(pg_hba_conf))
-        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '13', 'main', 'postgresql.conf')))
+        os.system("{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '13', 'main', 'postgresql.conf')))
         os.system('{systemctl} start postgresql@13-main'.format(systemctl=which('systemctl')))
     os.system('{usermod} -a -G mtagroup nginx'.format(usermod=which('usermod')))
 
@@ -132,7 +132,7 @@ def setup_rhel(pkg_mgr, os_release, os_version):
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
         with open(os.path.join('/', 'var', 'lib', 'pgsql', '13', 'data', 'pg_hba.conf'), 'w') as f:
             f.write("\n".join(pg_hba_conf))
-        os.system("{sed} -i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g' {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '13', 'data', 'postgresql.conf')))
+        os.system("{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '13', 'data', 'postgresql.conf')))
         os.system('{systemctl} enable postgresql-13'.format(systemctl=which('systemctl')))
         os.system('{systemctl} start postgresql-13'.format(systemctl=which('systemctl')))
         os.system('{cmd} --add-port=5432/tcp --permanent'.format(cmd=which('firewall-cmd')))
