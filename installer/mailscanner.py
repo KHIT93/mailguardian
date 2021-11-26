@@ -360,9 +360,9 @@ if __name__ == "__main__":
     os.system('chown postfix:mtagroup /var/spool/MailScanner/milterout')
     os.system('chown postfix:mtagroup /var/spool/MailScanner/incoming')
     os.system('chown postfix:mtagroup /var/spool/MailScanner/quarantine')
-    os.system('echo "qmqp      unix  n       -       n       -       -       qmqpd" >> {postfix}/master.cf'.format(postfix=POSTFIX_DIR))
-    os.system('echo "qmqpd_authorized_clients = 127.0.0.1" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
-    os.system('echo "smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
+    os.system('echo "\nqmqp      unix  n       -       n       -       -       qmqpd" >> {postfix}/master.cf'.format(postfix=POSTFIX_DIR))
+    os.system('echo "\nqmqpd_authorized_clients = 127.0.0.1" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
+    os.system('echo "\nsmtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=POSTFIX_DIR))
     os.system("sed -i 's/run_mailscanner=0/run_mailscanner=1/g' /etc/MailScanner/defaults")
 
     if not os.path.exists('/etc/MailScanner/bayes'):

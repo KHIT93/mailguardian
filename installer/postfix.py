@@ -54,12 +54,12 @@ if __name__ == "__main__":
         main_cf = f.readlines()
     for index, line in enumerate(main_cf):
         if line[:12] == 'mynetworks =':
-            main_cf[index] += ', proxy:pgsql:{postfix}/pgsql-mynetworks.cf'.format(postfix=POSTFIX_DIR)
-    main_cf.append('header_checks = regexp:/{postfix}/header_checks'.format(postfix=POSTFIX_DIR))
-    main_cf.append('relay_domains = proxy:pgsql:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
-    main_cf.append('transport_maps = proxy:pgsql:/{postfix}/pgsql-transport.cf'.format(postfix=POSTFIX_DIR))
+            main_cf[index] = main_cf[index].strip() + ', proxy:pgsql:{postfix}/pgsql-mynetworks.cf\n'.format(postfix=POSTFIX_DIR)
+    main_cf.append('header_checks = regexp:/{postfix}/header_checks\n'.format(postfix=POSTFIX_DIR))
+    main_cf.append('relay_domains = proxy:pgsql:/{postfix}/pgsql-transport.cf\n'.format(postfix=POSTFIX_DIR))
+    main_cf.append('transport_maps = proxy:pgsql:/{postfix}/pgsql-transport.cf\n'.format(postfix=POSTFIX_DIR))
     with open(os.path.join(POSTFIX_DIR, 'main.cf'), 'w') as f:
-        f.write("\n".join(main_cf))
+        f.write("".join(main_cf))
     os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname']))
     os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR, hostname=installer_config['mailguardian']['hostname']))
     os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR))
