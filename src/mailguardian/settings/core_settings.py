@@ -28,7 +28,7 @@ SECRET_KEY = 'UNSECURE_SECRET_KEY'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 APP_HOSTNAME = platform.node()
-APP_VERSION = '2.0.2'
+APP_VERSION = '2.0.3'
 LOCAL_CONFIG_VERSION = '0.0.0'
 ALLOWED_HOSTS = ['*']
 
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
-    'django_premailer',
     'core',
     'compliance',
     'frontend',
