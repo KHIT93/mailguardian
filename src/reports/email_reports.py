@@ -22,7 +22,7 @@ class QuarantinedEmailReport:
 
     def process(self, queryset):
         styles = ""
-        with open(os.path.join(settings.ASSETS_DIR, 'dist', 'css', 'app.css')) as f:
+        with open(os.path.join(settings.ASSETS_DIR, 'src', 'css', 'email.css')) as f:
             styles = f.read()
         for user in queryset:
             domains = [domain.name for domain in user.domains.all()]
