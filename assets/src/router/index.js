@@ -4,6 +4,12 @@ import PagesLogin from '../pages/Login.vue'
 import Messages from '../pages/messages/_id.vue'
 import ListIndex from '../pages/lists/Index.vue'
 import ListEdit from '../pages/lists/_id/edit.vue'
+import UserIndex from '../pages/users/index.vue'
+import UserCreate from '../pages/users/create.vue'
+import UserEdit from '../pages/users/_id/edit.vue'
+import DomainIndex from '../pages/domains/index.vue'
+import DomainCreate from '../pages/domains/create.vue'
+import DomainEdit from '../pages/domains/_id/edit.vue'
 import AccountIndex from '../pages/account.vue'
 import PageNotFound from '../pages/404.vue'
 
@@ -53,6 +59,56 @@ let routes = [
         path: '/account',
         name: 'account.index',
         component: AccountIndex,
+        meta: {
+            auth: true
+        }
+    },
+
+    {
+        path: '/users',
+        name: 'users.index',
+        component: UserIndex,
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/users/create',
+        name: 'users.create',
+        component: UserCreate,
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/users/:id/edit',
+        name: 'users.edit',
+        component: UserEdit,
+        meta: {
+            auth: true
+        }
+    },
+
+    {
+        path: '/domains',
+        name: 'domains.index',
+        component: DomainIndex,
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/domains/create',
+        name: 'domains.create',
+        component: DomainCreate,
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/domains/:id/edit',
+        name: 'domains.edit',
+        component: DomainEdit,
         meta: {
             auth: true
         }
