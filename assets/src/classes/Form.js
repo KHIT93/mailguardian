@@ -23,7 +23,7 @@ export default class Form {
         let data = {};
 
         for (let property in this.originalData) {
-            data[property] = this[property].value;
+            data[property] = this[property];
         }
 
         return data;
