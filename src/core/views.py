@@ -5,13 +5,13 @@ from .serializers import UserSerializer, LoginSerializer
 from .models import MailScannerConfiguration, User, TwoFactorConfiguration, TwoFactorBackupCode
 from compliance.models import DataLogEntry
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_auth.views import LoginView as RestAuthBaseLoginView
+from dj_rest_auth.views import LoginView as RestAuthBaseLoginView
 from rest_framework.parsers import FileUploadParser
 from rest_framework import status
 from django.conf import settings
 from .exceptions import TwoFactorRequired, TwoFactorInvalid, InvalidBackupCode
-from rest_auth.app_settings import create_token, JWTSerializer
-from rest_auth.utils import jwt_encode
+from dj_rest_auth.app_settings import create_token
+from dj_rest_auth.utils import jwt_encode
 from .helpers import TOTP
 from lists.models import ListEntry
 from domains.models import Domain

@@ -9,10 +9,10 @@ from .models import (
     TwoFactorConfiguration,
     TwoFactorBackupCode
 )
-from rest_auth.serializers import PasswordResetSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer
 from django.conf import settings
 import json
-from rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
+from dj_rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
 from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.
