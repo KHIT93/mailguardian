@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white">
+    <div class="bg-white relative pb-8">
         <div class="w-1/2 text-left bg-white">
                 <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -60,18 +60,22 @@
                 </tr>
             </tbody>
         </table>
+        <router-link to="/domains/create" class="absolute right-4 -bottom-8 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <PlusSmIcon class="h-6 w-6" aria-hidden="true" />
+        </router-link>
     </div>
 </template>
 
 <script>
 import { ref, onMounted, computed } from 'vue'
-import { PencilIcon, TrashIcon, SearchIcon } from '@heroicons/vue/outline'
+import { PencilIcon, TrashIcon, SearchIcon, PlusSmIcon } from '@heroicons/vue/outline'
 export default {
     props: ['listingType'],
     components: {
         PencilIcon,
         TrashIcon,
-        SearchIcon
+        SearchIcon,
+        PlusSmIcon
     },
     setup(props) {
         console.log(props.listingType)
