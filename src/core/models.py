@@ -284,12 +284,10 @@ datalog.register(model=TwoFactorConfiguration)
 
 @receiver(user_logged_in)
 def user_logged_in_audit(sender, request, user, **kwargs):
-    print('User has logged in')
     DataLogEntry.objects.log_create(user, action='updated', changes='User has logged in')
 
 @receiver(user_logged_out)
 def user_logged_out_audit(sender, request, user, **kwargs):
-    print('User has logged out')
     DataLogEntry.objects.log_create(user, action='deleted', changes='User has logged out')
 
 @receiver(user_login_failed)
