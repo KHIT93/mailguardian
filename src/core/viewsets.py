@@ -1,5 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+
+from domains.models import Domain
 from .models import (
     MailScannerConfiguration,
     Setting,
@@ -54,7 +56,7 @@ class UserViewSet(viewsets.ModelViewSet):
         qs = qs.filter(domains__name__in=domains).distinct()
         return qs
 
-    @action(methods=['get'], detail=True, permission_classes=[IsDomainAdminOrStaff], url_path='domains', url_name='user-domains')
+    @action(methods=['get'], detail=True, permission_classes=[IsDomainAdminOrStaff], url_path='domains', url_name='get-user-domains')
     def get_user_domains(self, request, pk=None):
         user = get_object_or_404(User.objects.all(), pk=pk)
         serializer = DomainSerializer(user.domains.all(), many=True, context={'request': request})
