@@ -15,14 +15,14 @@
                         </p>
                         <input type="hidden" name="remember" value="true" />
                         <div class="relative">
-                            <input id="email-address" v-model="form.email.value" name="email" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('email') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address" />
+                            <input id="email-address" v-model="form.email" name="email" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('email') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address" />
                             <label for="email-address" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Email address</label>
                             <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
                                 {{ form.errors.get('email') }}
                             </p>
                         </div>
                         <div class="mt-4 relative">
-                            <input id="password" v-model="form.password.value" name="password" type="password" required="" autocomplete="current-password" :class="{ 'border-red-600': form.errors.has('password') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="************" />
+                            <input id="password" v-model="form.password" name="password" type="password" required="" autocomplete="current-password" :class="{ 'border-red-600': form.errors.has('password') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="************" />
                             <label for="password" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Password</label>
                             <p v-if="form.errors.has('password')" class="text-red-500 text-xs py-1">
                                 {{ form.errors.get('password') }}
@@ -64,7 +64,7 @@
 <script>
 import { LockClosedIcon } from '@heroicons/vue/solid'
 import { ShieldCheckIcon } from '@heroicons/vue/outline'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import Form from '../classes/Form'
 export default {
     components: {
@@ -72,11 +72,11 @@ export default {
         ShieldCheckIcon
     },
     setup(props) {
-        let form = new Form({
-            email: ref(''),
-            password: ref(''),
-            remember: ref(false)
-        })
+        let form = reactive(new Form({
+            email: '',
+            password: '',
+            remember: false
+        }))
         let signingIn = ref(false)
         return {
             form,
@@ -88,8 +88,8 @@ export default {
             this.signingIn = true;
             this.$auth.login({
                 data: {
-                    email: this.form.email.value,
-                    password: this.form.password.value
+                    email: this.form.email,
+                    password: this.form.password
                 }
             }).then(() => {
                 console.warn('Logged in!')
