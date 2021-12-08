@@ -91,6 +91,11 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                            Save
+                                        </button>
+                                    </div>
                                 </div>
                             </TabPanel>
                             <!-- Security -->
@@ -107,9 +112,9 @@
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                                 <span class="flex-grow">{{ boolToHuman(record.has_two_factor) }}</span>
                                                 <span class="ml-4 flex-shrink-0">
-                                                <button type="button" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                                    Enable
-                                                </button>
+                                                    <button type="button" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                        Enable
+                                                    </button>
                                                 </span>
                                             </dd>
                                         </div>
@@ -118,8 +123,8 @@
                                                 Application Administrator
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.is_staff" :class="[record.is_staff ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
-                                                <span aria-hidden="true" :class="[record.is_staff ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
+                                                <Switch v-model="record.is_staff" disabled :class="[record.is_staff ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-not-allowed transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                    <span aria-hidden="true" :class="[record.is_staff ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
                                         </SwitchGroup>
@@ -128,8 +133,8 @@
                                                 Domain Administrator
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.is_domain_admin" :class="[record.is_domain_admin ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
-                                                <span aria-hidden="true" :class="[record.is_domain_admin ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
+                                                <Switch v-model="record.is_domain_admin" disabled :class="[record.is_domain_admin ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-not-allowed transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                    <span aria-hidden="true" :class="[record.is_domain_admin ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
                                         </SwitchGroup>
@@ -148,8 +153,12 @@
                                                 Daily Reports
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.daily_quarantine_report" :class="[record.daily_quarantine_report ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
-                                                <span aria-hidden="true" :class="[record.daily_quarantine_report ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
+                                                <svg v-if="dailyQuarantineReportToggle" class="relative inline-flex flex-shrink-0 sm:ml-auto animate-spin mr-3 h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <Switch v-else v-model="record.daily_quarantine_report" @click="toggleDailyReports" :class="[record.daily_quarantine_report ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                    <span aria-hidden="true" :class="[record.daily_quarantine_report ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
                                         </SwitchGroup>
@@ -158,8 +167,12 @@
                                                 Weekly Reports
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.weekly_quarantine_report" :class="[record.weekly_quarantine_report ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
-                                                <span aria-hidden="true" :class="[record.weekly_quarantine_report ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
+                                                <svg v-if="weeklyQuarantineReportToggle" class="relative inline-flex flex-shrink-0 sm:ml-auto animate-spin mr-3 h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <Switch v-else v-model="record.weekly_quarantine_report" @click="toggleWeeklyReports" :class="[record.weekly_quarantine_report ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                    <span aria-hidden="true" :class="[record.weekly_quarantine_report ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
                                         </SwitchGroup>
@@ -168,8 +181,12 @@
                                                 Monthly Reports
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.monthly_quarantine_report" :class="[record.monthly_quarantine_report ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
-                                                <span aria-hidden="true" :class="[record.monthly_quarantine_report ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
+                                                <svg v-if="monthlyQuarantineReportToggle" class="relative inline-flex flex-shrink-0 sm:ml-auto animate-spin mr-3 h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                <Switch v-else v-model="record.monthly_quarantine_report" @click="toggleMonthlyReports" :class="[record.monthly_quarantine_report ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                    <span aria-hidden="true" :class="[record.monthly_quarantine_report ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
                                         </SwitchGroup>
@@ -181,21 +198,45 @@
                                 'bg-white rounded-xl p-3',
                                 'focus:outline-none ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
                             ]" v-if="record.is_domain_admin">
-                                <!-- CONTENT GOES HERE -->
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-white">
+                                        <tr>
+                                            <th scope="col" class="px-6 pt-3 pb-1 text-left text-xs font-medium text-gray-400 tracking-wider">
+                                                Name
+                                            </th>
+                                            <th scope="col" class="relative px-6 py-3">
+                                                <span class="sr-only">Delete</span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white">
+                                        <template v-if="domains.length">
+                                            <tr v-for="domain in domains" :key="domain.pk" class="cursor-pointer border-b transition duration-300 hover:shadow-lg hover:font-bold">
+                                                <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
+                                                    {{ domain.name }}
+                                                </td>
+                                                <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
+                                                    <button type="button" class="text-red-600 hover:text-red-900">
+                                                        <TrashIcon class="w-4 h-4"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                        <tr v-else>
+                                            <td class="px-6 py-2 whitespace-nowrap" colspan="99">
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold">
+                                                    No domains are currently linked
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
                 </div>
             </div>
             <div class="pt-5">
-                <div class="flex justify-end">
-                    <button type="button" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Cancel
-                    </button>
-                    <button type="submit" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Save
-                    </button>
-                </div>
             </div>
         </div>
     </MainLayout>
@@ -213,6 +254,7 @@ import {
     SwitchGroup,
     SwitchLabel,
 } from '@headlessui/vue'
+import { TrashIcon } from '@heroicons/vue/outline'
 import { boolToHuman } from '../filters'
 import { onMounted, ref } from '@vue/runtime-core'
 import { useAuth } from '@websanova/vue-auth'
@@ -226,19 +268,62 @@ export default {
         TabPanel,
         SwitchLabel,
         SwitchGroup,
-        Switch
+        Switch,
+        TrashIcon
     },
     setup(props) {
         const auth = useAuth()
         let record = ref({})
+        let domains = ref([])
+        let dailyQuarantineReportToggle = ref(false)
+        let weeklyQuarantineReportToggle = ref(false)
+        let monthlyQuarantineReportToggle = ref(false)
+        let showNewDomainForm = ref(false)
 
         onMounted(async () => {
             record.value = (await auth.fetch()).data
+            domains.value = (await axios.get(`/api/users/${record.value.id}/domains/`)).data
         })
 
         return {
             record,
-            boolToHuman
+            domains,
+            boolToHuman,
+            showNewDomainForm,
+            dailyQuarantineReportToggle,
+            weeklyQuarantineReportToggle,
+            monthlyQuarantineReportToggle
+        }
+    },
+    methods: {
+        async toggleDailyReports() {
+            console.log(this.record.id)
+            this.dailyQuarantineReportToggle = true
+            await axios.patch(`/api/users/${this.record.id}/`, {
+                daily_quarantine_report: this.record.daily_quarantine_report
+            })
+            this.dailyQuarantineReportToggle = false
+        },
+        async toggleWeeklyReports() {
+            this.weeklyQuarantineReportToggle = true
+            await axios.patch(`/api/users/${this.record.id}/`, {
+                weekly_quarantine_report: this.record.weekly_quarantine_report
+            })
+            this.weeklyQuarantineReportToggle = false
+        },
+        async toggleMonthlyReports() {
+            this.monthlyQuarantineReportToggle = true
+            await axios.patch(`/api/users/${this.record.id}/`, {
+                monthly_quarantine_report: this.record.monthly_quarantine_report
+            })
+            this.monthlyQuarantineReportToggle = false
+        },
+        patchBasicData() {
+            axios.patch(`/api/users/${this.record.id}`, {
+                first_name: record.first_name,
+                last_name: record.last_name,
+                email: record.email
+            })
         }
     }
 }
