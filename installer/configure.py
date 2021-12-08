@@ -5,7 +5,6 @@
 import os
 import sys
 import platform
-import pytz
 import json
 import subprocess
 import configparser
