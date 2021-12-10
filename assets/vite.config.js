@@ -7,10 +7,10 @@ export default defineConfig({
         manifest: true, // adds a manifest.json
         rollupOptions: {
             input: [
-                resolve(__dirname, './main.js'),
+                resolve(__dirname, './src/main.js'),
             ]
         },
-        outDir: '../dist',
+        outDir: './dist',
         emptyOutDir: true,
         assetsDir: '',
     },

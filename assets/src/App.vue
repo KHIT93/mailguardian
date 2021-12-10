@@ -4,6 +4,10 @@
 
 <script>
 export default {
-
+    setup(props) {
+        return {
+            
+        }
+    }
 }
 </script>

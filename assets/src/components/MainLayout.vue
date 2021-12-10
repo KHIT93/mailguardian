@@ -15,7 +15,7 @@
                                 </button>
                             </div>
                         </TransitionChild>
-                        <div class="flex-shrink-0 flex items-center px-4">
+                        <div class="shrink-0 flex items-center px-4">
                             <ShieldCheckIcon class="h-8 w-8 text-blue-500" aria-hidden="true"/>
                             <span class="text-gray-400 text-2xl hover:text-gray-800 focus:text-gray-800">MailGuardian</span>
                         </div>
@@ -24,22 +24,22 @@
                                 <template v-for="item in navigation" :key="item.path">
                                     <div v-if="!item.children">
                                         <router-link :to="item.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                            <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                            <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                             {{ item.name }}
                                         </router-link>
                                     </div>
                                     <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
                                         <DisclosureButton class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group w-full flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                            <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                            <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                             <span class="flex-1 text-left">
                                                 {{ item.name }}
                                             </span>
-                                            <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
-                                            <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                            <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                            <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                         </DisclosureButton>
                                         <DisclosurePanel class="space-y-1">
                                             <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="ml-4 border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
-                                                <component v-if="child.icon" :is="child.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                                <component v-if="child.icon" :is="child.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                                 {{ child.name }}
                                             </router-link>
                                         </DisclosurePanel>
@@ -49,41 +49,41 @@
                         </div>
                     </div>
                 </TransitionChild>
-                <div class="flex-shrink-0 w-14" aria-hidden="true">
+                <div class="shrink-0 w-14" aria-hidden="true">
                     <!-- Dummy element to force sidebar to shrink to fit close icon -->
                 </div>
             </Dialog>
         </TransitionRoot>
         <!-- Static sidebar for desktop -->
-        <div class="hidden md:flex md:flex-shrink-0">
+        <div class="hidden md:flex md:shrink-0">
             <div class="flex flex-col w-64">
                 <!-- Sidebar component, swap this element with another sidebar if you like -->
-                <div class="flex flex-col flex-grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto">
-                    <div class="flex items-center flex-shrink-0 px-4">
+                <div class="flex flex-col grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto">
+                    <div class="flex items-center shrink-0 px-4">
                         <ShieldCheckIcon class="h-8 w-8 text-blue-500" aria-hidden="true"/>
                         <span class="text-gray-400 text-2xl hover:text-gray-800 focus:text-gray-800">MailGuardian</span>
                     </div>
-                    <div class="mt-5 flex-grow flex flex-col">
+                    <div class="mt-5 grow flex flex-col">
                         <nav class="flex-1 pr-2 bg-white space-y-1">
                             <template v-for="item in navigation" :key="item.path">
                                 <div v-if="!item.children">
-                                    <router-link :to="item.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="transition duration-300 border-l-4 border-transparent flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-blue-gray-200">
-                                        <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                    <router-link :to="item.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="transition duration-300 border-l-4 border-transparent flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-slate-200">
+                                        <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                         {{ item.name }}
                                     </router-link>
                                 </div>
                                 <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
-                                    <DisclosureButton class="transition duration-300 border-l-4 border-transparent group w-full flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-blue-gray-200">
-                                        <component v-if="item.icon" :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                    <DisclosureButton class="transition duration-300 border-l-4 border-transparent group w-full flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-slate-200">
+                                        <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                         <span class="flex-1 text-left">
                                             {{ item.name }}
                                         </span>
-                                        <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
-                                        <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                        <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                        <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                     </DisclosureButton>
                                     <DisclosurePanel class="space-y-1">
-                                        <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-blue-gray-200">
-                                            <component v-if="child.icon" :is="child.icon" class="mr-4 flex-shrink-0 h-6 w-6" aria-hidden="true" />
+                                        <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-slate-200">
+                                            <component v-if="child.icon" :is="child.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                             {{ child.name }}
                                         </router-link>
                                     </DisclosurePanel>
@@ -95,7 +95,7 @@
             </div>
         </div>
         <div class="flex flex-col w-0 flex-1 overflow-hidden">
-            <div class="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+            <div class="relative z-10 shrink-0 flex h-16 bg-white shadow">
                 <button class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white md:hidden" @click="open = true">
                     <span class="sr-only">Open sidebar</span>
                     <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />

@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import moment from 'moment';
 export function bytesToHuman(value) {
     let kb = 1024;
     let mb = 1024 * 1024;

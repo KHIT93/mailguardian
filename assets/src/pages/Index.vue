@@ -4,10 +4,10 @@
             <button type="button" @click.native="messageType = ''">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-cool-gray-300 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-300 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="currentColor" class="text-cool-gray-200" stroke-linecap="round"></ProgressRing>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="currentColor" class="text-gray-200" stroke-linecap="round"></ProgressRing>
                         <div class="absolute top-0 bottom-0 left-0 right-0 text-xl">
                             <div class="flex w-full h-full items-center justify-center">
                                 {{ stats.daily_total }}
@@ -23,7 +23,7 @@
             <button type="button" @click.native="messageType = 'is_clean'">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-cool-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
                         <ProgressRing :radius="60" :progress="((stats.daily_total - stats.daily_spam - stats.daily_virus) * stats.daily_total) * 100" :stroke="6" class="text-blue-500" stroke-linecap="round"></ProgressRing>
@@ -42,7 +42,7 @@
             <button type="button">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-cool-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
                         <ProgressRing :radius="60" :progress="0" :stroke="6" class="text-green-500" stroke-linecap="round"></ProgressRing>
@@ -61,7 +61,7 @@
             <button type="button">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-cool-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
                         <ProgressRing :radius="60" :progress="0" :stroke="6" class="text-yellow-500" stroke-linecap="round"></ProgressRing>
@@ -80,7 +80,7 @@
             <button type="button" @click.native="messageType = 'is_spam'">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-cool-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
                         <ProgressRing :radius="60" :progress="(stats.daily_spam / stats.daily_total) * 100" :stroke="6" class="text-red-500" stroke-linecap="round"></ProgressRing>
@@ -99,7 +99,7 @@
             <button type="button" @click.native="messageType = 'infected'">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-cool-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
                         <ProgressRing :radius="60" :progress="(stats.daily_virus / stats.daily_total) * 100" :stroke="6" class="text-purple-500" stroke-linecap="round"></ProgressRing>
@@ -159,13 +159,13 @@
                                 <template v-if="messagesLoading">
                                     <tr class="animate-pulse border-b" v-for="num in 20" :key="num">
                                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                            <div class="h-4 bg-cool-gray-300 rounded"></div>
+                                            <div class="h-4 bg-gray-300 rounded"></div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700" colspan="2">
-                                            <div class="h-4 bg-cool-gray-300 rounded"></div>
+                                            <div class="h-4 bg-gray-300 rounded"></div>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                            <div class="h-4 bg-cool-gray-300 rounded"></div>
+                                            <div class="h-4 bg-gray-300 rounded"></div>
                                         </td>
                                     </tr>
                                 </template>

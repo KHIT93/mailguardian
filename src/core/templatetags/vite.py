@@ -8,7 +8,7 @@ from django.templatetags.static import static
 
 register = template.Library()
 
-DEV_SERVER_ROOT = 'http://localhost:3000'
+DEV_SERVER_ROOT = 'http://localhost:3000/src'
 
 is_absolute_url = lambda url: re.match("^https?://", url)
 
