@@ -10,35 +10,23 @@
                         <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                             {{ form.errors.get('non_field_errors') }}
                         </p>
-                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.from_entry_type == 'email'">
-                            <label for="from_address" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
-                            <input type="text" name="from_address" id="from_address" v-model="form.from_address.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
-                            <p v-if="form.errors.has('from_address')" class="text-red-500 text-xs py-1">
-                                {{ form.errors.get('from_address') }}
-                            </p>
-                        </div>
-                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.from_entry_type == 'domain' || entry.from_entry_type == 'ip_address'">
-                            <label for="from_domain" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
-                            <input type="text" name="from_domain" id="from_domain" v-model="form.from_domain.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
-                            <p v-if="form.errors.has('from_domain')" class="text-red-500 text-xs py-1">
-                                {{ form.errors.get('from_domain') }}
-                            </p>
-                        </div>
+                        <FormInput inputId="from_address" label="Senders email" type="text" v-model="form.from_address" v-if="entry.from_entry_type == 'email'"/>
+                        <p v-if="form.errors.has('from_address')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('from_address') }}
+                        </p>
+                        <FormInput inputId="from_domain" label="Senders domain" type="text" v-model="form.from_domain" v-if="entry.from_entry_type == 'domain' || entry.from_entry_type == 'ip_address'"/>
+                        <p v-if="form.errors.has('from_domain')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('from_domain') }}
+                        </p>
                         <hr class="my-4"/>
-                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.to_entry_type == 'email'">
-                            <label for="to_address" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
-                            <input type="text" name="to_address" id="to_address" v-model="form.to_address.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
-                            <p v-if="form.errors.has('to_address')" class="text-red-500 text-xs py-1">
-                                {{ form.errors.get('to_address') }}
-                            </p>
-                        </div>
-                        <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600" v-if="entry.to_entry_type == 'domain' || entry.to_entry_type == 'ip_address'">
-                            <label for="to_domain" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Senders email</label>
-                            <input type="text" name="to_domain" id="to_domain" v-model="form.to_domain.value" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Senders email" />
-                            <p v-if="form.errors.has('to_domain')" class="text-red-500 text-xs py-1">
-                                {{ form.errors.get('to_domain') }}
-                            </p>
-                        </div>
+                        <FormInput inputId="to_address" label="Recipient email" type="text" v-model="form.to_address" v-if="entry.to_entry_type == 'email'"/>
+                        <p v-if="form.errors.has('to_address')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('to_address') }}
+                        </p>
+                        <FormInput inputId="to_domain" label="Recipient domain" type="text" v-model="form.to_domain" v-if="entry.to_entry_type == 'domain' || entry.to_entry_type == 'ip_address'"/>
+                        <p v-if="form.errors.has('to_domain')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('to_domain') }}
+                        </p>
                     </div>
                     <div class="pt-5">
                         <div class="flex justify-end">
@@ -57,36 +45,38 @@
 </template>
 
 <script>
-import { onMounted, ref, computed, toRefs } from 'vue'
+import { onMounted, ref, reactive, computed, toRefs } from 'vue'
 import { ArrowLeftIcon } from '@heroicons/vue/outline'
 import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
 import MainLayout from '../../../components/MainLayout.vue'
+import FormInput from '../../../components/FormInput.vue'
 import Form from '../../../classes/Form'
 export default {
     components: {
         ArrowLeftIcon,
-        MainLayout
+        MainLayout,
+        FormInput
     },
     setup(props) {
         let { id } = useRoute().params
         let entry = ref({})
-        let form = new Form({
-            from_address: ref(''),
-            from_domain: ref(''),
-            to_address: ref(''),
-            to_domain: ref(''),
-            listing_type: ref(''),
-        })
+        let form = reactive(new Form({
+            from_address: '',
+            from_domain: '',
+            to_address: '',
+            to_domain: '',
+            listing_type: '',
+        }))
         let loading = ref(false)
         let getEntry = (async () => {
             loading.value = true
             let res = (await axios.get(`/api/lists/${id}/`)).data
-            form.from_address.value = res.from_address
-            form.from_domain.value = res.from_domain
-            form.to_address.value = res.to_address
-            form.to_domain.value = res.to_domain
-            form.listing_type.value = res.listing_type
-            loading.value = false
+            form.from_address = res.from_address
+            form.from_domain = res.from_domain
+            form.to_address = res.to_address
+            form.to_domain = res.to_domain
+            form.listing_type = res.listing_type
+            loading = false
             return res
         })
 

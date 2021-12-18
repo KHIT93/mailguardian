@@ -4,42 +4,34 @@
             <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                 {{ form.errors.get('non_field_errors') }}
             </p>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="name" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Domain</label>
-                <input type="text" name="name" id="name" v-model="form.name" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Domain" />
-                <p v-if="form.errors.has('name')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('name') }}
-                </p>
-            </div>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="destination" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Destination</label>
-                <input type="text" name="destination" id="destination" v-model="form.destination" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Destination" />
-                <p v-if="form.errors.has('destination')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('destination') }}
-                </p>
-            </div>
+            <FormInput inputId="name" label="Domain" type="text" v-model="form.name" class="my-4"/>
+            <p v-if="form.errors.has('name')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('name') }}
+            </p>
+            <FormInput inputId="destination" label="Destination" type="text" v-model="form.destination" class="my-4"/>
+            <p v-if="form.errors.has('destination')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('destination') }}
+            </p>
             <hr />
             <div class="md:flex space-x-2">
-                <div class="w-1/2 relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                    <label for="relay_type" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Relay type</label>
-                    <select v-model="form.relay_type" id="relay_type" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Select relay type">
+                <FormSelection inputId="relay_type" label="Relay type" v-model="form.relay_type" class="w-full sm:w-1/2 my-4">
+                    <template v-slot:inputOptions>
                         <option value="smtp">Deliver to my email server (SMTP)</option>
                         <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
-                    </select>
-                    <p v-if="form.errors.has('destination')" class="text-red-500 text-xs py-1">
-                        {{ form.errors.get('destination') }}
-                    </p>
-                </div>
-                <div class="w-1/2 relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                    <label for="receive_type" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Delivery type</label>
-                    <select v-model="form.receive_type" id="receive_type" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Select Delivery type">
+                    </template>
+                </FormSelection>
+                <p v-if="form.errors.has('relay_type')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('relay_type') }}
+                </p>
+                <FormSelection inputId="receive_type" label="Delivery type" v-model="form.receive_type" class="w-full sm:w-1/2 my-4">
+                    <template v-slot:inputOptions>
                         <option value="load_balanced">Load balancing</option>
                         <option value="failover">Failover</option>
-                    </select>
-                    <p v-if="form.errors.has('receive_type')" class="text-red-500 text-xs py-1">
-                        {{ form.errors.get('receive_type') }}
-                    </p>
-                </div>
+                    </template>
+                </FormSelection>
+                <p v-if="form.errors.has('receive_type')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('receive_type') }}
+                </p>
             </div>
             <Disclosure v-slot="{ open }" v-if="nodes.length > 0">
                 <DisclosureButton class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
@@ -109,6 +101,8 @@ import Form from '../classes/Form'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/solid'
 import { ArrowLeftIcon } from '@heroicons/vue/outline'
+import FormInput from './FormInput.vue'
+import FormSelection from './FormSelection.vue'
 
 export default {
     props: [
@@ -119,7 +113,9 @@ export default {
         ChevronDownIcon,
         Disclosure,
         DisclosureButton,
-        DisclosurePanel
+        DisclosurePanel,
+        FormInput,
+        FormSelection
     },
     setup(props) {
         let { id } = props

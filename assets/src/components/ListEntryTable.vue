@@ -1,15 +1,12 @@
 <template>
     <div class="bg-white relative pb-8">
         <div class="w-1/2 text-left bg-white">
-                <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span class="text-gray-500 sm:text-sm">
-                            <SearchIcon class="w-4 h-4"/>
-                        </span>
-                    </div>
-                    <!-- <label for="search-key" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Search by name, email or more</label> -->
-                    <input v-model="searchKey" id="search-key" name="search-key" type="search" class="block w-full border-0 pl-6 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Search by name, email or more" />
-                </div>
+                
+                <FormInputWithIcon v-model="searchKey" inputId="search-key" label="Search by email, domain or IP-address" type="search">
+                    <template v-slot:icon>
+                        <SearchIcon class="w-4 h-4"/>
+                    </template>
+                </FormInputWithIcon>
             </div>
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-white">
@@ -69,13 +66,15 @@
 <script>
 import { ref, onMounted, computed } from 'vue'
 import { PencilIcon, TrashIcon, SearchIcon, PlusSmIcon } from '@heroicons/vue/outline'
+import FormInputWithIcon from './FormInputWithIcon.vue'
 export default {
     props: ['listingType'],
     components: {
         PencilIcon,
         TrashIcon,
         SearchIcon,
-        PlusSmIcon
+        PlusSmIcon,
+        FormInputWithIcon
     },
     setup(props) {
         console.log(props.listingType)

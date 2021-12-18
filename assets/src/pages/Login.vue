@@ -14,20 +14,14 @@
                             {{ form.errors.get('non_field_errors') }}
                         </p>
                         <input type="hidden" name="remember" value="true" />
-                        <div class="relative">
-                            <input id="email-address" v-model="form.email" name="email" type="email" autocomplete="email" required="" :class="{ 'border-red-600': form.errors.has('email') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Email address" />
-                            <label for="email-address" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Email address</label>
-                            <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
-                                {{ form.errors.get('email') }}
-                            </p>
-                        </div>
-                        <div class="mt-4 relative">
-                            <input id="password" v-model="form.password" name="password" type="password" required="" autocomplete="current-password" :class="{ 'border-red-600': form.errors.has('password') }" class="peer placeholder-transparent transition duration-300 appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="************" />
-                            <label for="password" class="absolute flex bg-white px-1 left-0 -top-6 text-gray-600 text-sm transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-placeholder-shown:left-3 peer-focus:-top-6 peer-focus:left-0 peer-focus:text-blue-500 peer-focus:text-sm peer-focus:bg-white peer-focus:px-1 peer-focus:flex peer-focus:z-50">Password</label>
-                            <p v-if="form.errors.has('password')" class="text-red-500 text-xs py-1">
-                                {{ form.errors.get('password') }}
-                            </p>
-                        </div>
+                        <FormInput inputId="email-address" label="Email address" type="email" v-model="form.email" class="my-4"/>
+                        <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('email') }}
+                        </p>
+                        <FormInput inputId="password" label="Password" type="password" v-model="form.password" class="my-4"/>
+                        <p v-if="form.errors.has('password')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('password') }}
+                        </p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <input id="remember_me" v-model="form.remember" name="remember_me" type="checkbox" class="transition duration-300 h-4 w-4 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded" />
@@ -43,13 +37,13 @@
                             </div>
                         </div>
                         <div>
-                            <button type="submit" :disabled="signingIn" class="group relative w-full transition duration-300 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" :class="{ 'cursor-not-allowed bg-blue-300 hover:bg-blue-400': signingIn, 'bg-blue-600 hover:bg-blue-700': !signingIn}">
+                            <button type="submit" :disabled="signingIn" class="group relative w-full transition duration-300 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:bg-blue-400 focus:shadow-none focus:ring-blue-400" :class="{ 'cursor-not-allowed bg-blue-300 hover:bg-blue-400': signingIn, 'bg-blue-500 hover:bg-blue-700 shadow-md shadow-blue-400 hover:shadow-lg hover:shadow-blue-400': !signingIn}">
                                 <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                                     <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" v-if="signingIn">
                                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                     </svg>
-                                    <LockClosedIcon v-else class="h-5 w-5 text-blue-500 transition duration-300 group-hover:text-blue-400" aria-hidden="true" />
+                                    <LockClosedIcon v-else class="h-5 w-5 text-white transition duration-300 group-hover:text-blue-100" aria-hidden="true" />
                                 </span>
                                 Sign in
                             </button>
@@ -66,10 +60,12 @@ import { LockClosedIcon } from '@heroicons/vue/solid'
 import { ShieldCheckIcon } from '@heroicons/vue/outline'
 import { ref, reactive } from 'vue'
 import Form from '../classes/Form'
+import FormInput from '../components/FormInput.vue'
 export default {
     components: {
         LockClosedIcon,
-        ShieldCheckIcon
+        ShieldCheckIcon,
+        FormInput
     },
     setup(props) {
         let form = reactive(new Form({

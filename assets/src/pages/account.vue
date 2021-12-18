@@ -76,18 +76,15 @@
 
                                         <div class="pt-6 grid grid-cols-4 gap-6">
                                             <div class="col-span-4 sm:col-span-2">
-                                                <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
-                                                <input type="text" name="first-name" id="first-name" v-model="record.first_name" autocomplete="cc-given-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
+                                                <FormInput inputId="first-name" label="First name" type="text" v-model="record.first_name"/>
                                             </div>
 
                                             <div class="col-span-4 sm:col-span-2">
-                                                <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
-                                                <input type="text" name="last-name" id="last-name" v-model="record.last_name" autocomplete="cc-family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
+                                                <FormInput inputId="last-name" label="Last name" type="text" v-model="record.last_name"/>
                                             </div>
 
                                             <div class="col-span-4 sm:col-span-2">
-                                                <label for="email-address" class="block text-sm font-medium text-gray-700">Email address</label>
-                                                <input type="email" name="email-address" id="email-address" v-model="record.email" autocomplete="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm" />
+                                                <FormInput inputId="email" label="Email address" type="email" v-model="record.email"/>
                                             </div>
                                         </div>
                                     </div>
@@ -258,6 +255,7 @@ import { TrashIcon } from '@heroicons/vue/outline'
 import { boolToHuman } from '../filters'
 import { onMounted, ref } from '@vue/runtime-core'
 import { useAuth } from '@websanova/vue-auth'
+import FormInput from '../components/FormInput.vue'
 export default {
     components: {
         MainLayout,
@@ -269,7 +267,8 @@ export default {
         SwitchLabel,
         SwitchGroup,
         Switch,
-        TrashIcon
+        TrashIcon,
+        FormInput
     },
     setup(props) {
         const auth = useAuth()

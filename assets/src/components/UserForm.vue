@@ -4,28 +4,19 @@
             <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                 {{ form.errors.get('non_field_errors') }}
             </p>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="email" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Email</label>
-                <input type="email" name="email" id="email" v-model="form.email" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Email" />
-                <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('email') }}
-                </p>
-            </div>
+            <FormInput inputId="email" label="Email" type="email" v-model="form.email"/>
+            <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('email') }}
+            </p>
             <hr class="my-4"/>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="first_name" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">First name</label>
-                <input type="text" name="first_name" id="first_name" v-model="form.first_name" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="First name" />
-                <p v-if="form.errors.has('first_name')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('first_name') }}
-                </p>
-            </div>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="last_name" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Last name</label>
-                <input type="text" name="last_name" id="last_name" v-model="form.last_name" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Last name" />
-                <p v-if="form.errors.has('last_name')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('last_name') }}
-                </p>
-            </div>
+            <FormInput inputId="first_name" label="First name" type="text" v-model="form.first_name" class="my-4"/>
+            <p v-if="form.errors.has('first_name')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('first_name') }}
+            </p>
+            <FormInput inputId="last_name" label="Last name" type="text" v-model="form.last_name"/>
+            <p v-if="form.errors.has('last_name')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('last_name') }}
+            </p>
             <hr class="my-4"/>
             <div class="flex my-4 items-center">
                 <input id="is_domain_admin" v-model="form.is_domain_admin" name="is_domain_admin" type="checkbox" class="transition duration-300 h-4 w-4 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded" />
@@ -40,20 +31,14 @@
                 </label>
             </div>
             <hr class="my-4"/>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="custom_spam_score" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Spam Score</label>
-                <input type="number" name="custom_spam_score" id="custom_spam_score" v-model="form.custom_spam_score" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Spam Score" />
-                <p v-if="form.errors.has('custom_spam_score')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('custom_spam_score') }}
-                </p>
-            </div>
-            <div class="relative transition duration-300 border border-gray-300 rounded-md px-3 py-2 my-4 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600">
-                <label for="custom_spam_highscore" class="absolute -top-2 left-2 -mt-px inline-block px-1 bg-white text-xs font-base text-gray-900">Spam HighScore</label>
-                <input type="number" name="custom_spam_highscore" id="custom_spam_highscore" v-model="form.custom_spam_highscore" class="block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm" placeholder="Spam HighScore" />
-                <p v-if="form.errors.has('custom_spam_highscore')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('custom_spam_highscore') }}
-                </p>
-            </div>
+            <FormInput inputId="custom_spam_score" label="Spam Score" type="number" v-model="form.custom_spam_score" class="my-4"/>
+            <p v-if="form.errors.has('custom_spam_score')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('custom_spam_score') }}
+            </p>
+            <FormInput inputId="custom_spam_highscore" label="Spam HighScore" type="number" v-model="form.custom_spam_highscore" class="my-4"/>
+            <p v-if="form.errors.has('custom_spam_highscore')" class="text-red-500 text-xs py-1">
+                {{ form.errors.get('custom_spam_highscore') }}
+            </p>
             
         </div>
         <div class="pt-5">
@@ -72,11 +57,15 @@
 <script>
 import { toRef, toRefs, ref } from '@vue/reactivity'
 import { reactive, onMounted } from 'vue'
+import FormInput from './FormInput.vue'
 import Form from '../classes/Form'
 export default {
     props: [
         'id'
     ],
+    components: {
+        FormInput
+    },
     setup(props) {
         let { id } = props
         let form = reactive(new Form({
