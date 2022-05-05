@@ -12,6 +12,8 @@ import DomainCreate from '../pages/domains/Create.vue'
 import DomainEdit from '../pages/domains/_id/Edit.vue'
 import AccountIndex from '../pages/Account.vue'
 import PageNotFound from '../pages/404.vue'
+import AuditLogIndex from '../pages/audit/log/Index.vue'
+import AuditLogDetail from '../pages/audit/log/_id.vue'
 
 let routes = [
     {
@@ -109,6 +111,23 @@ let routes = [
         path: '/domains/:id/edit',
         name: 'domains.edit',
         component: DomainEdit,
+        meta: {
+            auth: true
+        }
+    },
+
+    {
+        path: '/audit/log',
+        name: 'audit.log.index',
+        component: AuditLogIndex,
+        meta: {
+            auth: true
+        }
+    },
+    {
+        path: '/audit/log/:id',
+        name: 'audit.log.show',
+        component: AuditLogDetail,
         meta: {
             auth: true
         }
