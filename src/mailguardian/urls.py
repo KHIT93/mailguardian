@@ -122,7 +122,9 @@ if not settings.API_ONLY:
         path('api/license/', LicenseAPIView.as_view()),
         path('api/installed/', InstalledAPIView.as_view()),
         path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
-        path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+        path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+        path('rest-auth/', include('trench.urls')),
+        path('rest-auth/', include('trench.urls.authtoken')),
     ]
     # URL for rest-auth
     urlpatterns += [
@@ -131,7 +133,7 @@ if not settings.API_ONLY:
             name='rest_password_reset'),
         re_path(r'^rest-auth/password/reset/confirm/$', PasswordResetConfirmView.as_view(),
             name='rest_password_reset_confirm'),
-        re_path(r'^rest-auth/login/$', LoginView.as_view(), name='rest_login'),
+        # re_path(r'^rest-auth/login/$', LoginView.as_view(), name='rest_login'),
         # URLs that require a user to be logged in with a valid session / token.
         re_path(r'^rest-auth/logout/$', LogoutView.as_view(), name='rest_logout'),
         re_path(r'^rest-auth/user/$', UserDetailsView.as_view(), name='rest_user_details'),

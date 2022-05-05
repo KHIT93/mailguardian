@@ -109,8 +109,14 @@
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                                 <span class="grow">{{ boolToHuman(record.has_two_factor) }}</span>
                                                 <span class="ml-4 shrink-0">
-                                                    <button type="button" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                    <button type="button" v-if="!record.has_two_factor" @click="showMfaModal = true" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         Enable
+                                                    </button>
+                                                    <button type="button" v-else-if="record.has_two_factor" @click="showMfaModal = true" class="bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                        Disable
+                                                    </button>
+                                                    <button type="button" v-else-if="record.mfa_method_count > 1" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                        Manage
                                                     </button>
                                                 </span>
                                             </dd>
@@ -120,7 +126,7 @@
                                                 Application Administrator
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.is_staff" disabled :class="[record.is_staff ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-not-allowed transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                <Switch v-model="record.is_staff" disabled :class="[record.is_staff ? 'bg-blue-300' : 'bg-gray-200', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-not-allowed transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
                                                     <span aria-hidden="true" :class="[record.is_staff ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
@@ -130,7 +136,7 @@
                                                 Domain Administrator
                                             </SwitchLabel>
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                                <Switch v-model="record.is_domain_admin" disabled :class="[record.is_domain_admin ? 'bg-blue-600' : 'bg-gray-200', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-not-allowed transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
+                                                <Switch v-model="record.is_domain_admin" disabled :class="[record.is_domain_admin ? 'bg-blue-300' : 'bg-gray-200', 'relative inline-flex shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-not-allowed transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-auto']">
                                                     <span aria-hidden="true" :class="[record.is_domain_admin ? 'translate-x-5' : 'translate-x-0', 'inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200']" />
                                                 </Switch>
                                             </dd>
@@ -236,6 +242,53 @@
             <div class="pt-5">
             </div>
         </div>
+        <!--
+            Modals go here
+        -->
+        <TransitionRoot appear :show="showMfaModal" as="template">
+            <Dialog as="div" @close="closeMfaModal">
+                <div class="fixed inset-0 z-10 overflow-y-auto">
+                    <div class="min-h-screen px-4 text-center">
+                        <TransitionChild
+                            as="template"
+                            enter="duration-300 ease-out"
+                            enter-from="opacity-0"
+                            enter-to="opacity-100"
+                            leave="duration-200 ease-in"
+                            leave-from="opacity-100"
+                            leave-to="opacity-0"
+                            >
+                            <DialogOverlay class="fixed inset-0 bg-black opacity-30" />
+                        </TransitionChild>
+                        <span class="inline-block h-screen align-middle" aria-hidden="true">
+                        &#8203;
+                        </span>
+                        <TransitionChild v-if="!record.has_two_factor"
+                            as="template"
+                            enter="duration-300 ease-out"
+                            enter-from="opacity-0 scale-95"
+                            enter-to="opacity-100 scale-100"
+                            leave="duration-200 ease-in"
+                            leave-from="opacity-100 scale-100"
+                            leave-to="opacity-0 scale-95"
+                            >
+                            <EnableMfaDialog @close="closeMfaModal" />
+                        </TransitionChild>
+                        <TransitionChild v-else-if="record.has_two_factor && record.mfa_method_count == 1"
+                            as="template"
+                            enter="duration-300 ease-out"
+                            enter-from="opacity-0 scale-95"
+                            enter-to="opacity-100 scale-100"
+                            leave="duration-200 ease-in"
+                            leave-from="opacity-100 scale-100"
+                            leave-to="opacity-0 scale-95"
+                            >
+                            <DisableMfaDialog @close="closeMfaModal" :method="record.mfa_methods[0].name" />
+                        </TransitionChild>
+                    </div>
+                </div>
+            </Dialog>
+        </TransitionRoot>
     </MainLayout>
 </template>
 
@@ -250,12 +303,19 @@ import {
     Switch,
     SwitchGroup,
     SwitchLabel,
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogOverlay,
+    DialogTitle,
 } from '@headlessui/vue'
 import { TrashIcon } from '@heroicons/vue/outline'
 import { boolToHuman } from '../filters'
 import { onMounted, ref } from '@vue/runtime-core'
 import { useAuth } from '@websanova/vue-auth'
 import FormInput from '../components/FormInput.vue'
+import EnableMfaDialog from '../components/EnableMfaDialog.vue'
+import DisableMfaDialog from '../components/DisableMfaDialog.vue'
 export default {
     components: {
         MainLayout,
@@ -268,7 +328,14 @@ export default {
         SwitchGroup,
         Switch,
         TrashIcon,
-        FormInput
+        FormInput,
+        TransitionRoot,
+        TransitionChild,
+        Dialog,
+        DialogOverlay,
+        DialogTitle,
+        EnableMfaDialog,
+        DisableMfaDialog,
     },
     setup(props) {
         const auth = useAuth()
@@ -278,6 +345,7 @@ export default {
         let weeklyQuarantineReportToggle = ref(false)
         let monthlyQuarantineReportToggle = ref(false)
         let showNewDomainForm = ref(false)
+        let showMfaModal = ref(false)
 
         onMounted(async () => {
             record.value = (await auth.fetch()).data
@@ -291,7 +359,8 @@ export default {
             showNewDomainForm,
             dailyQuarantineReportToggle,
             weeklyQuarantineReportToggle,
-            monthlyQuarantineReportToggle
+            monthlyQuarantineReportToggle,
+            showMfaModal
         }
     },
     methods: {
@@ -323,6 +392,9 @@ export default {
                 last_name: record.last_name,
                 email: record.email
             })
+        },
+        closeMfaModal() {
+            this.showMfaModal = false
         }
     }
 }

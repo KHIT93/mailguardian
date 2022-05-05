@@ -12,6 +12,7 @@ from django.conf import settings
 from .exceptions import TwoFactorRequired, TwoFactorInvalid, InvalidBackupCode
 from dj_rest_auth.app_settings import create_token
 from dj_rest_auth.utils import jwt_encode
+from dj_rest_auth.models import get_token_model
 from .helpers import TOTP
 from lists.models import ListEntry
 from domains.models import Domain
@@ -78,7 +79,9 @@ class LoginView(RestAuthBaseLoginView):
 
     def login(self):
         self.user = self.serializer.validated_data['user']
+        token_model = get_token_model()
 
+        # Start override dj_rest_auth.views.LoginView
         if self.user.get_has_two_factor():
             # Check if we have a backup code in request.data
             if 'backup_code' in self.serializer.validated_data and self.serializer.validated_data['backup_code'] != '' and not self.serializer.validated_data['backup_code'] is None:
@@ -101,12 +104,12 @@ class LoginView(RestAuthBaseLoginView):
             # Raise Exception if code is not valid
             else:
                 raise TwoFactorRequired()
+        # Endoverride dj_rest_auth.views.LoginView
 
         if getattr(settings, 'REST_USE_JWT', False):
-            self.token = jwt_encode(self.user)
-        else:
-            self.token = create_token(self.token_model, self.user,
-                                      self.serializer)
+            self.access_token, self.refresh_token = jwt_encode(self.user)
+        elif token_model:
+            self.token = create_token(token_model, self.user, self.serializer)
 
         if getattr(settings, 'REST_SESSION_LOGIN', True):
             self.process_login()

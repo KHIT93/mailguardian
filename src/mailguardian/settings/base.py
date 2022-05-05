@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import platform
 from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'trench',
     'core',
     'compliance',
     'frontend',
@@ -165,6 +167,32 @@ AUTHENTICATION_BACKENDS = (
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'core.serializers.AccountUserSerializer',
     'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailGuardianPasswordResetSerializer'
+}
+
+TRENCH_AUTH = {
+    "BACKUP_CODES_QUANTITY": 6,
+    "BACKUP_CODES_LENGTH": 24,
+    "ENCRYPT_BACKUP_CODES": True, # This is the default setting in django-trench, but we set it explicitly here to encrypt codes if the default changes
+    "SECRET_KEY_LENGTH": 64,
+    "DEFAULT_VALIDITY_PERIOD": 30,
+    "APPLICATION_ISSUER_NAME": 'MailGuardian',
+    "MFA_METHODS": {
+        "email": {
+            "VERBOSE_NAME": _("email"),
+            "VALIDITY_PERIOD": 60 * 5, # Default code validity is 
+            "HANDLER": "trench.backends.basic_mail.SendMailMessageDispatcher",
+            "SOURCE_FIELD": "username",
+            "EMAIL_SUBJECT": _("Your verification code"),
+            "EMAIL_PLAIN_TEMPLATE": "trench/backends/email/code.txt",
+            "EMAIL_HTML_TEMPLATE": "trench/backends/email/code.html",
+        },
+        "app": {
+            "VERBOSE_NAME": _("app"),
+            "VALIDITY_PERIOD": 30,
+            "USES_THIRD_PARTY_CLIENT": True,
+            "HANDLER": "trench.backends.application.ApplicationMessageDispatcher",
+        },
+    }
 }
 
 # Django-Premailer

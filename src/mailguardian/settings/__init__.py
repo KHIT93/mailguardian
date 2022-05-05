@@ -46,3 +46,7 @@ REST_FRAMEWORK = {
         REST_RENDERERS
     )
 }
+
+# Override APPLICATION_ISSUER if not overriden i mailguardian.settings.local
+if TRENCH_AUTH['APPLICATION_ISSUER_NAME'] in ['MyApplication', 'MailGuardian']:
+    TRENCH_AUTH['APPLICATION_ISSUER_NAME'] = BRAND_NAME + ' ({})'.format(APP_HOSTNAME) if APP_HOSTNAME else ''

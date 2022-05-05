@@ -9,7 +9,7 @@ export default {
     response: function (res) {
         let response_data = this.drivers.http.httpData.call(this, res)
         if (response_data) {
-            return response_data.key
+            return response_data.auth_token
         }
     }
 };

@@ -123,6 +123,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         except ObjectDoesNotExist:
             return False
         return True
+    
+    @property
+    def has_mfa(self):
+        return bool(self.mfa_method_count)
+    
+    @property
+    def mfa_method_count(self):
+        return self.mfa_methods.filter(is_active=True).count()
 
 class MailScannerConfiguration(models.Model):
     class Meta:
