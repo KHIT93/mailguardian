@@ -28,13 +28,13 @@
                                             {{ item.name }}
                                         </router-link>
                                     </div>
-                                    <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
+                                    <Disclosure as="div" v-else class="space-y-1" :default-open="$route.path.includes(item.path, 0)" v-slot="{ open: childNavOpen }">
                                         <DisclosureButton class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group w-full flex items-center px-2 py-2 text-base font-medium rounded-md">
                                             <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                             <span class="flex-1 text-left">
                                                 {{ item.name }}
                                             </span>
-                                            <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                            <ChevronUpIcon v-if="childNavOpen" aria-hidden="true" class="text-gray-400 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                             <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                         </DisclosureButton>
                                         <DisclosurePanel class="space-y-1">
@@ -72,21 +72,23 @@
                                         {{ item.name }}
                                     </router-link>
                                 </div>
-                                <Disclosure as="div" v-else class="space-y-1" v-slot="{ open }">
+                                <Disclosure as="div" v-else class="space-y-1" :default-open="$route.path.includes(item.path, 0)" v-slot="{ open: childNavOpen }">
                                     <DisclosureButton class="transition duration-300 border-l-4 border-transparent group w-full flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-slate-200">
                                         <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                         <span class="flex-1 text-left">
                                             {{ item.name }}
                                         </span>
-                                        <ChevronUpIcon v-if="open" aria-hidden="true" class="text-gray-400 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
+                                        <ChevronUpIcon v-if="childNavOpen" aria-hidden="true" class="text-gray-400 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                         <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                     </DisclosureButton>
-                                    <DisclosurePanel class="space-y-1">
-                                        <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-slate-200">
-                                            <component v-if="child.icon" :is="child.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
-                                            {{ child.name }}
-                                        </router-link>
-                                    </DisclosurePanel>
+                                        <transition enter-active-class="transition ease-out duration-200" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
+                                            <DisclosurePanel class="space-y-1">
+                                                <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-slate-200">
+                                                    <component v-if="child.icon" :is="child.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
+                                                    {{ child.name }}
+                                                </router-link>
+                                            </DisclosurePanel>
+                                        </transition>
                                 </Disclosure>
                             </template>
                         </nav>
@@ -143,7 +145,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   Dialog,
   DialogOverlay,
