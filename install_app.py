@@ -54,14 +54,18 @@ Style = AnsiStyle()
 
 # END: Copy of https://github.com/tartley/colorama/blob/master/colorama/ansi.py
 
-SUPPORTED_LINUX_DISTROS = [
-    'debian',
-    'ubuntu',
+RHEL_DISTROS = [
     'centos',
     'almalinux',
     'rocky',
     'rhel'
 ]
+DEBIAN_DISTROS = [
+    'debian',
+    'ubuntu'
+]
+
+SUPPORTED_LINUX_DISTROS = RHEL_DISTROS + DEBIAN_DISTROS
 
 PKG_MGRS = {
     'debian': 'apt',
@@ -91,12 +95,95 @@ import platform
 import time
 import os
 from distutils.version import LooseVersion
+
+if not platform.system() == 'Linux':
+    print('*** Installation is only supported on Linux ***')
+    exit(255)
+
 try:
     import requests
 except:
     print_error('*** Could not import requests library ***')
     print_info('*** Often it can be fixed by installing python3-requests ***')
     exit(255)
+
+get_os_data = False
+
+try:
+    get_os_data = platform.freedesktop_os_release
+except AttributeError:
+    print_warning('*** Patching Python %s with platform.freedesktop_os_release from Python 3.10.x ***' % (platform.python_version(),))
+    import re
+    ### freedesktop.org os-release standard
+    # https://www.freedesktop.org/software/systemd/man/os-release.html
+
+    # NAME=value with optional quotes (' or "). The regular expression is less
+    # strict than shell lexer, but that's ok.
+    _os_release_line = re.compile(
+        "^(?P<name>[a-zA-Z0-9_]+)=(?P<quote>[\"\']?)(?P<value>.*)(?P=quote)$"
+    )
+    # unescape five special characters mentioned in the standard
+    _os_release_unescape = re.compile(r"\\([\\\$\"\'`])")
+    # /etc takes precedence over /usr/lib
+    _os_release_candidates = ("/etc/os-release", "/usr/lib/os-release")
+    _os_release_cache = None
+    def _parse_os_release(lines):
+        # These fields are mandatory fields with well-known defaults
+        # in practice all Linux distributions override NAME, ID, and PRETTY_NAME.
+        info = {
+            "NAME": "Linux",
+            "ID": "linux",
+            "PRETTY_NAME": "Linux",
+        }
+
+        for line in lines:
+            mo = _os_release_line.match(line)
+            if mo is not None:
+                info[mo.group('name')] = _os_release_unescape.sub(
+                    r"\1", mo.group('value')
+                )
+
+        return info
+    def freedesktop_os_release():
+        """Return operation system identification from freedesktop.org os-release
+        """
+        global _os_release_cache
+
+        if _os_release_cache is None:
+            errno = None
+            for candidate in _os_release_candidates:
+                try:
+                    with open(candidate, encoding="utf-8") as f:
+                        _os_release_cache = _parse_os_release(f)
+                    break
+                except OSError as e:
+                    errno = e.errno
+            else:
+                raise OSError(
+                    errno,
+                    f"Unable to read files {', '.join(_os_release_candidates)}"
+                )
+
+        return _os_release_cache.copy()
+    
+    get_os_data = freedesktop_os_release
+    
+if not get_os_data:
+    print_error('*** Unable to initialize OS detection logic ***')
+    exit(255)
+
+def which(program):
+    def is_exe(fpath):
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = Path(path, program)
+            if is_exe(exe_file):
+                return str(exe_file)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--version', help='Display the script version', action='store_true')
@@ -105,12 +192,8 @@ parser.add_argument('-b', '--branch', help='Install from latest commit to this b
 
 args = parser.parse_args()
 
-if __name__ == "__main__":
-    if not platform.system() == 'Linux':
-        print('*** Installation is only supported on Linux ***')
-        exit(255)
-    
-    os_data = platform.freedesktop_os_release()
+if __name__ == "__main__":    
+    os_data = get_os_data()
     platform_os_id = str(os_data.get('ID', False)).lower()
     if not platform_os_id in SUPPORTED_LINUX_DISTROS:
         print_error('*** Linux Distribution %s is not supported ***' % (platform_os_id,))
@@ -159,12 +242,24 @@ if __name__ == "__main__":
         exit(255)
 
     # Start the installation
+    if platform_os_id in RHEL_DISTROS:
+        print_warning('*** Installation of RHEL requires EPEL. Installing it now ***')
+        subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'epel-release'), shell=True)
     print_info('*** Installing setuptools ***')
-    subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-setuptools'), shell=True)
+    if platform_os_id in RHEL_DISTROS:
+        subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python38-setuptools'), shell=True)
+    else:
+        subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-setuptools'), shell=True)
     print_info('*** Installing PIP ***')
-    subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-pip'), shell=True)
+    if platform_os_id in RHEL_DISTROS:
+        subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python38-pip'), shell=True)
+    else:
+        subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-pip'), shell=True)
     print_info('*** Installing VIRTUALENV ***')
-    subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-virtualenv'), shell=True)
+    if platform_os_id in RHEL_DISTROS:
+        subprocess.check_call('%s install -y %s' % ('pip3', 'virtualenv'), shell=True)
+    else:
+        subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-virtualenv'), shell=True)
     print_info('*** Installing GIT ***')
     subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'git'), shell=True)
 
@@ -178,7 +273,7 @@ if __name__ == "__main__":
     
     print_info('*** Starting application configuration wizard ***')
     try:
-        subprocess.check_call('ENV_DB_PASS=%s python3 ./installer/configure.py -f /home/mailguardian/mailguardian/installer.ini' % (database_password_suggestion,), shell=True)
+        subprocess.check_call('ENV_DB_PASS="%s" python3 /home/mailguardian/mailguardian/installer/configure.py -f /home/mailguardian/mailguardian/installer.ini' % (database_password_suggestion,), shell=True)
     except:
         print_error('We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again')
         exit(255)
@@ -189,7 +284,7 @@ if __name__ == "__main__":
     
     print_info('*** Installing required dependencies ***')
     try:
-        subprocess.check_call('python3 ./installer/deps.py -f /home/mailguardian/mailguardian/installer.ini', shell=True)
+        subprocess.check_call('python3 /home/mailguardian/mailguardian/installer/deps.py -f /home/mailguardian/mailguardian/installer.ini', shell=True)
     except:
         print_error('We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again')
         exit(255)
