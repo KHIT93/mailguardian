@@ -267,6 +267,8 @@ if __name__ == "__main__":
             subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python38-pytz'), shell=True)
         else:
             subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-pytz'), shell=True)
+    print_info('*** Installing required python libraries ***')
+    subprocess.check_call('pip3 install distro', shell=True)
     print_info('*** Installing GIT ***')
     subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'git'), shell=True)
 
