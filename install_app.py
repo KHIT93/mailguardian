@@ -267,6 +267,7 @@ if __name__ == "__main__":
     subprocess.check_call('useradd -m mailguardian', shell=True)
     subprocess.check_call('chmod 755 /home/mailguardian', shell=True)
     print_info('*** Downloading MailGuardian %s ***' % (to_install,))
+    subprocess.check_call("echo 'mkdir -p /home/mailguardian/mailguardian' | su - mailguardian", shell=True)
     subprocess.check_call("su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git --branch %s /home/mailguardian/mailguardian'" % (to_install,))
     # TODO: Move this into installer/configure.py
     database_password_suggestion = subprocess.check_output('echo $(date +%s | sha256sum | base64 | head -c 32)', shell=True).decode().strip()
