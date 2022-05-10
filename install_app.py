@@ -243,7 +243,7 @@ if __name__ == "__main__":
 
     # Start the installation
     if platform_os_id in RHEL_DISTROS:
-        print_warning('*** Installation of RHEL requires EPEL. Installing it now ***')
+        print_warning('*** Installation on RHEL requires EPEL. Installing it now ***')
         subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'epel-release'), shell=True)
     print_info('*** Installing setuptools ***')
     if platform_os_id in RHEL_DISTROS:
