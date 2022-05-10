@@ -260,6 +260,13 @@ if __name__ == "__main__":
         subprocess.check_call('%s install %s' % ('pip3', 'virtualenv'), shell=True)
     else:
         subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-virtualenv'), shell=True)
+    if LooseVersion(to_install) < LooseVersion('3.0.0'):
+        # Installing for v2 or below, so we need pytz
+        print_info('*** Installing PYTZ ***')
+        if platform_os_id in RHEL_DISTROS:
+            subprocess.check_call('%s install %s' % (PKG_MGRS[platform_os_id], 'python38-pytz'), shell=True)
+        else:
+            subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-pytz'), shell=True)
     print_info('*** Installing GIT ***')
     subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'git'), shell=True)
 
