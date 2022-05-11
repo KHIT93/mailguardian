@@ -189,6 +189,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--version', help='Display the script version', action='store_true')
 parser.add_argument('-r', '--release', help='Specific release version of MailGuardian to install')
 parser.add_argument('-b', '--branch', help='Install from latest commit to this branch')
+parser.add_argument('-t', '--configtest', help='Test SpamAsssassin and MailScanner configuration after installation has completed', action="store_true")
 
 args = parser.parse_args()
 
@@ -369,14 +370,15 @@ if __name__ == "__main__":
         print_error('We are really sorry, but something seems to have gone wrong or the script was aborted')
         exit(255)
 
-    print_info('*** Starting virus scanners ***')
-    time.sleep(20)
+    if args.configtest:
+        print_info('*** Starting virus scanners ***')
+        time.sleep(20)
 
-    print_info('*** Testing configuration of spamassassin ***')
-    subprocess.call('spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint', shell=True)
+        print_info('*** Testing configuration of spamassassin ***')
+        subprocess.call('spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint', shell=True)
 
-    print_info('*** Testing MailScanner configuration ***')
-    subprocess.call('MailScanner --lint', shell=True)
+        print_info('*** Testing MailScanner configuration ***')
+        subprocess.call('MailScanner --lint', shell=True)
 
     print_success('*** Congratulations! MailGuardian is now installed ***')
     print_info('*** Please reboot your server and complete the setup in the browser ***')
