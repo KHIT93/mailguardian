@@ -268,7 +268,7 @@ if __name__ == "__main__":
         else:
             subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'python3-pytz'), shell=True)
     print_info('*** Installing required python libraries ***')
-    subprocess.check_call('pip3 install distro', shell=True)
+    subprocess.check_call('pip3 install distro packaging', shell=True)
     print_info('*** Installing GIT ***')
     subprocess.check_call('%s install -y %s' % (PKG_MGRS[platform_os_id], 'git'), shell=True)
 
@@ -378,4 +378,5 @@ if __name__ == "__main__":
     print_info('*** Testing MailScanner configuration ***')
     subprocess.call('MailScanner --lint', shell=True)
 
-    
+    print_success('*** Congratulations! MailGuardian is now installed ***')
+    print_info('*** Please reboot your server and complete the setup in the browser ***')
