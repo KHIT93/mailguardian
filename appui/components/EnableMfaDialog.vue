@@ -70,7 +70,7 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
 import { DialogTitle } from '@headlessui/vue'
 import { CheckIcon } from '@heroicons/vue/solid/esm/index.js'
 import { computed } from '@vue/reactivity'
@@ -78,56 +78,38 @@ import { onMounted, reactive, ref } from 'vue'
 import MfaWizardIndex from './MfaWizard/index.vue'
 import MfaWizardMethod from './MfaWizard/method.vue'
 import MfaWizardSetup from './MfaWizard/setup.vue'
-export default {
-    props: ['show'],
-    components: {
-        DialogTitle,
-        CheckIcon,
-        MfaWizardIndex,
-        MfaWizardMethod,
-        MfaWizardSetup
-    },
-    setup(props) {
-        let { show } = props
-        const steps = reactive([
-            { index: 0, name: 'Intro', href:'#', status: 'current' },
-            { index: 1, name: 'Method', href:'#', status: 'incomplete' },
-            { index: 2, name: 'Setup', href:'#', status: 'incomplete' },
-            { index: 3, name: 'Finished', href:'#', status: 'incomplete' },
-        ])
-        const method = ref('')
-        const backup_codes = reactive([])
-        const currentStepIndex = computed(() => {
-            return steps.findIndex(step => step.status == 'current')
-        })
-        const currentStep = computed(() => {
-            return steps.find(step => step.status == 'current')
-        })
-        return {
-            show,
-            steps,
-            currentStep,
-            currentStepIndex,
-            method,
-            backup_codes
-        }
-    },
-    methods: {
-        close() {
-            this.$emit('close')
-        },
-        nextStep(event) {
-            console.log(event)
-            let currentStep = this.steps.findIndex(step => step.status == 'current')
-            this.steps[currentStep].status = 'complete'
-            if (this.steps[currentStep].index == 1) {
-                this.method = event
-            }
-            else if (this.steps[currentStep].index == 2) {
-                this.backup_codes = event.backup_codes
-            }
-            this.steps[currentStep + 1].status = 'current'
-        }
+const props = defineProps(['show'])
+const emits = defineEmits(['close'])
+
+let { show } = props
+const steps = reactive([
+    { index: 0, name: 'Intro', href:'#', status: 'current' },
+    { index: 1, name: 'Method', href:'#', status: 'incomplete' },
+    { index: 2, name: 'Setup', href:'#', status: 'incomplete' },
+    { index: 3, name: 'Finished', href:'#', status: 'incomplete' },
+])
+const method = ref('')
+const backup_codes = reactive([])
+const currentStepIndex = computed(() => {
+    return steps.findIndex(step => step.status == 'current')
+})
+const currentStep = computed(() => {
+    return steps.find(step => step.status == 'current')
+})
+
+function close() {
+    emits('close')
+}
+function nextStep(event) {
+    console.log(event)
+    let currentStep = steps.findIndex(step => step.status == 'current')
+    steps[currentStep].status = 'complete'
+    if (steps[currentStep].index == 1) {
+        method = event
     }
+    else if (steps[currentStep].index == 2) {
+        backup_codes = event.backup_codes
+    }
+    steps[currentStep + 1].status = 'current'
 }
 </script>

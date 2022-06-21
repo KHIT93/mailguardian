@@ -13,41 +13,31 @@
         </div>
     </form>
 </template>
-<script>
+<script setup>
 import { onMounted, ref, reactive } from 'vue'
 import FormInput from '~/components/FormInput.vue'
 import QRCode from 'qrcode.vue'
-export default {
-    props: ['method'],
-    components: {
-        FormInput,
-        QRCode
-    },
-    setup(props) {
-        let code = ref('')
-        const qrcode = ref('')
-        const { method } = props
-        onMounted(async () => {
-            console.log(qrcode.value)
-            let res = (await axios.post(`/rest-auth/${method}/activate/`)).data
-            if (res.details.startsWith('otpauth://', 0)) {
-                qrcode.value = res.details
-            }
-        })
-        return {
-            code,
-            qrcode,
-            method
-        }
-    },
-    methods: {
-        nextStep() {
-            axios.post(`/rest-auth/${this.method}/activate/confirm/`, { code: this.code }).then(response => {
-                this.$emit('complete', response.data)
-            }).catch(error => {
-                console.log(error)
-            })
-        }
+
+const props = defineProps(['method'])
+const emits = defineEmits(['complete'])
+
+let code = ref('')
+const qrcode = ref('')
+const { method } = props
+
+onMounted(async () => {
+    console.log(qrcode.value)
+    let { data: res } = await useBackendFetch(`/rest-auth/${method}/activate/`, { method: 'POST'})
+    if (res.details.startsWith('otpauth://', 0)) {
+        qrcode.value = res.details
     }
+})
+
+function nextStep() {
+    $fetch(`/rest-auth/${method}/activate/confirm/`, { method: 'POST', body: { code: code }}).then(response => {
+        emits('complete', response.data)
+    }).catch(error => {
+        console.log(error)
+    })
 }
 </script>

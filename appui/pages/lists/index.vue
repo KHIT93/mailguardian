@@ -47,19 +47,8 @@
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import MainLayout from '~/components/MainLayout.vue'
 import ListEntryTable from '~/components/ListEntryTable.vue'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
-export default {
-    components: {
-        MainLayout,
-        ListEntryTable,
-        TabGroup,
-        TabList,
-        Tab,
-        TabPanels,
-        TabPanel,
-    }
-}
 </script>

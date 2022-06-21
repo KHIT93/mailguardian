@@ -31,10 +31,8 @@
 <script>
 import { DialogTitle } from '@headlessui/vue'
 import { CheckIcon } from '@heroicons/vue/solid/esm/index.js'
-import { computed } from '@vue/reactivity'
 import FormInput from './FormInput.vue'
 import { onMounted, reactive, ref } from 'vue'
-import axios from 'axios'
 export default {
     props: ['show', 'method'],
     components: {
@@ -55,7 +53,7 @@ export default {
     },
     methods: {
         deactivateTwoFactorAuth() {
-            axios.post(`/rest-auth/${this.method}/deactivate/`, { code: this.code }).then(response => {
+            this.$fetch(`/rest-auth/${this.method}/deactivate/`, { method:'POST', baseURL: 'http://localhost:8000', body: { code: this.code } }).then(response => {
                 this.$emit('close')
             }).catch(error => {
                 console.error(error)
@@ -63,7 +61,7 @@ export default {
         },
         startMfaDeactivation() {
             this.started = true
-            axios.post('/rest-auth/code/request/', { method: this.method }).then(response => {
+            this.$fetch('/rest-auth/code/request/', { method:'POST', baseURL: 'http://localhost:8000', body: { method: this.method } }).then(response => {
                 console.log(response.data)
             }).catch(error => {
                 console.error(error)

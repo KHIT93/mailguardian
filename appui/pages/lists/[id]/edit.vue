@@ -1,7 +1,7 @@
 <template>
     <MainLayout>
         <div class="flex w-full pb-4">
-            <router-link to="/lists" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></router-link>
+            <NuxtLink to="/lists" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></NuxtLink>
         </div>
         <div class="shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 bg-white space-y-8 sm:p-6">
@@ -44,53 +44,37 @@
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref, reactive, computed, toRefs } from 'vue'
-import { ArrowLeftIcon } from '@heroicons/vue/outline/esm/index.js'
+import { ArrowLeftIcon } from '@heroicons/vue/outline'
 import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
 import MainLayout from '~/components/MainLayout.vue'
 import FormInput from '~/components/FormInput.vue'
 import Form from '~/classes/Form'
-export default {
-    components: {
-        ArrowLeftIcon,
-        MainLayout,
-        FormInput
-    },
-    setup(props) {
-        let { id } = useRoute().params
-        let entry = ref({})
-        let form = reactive(new Form({
-            from_address: '',
-            from_domain: '',
-            to_address: '',
-            to_domain: '',
-            listing_type: '',
-        }))
-        let loading = ref(false)
-        let getEntry = (async () => {
-            loading.value = true
-            let res = (await axios.get(`/api/lists/${id}/`)).data
-            form.from_address = res.from_address
-            form.from_domain = res.from_domain
-            form.to_address = res.to_address
-            form.to_domain = res.to_domain
-            form.listing_type = res.listing_type
-            loading = false
-            return res
-        })
 
-        onMounted(async () => {
-            entry.value = (await getEntry())
-        })
-
-        return {
-            id,
-            entry,
-            form,
-            loading,
-            getEntry
-        }
-    }
+let { id } = useRoute().params
+let entry = ref({})
+let form = reactive(new Form({
+    from_address: '',
+    from_domain: '',
+    to_address: '',
+    to_domain: '',
+    listing_type: '',
+}))
+let loading = ref(false)
+async function getEntry() {
+    loading.value = true
+    let res = (await useBackendFetch(`/api/lists/${id}/`))
+    form.from_address = res.from_address
+    form.from_domain = res.from_domain
+    form.to_address = res.to_address
+    form.to_domain = res.to_domain
+    form.listing_type = res.listing_type
+    loading = false
+    return res
 }
+
+onMounted(async () => {
+    entry.value = (await getEntry())
+})
 </script>

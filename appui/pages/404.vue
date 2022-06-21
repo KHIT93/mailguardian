@@ -1,5 +1,6 @@
 <template>
-    <MainLayout v-if="$auth.check()">
+    <!-- <MainLayout> -->
+    <MainLayout v-if="$auth().isAuthenticated()">
         <div class="flex">
             <p class="border-r text-5xl text-blue-500 font-bold px-2 animate-wiggle">&lt;404&gt;</p>
             <div class="px-2">
@@ -16,10 +17,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import MainLayout from '../components/MainLayout.vue'
-export default {
-  components: { MainLayout },
-
-}
+const { $auth } = useNuxtApp()
 </script>

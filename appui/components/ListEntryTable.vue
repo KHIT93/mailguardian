@@ -45,62 +45,49 @@
                         {{ entry.to_address }}
                     </td>
                     <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
-                        <router-link :to="`/lists/${entry.id}/edit`" class="text-blue-600 hover:text-blue-900">
+                        <NuxtLink :to="`/lists/${entry.id}/edit`" class="text-blue-600 hover:text-blue-900">
                             <PencilIcon class="w-4 h-4"/>
-                        </router-link>
+                        </NuxtLink>
                     </td>
                     <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
-                        <router-link :to="`/lists/${entry.id}/delete`" class="text-red-600 hover:text-red-900">
+                        <NuxtLink :to="`/lists/${entry.id}/delete`" class="text-red-600 hover:text-red-900">
                             <TrashIcon class="w-4 h-4"/>
-                        </router-link>
+                        </NuxtLink>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <router-link to="/domains/create" class="absolute right-4 -bottom-8 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <NuxtLink to="/domains/create" class="absolute right-4 -bottom-8 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             <PlusSmIcon class="h-6 w-6" aria-hidden="true" />
-        </router-link>
+        </NuxtLink>
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref, onMounted, computed } from 'vue'
 import { PencilIcon, TrashIcon, SearchIcon, PlusSmIcon } from '@heroicons/vue/outline/esm/index.js'
 import FormInputWithIcon from './FormInputWithIcon.vue'
-export default {
-    props: ['listingType'],
-    components: {
-        PencilIcon,
-        TrashIcon,
-        SearchIcon,
-        PlusSmIcon,
-        FormInputWithIcon
-    },
-    setup(props) {
-        console.log(props.listingType)
-        let loading = ref(false)
-        let entries = ref([])
-        let searchKey = ref('')
-        let fetchEntries = (async () => {
-            loading.value = true
-            let res = (await axios.get(`/api/${props.listingType}list/?page_size=20`)).data.results
-            loading.value = false
-            return res
-        })
-        let filteredEntries = computed(() => {
-            let res = entries.value.filter(entry => entry.from_address.toLowerCase().includes(searchKey.value.toLowerCase()) || entry.from_domain.toLowerCase().includes(searchKey.value.toLowerCase()) || entry.to_address.toLowerCase().includes(searchKey.value.toLowerCase()) || entry.to_domain.toLowerCase().includes(searchKey.value.toLowerCase()))
-            return res
-        })
-        onMounted(async () => {
-            entries.value = (await fetchEntries())
-        })
-        return {
-            loading,
-            entries,
-            searchKey,
-            fetchEntries,
-            filteredEntries
-        }
-    }
-}
+const props = defineProps({
+    listingType: String
+})
+
+console.log(props.listingType)
+let loading = ref(false)
+let entries = ref([])
+let searchKey = ref('')
+let fetchEntries = (async () => {
+    loading.value = true
+    let res = await useBackendFetch(`/api/${props.listingType}list/?page_size=20`)
+    res = res.results
+    loading.value = false
+    return res
+})
+let filteredEntries = computed(() => {
+    let res = entries.value.filter(entry => entry.from_address.toLowerCase().includes(searchKey.value.toLowerCase()) || entry.from_domain.toLowerCase().includes(searchKey.value.toLowerCase()) || entry.to_address.toLowerCase().includes(searchKey.value.toLowerCase()) || entry.to_domain.toLowerCase().includes(searchKey.value.toLowerCase()))
+    return res
+})
+onMounted(async () => {
+    entries.value = (await fetchEntries())
+})
+
 </script>

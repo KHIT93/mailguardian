@@ -95,7 +95,7 @@
     </form>
 </template>
 
-<script>
+<script setup>
 import { reactive, ref, onMounted } from 'vue'
 import Form from '~/classes/Form'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
@@ -104,59 +104,37 @@ import { ArrowLeftIcon } from '@heroicons/vue/outline/esm/index.js'
 import FormInput from './FormInput.vue'
 import FormSelection from './FormSelection.vue'
 
-export default {
-    props: [
-        'id'
-    ],
-    components: {
-        ArrowLeftIcon,
-        ChevronDownIcon,
-        Disclosure,
-        DisclosureButton,
-        DisclosurePanel,
-        FormInput,
-        FormSelection
-    },
-    setup(props) {
-        let { id } = props
-        let form = reactive(new Form({
-            name: '',
-            active: '',
-            allowed_accounts: '',
-            destination: '',
-            receive_type: 'smtp',
-            relay_type: 'failover'
-        }))
-        let nodes = ref([])
+const props = defineProps(['id'])
 
-        onMounted(async () => {
-            if(id) {
-                let res = (await axios.get(`/api/domains/${id}/`)).data
-                form.name = res.name,
-                form.active = res.active,
-                form.allowed_accounts = res.allowed_accounts,
-                form.destination = res.destination,
-                form.receive_type = res.receive_type,
-                form.relay_type = res.relay_type
-            }
-            nodes = (await axios.get('/api/hosts/'))
-        })
+let form = reactive(new Form({
+    name: '',
+    active: '',
+    allowed_accounts: '',
+    destination: '',
+    receive_type: 'smtp',
+    relay_type: 'failover'
+}))
+let nodes = ref([])
 
-        return {
-            form,
-            nodes,
-            id
-        }
-    },
-    methods: {
-        async submit() {
-            if (this.id) {
-                await this.form.patch(`/api/domains/${this.id}/`)
-            }
-            else {
-                await this.form.post('/api/domains/')
-            }
-        }
+onMounted(async () => {
+    if(id) {
+        let { data: res } = await useBackendFetch(`/api/domains/${props.id}/`)
+        form.name = res.name,
+        form.active = res.active,
+        form.allowed_accounts = res.allowed_accounts,
+        form.destination = res.destination,
+        form.receive_type = res.receive_type,
+        form.relay_type = res.relay_type
+    }
+    nodes = (await useBackendFetch('/api/hosts/'))
+})
+
+async function submit() {
+    if (props.id) {
+        await form.patch(`/api/domains/${props.id}/`)
+    }
+    else {
+        await form.post('/api/domains/')
     }
 }
 </script>

@@ -17,38 +17,26 @@
     </svg>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, toRefs } from 'vue'
-export default {
-    props: {
-        radius: Number,
-        progress: Number,
-        stroke: Number,
-        fillColor: {
-            type: String,
-            default: 'transparent'
-        }
-    },
-    setup(props) {
-        let { radius, progress, stroke, fillColor } = toRefs(props)
-        let normalizedRadius = computed(() => {
-            return radius.value - stroke.value
-        })
-        let circumfence = computed(() => {
-            return normalizedRadius.value * 2 * Math.PI
-        })
-        let strokeDashoffset = computed(() => {
-            return circumfence.value - progress.value / 100 * circumfence.value
-        })
-        return {
-            radius,
-            stroke,
-            normalizedRadius,
-            circumfence,
-            strokeDashoffset
-        }
-    }
-}
+
+const props = defineProps({
+    radius: Number,
+    progress: Number,
+    stroke: Number,
+    fillColor: String
+})
+
+let { radius, progress, stroke, fillColor } = toRefs(props)
+let normalizedRadius = computed(() => {
+    return radius.value - stroke.value
+})
+let circumfence = computed(() => {
+    return normalizedRadius.value * 2 * Math.PI
+})
+let strokeDashoffset = computed(() => {
+    return circumfence.value - progress.value / 100 * circumfence.value
+})
 </script>
 <style scoped>
     circle {

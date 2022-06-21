@@ -54,61 +54,46 @@
     </form>
 </template>
 
-<script>
-import { toRef, toRefs, ref } from '@vue/reactivity'
+<script setup>
 import { reactive, onMounted } from 'vue'
 import FormInput from './FormInput.vue'
 import Form from '~/classes/Form'
-export default {
-    props: [
-        'id'
-    ],
-    components: {
-        FormInput
-    },
-    setup(props) {
-        let { id } = props
-        let form = reactive(new Form({
-            email: '',
-            first_name: '',
-            last_name: '',
-            is_active: true,
-            is_domain_admin: false,
-            is_staff: false,
-            skip_scan: false,
-            custom_spam_score: 5.0,
-            custom_spam_highscore: 15.0
-        }))
+const props = defineProps({
+    id: String
+})
+let form = reactive(new Form({
+    email: '',
+    first_name: '',
+    last_name: '',
+    is_active: true,
+    is_domain_admin: false,
+    is_staff: false,
+    skip_scan: false,
+    custom_spam_score: 5.0,
+    custom_spam_highscore: 15.0
+}))
 
-        onMounted(async () => {
-            if(id) {
-                let res = (await axios.get(`/api/users/${id}/`)).data
-                form.email = res.email,
-                form.first_name = res.first_name,
-                form.last_name = res.last_name,
-                form.is_active = res.is_active,
-                form.is_domain_admin = res.is_domain_admin,
-                form.is_staff = res.is_staff,
-                form.skip_scan = res.skip_scan,
-                form.custom_spam_score = res.custom_spam_score,
-                form.custom_spam_highscore = res.custom_spam_highscore
-            }
-        })
+onMounted(async () => {
+    if(props.id) {
+        let { data: res } = await useBackendFetch(`/api/users/${props.id}/`)
+        form.email = res.email,
+        form.first_name = res.first_name,
+        form.last_name = res.last_name,
+        form.is_active = res.is_active,
+        form.is_domain_admin = res.is_domain_admin,
+        form.is_staff = res.is_staff,
+        form.skip_scan = res.skip_scan,
+        form.custom_spam_score = res.custom_spam_score,
+        form.custom_spam_highscore = res.custom_spam_highscore
+    }
+})
 
-        return {
-            form,
-            id
-        }
-    },
-    methods: {
-        async submit() {
-            if (this.id) {
-                await this.form.patch(`/api/users/${this.id}/`)
-            }
-            else {
-                await this.form.post('/api/users/')
-            }
-        }
+async function submit() {
+    if (props.id) {
+        await form.patch(`/api/users/${props.id}/`)
+    }
+    else {
+        await form.post('/api/users/')
     }
 }
 </script>

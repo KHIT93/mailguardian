@@ -4,7 +4,7 @@
             <button type="button" @click.native="messageType = ''">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-300 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="transparent" class="text-gray-300 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
                         <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="currentColor" class="text-gray-200" stroke-linecap="round"></ProgressRing>
@@ -23,10 +23,10 @@
             <button type="button" @click.native="messageType = 'is_clean'">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="transparent" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
-                        <ProgressRing :radius="60" :progress="((stats.daily_total - stats.daily_spam - stats.daily_virus) * stats.daily_total) * 100" :stroke="6" class="text-blue-500" stroke-linecap="round"></ProgressRing>
+                        <ProgressRing :radius="60" :progress="((stats.daily_total - stats.daily_spam - stats.daily_virus) * stats.daily_total) * 100" :stroke="6" fillColor="transparent" class="text-blue-500" stroke-linecap="round"></ProgressRing>
                         <div class="absolute top-0 bottom-0 left-0 right-0 text-xl">
                             <div class="flex w-full h-full items-center justify-center">
                                 {{ stats.daily_total - stats.daily_spam - stats.daily_virus }}
@@ -42,10 +42,10 @@
             <button type="button">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="transparent" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
-                        <ProgressRing :radius="60" :progress="0" :stroke="6" class="text-green-500" stroke-linecap="round"></ProgressRing>
+                        <ProgressRing :radius="60" :progress="0" :stroke="6" fillColor="transparent" class="text-green-500" stroke-linecap="round"></ProgressRing>
                         <div class="absolute top-0 bottom-0 left-0 right-0 text-xl">
                             <div class="flex w-full h-full items-center justify-center">
                                 0
@@ -61,10 +61,10 @@
             <button type="button">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="transparent" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
-                        <ProgressRing :radius="60" :progress="0" :stroke="6" class="text-yellow-500" stroke-linecap="round"></ProgressRing>
+                        <ProgressRing :radius="60" :progress="0" :stroke="6" fillColor="transparent" class="text-yellow-500" stroke-linecap="round"></ProgressRing>
                         <div class="absolute top-0 bottom-0 left-0 right-0 text-xl">
                             <div class="flex w-full h-full items-center justify-center">
                                 0
@@ -80,10 +80,10 @@
             <button type="button" @click.native="messageType = 'is_spam'">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="transparent" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
-                        <ProgressRing :radius="60" :progress="(stats.daily_spam / stats.daily_total) * 100" :stroke="6" class="text-red-500" stroke-linecap="round"></ProgressRing>
+                        <ProgressRing :radius="60" :progress="(stats.daily_spam / stats.daily_total) * 100" :stroke="6" fillColor="transparent" class="text-red-500" stroke-linecap="round"></ProgressRing>
                         <div class="absolute top-0 bottom-0 left-0 right-0 text-xl">
                             <div class="flex w-full h-full items-center justify-center">
                                 {{ stats.daily_spam }}
@@ -99,10 +99,10 @@
             <button type="button" @click.native="messageType = 'infected'">
                 <div class="relative">
                     <template v-if="statsLoading">
-                        <ProgressRing :radius="60" :progress="100" :stroke="6" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
+                        <ProgressRing :radius="60" :progress="100" :stroke="6" fillColor="transparent" class="text-gray-100 animate-pulse" stroke-linecap="round"/>
                     </template>
                     <template v-else>
-                        <ProgressRing :radius="60" :progress="(stats.daily_virus / stats.daily_total) * 100" :stroke="6" class="text-purple-500" stroke-linecap="round"></ProgressRing>
+                        <ProgressRing :radius="60" :progress="(stats.daily_virus / stats.daily_total) * 100" :stroke="6" fillColor="transparent" class="text-purple-500" stroke-linecap="round"></ProgressRing>
                         <div class="absolute top-0 bottom-0 left-0 right-0 text-xl">
                             <div class="flex w-full h-full items-center justify-center">
                                 {{ stats.daily_virus }}
@@ -195,81 +195,61 @@
     </MainLayout>
 </template>
 
-<script>
-import { onMounted, ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import MainLayout from '~/components/MainLayout.vue'
-import FormInputWithIcon from '~/components/FormInputWithIcon.vue'
-import ProgressRing from '~/components/ProgressRing.vue'
-import { RefreshIcon, SearchIcon } from '@heroicons/vue/outline/esm/index.js'
-export default {
-    components: {
-        MainLayout,
-        ProgressRing,
-        RefreshIcon,
-        SearchIcon,
-        FormInputWithIcon
-    },
-    setup(props) {
-        const router = useRouter()
-        let messagesLoading = ref(false)
-        let statsLoading = ref(false)
-        let messages = ref([])
-        let stats = ref({})
-        let searchKey = ref('')
-        let messageType = ref('')
-        let filteredMessages = computed(() => {
-            let res = messages.value.filter(message => message.subject.toLowerCase().includes(searchKey.value.toLowerCase()) || message.to_address.toLowerCase().includes(searchKey.value.toLowerCase()) || message.from_address.toLowerCase().includes(searchKey.value.toLowerCase()))
-            if (messageType) {
-                if (messageType.value == 'is_clean') {
-                    res = res.filter(message => message.is_clean)
-                }
-                else if (messageType.value == 'is_spam') {
-                    res = res.filter(message => message.is_spam)
-                }
-                else if (messageType.value == 'infected') {
-                    res = res.filter(message => message.infected)
-                }
+<script setup>
+    import { onMounted, ref, computed } from 'vue'
+    import MainLayout from '~/components/MainLayout.vue'
+    import FormInputWithIcon from '~/components/FormInputWithIcon.vue'
+    import ProgressRing from '~/components/ProgressRing.vue'
+    import { RefreshIcon, SearchIcon } from '@heroicons/vue/outline/esm/index.js'
+    definePageMeta({
+        middleware: ['auth']
+    })
+    let messagesLoading = ref(false)
+    let statsLoading = ref(false)
+    let messages = ref([])
+    let stats = ref({})
+    let searchKey = ref('')
+    let messageType = ref('')
+    let filteredMessages = computed(() => {
+        let res = messages.value.filter(message => message.subject.toLowerCase().includes(searchKey.value.toLowerCase()) || message.to_address.toLowerCase().includes(searchKey.value.toLowerCase()) || message.from_address.toLowerCase().includes(searchKey.value.toLowerCase()))
+        if (messageType) {
+            if (messageType.value == 'is_clean') {
+                res = res.filter(message => message.is_clean)
             }
-            return res
-        })
-        let fetchMessages = (async () => {
-            statsLoading.value = true
-            messagesLoading.value = true
-            let res = (await axios.get('/api/messages/?page_size=20')).data.results
-            messagesLoading.value = false
-            return res
-        })
-        let fetchStatistics = (async () => {
-            statsLoading.value = true
-            let res = (await axios.post('/api/dashboard/', {'interval' : 'daily'})).data
-            statsLoading.value = false
-            return res
-        })
-        let refreshDashboard = (async () => {
-            messages.value = (await fetchMessages())
-            // filteredMessages.value = messages.value
-            stats.value = (await fetchStatistics())
-        })
-        let goToMessage = (messageId => {
-            router.push({ name: 'messages.show', params: { id: messageId } })
-        })
-        onMounted(async () => {
-            refreshDashboard()
-        })
-        return {
-            stats,
-            messages,
-            statsLoading,
-            messagesLoading,
-            filteredMessages,
-            searchKey,
-            messageType,
-            fetchMessages,
-            fetchStatistics,
-            refreshDashboard,
-            goToMessage
+            else if (messageType.value == 'is_spam') {
+                res = res.filter(message => message.is_spam)
+            }
+            else if (messageType.value == 'infected') {
+                res = res.filter(message => message.infected)
+            }
         }
-    },
-}
+        return res
+    })
+    let fetchMessages = (async () => {
+        statsLoading.value = true
+        messagesLoading.value = true
+        let res = (await useBackendFetch('/api/messages/?page_size=20')).results
+        messagesLoading.value = false
+        return res
+    })
+    let fetchStatistics = (async () => {
+        statsLoading.value = true
+        let res = (await useBackendFetch('/api/dashboard/', {
+            method: 'POST',
+            body: { interval: 'daily' }
+        }))
+        statsLoading.value = false
+        return res
+    })
+    let refreshDashboard = (async () => {
+        messages.value = (await fetchMessages())
+        // filteredMessages.value = messages.value
+        stats.value = (await fetchStatistics())
+    })
+    let goToMessage = (messageId => {
+        navigateTo({ name: 'messages-id', params: { id: messageId } })
+    })
+    onMounted(async () => {
+        refreshDashboard()
+    })
 </script>

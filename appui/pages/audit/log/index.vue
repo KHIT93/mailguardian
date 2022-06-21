@@ -50,9 +50,9 @@
                             {{ entry.remote_addr }}
                         </td>
                         <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
-                            <router-link :to="`/audit/log/${entry.id}`" class="text-blue-600 hover:text-blue-900">
+                            <NuxtLink :to="`/audit/log/${entry.id}`" class="text-blue-600 hover:text-blue-900">
                                 <SearchIcon class="w-4 h-4"/>
-                            </router-link>
+                            </NuxtLink>
                         </td>
                     </tr>
                 </tbody>
@@ -61,31 +61,19 @@
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import { onMounted } from '@vue/runtime-core'
 import { ref } from 'vue'
 import MainLayout from '~/components/MainLayout.vue'
-import { SearchIcon } from '@heroicons/vue/outline/esm/index.js'
-export default {
-    components: {
-        MainLayout,
-        SearchIcon
-    },
-    setup(props) {
-        let entries = ref([])
-        let loading = ref(false)
+import { SearchIcon } from '@heroicons/vue/outline'
 
-        onMounted(async () => {
-            loading.value = true
-            let res = (await axios.get('/api/datalog/?page_size=20')).data.results
-            entries.value = res
-            loading.value = false
-        })
+let entries = ref([])
+let loading = ref(false)
 
-        return {
-            entries,
-            loading
-        }
-    }
-}
+onMounted(async () => {
+    loading.value = true
+    let res = (await useBackendFetch('/api/datalog/?page_size=20')).results
+    entries.value = res
+    loading.value = false
+})
 </script>

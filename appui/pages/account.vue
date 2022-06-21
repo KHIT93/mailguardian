@@ -292,7 +292,7 @@
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import MainLayout from '~/components/MainLayout.vue'
 import {
     Tab,
@@ -309,93 +309,69 @@ import {
     DialogOverlay,
     DialogTitle,
 } from '@headlessui/vue'
-import { TrashIcon } from '@heroicons/vue/outline/esm/index.js'
+import { TrashIcon } from '@heroicons/vue/outline'
 import { boolToHuman } from '~/filters'
 import { onMounted, ref } from '@vue/runtime-core'
-import { useAuth } from '@websanova/vue-auth'
 import FormInput from '~/components/FormInput.vue'
 import EnableMfaDialog from '~/components/EnableMfaDialog.vue'
 import DisableMfaDialog from '~/components/DisableMfaDialog.vue'
-export default {
-    components: {
-        MainLayout,
-        Tab,
-        TabGroup,
-        TabList,
-        TabPanels,
-        TabPanel,
-        SwitchLabel,
-        SwitchGroup,
-        Switch,
-        TrashIcon,
-        FormInput,
-        TransitionRoot,
-        TransitionChild,
-        Dialog,
-        DialogOverlay,
-        DialogTitle,
-        EnableMfaDialog,
-        DisableMfaDialog,
-    },
-    setup(props) {
-        const auth = useAuth()
-        let record = ref({})
-        let domains = ref([])
-        let dailyQuarantineReportToggle = ref(false)
-        let weeklyQuarantineReportToggle = ref(false)
-        let monthlyQuarantineReportToggle = ref(false)
-        let showNewDomainForm = ref(false)
-        let showMfaModal = ref(false)
 
-        onMounted(async () => {
-            record.value = (await auth.fetch()).data
-            domains.value = (await axios.get(`/api/users/${record.value.id}/domains/`)).data
-        })
+const { $auth } = useNuxtApp()
+let record = ref({})
+let domains = ref([])
+let dailyQuarantineReportToggle = ref(false)
+let weeklyQuarantineReportToggle = ref(false)
+let monthlyQuarantineReportToggle = ref(false)
+let showNewDomainForm = ref(false)
+let showMfaModal = ref(false)
 
-        return {
-            record,
-            domains,
-            boolToHuman,
-            showNewDomainForm,
-            dailyQuarantineReportToggle,
-            weeklyQuarantineReportToggle,
-            monthlyQuarantineReportToggle,
-            showMfaModal
+onMounted(async () => {
+    record.value = (await $auth.fetch()).data
+    domains.value = (await useBackendFetch(`/api/users/${record.value.id}/domains/`)).data
+})
+
+async function toggleDailyReports() {
+    console.log(this.record.id)
+    this.dailyQuarantineReportToggle = true
+    await useBackendFetch(`/api/users/${this.record.id}/`, {
+        method: 'PATCH',
+        body: {
+            daily_quarantine_report: this.record.daily_quarantine_report
         }
-    },
-    methods: {
-        async toggleDailyReports() {
-            console.log(this.record.id)
-            this.dailyQuarantineReportToggle = true
-            await axios.patch(`/api/users/${this.record.id}/`, {
-                daily_quarantine_report: this.record.daily_quarantine_report
-            })
-            this.dailyQuarantineReportToggle = false
-        },
-        async toggleWeeklyReports() {
-            this.weeklyQuarantineReportToggle = true
-            await axios.patch(`/api/users/${this.record.id}/`, {
-                weekly_quarantine_report: this.record.weekly_quarantine_report
-            })
-            this.weeklyQuarantineReportToggle = false
-        },
-        async toggleMonthlyReports() {
-            this.monthlyQuarantineReportToggle = true
-            await axios.patch(`/api/users/${this.record.id}/`, {
-                monthly_quarantine_report: this.record.monthly_quarantine_report
-            })
-            this.monthlyQuarantineReportToggle = false
-        },
-        patchBasicData() {
-            axios.patch(`/api/users/${this.record.id}`, {
-                first_name: record.first_name,
-                last_name: record.last_name,
-                email: record.email
-            })
-        },
-        closeMfaModal() {
-            this.showMfaModal = false
+    })
+    this.dailyQuarantineReportToggle = false
+}
+async function toggleWeeklyReports() {
+    this.weeklyQuarantineReportToggle = true
+    await useBackendFetch(`/api/users/${this.record.id}/`, {
+        method: 'PATCH',
+        body: {
+            weekly_quarantine_report: this.record.weekly_quarantine_report
         }
-    }
+    })
+    this.weeklyQuarantineReportToggle = false
+}
+async function toggleMonthlyReports() {
+    this.monthlyQuarantineReportToggle = true
+    await useBackendFetch(`/api/users/${this.record.id}/`, {
+        method: 'PATCH',
+        body: {
+            monthly_quarantine_report: this.record.monthly_quarantine_report
+        }
+    })
+    this.monthlyQuarantineReportToggle = false
+}
+function patchBasicData() {
+    useBackendFetch(`/api/users/${this.record.id}`, {
+        method: 'PATCH',
+        body: {
+            first_name: record.first_name,
+            last_name: record.last_name,
+            email: record.email
+        }
+    })
+}
+function closeMfaModal() {
+    this.showMfaModal = false
 }
 </script>

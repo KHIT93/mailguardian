@@ -62,64 +62,45 @@
                             {{ boolToHuman(user.is_staff) }}
                         </td>
                         <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
-                            <router-link :to="`/users/${user.id}/edit`" class="text-blue-600 hover:text-blue-900">
+                            <NuxtLink :to="`/users/${user.id}/edit`" class="text-blue-600 hover:text-blue-900">
                                 <PencilIcon class="w-4 h-4"/>
-                            </router-link>
+                            </NuxtLink>
                         </td>
                         <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
-                            <router-link :to="`/users/${user.id}/delete`" class="text-red-600 hover:text-red-900">
+                            <NuxtLink :to="`/users/${user.id}/delete`" class="text-red-600 hover:text-red-900">
                                 <TrashIcon class="w-4 h-4"/>
-                            </router-link>
+                            </NuxtLink>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <router-link to="/users/create" class="absolute right-4 -bottom-5 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <NuxtLink to="/users/create" class="absolute right-4 -bottom-5 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 <PlusSmIcon class="h-6 w-6" aria-hidden="true" />
-            </router-link>
+            </NuxtLink>
         </div>
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import MainLayout from '~/components/MainLayout.vue'
 import { ref, onMounted, computed } from 'vue'
-import { PencilIcon, TrashIcon, SearchIcon, PlusSmIcon } from '@heroicons/vue/outline/esm/index.js'
+import { PencilIcon, TrashIcon, SearchIcon, PlusSmIcon } from '@heroicons/vue/outline'
 import { boolToHuman } from '~/filters'
 
-export default {
-    components: {
-        MainLayout,
-        PencilIcon,
-        TrashIcon,
-        SearchIcon,
-        PlusSmIcon
-    },
-    setup(props) {
-        let loading = ref(false)
-        let entries = ref([])
-        let searchKey = ref('')
-        let fetchEntries = (async () => {
-            loading.value = true
-            let res = (await axios.get(`/api/users/?page_size=20`)).data.results
-            loading.value = false
-            return res
-        })
-        let filteredEntries = computed(() => {
-            let res = entries.value.filter(entry => entry.email.toLowerCase().includes(searchKey.value.toLowerCase()))
-            return res
-        })
-        onMounted(async () => {
-            entries.value = (await fetchEntries())
-        })
-        return {
-            loading,
-            entries,
-            searchKey,
-            fetchEntries,
-            filteredEntries,
-            boolToHuman
-        }
-    }
+let loading = ref(false)
+let entries = ref([])
+let searchKey = ref('')
+async function fetchEntries() {
+    loading.value = true
+    let res = (await useBackendFetch(`/api/users/?page_size=20`)).results
+    loading.value = false
+    return res
 }
+let filteredEntries = computed(() => {
+    let res = entries.value.filter(entry => entry.email.toLowerCase().includes(searchKey.value.toLowerCase()))
+    return res
+})
+onMounted(async () => {
+    entries.value = (await fetchEntries())
+})
 </script>

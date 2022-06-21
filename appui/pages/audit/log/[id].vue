@@ -1,7 +1,7 @@
 <template>
     <MainLayout>
         <div class="flex w-full pb-4">
-            <router-link to="/audit/log" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></router-link>
+            <NuxtLink to="/audit/log" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></NuxtLink>
         </div>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
@@ -55,64 +55,48 @@
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import MainLayout from '~/components/MainLayout.vue'
 import { useRoute } from 'vue-router'
 import { ref } from '@vue/reactivity'
 import { onMounted } from '@vue/runtime-core'
-import { ArrowLeftIcon } from '@heroicons/vue/outline/esm/index.js'
+import { ArrowLeftIcon } from '@heroicons/vue/outline'
 
-export default {
-    components: {
-        MainLayout,
-        ArrowLeftIcon
-    },
-    setup(props) {
-        let { id } = useRoute().params
+let { id } = useRoute().params
+let entry = ref({})
+let changes = ref([])
 
-        let entry = ref({})
-        let changes = ref([])
- 
-        const parse_changes = (changes) => {
-            let data = {}
-            try {
-                data = JSON.parse(changes)
-            }
-            catch {
-                return changes
-            }
-            
-            if (typeof data == 'string' || data instanceof String) {
-                return data
-            }
-            let response = []
-            for (let [key, value] of Object.entries(data)) {
-                response.push({
-                    key: key,
-                    from: value[0],
-                    to: value[1],
-                    change: `${value[0]} -> ${value[1]}`
-                })
-            }
-
-            console.log(response)
-
-            return response
-            
-        }
-
-        onMounted(async () => {
-            entry.value = (await axios.get(`/api/datalog/${id}/`)).data
-            changes.value = (await parse_changes(entry.value.changes))
-            // entry.value.changes = JSON.parse(entry.value.changes)
-        })
-
-        return {
-            id,
-            entry,
-            parse_changes,
-            changes
-        }
+function parse_changes(changes) {
+    let data = {}
+    try {
+        data = JSON.parse(changes)
     }
+    catch {
+        return changes
+    }
+    
+    if (typeof data == 'string' || data instanceof String) {
+        return data
+    }
+    let response = []
+    for (let [key, value] of Object.entries(data)) {
+        response.push({
+            key: key,
+            from: value[0],
+            to: value[1],
+            change: `${value[0]} -> ${value[1]}`
+        })
+    }
+
+    console.log(response)
+
+    return response
+    
 }
+
+onMounted(async () => {
+    entry.value = (await useBackendFetch(`/api/datalog/${id}/`))
+    changes.value = (await parse_changes(entry.value.changes))
+    // entry.value.changes = JSON.parse(entry.value.changes)
+})
 </script>

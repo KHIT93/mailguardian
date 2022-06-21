@@ -15,23 +15,15 @@
         </div>
     </form>
 </template>
-<script>
+<script setup>
 import { ref } from 'vue'
 import FormSelection from '~/components/FormSelection.vue'
-export default {
-    components: {
-        FormSelection
-    },
-    setup(props) {
-        let method = ref('')
-        return {
-            method
-        }
-    },
-    methods: {
-        nextStep() {
-            this.$emit('complete', this.method)
-        }
-    }
+
+const emits = defineEmits(['complete'])
+
+let method = ref('')
+
+function nextStep() {
+    emits('complete', this.method)
 }
 </script>

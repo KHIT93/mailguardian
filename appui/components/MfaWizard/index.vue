@@ -8,12 +8,10 @@
         </div>
     </div>
 </template>
-<script>
-export default {
-    methods: {
-        nextStep() {
-            this.$emit('complete')
-        }
-    }
+<script setup>
+const emits = defineEmits(['complete'])
+
+function nextStep() {
+    emits('complete')
 }
 </script>

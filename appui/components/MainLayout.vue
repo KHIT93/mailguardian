@@ -23,10 +23,10 @@
                             <nav class="px-2 space-y-1">
                                 <template v-for="item in navigation" :key="item.path">
                                     <div v-if="!item.children">
-                                        <router-link :to="item.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                        <NuxtLink :to="item.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                                             <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                             {{ item.name }}
-                                        </router-link>
+                                        </NuxtLink>
                                     </div>
                                     <Disclosure as="div" v-else class="space-y-1" :default-open="$route.path.includes(item.path, 0)" v-slot="{ open: childNavOpen }">
                                         <DisclosureButton class="border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group w-full flex items-center px-2 py-2 text-base font-medium rounded-md">
@@ -38,10 +38,10 @@
                                             <ChevronDownIcon v-else aria-hidden="true" class="text-gray-300 ml-3 shrink-0 h-5 w-5 transition-colors ease-in-out duration-150"/>
                                         </DisclosureButton>
                                         <DisclosurePanel class="space-y-1">
-                                            <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="ml-4 border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                                            <NuxtLink v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="font-bold bg-blue-200 text-blue-500 hover:bg-blue-300 border-blue-600" class="ml-4 border-l-4 border-transparent text-gray-700 hover:bg-gray-200 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md">
                                                 <component v-if="child.icon" :is="child.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                                 {{ child.name }}
-                                            </router-link>
+                                            </NuxtLink>
                                         </DisclosurePanel>
                                     </Disclosure>
                                 </template>
@@ -67,10 +67,10 @@
                         <nav class="flex-1 pr-2 bg-white space-y-1">
                             <template v-for="item in navigation" :key="item.path">
                                 <div v-if="!item.children">
-                                    <router-link :to="item.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="transition duration-300 border-l-4 border-transparent flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-slate-200">
+                                    <NuxtLink :to="item.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="transition duration-300 border-l-4 border-transparent flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-slate-200">
                                         <component v-if="item.icon" :is="item.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                         {{ item.name }}
-                                    </router-link>
+                                    </NuxtLink>
                                 </div>
                                 <Disclosure as="div" v-else class="space-y-1" :default-open="$route.path.includes(item.path, 0)" v-slot="{ open: childNavOpen }">
                                     <DisclosureButton class="transition duration-300 border-l-4 border-transparent group w-full flex items-center rounded-r-full text-gray-700 p-1 pl-6 hover:bg-slate-200">
@@ -83,10 +83,10 @@
                                     </DisclosureButton>
                                         <transition enter-active-class="transition ease-out duration-200" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                                             <DisclosurePanel class="space-y-1">
-                                                <router-link v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-slate-200">
+                                                <NuxtLink v-for="child in item.children" :key="child.path" :to="child.path" exact-active-class="border-blue-600 font-bold bg-blue-200 text-blue-500 hover:bg-blue-300" class="ml-6 transition duration-300 border-l-4 border-transparent group flex items-center rounded-r-full text-gray-700 p-1 mr-1 pl-3 hover:bg-slate-200">
                                                     <component v-if="child.icon" :is="child.icon" class="mr-4 shrink-0 h-6 w-6" aria-hidden="true" />
                                                     {{ child.name }}
-                                                </router-link>
+                                                </NuxtLink>
                                             </DisclosurePanel>
                                         </transition>
                                 </Disclosure>
@@ -122,7 +122,7 @@
                             <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
                                 <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <MenuItem v-for="item in profile" :key="item" v-slot="{ active }">
-                                        <router-link :to="item.path" :class="[active ? 'bg-gray-100' : '', 'transition duration-300 block px-4 py-2 text-base md:text-sm text-gray-700']">{{ item.name }}</router-link>
+                                        <NuxtLink :to="item.path" :class="[active ? 'bg-gray-100' : '', 'transition duration-300 block px-4 py-2 text-base md:text-sm text-gray-700']">{{ item.name }}</NuxtLink>
                                     </MenuItem>
                                     <MenuItem v-for="item in profile" :key="item" v-slot="{ active }">
                                         <a href="#" @click="signOut" :class="[active ? 'bg-gray-100' : '', 'transition duration-300 block px-4 py-2 text-base md:text-sm text-gray-700']">Sign out</a>
@@ -144,7 +144,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref } from 'vue'
 import {
   Dialog,
@@ -162,49 +162,15 @@ import {
 import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon, ShieldCheckIcon, XIcon, BellIcon, MenuAlt2Icon, UserCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline/esm/index.js'
 import navigation from '~/data/menu'
 import profile from '~/data/profile'
-export default {
-    components: {
-        Dialog,
-        DialogOverlay,
-        Menu,
-        MenuButton,
-        MenuItem,
-        MenuItems,
-        TransitionRoot,
-        TransitionChild,
-        DisclosureButton,
-        DisclosurePanel,
-        Disclosure,
-        MailIcon,
-        LockClosedIcon,
-        ChartBarIcon,
-        UserGroupIcon,
-        GlobeIcon,
-        ServerIcon,
-        DocumentSearchIcon,
-        ShieldCheckIcon,
-        XIcon,
-        BellIcon,
-        UserCircleIcon,
-        MenuAlt2Icon,
-        ChevronUpIcon,
-        ChevronDownIcon
-    },
-    setup(props) {
-        let open = ref(false)
-        return {
-            navigation,
-            profile,
-            open
-        }
-    },
-    methods: {
-        signOut() {
-            this.$auth.logout({
-                makeRequest: true,
-                redirect: '/login'
-            })
-        }
-    }
+
+let open = ref(false)
+const { $auth } = useNuxtApp()
+
+function signOut() {
+    $auth().logout({
+        makeRequest: true,
+        redirect: '/login'
+    })
 }
+
 </script>

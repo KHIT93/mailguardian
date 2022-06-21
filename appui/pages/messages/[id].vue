@@ -1,7 +1,7 @@
 <template>
     <MainLayout>
         <div class="flex w-full pb-4">
-            <router-link to="/" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></router-link>
+            <NuxtLink to="/" class="rounded-full hover:bg-gray-200 p-4 cursor-pointer transition duration-200"><ArrowLeftIcon class="w-4 h-4"/></NuxtLink>
         </div>
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
@@ -222,66 +222,42 @@
     </MainLayout>
 </template>
 
-<script>
+<script setup>
 import { onMounted, ref, computed, toRefs } from 'vue'
 import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronDownIcon } from '@heroicons/vue/solid/esm/index.js'
-import { ArrowLeftIcon, BanIcon } from '@heroicons/vue/outline/esm/index.js'
+import { ChevronDownIcon } from '@heroicons/vue/solid'
+import { ArrowLeftIcon, BanIcon } from '@heroicons/vue/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import { bytesToHuman, boolToHuman } from '~/filters'
-export default {
-    components: {
-        MainLayout,
-        Disclosure,
-        DisclosureButton,
-        DisclosurePanel,
-        ArrowLeftIcon,
-        ChevronDownIcon,
-        BanIcon
-    },
-    setup(props) {
-        let { id } = useRoute().params
-        let message = ref({})
-        let messageLoading = ref(false)
-        let getMessage = (async () => {
-            console.log('Started fetching message')
-            messageLoading.value = true
-            let res = (await axios.get(`/api/messages/${id}/`)).data
-            messageLoading.value = false
-            return res
-        })
-        let getMessageHeaders = (async () => {
-            let res = (await axios.get(`/api/messages/${id}/headers/`)).data.headers
-            return res
-        })
-        let getMessageSpamReport = (async () => {
-            let res = (await axios.get(`/api/messages/${id}/spam-report/`)).data.report
-            return res
-        })
-        let getMessageTransportLogs = (async () => {
-            let res = (await axios.get(`/api/messages/${id}/transport-log/`)).data
-            return res
-        })
 
-        onMounted(async () => {
-            message.value = (await getMessage())
-            message.value['headers'] = (await getMessageHeaders())
-            message.value['spamReport'] = (await getMessageSpamReport())
-            message.value['transportLogs'] = (await getMessageTransportLogs())
-        })
-
-        return {
-            id,
-            message,
-            messageLoading,
-            getMessage,
-            getMessageHeaders,
-            getMessageSpamReport,
-            bytesToHuman,
-            boolToHuman,
-            useRouter
-        }
-    }
+let { id } = useRoute().params
+let message = ref({})
+let messageLoading = ref(false)
+async function getMessage() {
+    console.log('Started fetching message')
+    messageLoading.value = true
+    let res = (await useBackendFetch(`/api/messages/${id}/`))
+    messageLoading.value = false
+    return res
 }
+async function getMessageHeaders() {
+    let res = (await useBackendFetch(`/api/messages/${id}/headers/`)).headers
+    return res
+}
+async function getMessageSpamReport() {
+    let res = (await useBackendFetch(`/api/messages/${id}/spam-report/`)).report
+    return res
+}
+async function getMessageTransportLogs() {
+    let res = (await useBackendFetch(`/api/messages/${id}/transport-log/`))
+    return res
+}
+
+onMounted(async () => {
+    message.value = (await getMessage())
+    message.value['headers'] = (await getMessageHeaders())
+    message.value['spamReport'] = (await getMessageSpamReport())
+    message.value['transportLogs'] = (await getMessageTransportLogs())
+})
 </script>

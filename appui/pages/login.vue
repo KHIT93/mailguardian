@@ -44,9 +44,9 @@
                                 </div>
 
                                 <div class="text-sm">
-                                    <router-link to="#" class="font-medium transition duration-300 text-blue-600 hover:text-blue-500">
+                                    <NuxtLink to="#" class="font-medium transition duration-300 text-blue-600 hover:text-blue-500">
                                     Forgot your password?
-                                    </router-link>
+                                    </NuxtLink>
                                 </div>
                             </div>
                         </template>
@@ -69,83 +69,77 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { LockClosedIcon } from '@heroicons/vue/solid/esm/index.js'
 import { ShieldCheckIcon } from '@heroicons/vue/outline/esm/index.js'
 import { ref, reactive } from 'vue'
 import Form from '~/classes/Form'
 import FormInput from '~/components/FormInput.vue'
-export default {
-    components: {
-        LockClosedIcon,
-        ShieldCheckIcon,
-        FormInput
-    },
-    setup(props) {
-        let form = reactive(new Form({
-            email: '',
-            password: '',
-            mfa_code: '',
-            ephemeral_token: '',
-            remember: false
-        }))
-        let signingIn = ref(false)
-        return {
-            form,
-            signingIn
-        }
-    },
-    methods: {
-        signIn() {
-            if (this.form.ephemeral_token) {
-                this.twoFactorSignIn()
+definePageMeta({
+    middleware: ['guest']
+})
+const form = reactive(new Form({
+    email: '',
+    password: '',
+    mfa_code: '',
+    ephemeral_token: '',
+    remember: false
+}))
+const { $auth } = useNuxtApp()
+const signingIn = ref(false)
+function signIn() {
+    if (form.ephemeral_token) {
+        twoFactorSignIn()
+    }
+    else {
+        signingIn.value = true;
+        $auth().login({
+            data: {
+                username: form.email,
+                password: form.password
+            },
+            fetchUser: false
+        }).then(response => {
+            console.log(response)
+            if(response.ephemeral_token) {
+                signingIn.value = false
+                form.ephemeral_token = response.ephemeral_token
+                console.error('Login requires 2FA')
+                return
             }
             else {
-                this.signingIn = true;
-                this.$auth.login({
-                    data: {
-                        username: this.form.email,
-                        password: this.form.password
-                    },
-                    fetchUser: false
-                }).then(response => {
-                    if(response.data.ephemeral_token) {
-                        this.signingIn = false
-                        this.form.ephemeral_token = response.data.ephemeral_token
-                        console.error('Login requires 2FA')
-                        return
-                    }
-                    else {
-                        console.warn('Logged in!')
-                        this.$auth.fetch()
-                    }
-                })
-                .catch(error => {
-                    this.signingIn = false
-                    console.log(error)
-                    this.form.errors.record(error.response.data)
+                console.warn('Logged in!')
+                $auth().fetch().then(() => {
+                    navigateTo('/')
                 })
             }
-        },
-        twoFactorSignIn() {
-            this.signingIn = true
-            this.$auth.login({
-                data: {
-                    ephemeral_token: this.form.ephemeral_token,
-                    code: this.form.mfa_code
-                },
-                fetchUser: false,
-                url: '/rest-auth/login/code/'
-            }).then(response => {
-                console.warn('Logged in with 2FA!')
-                this.$auth.fetch()
-            })
-            .catch(error => {
-                this.signingIn = false
-                console.log(error)
-                this.form.errors.record(error.response.data)
-            })
-        }
+        })
+        .catch(error => {
+            signingIn.value = false
+            console.log(error)
+            form.errors.record(error.response.data)
+        })
     }
+}
+function twoFactorSignIn()  {
+    signingIn.value = true
+    $auth().login({
+        data: {
+            ephemeral_token: form.ephemeral_token,
+            code: form.mfa_code
+        },
+        fetchUser: false,
+        url: '/rest-auth/login/code/'
+    }).then(response => {
+        console.warn('Logged in with 2FA!')
+        $auth().fetch().then(response => {
+            navigateTo('/')
+        })
+    })
+    .catch(error => {
+        signingIn.value = false
+        console.log(error)
+        form.errors.record(error.response.data)
+    })
 }
 </script>

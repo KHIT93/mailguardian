@@ -4,6 +4,7 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
     modules: [
         '@nuxtjs/tailwindcss',
-        '@vueuse/nuxt'
-    ]
+        '@pinia/nuxt'
+    ],
+    ssr: false // Seems to be required for some reason. Maybe the issue is fixed at RTM of Nuxt 3
 })
