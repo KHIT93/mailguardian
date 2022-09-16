@@ -1,5 +1,4 @@
 <template>
-    <!-- <MainLayout> -->
     <MainLayout v-if="$auth().isAuthenticated()">
         <div class="flex">
             <p class="border-r text-5xl text-blue-500 font-bold px-2 animate-wiggle">&lt;404&gt;</p>
@@ -9,12 +8,6 @@
             </div>
         </div>
     </MainLayout>
-    <div v-else class="mx-auto">
-        <h1 class="flex">
-            <span class="border-r">404</span>
-            <span>Page not found</span>
-        </h1>
-    </div>
 </template>
 
 <script setup>

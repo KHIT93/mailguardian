@@ -71,7 +71,6 @@ const props = defineProps({
     listingType: String
 })
 
-console.log(props.listingType)
 let loading = ref(false)
 let entries = ref([])
 let searchKey = ref('')
