@@ -24,6 +24,6 @@ const emits = defineEmits(['complete'])
 let method = ref('')
 
 function nextStep() {
-    emits('complete', this.method)
+    emits('complete', method)
 }
 </script>
