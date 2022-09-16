@@ -201,9 +201,6 @@
     import FormInputWithIcon from '~/components/FormInputWithIcon.vue'
     import ProgressRing from '~/components/ProgressRing.vue'
     import { RefreshIcon, SearchIcon } from '@heroicons/vue/outline/esm/index.js'
-    definePageMeta({
-        middleware: ['auth']
-    })
     let messagesLoading = ref(false)
     let statsLoading = ref(false)
     let messages = ref([])
@@ -249,6 +246,7 @@
     let goToMessage = (messageId => {
         navigateTo({ name: 'messages-id', params: { id: messageId } })
     })
+    
     onMounted(async () => {
         refreshDashboard()
     })
