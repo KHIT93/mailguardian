@@ -21,7 +21,5 @@ export const useBackendFetch = (url, options = {}) => {
         }
     }
 
-    console.warn(options)
-
     return $fetch(url, options)
 }
