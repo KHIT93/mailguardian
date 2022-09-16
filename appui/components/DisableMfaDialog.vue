@@ -53,7 +53,7 @@ export default {
     },
     methods: {
         deactivateTwoFactorAuth() {
-            this.$fetch(`/rest-auth/${this.method}/deactivate/`, { method:'POST', baseURL: 'http://localhost:8000', body: { code: this.code } }).then(response => {
+            useBackendFetch(`/rest-auth/${this.method}/deactivate/`, { method:'POST', body: { code: this.code } }).then(response => {
                 this.$emit('close')
             }).catch(error => {
                 console.error(error)
@@ -61,7 +61,7 @@ export default {
         },
         startMfaDeactivation() {
             this.started = true
-            this.$fetch('/rest-auth/code/request/', { method:'POST', baseURL: 'http://localhost:8000', body: { method: this.method } }).then(response => {
+            useBackendFetch('/rest-auth/code/request/', { method:'POST', body: { method: this.method } }).then(response => {
                 console.log(response.data)
             }).catch(error => {
                 console.error(error)
