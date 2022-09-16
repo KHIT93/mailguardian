@@ -1,5 +1,5 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog, SmtpRelay
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, TransportLogSerializer, SmtpRelaySerializer
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, PostqueueStoreSerializer, TransportLogSerializer, SmtpRelaySerializer
 from mailguardian.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
@@ -12,7 +12,6 @@ from pymailq.store import PostqueueStore
 from django.conf import settings
 from core.models import Setting, MailScannerHost
 from compliance.models import DataLogEntry
-import datetime
 from django.db.models import Q
 import subprocess
 import requests, json, types

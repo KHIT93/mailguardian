@@ -1,8 +1,6 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog, SmtpRelay
 from rest_framework import serializers
 from spamassassin.models import RuleDescription
-import requests
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.

@@ -21,13 +21,9 @@ from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
 from core.viewsets import (
     UserViewSet,
-    MailScannerConfigurationViewSet,
     SettingsViewSet,
     MailScannerHostViewSet,
-    ApplicationTaskViewSet,
     ApplicationNotificationViewSet,
-    TwoFactorConfigurationViewSet,
-    TwoFactorBackupCodeViewSet
 )
 from compliance.viewsets import (
     DataLogEntryViewSet
@@ -42,7 +38,7 @@ from mail.viewsets import (
     TransportLogViewSet,
     SmtpRelayViewSet
 )
-from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView
+from core.views import CurrentUserView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView
 from lists.viewsets import ListEntryViewSet, BlocklistEntryViewSet, AllowlistEntryViewSet
 from reports.views import (
     SummaryApiView,
@@ -70,7 +66,6 @@ from dj_rest_auth.views import (
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'mailscanner-configuration', MailScannerConfigurationViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'message-headers', HeaderViewSet)
 router.register(r'spam-reports', SpamReportViewSet)
@@ -87,10 +82,7 @@ router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
 router.register(r'hosts', MailScannerHostViewSet)
 router.register(r'settings', SettingsViewSet)
-router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
-router.register(r'two-factor', TwoFactorConfigurationViewSet)
-router.register(r'two-factor-codes', TwoFactorBackupCodeViewSet)
 router.register(r'datalog', DataLogEntryViewSet)
 
 urlpatterns = [
@@ -115,7 +107,6 @@ if not settings.API_ONLY:
         path('api/reports/top-sender-domains-by-volume/', TopSenderDomainsByVolumeApiView.as_view()),
         path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
         path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
-        path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
         path('api/data-import/', DataImportUploadAPIView.as_view()),
         path('api/geoip/lookup/', GeoIPLookupAPIView.as_view()),
         path('api/geoip/update/', GeoIPUpdateAPIView.as_view()),
@@ -139,11 +130,6 @@ if not settings.API_ONLY:
         re_path(r'^rest-auth/user/$', UserDetailsView.as_view(), name='rest_user_details'),
         re_path(r'^rest-auth/password/change/$', PasswordChangeView.as_view(),
             name='rest_password_change'),
-    ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        path('admin/', admin.site.urls),
     ]
 
 # Add final wildcard route to catch the deep links

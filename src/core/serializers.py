@@ -1,19 +1,13 @@
 from rest_framework import serializers
 from .models import (
-    MailScannerConfiguration,
     Setting,
     User,
     MailScannerHost,
-    ApplicationTask,
     ApplicationNotification,
-    TwoFactorConfiguration,
-    TwoFactorBackupCode
 )
 from dj_rest_auth.serializers import PasswordResetSerializer
 from trench.serializers import UserMFAMethodSerializer
 from django.conf import settings
-import json
-from dj_rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
 from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.
@@ -88,12 +82,6 @@ class AccountUserSerializer(UserSerializer):
             'date_joined',
         )
 
-
-class MailScannerConfigurationSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = MailScannerConfiguration
-        fields = ('id', 'url', 'key', 'value', 'filepath')
-
 class SettingsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Setting
@@ -130,34 +118,8 @@ class MailScannerHostSerializer(serializers.HyperlinkedModelSerializer):
         model = MailScannerHost
         fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls', 'priority', 'passive')
 
-class ApplicationTaskSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ApplicationTask
-        fields = ('id', 'url', 'user_email', 'hostname', 'created', 'updated', 'completed', 'status_code', 'status_message', 'content_type_id', 'object_pk', 'method', 'params')
-    hostname = serializers.SerializerMethodField()
-    user_email = serializers.SerializerMethodField()
-
-    def get_hostname(self, obj):
-        return obj.host.name
-
-    def get_user_email(self, obj):
-        return obj.user.email
-
 class ApplicationNotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ApplicationNotification
         fields = ('id', 'url', 'title', 'body', 'date_start', 'date_end', 'notification_type')
 
-class LoginSerializer(BaseRestAuthLoginSerializer):
-    two_factor_token = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    backup_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-
-class TwoFactorConfigurationSerialiser(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = TwoFactorConfiguration
-        fields = ('id', 'url', 'user', 'totp_key')
-
-class TwoFactorBackupCodeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = TwoFactorBackupCode
-        fields = ('id', 'url', 'user', 'code')

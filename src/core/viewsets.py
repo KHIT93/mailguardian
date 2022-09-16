@@ -3,25 +3,17 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from domains.models import Domain
 from .models import (
-    MailScannerConfiguration,
     Setting,
     User,
     MailScannerHost,
-    ApplicationTask,
     ApplicationNotification,
-    TwoFactorConfiguration,
-    TwoFactorBackupCode
 )
 from .serializers import (
     UserSerializer,
-    MailScannerConfigurationSerializer,
     SettingsSerializer,
     ChangePasswordSerializer,
     MailScannerHostSerializer,
-    ApplicationTaskSerializer,
     ApplicationNotificationSerializer,
-    TwoFactorConfigurationSerialiser,
-    TwoFactorBackupCodeSerializer
 )
 from django.db.models import Q
 from rest_framework.decorators import action
@@ -74,24 +66,6 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class MailScannerConfigurationViewSet(viewsets.ModelViewSet):
-    queryset = MailScannerConfiguration.objects.all()
-    serializer_class = MailScannerConfigurationSerializer
-    permission_classes = (IsAdminUser,)
-    model = MailScannerConfiguration
-
-    def get_queryset(self):
-        qs = self.queryset
-        if self.request.query_params.__contains__('search'):
-            search_key = self.request.query_params.get('search')
-            qs = qs.filter(
-                    Q(key__icontains=search_key) | Q(value__icontains=search_key)
-                )
-        if self.request.query_params.__contains__('filename'):
-            qs = qs.filter(filepath=self.request.query_params.get('filename'))
-        return qs
-
 class SettingsViewSet(viewsets.ModelViewSet):
     queryset = Setting.objects.all()
     serializer_class = SettingsSerializer
@@ -123,18 +97,6 @@ class MailScannerHostViewSet(viewsets.ModelViewSet):
             qs = qs.filter(filepath=self.request.query_params.get('filename'))
         return qs
 
-class ApplicationTaskViewSet(viewsets.ModelViewSet):
-    queryset = ApplicationTask.objects.all()
-    serializer_class = ApplicationTaskSerializer
-    permission_classes = (IsAuthenticated,)
-    model = ApplicationTask
-
-    def get_queryset(self):
-        qs = super(ApplicationTaskViewSet, self).get_queryset()
-        if self.request.user.is_staff:
-            return qs
-        return qs.filter(user=self.request.user)
-
 class ApplicationNotificationViewSet(viewsets.ModelViewSet):
     queryset = ApplicationNotification.objects.all()
     serializer_class = ApplicationNotificationSerializer
@@ -149,62 +111,4 @@ class ApplicationNotificationViewSet(viewsets.ModelViewSet):
     @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='dashboard', url_name='dashboard-notifications')
     def get_dashboard_notifications(self, request):
         serializer = ApplicationNotificationSerializer(self.get_queryset().filter(notification_type='dashboard', date_start__lte=datetime.datetime.now(), date_end__gte=datetime.datetime.now()), many=True, context={'request': request})
-        return Response(serializer.data)
-
-class TwoFactorConfigurationViewSet(viewsets.ModelViewSet):
-    queryset = TwoFactorConfiguration.objects.all()
-    serializer_class = TwoFactorConfigurationSerialiser
-    permission_classes = (IsAdminUser,)
-    model = TwoFactorConfiguration
-
-    @action(methods=['put'], detail=False, permission_classes=[IsAuthenticated], url_path='enable', url_name='two-factor-enable')
-    def put_enable(self, request):
-        # Enable 2FA for currently logged in user
-        user = get_object_or_404(User, pk=request.user.id)
-        TwoFactorConfiguration.objects.create(user=user, totp_key=request.data['totp_key'])
-        TwoFactorBackupCode().generate_codes(user=request.user)
-        DataLogEntry.objects.log_create(user, action='created', changes='The user {} enabled 2FA on their account'.format(user.__str__()))
-        return Response({}, status=status.HTTP_201_CREATED)
-
-    @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='qr', url_name='two-factor-qr-code')
-    def get_qr_code(self, request):
-        totp_key = pyotp.random_base32()
-        return Response({
-            'totp_key': totp_key,
-            'url': pyotp.totp.TOTP(totp_key).provisioning_uri(request.user.email, issuer_name="{0} ({1})".format(settings.BRAND_NAME, settings.APP_HOSTNAME if settings.APP_HOSTNAME else 'unknown'))
-        }, status=status.HTTP_200_OK)
-
-    @action(methods=['delete'], detail=False, permission_classes=[IsAuthenticated], url_path='disable', url_name='two-factor-disable')
-    def delete_disable(self, request):
-        # Disable 2FA for currently logged in user
-        user = get_object_or_404(User, pk=request.user.id)
-        TwoFactorConfiguration.objects.get(user=user).delete()
-        TwoFactorBackupCode.objects.filter(user=user).delete()
-        DataLogEntry.objects.log_create(user, action='deleted', changes='The user {} disabled 2FA on their account'.format(user.__str__()))
-        return Response({}, status=status.HTTP_204_NO_CONTENT)
-
-class TwoFactorBackupCodeViewSet(viewsets.ModelViewSet):
-    queryset = TwoFactorBackupCode.objects.all()
-    serializer_class = TwoFactorBackupCodeSerializer
-    permission_classes = (IsAuthenticated,)
-    model = TwoFactorBackupCode
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if self.request.user.is_staff:
-            return qs
-        return qs.filter(user=self.request.user)
-
-    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='generate', url_name='two-factor-backup-code-generate')
-    def post_generate_backup_codes(self, request):
-        codes = TwoFactorBackupCode().generate_codes(user=request.user)
-        return Response({ 'codes': codes }, status=status.HTTP_201_CREATED)
-
-    @action(methods=['get'], detail=False, permission_classes=[IsAuthenticated], url_path='my', url_name='two-factor-backup-code-my-own')
-    def get_my_backup_codes(self, request):
-        qs = self.get_queryset()
-        if request.user.is_staff:
-            qs = qs.filter(user=request.user)
-        serializer = TwoFactorBackupCodeSerializer(qs, many=True, context={'request': request})
-        DataLogEntry.objects.log_create(request.user, changes='The user {} requested their 2FA backup codes'.format(request.user.__str__()))
         return Response(serializer.data)

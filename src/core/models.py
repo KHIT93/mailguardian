@@ -132,61 +132,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def mfa_method_count(self):
         return self.mfa_methods.filter(is_active=True).count()
 
-class MailScannerConfiguration(models.Model):
-    class Meta:
-        indexes = [
-            models.Index(fields=['key']),
-        ]
-        unique_together = ('key', 'value')
-        verbose_name = _('mailscanner configuration')
-        verbose_name_plural = _('mailscanner configuration')
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    key = models.CharField(_('Key'), max_length=255)
-    value = models.TextField(_('Value'))
-    filepath = models.CharField(_('Filepath'), max_length=511, default=settings.MAILSCANNER_CONFIG_DIR + '/MailScanner.conf')
-
-    def __str__(self):
-        return str(self.key)
-
-    @staticmethod
-    def sync_files_to_db():
-        files = [f for f in listdir(settings.MAILSCANNER_CONFIG_DIR) if isfile(join(settings.MAILSCANNER_CONFIG_DIR, f))]
-        for f in files:
-            parser = None
-            classname = f.replace('.', ' ').title().replace(' ', '') + 'FileParser'
-            try:
-                module = importlib.import_module('core.fileparsers')
-                classname = getattr(module, classname)
-                parser = classname()
-            except AttributeError:
-                parser = None
-            if parser:
-                parser.parse(f)
-            else:
-                print('Parser {0} does not exist'.format(classname))
-
-    
-    @staticmethod
-    def rebuild_config_files(self, file):
-        return None
-
-    def update_config_parameter(self):
-        return None
-
-class SpamAssassinConfiguration(models.Model):
-    class Meta:
-        indexes = [
-            models.Index(fields=['key']),
-        ]
-        unique_together = ('key', 'value')
-        verbose_name = _('SpamAssassin configuration')
-        verbose_name_plural = _('SpamAssassin configuration')
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    key = models.CharField(_('Key'), max_length=255)
-    rule = models.CharField(_('Rule'), max_length=255)
-    value = models.CharField(_('Value'), max_length=255)
-    filepath = models.CharField(_('Filepath'), max_length=511, default=settings.MAILSCANNER_CONFIG_DIR + '/spamassassin.conf')
-
 class Setting(models.Model):
     class Meta:
         db_table = 'core_settings'
@@ -215,29 +160,6 @@ class MailScannerHost(models.Model):
     def __str__(self):
         return '{0} ({1})'.format(self.hostname, self.ip_address)
 
-class ApplicationTask(models.Model):
-    class Meta:
-        verbose_name = _('application task')
-        verbose_name_plural = _('application tasks')
-    task_status = (
-        ('QUEUED', _("queued")),
-        ('RUNNING', _("running")),
-        ('FAILED', _("failed")),
-        ('COMPLETED', _("completed")),
-    )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name=_('User'))
-    host = models.ForeignKey(MailScannerHost, on_delete=models.SET_NULL, null=True, verbose_name=_('Host'))
-    created = models.DateTimeField(_('Created on'), auto_now_add=True)
-    updated = models.DateTimeField(_('Last updated on'), null=True)
-    completed = models.DateTimeField(_('Completed'), null=True)
-    status_code = models.CharField(_('Status code'), choices=task_status, default='QUEUED', blank=True, max_length=255)
-    status_message = models.TextField(_('Status message'), null=True, blank=True)
-    content_type = models.ForeignKey(to='contenttypes.ContentType', on_delete=models.CASCADE, related_name='+', verbose_name=_("content type"))
-    object_pk = models.CharField(db_index=True, max_length=255, verbose_name=_("object primary key"))
-    method = models.CharField(max_length=255, verbose_name=_("method"))
-    params = models.JSONField(blank=True, null=True, verbose_name=_("parameters"))
-
 class ApplicationNotification(models.Model):
     notification_types = [
         ('dashboard', _('Dashboard')),
@@ -254,30 +176,6 @@ class ApplicationNotification(models.Model):
     date_end = models.DateField(_('Ending on'))
     notification_type = models.CharField(_('Notification type'), choices=notification_types, max_length=20)
 
-class TwoFactorConfiguration(models.Model):
-    class Meta:
-        verbose_name = _('two factor configuration')
-        verbose_name_plural = _('two factor configuration')
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name=_('User'))
-    totp_key = encrypt(models.CharField(_('Timebased Onetime Password Key'),max_length=255))
-
-class TwoFactorBackupCode(models.Model):
-    class Meta:
-        verbose_name = _('two factor backup code')
-        verbose_name_plural = _('two factor backup codes')
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('User'))
-    code = encrypt(models.CharField(_('Two Factor Backup Code'), max_length=255))
-
-    def generate_codes(self, user):
-        existing = TwoFactorBackupCode.objects.filter(user=user).values_list('code', flat=True)
-        codes = []
-        for i in range(0, 5-len(existing)):
-            code = TwoFactorBackupCode.objects.create(user=user, code=get_random_string(16, 'abcdefghijklmnopqrstuvwxyz0123456789'))
-            codes.append(code.code)
-        return codes
-
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
@@ -287,8 +185,6 @@ datalog.register(model=User)
 datalog.register(model=Setting)
 datalog.register(model=MailScannerHost)
 datalog.register(model=ApplicationNotification)
-datalog.register(model=ApplicationTask)
-datalog.register(model=TwoFactorConfiguration)
 
 @receiver(user_logged_in)
 def user_logged_in_audit(sender, request, user, **kwargs):

@@ -1,7 +1,6 @@
 import uuid
 from django.db import models
 from django.conf import settings
-import os, datetime, subprocess
 from django.utils.translation import gettext_lazy as _
 from compliance.registry import datalog
 from pathlib import Path
