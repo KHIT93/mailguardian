@@ -18,6 +18,6 @@
 </template>
 
 <script setup>
-import MainLayout from '../components/MainLayout.vue'
-const { $auth } = useNuxtApp()
+    import MainLayout from '../components/MainLayout.vue'
+    const { $auth } = useNuxtApp()
 </script>
