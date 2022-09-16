@@ -109,15 +109,21 @@
                                             <dd class="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                                 <span class="grow">{{ boolToHuman(record.has_two_factor) }}</span>
                                                 <span class="ml-4 shrink-0">
-                                                    <button type="button" v-if="!record.has_two_factor" @click="showMfaModal = true" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                    <!-- <button type="button" v-if="!record.has_two_factor" @click="showMfaModal = true" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         Enable
-                                                    </button>
-                                                    <button type="button" v-else-if="record.has_two_factor" @click="showMfaModal = true" class="bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                    </button> -->
+                                                    <!-- <button type="button" v-else-if="record.has_two_factor" @click="showMfaModal = true" class="bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                                                         Disable
                                                     </button>
                                                     <button type="button" v-else-if="record.mfa_method_count > 1" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                         Manage
-                                                    </button>
+                                                    </button> -->
+                                                    <NuxtLink v-if="!record.has_two_factor" class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" href="/mfa/enable">
+                                                        Enable
+                                                    </NuxtLink>
+                                                    <NuxtLink class="bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" v-else-if="record.has_two_factor" href="/mfa/manage">
+                                                        Manage
+                                                    </NuxtLink>
                                                 </span>
                                             </dd>
                                         </div>
@@ -201,7 +207,7 @@
                                 'bg-white rounded-xl p-3',
                                 'focus:outline-none ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
                             ]" v-if="record.is_domain_admin">
-                                <table class="min-w-full divide-y divide-gray-200">
+                                <table class="min-w-full divide-y divide-gray-200" v-if="! record.is_staff">
                                     <thead class="bg-white">
                                         <tr>
                                             <th scope="col" class="px-6 pt-3 pb-1 text-left text-xs font-medium text-gray-400 tracking-wider">
@@ -213,7 +219,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white">
-                                        <template v-if="domains.length">
+                                        <template v-if="domains">
                                             <tr v-for="domain in domains" :key="domain.pk" class="cursor-pointer border-b transition duration-300 hover:shadow-lg hover:font-bold">
                                                 <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
                                                     {{ domain.name }}
@@ -234,6 +240,9 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                <p class="px-2 text-xs text-center leading-5 font-semibold" v-else>
+                                    Domain management is not required, since you are an administrator
+                                </p>
                             </TabPanel>
                         </TabPanels>
                     </TabGroup>
@@ -242,53 +251,6 @@
             <div class="pt-5">
             </div>
         </div>
-        <!--
-            Modals go here
-        -->
-        <TransitionRoot appear :show="showMfaModal" as="template">
-            <Dialog as="div" @close="closeMfaModal">
-                <div class="fixed inset-0 z-10 overflow-y-auto">
-                    <div class="min-h-screen px-4 text-center">
-                        <TransitionChild
-                            as="template"
-                            enter="duration-300 ease-out"
-                            enter-from="opacity-0"
-                            enter-to="opacity-100"
-                            leave="duration-200 ease-in"
-                            leave-from="opacity-100"
-                            leave-to="opacity-0"
-                            >
-                            <DialogOverlay class="fixed inset-0 bg-black opacity-30" />
-                        </TransitionChild>
-                        <span class="inline-block h-screen align-middle" aria-hidden="true">
-                        &#8203;
-                        </span>
-                        <TransitionChild v-if="!record.has_two_factor"
-                            as="template"
-                            enter="duration-300 ease-out"
-                            enter-from="opacity-0 scale-95"
-                            enter-to="opacity-100 scale-100"
-                            leave="duration-200 ease-in"
-                            leave-from="opacity-100 scale-100"
-                            leave-to="opacity-0 scale-95"
-                            >
-                            <EnableMfaDialog @close="closeMfaModal" />
-                        </TransitionChild>
-                        <TransitionChild v-else-if="record.has_two_factor && record.mfa_method_count == 1"
-                            as="template"
-                            enter="duration-300 ease-out"
-                            enter-from="opacity-0 scale-95"
-                            enter-to="opacity-100 scale-100"
-                            leave="duration-200 ease-in"
-                            leave-from="opacity-100 scale-100"
-                            leave-to="opacity-0 scale-95"
-                            >
-                            <DisableMfaDialog @close="closeMfaModal" :method="record.mfa_methods[0].name" />
-                        </TransitionChild>
-                    </div>
-                </div>
-            </Dialog>
-        </TransitionRoot>
     </MainLayout>
 </template>
 
@@ -303,66 +265,60 @@ import {
     Switch,
     SwitchGroup,
     SwitchLabel,
-    TransitionRoot,
-    TransitionChild,
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
 } from '@headlessui/vue'
 import { TrashIcon } from '@heroicons/vue/outline'
 import { boolToHuman } from '~/filters'
 import { onMounted, ref } from '@vue/runtime-core'
 import FormInput from '~/components/FormInput.vue'
-import EnableMfaDialog from '~/components/EnableMfaDialog.vue'
-import DisableMfaDialog from '~/components/DisableMfaDialog.vue'
 
 const { $auth } = useNuxtApp()
-let record = ref({})
-let domains = ref([])
-let dailyQuarantineReportToggle = ref(false)
-let weeklyQuarantineReportToggle = ref(false)
-let monthlyQuarantineReportToggle = ref(false)
-let showNewDomainForm = ref(false)
-let showMfaModal = ref(false)
+const record = ref({})
+const domains = ref([])
+const dailyQuarantineReportToggle = ref(false)
+const weeklyQuarantineReportToggle = ref(false)
+const monthlyQuarantineReportToggle = ref(false)
+const showNewDomainForm = ref(false)
+const showMfaModal = ref(false)
 
 onMounted(async () => {
-    record.value = (await $auth.fetch()).data
+    record.value = (await $auth().fetch())
     domains.value = (await useBackendFetch(`/api/users/${record.value.id}/domains/`)).data
 })
 
 async function toggleDailyReports() {
-    console.log(this.record.id)
-    this.dailyQuarantineReportToggle = true
-    await useBackendFetch(`/api/users/${this.record.id}/`, {
+    console.log(record.id)
+    dailyQuarantineReportToggle = true
+    await useBackendFetch(`/api/users/${record.id}/`, {
         method: 'PATCH',
         body: {
-            daily_quarantine_report: this.record.daily_quarantine_report
+            daily_quarantine_report: record.daily_quarantine_report
         }
     })
-    this.dailyQuarantineReportToggle = false
+    dailyQuarantineReportToggle = false
 }
 async function toggleWeeklyReports() {
-    this.weeklyQuarantineReportToggle = true
-    await useBackendFetch(`/api/users/${this.record.id}/`, {
+    weeklyQuarantineReportToggle = true
+    await useBackendFetch(`/api/users/${record.id}/`, {
         method: 'PATCH',
         body: {
-            weekly_quarantine_report: this.record.weekly_quarantine_report
+            weekly_quarantine_report: record.weekly_quarantine_report
         }
     })
-    this.weeklyQuarantineReportToggle = false
+    weeklyQuarantineReportToggle = false
 }
 async function toggleMonthlyReports() {
-    this.monthlyQuarantineReportToggle = true
-    await useBackendFetch(`/api/users/${this.record.id}/`, {
+    monthlyQuarantineReportToggle = true
+    await useBackendFetch(`/api/users/${record.id}/`, {
         method: 'PATCH',
         body: {
-            monthly_quarantine_report: this.record.monthly_quarantine_report
+            monthly_quarantine_report: record.monthly_quarantine_report
         }
     })
-    this.monthlyQuarantineReportToggle = false
+    monthlyQuarantineReportToggle = false
 }
+
 function patchBasicData() {
-    useBackendFetch(`/api/users/${this.record.id}`, {
+    useBackendFetch(`/api/users/${record.id}`, {
         method: 'PATCH',
         body: {
             first_name: record.first_name,
@@ -372,6 +328,6 @@ function patchBasicData() {
     })
 }
 function closeMfaModal() {
-    this.showMfaModal = false
+    showMfaModal = false
 }
 </script>
