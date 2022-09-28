@@ -60,7 +60,7 @@ import MainLayout from '~/components/MainLayout.vue'
 import { useRoute } from 'vue-router'
 import { ref } from '@vue/reactivity'
 import { onMounted } from '@vue/runtime-core'
-import { ArrowLeftIcon } from '@heroicons/vue/outline'
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 
 let { id } = useRoute().params
 let entry = ref({})

@@ -124,13 +124,13 @@
                             <div class="w-1/2 text-left bg-white">
                                 <FormInputWithIcon v-model="searchKey" inputId="search-key" label="Search by name, email or more" type="search">
                                     <template v-slot:icon>
-                                        <SearchIcon class="w-4 h-4"/>
+                                        <MagnifyingGlassIcon class="w-4 h-4"/>
                                     </template>
                                 </FormInputWithIcon>
                             </div>
                             <div class="w-1/2 text-right">
                                 <button type="button" class="text-gray-400 hover:text-gray-600 transition duration-300" @click.native="refreshDashboard">
-                                    <RefreshIcon class="w-6 h-6"/>
+                                    <ArrowPathIcon class="w-6 h-6"/>
                                 </button>
                             </div>
                         </div>
@@ -200,7 +200,7 @@
     import MainLayout from '~/components/MainLayout.vue'
     import FormInputWithIcon from '~/components/FormInputWithIcon.vue'
     import ProgressRing from '~/components/ProgressRing.vue'
-    import { RefreshIcon, SearchIcon } from '@heroicons/vue/outline/esm/index.js'
+    import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
     let messagesLoading = ref(false)
     let statsLoading = ref(false)
     let messages = ref([])

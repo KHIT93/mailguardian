@@ -99,7 +99,7 @@
         Dialog,
         DialogPanel,
     } from '@headlessui/vue'
-    import { TrashIcon } from '@heroicons/vue/outline/esm/index.js'
+    import { TrashIcon } from '@heroicons/vue/24/outline'
     definePageMeta({
         middleware: ['has-mfa']
     })

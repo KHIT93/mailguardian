@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ArrowLeftIcon } from '@heroicons/vue/outline'
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import DomainForm from '~/components/DomainForm.vue'
 

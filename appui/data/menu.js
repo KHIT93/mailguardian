@@ -1,10 +1,10 @@
-import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon, DocumentTextIcon, CogIcon } from '@heroicons/vue/outline/esm/index.js'
+import { EnvelopeIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeEuropeAfricaIcon, ServerIcon, DocumentMagnifyingGlassIcon, DocumentTextIcon, CogIcon } from '@heroicons/vue/24/outline'
 export default [
     {
         name: 'Dashboard',
         path: '/',
         admin: false,
-        icon: MailIcon
+        icon: EnvelopeIcon
     },
     {
         name: 'Allow/Deny lists',
@@ -28,7 +28,7 @@ export default [
         name: 'Domains',
         path: '/domains',
         admin: true,
-        icon: GlobeIcon
+        icon: GlobeEuropeAfricaIcon
     },
     {
         name: 'Cluster',
@@ -40,7 +40,7 @@ export default [
         name: 'Audit',
         path: '/audit',
         admin: true,
-        icon: DocumentSearchIcon,
+        icon: DocumentMagnifyingGlassIcon,
         children: [
             {
                 name: 'Log',

@@ -11,7 +11,7 @@
                             <div class="absolute top-0 right-0 -mr-12 pt-2">
                                 <button class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" @click="open = false">
                                     <span class="sr-only">Close sidebar</span>
-                                    <XIcon class="h-6 w-6 text-white" aria-hidden="true" />
+                                    <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
                                 </button>
                             </div>
                         </TransitionChild>
@@ -100,7 +100,7 @@
             <div class="relative z-10 shrink-0 flex h-16 bg-white shadow">
                 <button class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white md:hidden" @click="open = true">
                     <span class="sr-only">Open sidebar</span>
-                    <MenuAlt2Icon class="h-6 w-6" aria-hidden="true" />
+                    <Bars3BottomLeftIcon class="h-6 w-6" aria-hidden="true" />
                 </button>
                 <div class="flex-1 px-4 flex justify-between">
                     <div class="flex-1 flex">
@@ -159,7 +159,7 @@ import {
   Disclosure,
   DisclosureButton
 } from '@headlessui/vue'
-import { MailIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeIcon, ServerIcon, DocumentSearchIcon, ShieldCheckIcon, XIcon, BellIcon, MenuAlt2Icon, UserCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/outline/esm/index.js'
+import { ShieldCheckIcon, XMarkIcon, BellIcon, Bars3BottomLeftIcon, UserCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import navigation from '~/data/menu'
 import profile from '~/data/profile'
 

@@ -4,7 +4,7 @@
                 
                 <FormInputWithIcon v-model="searchKey" inputId="search-key" label="Search by email, domain or IP-address" type="search">
                     <template v-slot:icon>
-                        <SearchIcon class="w-4 h-4"/>
+                        <MagnifyingGlassIcon class="w-4 h-4"/>
                     </template>
                 </FormInputWithIcon>
             </div>
@@ -58,14 +58,14 @@
             </tbody>
         </table>
         <NuxtLink to="/domains/create" class="absolute right-4 -bottom-8 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            <PlusSmIcon class="h-6 w-6" aria-hidden="true" />
+            <PlusSmallIcon class="h-6 w-6" aria-hidden="true" />
         </NuxtLink>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { PencilIcon, TrashIcon, SearchIcon, PlusSmIcon } from '@heroicons/vue/outline/esm/index.js'
+import { PencilIcon, TrashIcon, MagnifyingGlassIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
 import FormInputWithIcon from './FormInputWithIcon.vue'
 const props = defineProps({
     listingType: String

@@ -12,11 +12,11 @@
                     <div class="sm:w-1/2">
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">
                             From: {{ message.from_address }}
-                            <button type="button" class="text-red-600 hover:text-red-900 inline-flex font-semibold"><BanIcon class="w-4 h-4"/>Block</button>
+                            <button type="button" class="text-red-600 hover:text-red-900 inline-flex font-semibold"><NoSymbolIcon class="w-4 h-4"/>Block</button>
                         </p>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">
                             To: {{ message.to_address }}
-                            <button type="button" class="text-red-600 hover:text-red-900 inline-flex font-semibold"><BanIcon class="w-4 h-4"/>Block</button>
+                            <button type="button" class="text-red-600 hover:text-red-900 inline-flex font-semibold"><NoSymbolIcon class="w-4 h-4"/>Block</button>
                         </p>
                     </div>
                     <div class="sm:w-1/2 border-l">
@@ -226,8 +226,8 @@
 import { onMounted, ref, computed, toRefs } from 'vue'
 import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronDownIcon } from '@heroicons/vue/solid'
-import { ArrowLeftIcon, BanIcon } from '@heroicons/vue/outline'
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
+import { ArrowLeftIcon, NoSymbolIcon } from '@heroicons/vue/24/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import { bytesToHuman, boolToHuman } from '~/filters'
 

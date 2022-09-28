@@ -266,7 +266,7 @@ import {
     SwitchGroup,
     SwitchLabel,
 } from '@headlessui/vue'
-import { TrashIcon } from '@heroicons/vue/outline'
+import { TrashIcon } from '@heroicons/vue/24/outline'
 import { boolToHuman } from '~/filters'
 import { onMounted, ref } from '@vue/runtime-core'
 import FormInput from '~/components/FormInput.vue'

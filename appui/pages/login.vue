@@ -70,8 +70,8 @@
 </template>
 
 <script setup>
-import { LockClosedIcon } from '@heroicons/vue/solid/esm/index.js'
-import { ShieldCheckIcon } from '@heroicons/vue/outline/esm/index.js'
+import { LockClosedIcon } from '@heroicons/vue/24/solid'
+import { ShieldCheckIcon } from '@heroicons/vue/24/outline'
 import { ref, reactive } from 'vue'
 import Form from '~/classes/Form'
 import FormInput from '~/components/FormInput.vue'

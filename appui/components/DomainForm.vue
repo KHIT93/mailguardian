@@ -99,8 +99,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import Form from '~/classes/Form'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-import { ChevronDownIcon } from '@heroicons/vue/solid/esm/index.js'
-import { ArrowLeftIcon } from '@heroicons/vue/outline/esm/index.js'
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 import FormInput from './FormInput.vue'
 import FormSelection from './FormSelection.vue'
 

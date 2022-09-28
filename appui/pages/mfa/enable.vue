@@ -102,7 +102,7 @@
 </template>
 <script setup>
     import MainLayout from '~/components/MainLayout.vue'
-    import { CheckIcon } from '@heroicons/vue/solid/esm/index.js'
+    import { CheckIcon } from '@heroicons/vue/24/solid'
     import { computed } from '@vue/reactivity'
     import { onMounted, reactive, ref } from 'vue'
     import FormSelection from '~/components/FormSelection.vue'

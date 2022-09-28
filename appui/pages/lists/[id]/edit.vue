@@ -46,7 +46,7 @@
 
 <script setup>
 import { onMounted, ref, reactive, computed, toRefs } from 'vue'
-import { ArrowLeftIcon } from '@heroicons/vue/outline'
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
 import MainLayout from '~/components/MainLayout.vue'
 import FormInput from '~/components/FormInput.vue'

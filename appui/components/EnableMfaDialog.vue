@@ -72,7 +72,7 @@
 </template>
 <script setup>
 import { DialogTitle } from '@headlessui/vue'
-import { CheckIcon } from '@heroicons/vue/solid/esm/index.js'
+import { CheckIcon } from '@heroicons/vue/24/solid'
 import { computed } from '@vue/reactivity'
 import { onMounted, reactive, ref } from 'vue'
 import MfaWizardIndex from './MfaWizard/index.vue'

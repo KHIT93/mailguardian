@@ -51,7 +51,7 @@
                         </td>
                         <td class="px-6 whitespace-nowrap text-right text-sm font-medium">
                             <NuxtLink :to="`/audit/log/${entry.id}`" class="text-blue-600 hover:text-blue-900">
-                                <SearchIcon class="w-4 h-4"/>
+                                <MagnifyingGlassIcon class="w-4 h-4"/>
                             </NuxtLink>
                         </td>
                     </tr>
@@ -65,7 +65,7 @@
 import { onMounted } from '@vue/runtime-core'
 import { ref } from 'vue'
 import MainLayout from '~/components/MainLayout.vue'
-import { SearchIcon } from '@heroicons/vue/outline'
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
 let entries = ref([])
 let loading = ref(false)

@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ArrowLeftIcon } from '@heroicons/vue/outline/esm/index.js'
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import { useRoute } from 'vue-router'
 import UserForm from '~/components/UserForm.vue'
