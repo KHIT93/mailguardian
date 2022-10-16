@@ -24,3 +24,7 @@ export function timeAgo(value) {
 export function boolToHuman(value) {
     return value ? 'Yes' : 'No';
 }
+
+export function partialString(value, length) {
+    return `${value.substring(0, length)}...`
+}
