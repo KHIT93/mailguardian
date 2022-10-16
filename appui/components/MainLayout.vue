@@ -135,11 +135,14 @@
             </div>
             <main class="flex-1 relative overflow-y-auto focus:outline-none">
                 <div class="py-6">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                    <div class="w-full mx-auto px-4 sm:px-6 md:px-8">
                         <slot></slot>
                     </div>
                 </div>
             </main>
+        </div>
+        <div class="w-full text-center absolute bottom-0" v-if="apiStore.isLoading">
+            <div class="w-1/2 p-2 bg-slate-800 inline-block animate-pulse rounded-full"></div>
         </div>
     </div>
 </template>
@@ -162,9 +165,11 @@ import {
 import { ShieldCheckIcon, XMarkIcon, BellIcon, Bars3BottomLeftIcon, UserCircleIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/outline'
 import navigation from '~/data/menu'
 import profile from '~/data/profile'
+import { useApiStore } from '~/store'
 
 let open = ref(false)
 const { $auth } = useNuxtApp()
+const apiStore = useApiStore()
 
 function signOut() {
     $auth().logout({

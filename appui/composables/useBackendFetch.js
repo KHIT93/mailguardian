@@ -1,4 +1,4 @@
-import { useAuthenticationStore } from '~/store'
+import { useAuthenticationStore, useApiStore } from '~/store'
 import { useSessionStorage } from '@vueuse/core'
 
 const defaultOptions = {
@@ -9,6 +9,7 @@ export const useBackendFetch = (url, options = {}) => {
     options = {...defaultOptions, ...options}
     const nuxtApp = useNuxtApp()
     const authenticationStore = useAuthenticationStore(nuxtApp.$pinia)
+    const apiStore = useApiStore(nuxtApp.$pinia)
     let token = useSessionStorage('authToken').value
     if (nuxtApp.$auth().isAuthenticated()) {
         if (options.headers) {
@@ -19,6 +20,12 @@ export const useBackendFetch = (url, options = {}) => {
                 Authorization: `Token ${token}`
             }
         }
+    }
+    options.onRequest = ({ request, options }) => {
+        apiStore.toggleLoading(true)
+    }
+    options.onResponse = ({ request, options, response }) => {
+        apiStore.toggleLoading(false)
     }
 
     return $fetch(url, options)
