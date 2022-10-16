@@ -177,13 +177,13 @@
                                         {{ (new Date(message.date).toLocaleDateString()) }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
-                                        {{ message.from_address }}
+                                        {{ partialString(message.from_address, 40) }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
-                                        {{ message.to_address }}
+                                        {{ partialString(message.to_address, 40) }}
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">
-                                        {{ message.subject }}
+                                        {{ partialString(message.subject, 32) }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -201,6 +201,7 @@
     import FormInputWithIcon from '~/components/FormInputWithIcon.vue'
     import ProgressRing from '~/components/ProgressRing.vue'
     import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+    import { partialString } from '~/filters'
     let messagesLoading = ref(false)
     let statsLoading = ref(false)
     let messages = ref([])
