@@ -17,7 +17,7 @@
                             <p class="text-red-300 text-center">
                                 Please enter your verifcation code for 2-factor Authentication
                             </p>
-                            <FormInput inputId="code" label="Verification code" type="text" autocomplete="off" v-model="form.mfa_code" class="my-4"/>
+                            <FormInput inputId="code" label="Verification code" type="text" autocomplete="one-time-code" v-model="form.mfa_code" class="my-4"/>
                             <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
                                 {{ form.errors.get('email') }}
                             </p>
@@ -27,7 +27,7 @@
                                 {{ form.errors.get('non_field_errors') }}
                             </p>
                             <input type="hidden" name="remember" value="true" />
-                            <FormInput inputId="email-address" label="Email address" type="email" v-model="form.email" class="my-4"/>
+                            <FormInput inputId="email-address" label="Email address" type="email" autocomplete="email" v-model="form.email" class="my-4"/>
                             <p v-if="form.errors.has('email')" class="text-red-500 text-xs py-1">
                                 {{ form.errors.get('email') }}
                             </p>
