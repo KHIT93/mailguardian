@@ -1,6 +1,138 @@
 from django.db.models import Q
 import abc
 
+VALID_FILTERS = {
+    'from_address': {
+        'label': 'Sender',
+        'autocomplete': 'email',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' },
+            { 'label': 'contains', 'value': 'icontains' }
+        ],
+        'field_type': 'text'
+    },
+    'from_domain': {
+        'label': 'Sender Domain',
+        'autocomplete': 'text',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' },
+            { 'label': 'contains', 'value': 'icontains' }
+        ],
+        'field_type': 'text'
+    },
+    'to_address': {
+        'label': 'Recipient',
+        'autocomplete': 'email',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' },
+            { 'label': 'contains', 'value': 'icontains' }
+        ],
+        'field_type': 'text'
+    },
+    'to_domain': {
+        'label': 'Recipient Domain',
+        'autocomplete': 'text',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' },
+            { 'label': 'contains', 'value': 'icontains' }
+        ],
+        'field_type': 'text'
+    },
+    'subject': {
+        'label': 'Subject',
+        'autocomplete': 'text',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' },
+            { 'label': 'contains', 'value': 'icontains' }
+        ],
+        'field_type': 'text'
+    },
+    'client_ip': {
+        'label': 'Sender IP-address',
+        'autocomplete': 'off',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' }
+        ],
+        'field_type': 'text'
+    },
+    'mailscanner_hostname': {
+        'label': 'MailScanner Host',
+        'autocomplete': 'text',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' }
+        ],
+        'field_type': 'text'
+    },
+    'date': {
+        'label': 'Date',
+        'autocomplete': 'off',
+        'operators': [
+            { 'label': 'equals', 'value': '=' },
+            { 'label': 'does not equal', 'value': '<>' },
+            { 'label': 'greater than', 'value': 'gt' },
+            { 'label': 'greater than or equals', 'value': 'gte' },
+            { 'label': 'less than', 'value': 'lt'},
+            { 'label': 'less than or equals', 'value': 'lte'}
+        ],
+        'field_type': 'date'
+    },
+    'allowed': {
+        'label': 'Allowed',
+        'operators': [
+            { 'label': 'yes', 'value': 1},
+            { 'label': 'no', 'value': 0}
+        ],
+        'field_type': 'boolean'
+    },
+    'blocked': {
+        'label': 'Blocked',
+        'operators': [
+            { 'label': 'yes', 'value': 1},
+            { 'label': 'no', 'value': 0}
+        ],
+        'field_type': 'boolean'
+    },
+    'is_spam': {
+        'label': 'Marked as SPAM',
+        'operators': [
+            { 'label': 'yes', 'value': 1},
+            { 'label': 'no', 'value': 0}
+        ],
+        'field_type': 'boolean'
+    },
+    'is_rbl_listed': {
+        'label': 'Listed in RBL',
+        'operators': [
+            { 'label': 'yes', 'value': 1},
+            { 'label': 'no', 'value': 0}
+        ],
+        'field_type': 'boolean'
+    },
+    'stored': {
+        'label': 'Stored',
+        'operators': [
+            { 'label': 'yes', 'value': 1},
+            { 'label': 'no', 'value': 0}
+        ],
+        'field_type': 'boolean'
+    },
+    'infected': {
+        'label': 'Infected',
+        'operators': [
+            { 'label': 'yes', 'value': 1},
+            { 'label': 'no', 'value': 0}
+        ],
+        'field_type': 'boolean'
+    }
+}
+
 class QuerySetFilter:
     @abc.abstractmethod
     def filter(self, qs, filters, user):

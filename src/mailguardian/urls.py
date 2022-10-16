@@ -53,7 +53,8 @@ from reports.views import (
     TopSenderDomainsByQuantityApiView,
     TopSenderDomainsByVolumeApiView,
     TopRecipientDomainsByQuantityApiView,
-    TopRecipientDomainsByVolumeApiView
+    TopRecipientDomainsByVolumeApiView,
+    ValidFilterChoicesApiView
 )
 from domains.viewsets import DomainViewSet
 from setup_wizard.views import LicenseAPIView, InstalledAPIView, InitializeDatabaseAPIView
@@ -107,6 +108,7 @@ if not settings.API_ONLY:
         path('api/reports/top-sender-domains-by-volume/', TopSenderDomainsByVolumeApiView.as_view()),
         path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
         path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
+        path('api/reports/filters/', ValidFilterChoicesApiView.as_view()),
         path('api/data-import/', DataImportUploadAPIView.as_view()),
         path('api/geoip/lookup/', GeoIPLookupAPIView.as_view()),
         path('api/geoip/update/', GeoIPUpdateAPIView.as_view()),
