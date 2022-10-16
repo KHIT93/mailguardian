@@ -71,7 +71,7 @@
                                 </h3>
                                 <div>
                                     <p class="my-2">Please confirm switching to the <code class="text-blue-700 bg-gray-100 p-1">{{ newMethod }}</code> method by entering a validation code from your current 2FA method</p>
-                                    <FormInput v-model="mfaCode" label="Verification code" type="number" input-id="mfaCode"/>
+                                    <FormInput v-model="mfaCode" label="Verification code" autocomplete="one-time-code" type="number" input-id="mfaCode"/>
                                     <div class="pt-5">
                                         <div class="flex">
                                             <button type="button" @click="switchPrimaryMethod" class="transition duration-300 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">

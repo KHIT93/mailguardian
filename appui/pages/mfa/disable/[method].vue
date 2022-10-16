@@ -12,7 +12,7 @@
                 </button>
                 <template v-if="started">
                     <p>Please input your verification code and press <code class="text-blue-700 bg-gray-100 p-1">Confirm</code> to complete the deactivation</p>
-                    <FormInput v-model="mfaCode" label="Verification code" type="number" input-id="code"/>
+                    <FormInput v-model="mfaCode" label="Verification code" autocomplete="one-time-code" type="number" input-id="code"/>
                     <div class="pt-5">
                         <div class="flex">
                             <button type="button" @click="deactivateTwoFactorAuth" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
