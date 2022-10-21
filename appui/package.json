@@ -13,7 +13,7 @@
   "devDependencies": {
     "@headlessui/vue": "^1.6.7",
     "@heroicons/vue": "^2.0.11",
-    "@nuxtjs/tailwindcss": "^5.3.1",
+    "@nuxtjs/tailwindcss": "^6.0.1",
     "@pinia/nuxt": "^0.4.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
@@ -21,9 +21,9 @@
     "@tailwindcss/typography": "^0.5.7",
     "@vueuse/core": "^9.2.0",
     "moment": "^2.29.4",
-    "nuxt": "3.0.0-rc.11",
+    "nuxt": "^3.0.0-rc.12",
     "pinia": "^2.0.22",
     "qrcode.vue": "^3.3.3",
-    "tailwindcss": "^3.1.8"
+    "tailwindcss": "^3.2.1"
   }
 }
