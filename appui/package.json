@@ -11,18 +11,18 @@
     "preview": "nuxt preview"
   },
   "devDependencies": {
-    "@headlessui/vue": "^1.6.7",
-    "@heroicons/vue": "^2.0.11",
+    "@headlessui/vue": "^1.7.4",
+    "@heroicons/vue": "^2.0.13",
     "@nuxtjs/tailwindcss": "^6.0.1",
-    "@pinia/nuxt": "^0.4.0",
+    "@pinia/nuxt": "^0.4.6",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/line-clamp": "^0.4.2",
-    "@tailwindcss/typography": "^0.5.7",
-    "@vueuse/core": "^9.2.0",
+    "@tailwindcss/typography": "^0.5.8",
+    "@vueuse/core": "^9.6.0",
     "moment": "^2.29.4",
-    "nuxt": "^3.0.0-rc.12",
-    "pinia": "^2.0.22",
+    "nuxt": "^3.0.0",
+    "pinia": "^2.0.27",
     "qrcode.vue": "^3.3.3",
     "tailwindcss": "^3.2.1"
   }
