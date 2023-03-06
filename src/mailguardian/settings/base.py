@@ -164,7 +164,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # https://django-rest-auth.readthedocs.io/en/latest/configuration.html#configuration
-REST_AUTH_SERIALIZERS = {
+REST_AUTH = {
     'USER_DETAILS_SERIALIZER': 'core.serializers.AccountUserSerializer',
     'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailGuardianPasswordResetSerializer'
 }

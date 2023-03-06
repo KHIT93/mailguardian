@@ -13,10 +13,10 @@ cryptography==38.0.1
 cssselect==1.1.0
 cssutils==2.6.0
 distro==1.8.0
-dj-rest-auth==2.2.7
-Django==4.1.5
+dj-rest-auth==3.0.0
+Django==4.1.7
 django-appconf==1.0.5
-django-cors-headers==3.13.0
+django-cors-headers==3.14.0
 django-cryptography==1.1
 django-extensions==3.2.1
 django-trench==0.3.1

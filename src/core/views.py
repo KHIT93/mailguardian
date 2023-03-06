@@ -8,9 +8,6 @@ from dj_rest_auth.views import LoginView as RestAuthBaseLoginView
 from rest_framework.parsers import FileUploadParser
 from rest_framework import status
 from django.conf import settings
-from dj_rest_auth.app_settings import create_token
-from dj_rest_auth.utils import jwt_encode
-from dj_rest_auth.models import get_token_model
 from lists.models import ListEntry
 from domains.models import Domain
 from mail.models import SmtpRelay

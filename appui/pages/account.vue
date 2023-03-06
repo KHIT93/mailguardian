@@ -286,44 +286,43 @@ onMounted(async () => {
 })
 
 async function toggleDailyReports() {
-    console.log(record.id)
-    dailyQuarantineReportToggle = true
-    await useBackendFetch(`/api/users/${record.id}/`, {
+    dailyQuarantineReportToggle.value = true
+    await useBackendFetch(`/api/users/${record.value.id}/`, {
         method: 'PATCH',
         body: {
-            daily_quarantine_report: record.daily_quarantine_report
+            daily_quarantine_report: record.value.daily_quarantine_report
         }
     })
-    dailyQuarantineReportToggle = false
+    dailyQuarantineReportToggle.value = false
 }
 async function toggleWeeklyReports() {
-    weeklyQuarantineReportToggle = true
-    await useBackendFetch(`/api/users/${record.id}/`, {
+    weeklyQuarantineReportToggle.value = true
+    await useBackendFetch(`/api/users/${record.value.id}/`, {
         method: 'PATCH',
         body: {
-            weekly_quarantine_report: record.weekly_quarantine_report
+            weekly_quarantine_report: record.value.weekly_quarantine_report
         }
     })
-    weeklyQuarantineReportToggle = false
+    weeklyQuarantineReportToggle.value = false
 }
 async function toggleMonthlyReports() {
-    monthlyQuarantineReportToggle = true
-    await useBackendFetch(`/api/users/${record.id}/`, {
+    monthlyQuarantineReportToggle.value = true
+    await useBackendFetch(`/api/users/${record.value.id}/`, {
         method: 'PATCH',
         body: {
-            monthly_quarantine_report: record.monthly_quarantine_report
+            monthly_quarantine_report: record.value.monthly_quarantine_report
         }
     })
-    monthlyQuarantineReportToggle = false
+    monthlyQuarantineReportToggle.value = false
 }
 
 function patchBasicData() {
-    useBackendFetch(`/api/users/${record.id}`, {
+    useBackendFetch(`/api/users/${record.value.id}`, {
         method: 'PATCH',
         body: {
-            first_name: record.first_name,
-            last_name: record.last_name,
-            email: record.email
+            first_name: record.value.first_name,
+            last_name: record.value.last_name,
+            email: record.value.email
         }
     })
 }
