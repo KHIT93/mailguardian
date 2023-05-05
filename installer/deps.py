@@ -50,29 +50,29 @@ def setup_deb(pkg_mgr, os_release, os_version):
         print('python3 was not found on your system. Exitting')
         exit(255)
     os.system('{pip3} install virtualenv'.format(pip3=which('pip3')))
-    pgsql_packages = 'postgresql-server-dev-13 postgresql-client-13'
+    pgsql_packages = 'postgresql-server-dev-14 postgresql-client-14'
     if installer_config['database']['db_local']:
-        pgsql_packages += ' postgresql-13'
+        pgsql_packages += ' postgresql-14'
     os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
-    os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.4.4-1/MailScanner-5.4.4-1.noarch.deb')
-    os.system('cd /tmp; dpkg -i MailScanner-5.4.4-1.noarch.deb')
+    os.system('cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.4.5-3/MailScanner-5.4.5-3.noarch.deb')
+    os.system('cd /tmp; dpkg -i MailScanner-5.4.5-3.noarch.deb')
     os.system('/usr/sbin/ms-configure --MTA=none --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
     os.system('{pkg} install libdbd-pg-perl -y'.format(pkg=PKG_MGR))
     if installer_config['database']['db_local']:
         pg_hba_conf = []
-        with open(os.path.join('/', 'etc', 'postgresql', '13', 'main', 'pg_hba.conf'), 'r') as f:
+        with open(os.path.join('/', 'etc', 'postgresql', '14', 'main', 'pg_hba.conf'), 'r') as f:
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
                 pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
-        with open(os.path.join('/', 'etc', 'postgresql', '13', 'main', 'pg_hba.conf'), 'w') as f:
+        with open(os.path.join('/', 'etc', 'postgresql', '14', 'main', 'pg_hba.conf'), 'w') as f:
             f.write("".join(pg_hba_conf))
-        os.system("{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '13', 'main', 'postgresql.conf')))
-        os.system('{systemctl} start postgresql@13-main'.format(systemctl=which('systemctl')))
+        os.system("{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=os.path.join('/', 'etc', 'postgresql', '14', 'main', 'postgresql.conf')))
+        os.system('{systemctl} start postgresql@14-main'.format(systemctl=which('systemctl')))
     os.system('{usermod} -a -G mtagroup nginx'.format(usermod=which('usermod')))
 
 def setup_rhel(pkg_mgr, os_release, os_version):
@@ -80,9 +80,9 @@ def setup_rhel(pkg_mgr, os_release, os_version):
     PKG_MGR = which(pkg_mgr)
     print('Installing EPEL...')
     os.system('{pkg} install -y epel-release'.format(pkg=PKG_MGR))
-    os.system('{pkg} install -y centos-release-scl'.format(pkg=PKG_MGR))
     os.system("{sed} -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux".format(sed=which('sed')))
     if os_version == '7':
+        os.system('{pkg} install -y centos-release-scl'.format(pkg=PKG_MGR))
         print('Adding GhettoForge repo...')
         # GhettoForge currently give postfix 3.5.3
         os.system('{pkg} --nogpg install https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm -y'.format(pkg=PKG_MGR))
@@ -90,9 +90,9 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         os.system('{pkg} makecache fast'.format(pkg=PKG_MGR))
         os.system('{pkg} remove postfix -y'.format(pkg=PKG_MGR))
         os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
-        pgsql_packages = 'postgresql13-devel postgresql13 libpq5 libpq5-devel'
+        pgsql_packages = 'postgresql14-devel postgresql14 libpq5 libpq5-devel'
         if installer_config['database']['db_local']:
-            pgsql_packages += ' postgresql13-server'
+            pgsql_packages += ' postgresql14-server'
         os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install --enablerepo=gf-plus postfix3 postfix3-pgsql -y'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
@@ -106,9 +106,9 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         PKG_MGR = which('dnf')
         os.system('{pkg} install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'.format(pkg=PKG_MGR))
         os.system('{pkg} -qy module disable postgresql'.format(pkg=PKG_MGR))
-        pgsql_packages = 'postgresql13-devel postgresql13 libpq5 libpq5-devel'
+        pgsql_packages = 'postgresql14-devel postgresql14 libpq5 libpq5-devel'
         if installer_config['database']['db_local']:
-            pgsql_packages += ' postgresql13-server'
+            pgsql_packages += ' postgresql14-server'
         os.system('{pkg} install {packages} -y'.format(pkg=PKG_MGR, packages=pgsql_packages))
         os.system('{pkg} install -y postfix postfix-pgsql'.format(pkg=PKG_MGR))
         os.system('{pkg} groupinstall "Development Tools" -y'.format(pkg=PKG_MGR))
@@ -121,24 +121,24 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         print('Your version is unfortunately not supported')
         exit(255)
     if installer_config['database']['db_local']:
-        os.system('/usr/pgsql-13/bin/postgresql-13-setup initdb')
+        os.system('/usr/pgsql-14/bin/postgresql-14-setup initdb')
         pg_hba_conf = []
-        with open(os.path.join('/', 'var', 'lib', 'pgsql', '13', 'data', 'pg_hba.conf'), 'r') as f:
+        with open(os.path.join('/', 'var', 'lib', 'pgsql', '14', 'data', 'pg_hba.conf'), 'r') as f:
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
                 pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
-        with open(os.path.join('/', 'var', 'lib', 'pgsql', '13', 'data', 'pg_hba.conf'), 'w') as f:
+        with open(os.path.join('/', 'var', 'lib', 'pgsql', '14', 'data', 'pg_hba.conf'), 'w') as f:
             f.write("\n".join(pg_hba_conf))
-        os.system("{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '13', 'data', 'postgresql.conf')))
-        os.system('{systemctl} enable postgresql-13'.format(systemctl=which('systemctl')))
-        os.system('{systemctl} start postgresql-13'.format(systemctl=which('systemctl')))
+        os.system("{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=os.path.join('/', 'var', 'lib', 'pgsql', '14', 'data', 'postgresql.conf')))
+        os.system('{systemctl} enable postgresql-14'.format(systemctl=which('systemctl')))
+        os.system('{systemctl} start postgresql-14'.format(systemctl=which('systemctl')))
         os.system('{cmd} --add-port=5432/tcp --permanent'.format(cmd=which('firewall-cmd')))
     os.system('curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -')
     os.system('{pkg} install -y nodejs'.format(pkg=PKG_MGR))
-    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.4.4-1/MailScanner-5.4.4-1.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
+    os.system('{pkg} install https://github.com/MailScanner/v5/releases/download/5.4.5-3/MailScanner-5.4.5-3.rhel.noarch.rpm -y'.format(pkg=PKG_MGR))
     os.system('/usr/sbin/ms-configure --installEPEL=Y --MTA=none --installClamav=Y --installCPAN=Y --ramdiskSize=0 --SELPermissive=Y --installDf=Y --installUnrar=Y --installTNEF=Y --configClamav=Y --installPowerTools=Y')
     for dep in CPAN_DEPS:
         os.system('{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep))
