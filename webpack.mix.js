@@ -1,5 +1,6 @@
 let mix = require('laravel-mix');
 let tailwindcss = require('tailwindcss');
+let resolve = require('path').resolve
 
 /*
  |--------------------------------------------------------------------------
@@ -11,8 +12,8 @@ let tailwindcss = require('tailwindcss');
  | file for your application, as well as bundling up your JS files.
  |
  */
-mix.setPublicPath(path.resolve('./'));
-mix.js('./assets/src/js/app.js', './assets/dist/js')
+mix.setPublicPath(resolve('./'));
+mix.js('./assets/src/js/app.js', './assets/dist/js').vue({ version: 2 })
    .postCss('./assets/src/css/app.css', './assets/dist/css').options({
        postCss: [
            tailwindcss('./tailwind.config.js'),
