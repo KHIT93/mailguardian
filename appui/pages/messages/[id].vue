@@ -124,8 +124,8 @@
                         <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
                             <dl>
                                 <div class="bg-gray-50 px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-2" v-for="(value, key) in message.spamReport" :key="key">
-                                    <dt class="text-sm font-medium text-gray-500" :title="value.description">
-                                        {{key}}
+                                    <dt class="text-sm font-medium text-gray-500" :title="key">
+                                        {{value.description}}
                                     </dt>
                                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                                         {{value.value}}
