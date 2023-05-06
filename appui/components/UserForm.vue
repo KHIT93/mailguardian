@@ -75,7 +75,7 @@ let form = reactive(new Form({
 
 onMounted(async () => {
     if(props.id) {
-        let { data: res } = await useBackendFetch(`/api/users/${props.id}/`)
+        let res = (await useBackendFetch(`/api/users/${props.id}/`))
         form.email = res.email,
         form.first_name = res.first_name,
         form.last_name = res.last_name,

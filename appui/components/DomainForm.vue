@@ -116,8 +116,8 @@ let form = reactive(new Form({
 let nodes = ref([])
 
 onMounted(async () => {
-    if(id) {
-        let { data: res } = await useBackendFetch(`/api/domains/${props.id}/`)
+    if(props.id) {
+        let res = (await useBackendFetch(`/api/domains/${props.id}/`))
         form.name = res.name,
         form.active = res.active,
         form.allowed_accounts = res.allowed_accounts,
@@ -125,7 +125,7 @@ onMounted(async () => {
         form.receive_type = res.receive_type,
         form.relay_type = res.relay_type
     }
-    nodes = (await useBackendFetch('/api/hosts/'))
+    nodes.value = (await useBackendFetch('/api/hosts/')).results
 })
 
 async function submit() {
