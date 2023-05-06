@@ -62,6 +62,25 @@
             </table>
         </Card>
         <Card class="border mt-6">
+            <h2 class="prose">Summary</h2>
+            <table class="min-w-full divide-y divide-gray-200">
+                <tbody class="bg-white">
+                    <tr class="border-b">
+                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">First message registered:</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate font-bold">{{ summary.earliest }}</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">Last message registered:</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate font-bold">{{ summary.latest }}</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate">Messages registered:</td>
+                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700 truncate font-bold">{{ summary.count }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </Card>
+        <Card class="border mt-6">
             <h2 class="prose">All Filters</h2>
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-white">
@@ -125,11 +144,13 @@ function addFilter() {
         value: selectedFilterValue.value
     })
     resetSelectedFilter()
+    getStatisticsSummary()
 }
 
 function removeFilter(name) {
     if (store.hasActiveFilter(name)) {
         store.removeActiveFilterByName(name)
+        getStatisticsSummary()
     }
     else {
         console.error(`Unable to locate an active filter with field name ${name}`)
