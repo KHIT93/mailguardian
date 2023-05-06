@@ -215,7 +215,7 @@ if __name__ == "__main__":
             os.chown(CERT_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
         print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
         print('Please note that this step can take up to 30 minutes to complete')
-        os.system(OPENSSL_BIN + ' dhparam -out {0} 4096'.format(DHPARAM_PATH))
+        os.system('curl https://ssl-config.mozilla.org/ffdhe4096.txt > {}'.format(DHPARAM_PATH))
         os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     # Store the nginx configuration file for the application
     with open(os.path.join(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
