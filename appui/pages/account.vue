@@ -271,6 +271,10 @@ import { boolToHuman } from '~/filters'
 import { onMounted, ref } from '@vue/runtime-core'
 import FormInput from '~/components/FormInput.vue'
 
+useHead({
+    title: 'MailGuardian - Your Account'
+})
+
 const { $auth } = useNuxtApp()
 const record = ref({})
 const domains = ref([])

@@ -76,7 +76,10 @@ import { ref, reactive } from 'vue'
 import Form from '~/classes/Form'
 import FormInput from '~/components/FormInput.vue'
 definePageMeta({
-    middleware: ['guest']
+    middleware: ['guest'],
+})
+useHead({
+    title: 'MailGuardian - Sign In'
 })
 const form = reactive(new Form({
     email: '',

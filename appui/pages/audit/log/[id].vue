@@ -62,6 +62,10 @@ import { ref } from '@vue/reactivity'
 import { onMounted } from '@vue/runtime-core'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 
+useHead({
+    title: 'MailGuardian - View Audit Entry'
+})
+
 let { id } = useRoute().params
 let entry = ref({})
 let changes = ref([])

@@ -3,5 +3,10 @@ export default defineNuxtConfig({
         '@nuxtjs/tailwindcss',
         '@pinia/nuxt'
     ],
-    ssr: false // Seems to be required for some reason. Maybe the issue is fixed at RTM of Nuxt 3
+    ssr: false, // Seems to be required for some reason. Maybe the issue is fixed at RTM of Nuxt 3
+    app: {
+        head: {
+            title: 'MailGuardian'
+        }
+    }
 })

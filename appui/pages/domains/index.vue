@@ -95,6 +95,10 @@ import MainLayout from '~/components/MainLayout.vue'
 import { ref, onMounted, computed } from 'vue'
 import { PencilIcon, TrashIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
 
+useHead({
+    title: 'MailGuardian - Manage Domains'
+})
+
 let loading = ref(false)
 let entries = ref([])
 let searchKey = ref('')

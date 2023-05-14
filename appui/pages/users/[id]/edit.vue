@@ -17,5 +17,9 @@ import MainLayout from '~/components/MainLayout.vue'
 import { useRoute } from 'vue-router'
 import UserForm from '~/components/UserForm.vue'
 
+useHead({
+    title: 'MailGuardian - Edit User'
+})
+
 let { id } = useRoute().params
 </script>

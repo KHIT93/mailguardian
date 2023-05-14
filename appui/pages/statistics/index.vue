@@ -120,6 +120,10 @@ import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useStatisticsStore } from '~/store/index'
 import { ref } from 'vue'
 
+useHead({
+    title: 'MailGuardian - Statistics & Reports'
+})
+
 const store = useStatisticsStore()
 const selectedFilterField = ref('')
 const selectedFilterFieldOperator = ref('')

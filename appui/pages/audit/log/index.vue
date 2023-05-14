@@ -67,6 +67,10 @@ import { ref } from 'vue'
 import MainLayout from '~/components/MainLayout.vue'
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
+useHead({
+    title: 'MailGuardian - Audit Log'
+})
+
 let entries = ref([])
 let loading = ref(false)
 

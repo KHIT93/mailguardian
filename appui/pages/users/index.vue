@@ -87,6 +87,10 @@ import { ref, onMounted, computed } from 'vue'
 import { PencilIcon, TrashIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
 import { boolToHuman } from '~/filters'
 
+useHead({
+    title: 'MailGuardian - Manage Users'
+})
+
 let loading = ref(false)
 let entries = ref([])
 let searchKey = ref('')

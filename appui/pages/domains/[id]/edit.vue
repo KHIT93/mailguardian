@@ -17,5 +17,9 @@ import MainLayout from '~/components/MainLayout.vue'
 import DomainForm from '~/components/DomainForm.vue'
 import { useRoute } from 'vue-router'
 
+useHead({
+    title: 'MailGuardian - Edit Domain'
+})
+
 let { id } = useRoute().params
 </script>

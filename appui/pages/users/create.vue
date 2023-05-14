@@ -15,4 +15,8 @@
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import UserForm from '~/components/UserForm.vue'
+
+useHead({
+    title: 'MailGuardian - Create User'
+})
 </script>

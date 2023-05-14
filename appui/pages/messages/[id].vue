@@ -231,6 +231,10 @@ import { ArrowLeftIcon, NoSymbolIcon } from '@heroicons/vue/24/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import { bytesToHuman, boolToHuman } from '~/filters'
 
+useHead({
+    title: `MailGuardian - View Message`
+})
+
 let { id } = useRoute().params
 let message = ref({})
 let messageLoading = ref(false)

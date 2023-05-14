@@ -51,4 +51,9 @@
 import MainLayout from '~/components/MainLayout.vue'
 import ListEntryTable from '~/components/ListEntryTable.vue'
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue'
+
+useHead({
+    title: 'MailGuardian - Allow & Block Access'
+})
+
 </script>

@@ -57,7 +57,7 @@
                 </tr>
             </tbody>
         </table>
-        <NuxtLink to="/domains/create" class="absolute right-4 -bottom-8 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <NuxtLink to="/lists/create" class="absolute right-4 -bottom-8 inline-flex items-center p-2 border border-transparent rounded-full shadow hover:shadow-lg transition-all duration-300 text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             <PlusSmallIcon class="h-6 w-6" aria-hidden="true" />
         </NuxtLink>
     </div>

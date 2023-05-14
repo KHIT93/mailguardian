@@ -16,4 +16,8 @@ import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import MainLayout from '~/components/MainLayout.vue'
 import DomainForm from '~/components/DomainForm.vue'
 
+useHead({
+    title: 'MailGuardian - Create Domain'
+})
+
 </script>
