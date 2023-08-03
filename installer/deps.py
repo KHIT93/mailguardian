@@ -24,7 +24,7 @@ def which(program):
                 return str(exe_file)
     return None
 
-CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::ClamAV', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval']
+CPAN_DEPS = ['CPAN', 'Data::Dumper', 'Data::UUID', 'HTTP::Date', 'DBI', 'Encode::FixLatin', 'Digest::SHA1', 'Mail::SpamAssassin::Plugin::SPF', 'Mail::SpamAssassin::Plugin::URIDNSBL', 'Mail::SpamAssassin::Plugin::DNSEval', 'Encoding::FixLatin']
 PKG_MGR = False
 installer_config = False
 
@@ -47,48 +47,48 @@ def setup_deb(pkg_mgr, os_release, os_version):
     subprocess.call([which('sh'), '/usr/share/postgresql-common/pgdg/apt.postgresql.org.sh'])
     subprocess.call([PKG_MGR, 'update'])
     print('Adding Node.js')
-    subprocess.call([which('curl') + ' -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -'])
+    subprocess.call([which('curl') + ' -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -'])
     subprocess.call([PKG_MGR, 'update'])
     subprocess.call([PKG_MGR, 'install nodejs -y'])
 
     if not which('python3'):
         print('python3 was not found on your system. Exitting')
         exit(255)
-    subprocess.call([which('pip3'), 'install virtualenv'])
-    pgsql_packages = 'postgresql-server-dev-12 postgresql-client-12'
+    subprocess.call([PKG_MGR, 'install python3-virtualenv'])
+    pgsql_packages = 'postgresql-server-dev-14 postgresql-client-14'
     if installer_config['database']['db_local']:
-        pgsql_packages += ' postgresql-12'
-    subprocess.call([PKG_MGR, 'install {packages}'.format(packages=pgsql_packages)])
-    subprocess.call([which('cd') + ' /tmp; wget https://github.com/MailScanner/v5/releases/download/5.3.4-3/MailScanner-5.3.4-3.noarch.deb'])
-    subprocess.call([which('cd') + ' /tmp; dpkg -i MailScanner-5.3.4-3.noarch.deb'])
+        pgsql_packages += ' postgresql-14'
+    subprocess.call([PKG_MGR, 'install {packages} -y'.format(packages=pgsql_packages)])
+    subprocess.call(['cd /tmp; wget https://github.com/MailScanner/v5/releases/download/5.5.1-1/MailScanner-5.5.1-1.noarch.deb'])
+    subprocess.call(['cd /tmp; dpkg -i MailScanner-5.5.1-1.noarch.deb'])
     subprocess.call(['/usr/sbin/ms-configure --MTA=none --installClamav=Y --installCPAN=Y --ignoreDeps=Y --ramdiskSize=0'])
     for dep in CPAN_DEPS:
         subprocess.call(['{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep)])
     subprocess.call([PKG_MGR, 'install libdbd-pg-perl -y'])
     if installer_config['database']['db_local']:
         pg_hba_conf = []
-        with open(Path('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'r') as f:
+        with Path('/', 'etc', 'postgresql', '14', 'main', 'pg_hba.conf').open('r') as f:
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
                 pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
-        with open(Path('/', 'etc', 'postgresql', '12', 'main', 'pg_hba.conf'), 'w') as f:
+        with Path('/', 'etc', 'postgresql', '14', 'main', 'pg_hba.conf').open('w') as f:
             f.write("".join(pg_hba_conf))
-        subprocess.call([which('sed'), "-i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g", Path('/', 'etc', 'postgresql', '12', 'main', 'postgresql.conf')])
-        subprocess.call([which('systemctl'), 'start postgresql@12-main.service'])
-    subprocess.call([which('usermod'), '-a -G mtagroup nginx'])
+        subprocess.call(["{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=Path('/', 'etc', 'postgresql', '14', 'main', 'postgresql.conf'))])
+        subprocess.call(['{systemctl} start postgresql@14-main'.format(systemctl=which('systemctl'))])
+    subprocess.call(['{usermod} -a -G mtagroup nginx'.format(usermod=which('usermod'))])
 
 def setup_rhel(pkg_mgr, os_release, os_version):
     print('Setting up on RHEL-based distro')
     PKG_MGR = which(pkg_mgr)
     print('Installing EPEL...')
     subprocess.call([PKG_MGR, 'install -y epel-release'])
-    if os_release == 'centos':
-        subprocess.call([PKG_MGR, 'install -y centos-release-scl'])
-    subprocess.call([which('sed'), "-i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux"])
+    subprocess.call(["{sed} -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/sysconfig/selinux".format(sed=which('sed'))])
+    subprocess.call(["{sed} -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config".format(sed=which('sed'))])
     if os_version == '7':
+        subprocess.call([PKG_MGR, 'install -y centos-release-scl'])
         print('Adding GhettoForge repo...')
         # GhettoForge currently give postfix 3.5.3
         subprocess.call([PKG_MGR, '--nogpg install https://mirror.ghettoforge.org/distributions/gf/gf-release-latest.gf.el7.noarch.rpm -y'])
@@ -96,49 +96,62 @@ def setup_rhel(pkg_mgr, os_release, os_version):
         subprocess.call([PKG_MGR, 'makecache fast'])
         subprocess.call([PKG_MGR, 'remove postfix -y'])
         subprocess.call([PKG_MGR, 'install https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'])
-        pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
+        pgsql_packages = 'postgresql14-devel postgresql14 libpq5 libpq5-devel'
         if installer_config['database']['db_local']:
-            pgsql_packages += ' postgresql12-server'
+            pgsql_packages += ' postgresql14-server'
         subprocess.call([PKG_MGR, 'install {packages} -y'.format(packages=pgsql_packages)])
         subprocess.call([PKG_MGR, 'install --enablerepo=gf-plus postfix3 postfix3-pgsql -y'])
+        subprocess.call([PKG_MGR, 'groupinstall "Development Tools" -y'])
+        subprocess.call([PKG_MGR, 'install -y python3 python3-devel python3-pip python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'.format(pkg=PKG_MGR)])
+        if not which('python3'):
+            print('python3 was not found on your system. Exitting')
+            exit(255)
+        subprocess.call([PKG_MGR, 'install python3-virtualenv'])
 
     elif os_version == '8':
         PKG_MGR = which('dnf')
         subprocess.call([PKG_MGR, 'install https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm -y'])
         subprocess.call([PKG_MGR, '-qy module disable postgresql'])
-        pgsql_packages = 'postgresql12-devel postgresql12 libpq5 libpq5-devel'
+        pgsql_packages = 'postgresql14-devel postgresql14 libpq5 libpq5-devel'
         if installer_config['database']['db_local']:
-            pgsql_packages += ' postgresql12-server'
-        subprocess.call([PKG_MGR, 'install {packages}'.format(packages=pgsql_packages)])
+            pgsql_packages += ' postgresql14-server'
+        subprocess.call([PKG_MGR, 'install {packages} -y'.format(packages=pgsql_packages)])
         subprocess.call([PKG_MGR, 'install -y postfix postfix-pgsql'])
+        subprocess.call([PKG_MGR, 'groupinstall "Development Tools" -y'])
+        subprocess.call([PKG_MGR, 'install -y python3 python3-devel python3-pip python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'])
+        if not which('python3'):
+            print('python3 was not found on your system. Exitting')
+            exit(255)
+        subprocess.call(['{pip3} install virtualenv'.format(pip3=which('pip3'))])
     else:
         print('Your version is unfortunately not supported')
         exit(255)
     
-    subprocess.call([PKG_MGR, 'groupinstall "Development Tools" -y'])
-    subprocess.call([PKG_MGR, 'install -y python3 python3-devel python3-pip python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo'])
+    subprocess.call([[PKG_MGR, 'groupinstall "Development Tools" -y']])
+    subprocess.call([[PKG_MGR, 'install -y python3 python3-devel python3-pip python3-setuptools nginx openssl ca-certificates libpng-devel redhat-lsb-core sudo']])
     if not which('python3'):
         print('python3 was not found on your system. Exitting')
         exit(255)
-    subprocess.call([which('pip3'), 'install virtualenv'])
+    subprocess.call([[which('pip3'), 'install virtualenv']])
     if installer_config['database']['db_local']:
-        subprocess.call(['/usr/pgsql-12/bin/postgresql-12-setup initdb'])
+        subprocess.call(['/usr/pgsql-14/bin/postgresql-14-setup initdb'])
         pg_hba_conf = []
-        with open(Path('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'r') as f:
+        with Path('/', 'var', 'lib', 'pgsql', '14', 'data', 'pg_hba.conf').open('r') as f:
             pg_hba_conf = f.readlines()
         for index, line in enumerate(pg_hba_conf):
             if line[:6] == '# IPv4':
                 pg_hba_conf.insert(index + 1, 'host    all             all             127.0.0.1/32            md5\n')
             if line[:6] == '# IPv6':
                 pg_hba_conf.insert(index + 1, 'host    all             all             ::1/128                 md5\n')
-        with open(Path('/', 'var', 'lib', 'pgsql', '12', 'data', 'pg_hba.conf'), 'w') as f:
+        with Path('/', 'var', 'lib', 'pgsql', '14', 'data', 'pg_hba.conf').open('w') as f:
             f.write("\n".join(pg_hba_conf))
-        subprocess.call([which('sed'), "-i 's/#listen_address = \'localhost\'/listen_address = \'*\'/g'", Path('/', 'var', 'lib', 'pgsql', '12', 'data', 'postgresql.conf')])
-        subprocess.call([which('systemctl', 'enable --now postgresql-12')])
-        subprocess.call([which('firewall-cmd'), '--add-port=5432/tcp --permanent'])
-    subprocess.call([which('curl'), '-sL https://rpm.nodesource.com/setup_14.x | sudo bash -'])
-    subprocess.call([PKG_MGR, 'install nodejs -y'])
-    subprocess.call([PKG_MGR, 'install https://github.com/MailScanner/v5/releases/download/5.3.4-3/MailScanner-5.3.4-3.rhel.noarch.rpm -y'])
+        subprocess.call(["{sed} -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" {path}".format(sed=which('sed'), path=Path('/', 'var', 'lib', 'pgsql', '14', 'data', 'postgresql.conf'))])
+        subprocess.call(['{systemctl} enable postgresql-14'.format(systemctl=which('systemctl'))])
+        subprocess.call(['{systemctl} start postgresql-14'.format(systemctl=which('systemctl'))])
+        subprocess.call(['{cmd} --add-port=5432/tcp --permanent'.format(cmd=which('firewall-cmd'))])
+    subprocess.call(['curl -sL https://rpm.nodesource.com/setup_18.x | sudo bash -'])
+    subprocess.call([PKG_MGR, 'install -y nodejs'])
+    subprocess.call([PKG_MGR, 'install https://github.com/MailScanner/v5/releases/download/5.5.1-1/MailScanner-5.5.1-1.rhel.noarch.rpm -y'])
     subprocess.call(['/usr/sbin/ms-configure --installEPEL=Y --MTA=none --installClamav=Y --installCPAN=Y --ramdiskSize=0 --SELPermissive=Y --installDf=Y --installUnrar=Y --installTNEF=Y --configClamav=Y --installPowerTools=Y'])
     for dep in CPAN_DEPS:
         subprocess.call(['{cpan} -i {dep}'.format(cpan=which('cpan'), dep=dep)])
@@ -161,7 +174,7 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config.read(args.config_file)
     distro_data = distribution.linux_distribution(full_distribution_name=False)
     distro = distro_data[0] or 'LINUX'

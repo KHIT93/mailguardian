@@ -44,7 +44,7 @@ if __name__ == "__main__":
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit(255)
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config.read(args.config_file)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
     APP_DIR  = installer_config['mailguardian']['app_dir']
@@ -66,7 +66,10 @@ if __name__ == "__main__":
     # Define variables to store generic data for use regardless of the installation purpose
     APP_HOSTNAME = installer_config['mailguardian']['hostname']
     APP_USER = installer_config['mailguardian']['user']
-    if not installer_config['mailguardian']['secret']:
+    try:
+        if not installer_config['mailguardian'].getint('secret'):
+            installer_config['mailguardian']['secret'] = get_random_secret_key()
+    except:
         installer_config['mailguardian']['secret'] = get_random_secret_key()
     APP_SECRET = installer_config['mailguardian']['secret']
     RETENTION_DAYS = installer_config['mailguardian']['retention']
@@ -123,7 +126,7 @@ if __name__ == "__main__":
         'import os',
         'from .core_settings import BASE_DIR',
         '# Quick-start production settings',
-        '# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/',
+        '# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/',
         '',
         '# SECURITY WARNING: keep the secret key used in production secret!',
         'SECRET_KEY = "{}"'.format(APP_SECRET),
@@ -165,12 +168,12 @@ if __name__ == "__main__":
         'BRAND_LOGO = ""',
         '',
         '# Internationalization',
-        '# https://docs.djangoproject.com/en/3.1/topics/i18n/',
+        '# https://docs.djangoproject.com/en/3.2/topics/i18n/',
         'LANGUAGE_CODE = "en-us"',
         '',
         'TIME_ZONE = "{}"'.format(TZ),
         '# Database',
-        '# https://docs.djangoproject.com/en/3.1/ref/settings/#databases',
+        '# https://docs.djangoproject.com/en/3.2/ref/settings/#databases',
         'DATABASES = {',
         '    "default": {',
         '        "ENGINE": "django.db.backends.postgresql",',
@@ -216,7 +219,7 @@ if __name__ == "__main__":
             os.chown(CERT_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
         print('Now that we have all the details for your SSL/TLS Certificate, we will generate a set of parameters needed to improve security of the encryption')
         print('Please note that this step can take up to 30 minutes to complete')
-        subprocess.call([OPENSSL_BIN, 'dhparam -out {0} 4096'.format(DHPARAM_PATH)])
+        subprocess.call(['curl https://ssl-config.mozilla.org/ffdhe4096.txt > {}'.format(DHPARAM_PATH)])
         os.chown(DHPARAM_PATH, pwd.getpwnam(APP_USER).pw_uid, grp.getgrnam(APP_USER).gr_gid)
     # Store the nginx configuration file for the application
     with open(Path(APP_DIR, 'configuration', 'examples','nginx','domain.tld'), 'r') as t:
@@ -231,6 +234,8 @@ if __name__ == "__main__":
                 conf.replace('include proxy_params;', '#include proxy_params;')
         with open(Path(NGINX_PATH, APP_HOSTNAME + NGINX_EXTENSION), 'w') as f:
             f.write(conf)
+        if Path(NGINX_PATH + '/default').exists():
+            subprocess.call(['rm {}/default'.format(NGINX_PATH)])
 
     # Store the systemd socket file
     with open(Path(APP_DIR, 'configuration', 'examples','systemd','mailguardian.socket'), 'r') as t:

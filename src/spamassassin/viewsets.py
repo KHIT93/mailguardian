@@ -27,7 +27,7 @@ class RuleDescriptionViewSet(viewsets.ModelViewSet):
             sa = RuleDescription()
             sa.sync_files()
             Setting.objects.update_or_create(key='sa.last_updated', defaults={'value':str(datetime.datetime.now())})
-            DataLogEntry.objects.log_create(None, actor=request.user, changes='SpamAssassin rule update completed')
+            DataLogEntry.objects.log_create(request.user, actor=request.user, changes='SpamAssassin rule update completed')
         except Exception as e:
             return Response({'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return Response({}, status=status.HTTP_204_NO_CONTENT)

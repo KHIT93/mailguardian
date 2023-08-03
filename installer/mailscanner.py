@@ -35,7 +35,7 @@ if __name__ == "__main__":
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit()
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config.read(args.config_file)
     PKG_MGR = installer_config['bin']['pkg']
     POSTFIX_DIR = '/etc/postfix'
