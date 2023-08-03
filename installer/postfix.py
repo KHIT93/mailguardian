@@ -35,7 +35,7 @@ if __name__ == "__main__":
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit()
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config.read(args.config_file)
     PKG_MGR = installer_config['bin']['pkg']
     POSTFIX_DIR = '/etc/postfix'
@@ -68,20 +68,20 @@ if __name__ == "__main__":
     subprocess.call([which('echo'), '"/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=POSTFIX_DIR)])
 
     print('Configure PostgreSQL integrations')
-    with open(Path(POSTFIX_DIR, 'pgsql-transport.cf'), 'w') as f:
+    with Path(POSTFIX_DIR, 'pgsql-transport.cf').open('w') as f:
         f.write("\n".join([
             "user = {}".format(installer_config['database']['user']),
             "password = {}".format(installer_config['database']['pass']),
             "hosts = {}".format(installer_config['database']['fqdn']),
             "dbname = {}".format(installer_config['database']['name']),
-            "query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='\%\s' AND active = '1';",
+            "query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='%s' AND active = '1';",
         ]))
 
-    with open(Path(POSTFIX_DIR, 'pgsql-mynetworks.cf'), 'w') as f:
+    with Path(POSTFIX_DIR, 'pgsql-mynetworks.cf').open('w') as f:
         f.write("\n".join([
             "user = {}".format(installer_config['database']['user']),
             "password = {}".format(installer_config['database']['pass']),
             "hosts = {}".format(installer_config['database']['fqdn']),
             "dbname = {}".format(installer_config['database']['name']),
-            "query = query = SELECT ip_address from mail_smtprelay where (ip_address='\%\s' or hostname='\%\s') AND active = '1';",
+            "query = SELECT ip_address from mail_smtprelay where (ip_address='%s' or hostname='%s') AND active = '1';",
         ]))

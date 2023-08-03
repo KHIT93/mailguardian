@@ -113,7 +113,7 @@ if __name__ == "__main__":
             print('Your version of Debian is not supported')
     elif distro.lower() == 'ubuntu':
         PKG_MGR = which('apt')
-        if distro_version in ['16.04', '18.04', '20.04']:
+        if distro_version in ['16.04', '18.04', '20.04', '22.04']:
             NGINX_PATH = '/etc/nginx/sites-enabled/'
         else:
             print('Your version of Ubuntu is not supported')
@@ -276,11 +276,11 @@ if __name__ == "__main__":
         exit(255)
     subprocess.call([which('clear')])
     
-    installer_config = configparser.ConfigParser()
+    installer_config = configparser.RawConfigParser()
     installer_config['mailguardian'] = {
         'app_dir': APP_DIR,
         'hostname': APP_HOSTNAME,
-        'secret': APP_SECRET,
+        'secret': APP_SECRET or 0,
         'user': APP_USER,
         'https': HTTP_SECURE,
         'tz': TZ or 'Utc',

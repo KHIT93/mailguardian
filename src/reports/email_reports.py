@@ -50,6 +50,7 @@ class QuarantinedEmailReport:
             to_email = user.email
             plaintext = render_to_string('quarantine_report.txt', context)
             html = get_template('quarantine_report.html').render(context)
+            html_body = Premailer(html, base_url="{}://{}".format(context['protocol'], context['domain'])).transform()
             email = EmailMultiAlternatives(self.subject, plaintext, self.from_email, [to_email])
-            email.attach_alternative(html, "text/html")
+            email.attach_alternative(html_body, "text/html")
             email.send()
