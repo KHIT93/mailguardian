@@ -17,13 +17,13 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11']
         include:
           - db: postgres12
-            db_port: 5432
+            db_port: 54312
           - db: postgres13
-            db_port: 5432
+            db_port: 54313
           - db: postgres14
-            db_port: 5432
+            db_port: 54314
           - db: postgres15
-            db_port: 5432
+            db_port: 54315
 
     services:
       postgres12:
@@ -37,7 +37,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 54312:5432
       postgres13:
         image: postgres:13
         env:
@@ -49,7 +49,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 54313:5432
       postgres14:
         image: postgres:14
         env:
@@ -61,7 +61,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 54314:5432
       postgres15:
         image: postgres:15
         env:
@@ -73,7 +73,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 5432:5432
+          - 54315:5432
 
     steps:
     - uses: actions/checkout@v3
