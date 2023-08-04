@@ -29,8 +29,8 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: yarn install --frozen-lockfile
       working-directory: ./appui
     - name: Build Nuxt Application
-      run: npm run build
+      run: yarn build
       working-directory: ./appui
