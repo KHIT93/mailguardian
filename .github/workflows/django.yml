@@ -87,7 +87,7 @@ jobs:
         pip install -r requirements.txt
     - name: Run Migrations
       env:
-        MAILGUARDIAN_DB_NAME: ${{ matrix.db }}
+        MAILGUARDIAN_DB_NAME: mailguardian
         MAILGUARDIAN_DB_USER: mailguardian
         MAILGUARDIAN_DB_HOST: 127.0.0.1
         MAILGUARDIAN_DB_PORT: ${{ matrix.db_port }}
@@ -96,7 +96,7 @@ jobs:
         python src/manage.py migrate
     - name: Run Tests
       env:
-        MAILGUARDIAN_DB_NAME: ${{ matrix.db }}
+        MAILGUARDIAN_DB_NAME: mailguardian
         MAILGUARDIAN_DB_USER: mailguardian
         MAILGUARDIAN_DB_HOST: 127.0.0.1
         MAILGUARDIAN_DB_PORT: ${{ matrix.db_port }}
