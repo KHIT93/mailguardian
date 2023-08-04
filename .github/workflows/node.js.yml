@@ -25,6 +25,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        cache-dependency-path: ./appui
         cache: 'npm'
     
     - name: Install dependencies
