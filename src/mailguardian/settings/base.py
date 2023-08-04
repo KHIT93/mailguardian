@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+import os
 import platform
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
@@ -22,11 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'UNSECURE_SECRET_KEY'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'UNSECURE_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-APP_HOSTNAME = platform.node()
+DEBUG = os.environ.get('DJANGO_DEBUG', False)
+APP_HOSTNAME = os.environ.get('MAILGUARDIAN_HOSTNAME', platform.node())
 APP_VERSION = '3.0.0'
 LOCAL_CONFIG_VERSION = '0.0.0'
 ALLOWED_HOSTS = ['*']
@@ -97,11 +98,11 @@ WSGI_APPLICATION = 'mailguardian.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mailguardian',
-        'USER': 'mailguardian',
-        'PASSWORD': 'mailguardian',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': os.environ.get('MAILGUARDIAN_DB_NAME', 'mailguardian'),
+        'USER': os.environ.get('MAILGUARDIAN_DB_USER', 'mailguardian'),
+        'PASSWORD': os.environ.get('MAILGUARDIAN_DB_PASSWD', 'mailguardian'),
+        'HOST': os.environ.get('MAILGUARDIAN_DB_HOST', 'localhost'),
+        'PORT': os.environ.get('MAILGUARDIAN_DB_PORT', 5432),
         'OPTIONS': {
             'sslmode': 'prefer'
         },
