@@ -93,7 +93,7 @@ jobs:
         MAILGUARDIAN_DB_PORT: ${{ matrix.db_port }}
         MAILGUARDIAN_DB_PASSWD: mailguardian
       run: |
-        python src/manage.py test
+        python src/manage.py migrate
     - name: Run Tests
       env:
         MAILGUARDIAN_DB_NAME: ${{ matrix.db }}
