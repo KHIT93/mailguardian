@@ -13,7 +13,67 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
+        db: [postgres12, postgres13, postgres14, postgres15]
         python-version: ['3.8', '3.9', '3.10', '3.11']
+        include:
+          - db: postgres12
+            db_port: 5432
+          - db: postgres13
+            db_port: 5432
+          - db: postgres14
+            db_port: 5432
+          - db: postgres15
+            db_port: 5432
+
+    services:
+      postgres12:
+        image: postgres:12
+        env:
+          POSTGRES_USER: mailguardian
+          POSTGRES_PASSWORD: mailguardian
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      postgres13:
+        image: postgres:13
+        env:
+          POSTGRES_USER: mailguardian
+          POSTGRES_PASSWORD: mailguardian
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      postgres14:
+        image: postgres:14
+        env:
+          POSTGRES_USER: mailguardian
+          POSTGRES_PASSWORD: mailguardian
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      postgres15:
+        image: postgres:15
+        env:
+          POSTGRES_USER: mailguardian
+          POSTGRES_PASSWORD: mailguardian
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
     steps:
     - uses: actions/checkout@v3
@@ -25,6 +85,21 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Run Migrations
+      env:
+        MAILGUARDIAN_DB_NAME: ${{ matrix.db }}
+        MAILGUARDIAN_DB_USER: mailguardian
+        MAILGUARDIAN_DB_HOST: 127.0.0.1
+        MAILGUARDIAN_DB_PORT: ${{ matrix.db_port }}
+        MAILGUARDIAN_DB_PASSWD: mailguardian
+      run: |
+        python src/manage.py test
     - name: Run Tests
+      env:
+        MAILGUARDIAN_DB_NAME: ${{ matrix.db }}
+        MAILGUARDIAN_DB_USER: mailguardian
+        MAILGUARDIAN_DB_HOST: 127.0.0.1
+        MAILGUARDIAN_DB_PORT: ${{ matrix.db_port }}
+        MAILGUARDIAN_DB_PASSWD: mailguardian
       run: |
         python src/manage.py test
