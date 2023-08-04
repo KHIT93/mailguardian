@@ -7,7 +7,7 @@ The major versions below are supported
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.5.x   | :white_check_mark: |
-| 2.x.x   | :white_check_mark: |
+| 2.x.x   | :x: |
 
 ## Reporting a Vulnerability
 
