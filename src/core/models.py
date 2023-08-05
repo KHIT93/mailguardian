@@ -117,13 +117,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-    def get_has_two_factor(self):
-        try:
-            two_factor = TwoFactorConfiguration.objects.get(user=self)
-        except ObjectDoesNotExist:
-            return False
-        return True
-    
     @property
     def has_mfa(self):
         return bool(self.mfa_method_count)
