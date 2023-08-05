@@ -1,4 +1,4 @@
-import { EnvelopeIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeEuropeAfricaIcon, ServerIcon, DocumentMagnifyingGlassIcon, DocumentTextIcon, CogIcon } from '@heroicons/vue/24/outline'
+import { EnvelopeIcon, LockClosedIcon, ChartBarIcon, UserGroupIcon, GlobeEuropeAfricaIcon, ServerIcon, DocumentMagnifyingGlassIcon, DocumentTextIcon, CogIcon, ServerStackIcon, RectangleGroupIcon } from '@heroicons/vue/24/outline'
 export default [
     {
         name: 'Dashboard',
@@ -34,7 +34,21 @@ export default [
         name: 'Cluster',
         path: '/cluster',
         admin: true,
-        icon: ServerIcon
+        icon: ServerStackIcon,
+        children: [
+            {
+                name: 'Dashboard',
+                path: '/cluster',
+                admin: true,
+                icon: RectangleGroupIcon
+            },
+            {
+                name: 'Hosts',
+                path: '/cluster/nodes',
+                admin: true,
+                icon: ServerIcon
+            }
+        ]
     },
     {
         name: 'Audit',
