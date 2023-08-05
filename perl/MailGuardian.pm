@@ -207,8 +207,8 @@ sub ListenForMessages {
             $$message{sascore},
             $$message{timestamp},
             $$message{token},
-            $$message{spamallowed},
-            $$message{spamblocked},
+            $$message{spamwhitelisted},
+            $$message{spamblacklisted},
             $issaspam,
             $isrblspam,
             $$message{quarantined},
@@ -428,10 +428,10 @@ sub MailGuardianLogging {
 
     # Integrate SpamAssassin Allowlist/Blocklist reporting
     if ($spamreport =~ /USER_IN_WHITELIST/) {
-        $message->{spamallowed} = 1;
+        $message->{spamwhitelisted} = 1;
     }
     if ($spamreport =~ /USER_IN_BLACKLIST/) {
-        $message->{spamblocked} = 1;
+        $message->{spamblacklisted} = 1;
     }
 
     # Get the first domain from the list of recipients
@@ -461,8 +461,8 @@ sub MailGuardianLogging {
     $msg{ishigh} = $message->{ishigh};
     $msg{issaspam} = $message->{issaspam};
     $msg{isrblspam} = $message->{isrblspam};
-    $msg{spamallowed} = $message->{spamallowed};
-    $msg{spamblocked} = $message->{spamblocked};
+    $msg{spamwhitelisted} = $message->{spamwhitelisted};
+    $msg{spamblacklisted} = $message->{spamblacklisted};
     $msg{sascore} = $message->{sascore};
     $msg{spamreport} = $spamreport;
     $msg{ismcp} = $message->{ismcp};
