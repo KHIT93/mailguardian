@@ -11,6 +11,7 @@ from django.conf import settings
 from lists.models import ListEntry
 from domains.models import Domain
 from mail.models import SmtpRelay
+from pymailq.store import PostqueueStore
 import pyotp
 import csv
 import os
@@ -22,6 +23,7 @@ import urllib
 import geoip2.database
 from pathlib import Path
 from core.helpers import which
+import psutil
 
 class CurrentUserView(APIView):
     def post(self, request):
@@ -122,3 +124,16 @@ class GeoIPUpdateAPIView(APIView):
                     shutil.rmtree(Path(settings.MAXMIND_DB_PATH, path))
         DataLogEntry.objects.log_create(request.user, changes='User {} has performed an update of the MaxMind GeoLite2 database'.format(request.user.email))
         return Response({}, status=status.HTTP_200_OK)
+
+class SystemMetricsAPIView(APIView):
+    def get(self, request):
+        data = {
+            'hostname': 'localhost',
+            'cpu_load': psutil.cpu_percent(3),
+            'ram_usage': psutil.virtual_memory()[2]
+        }
+        if which('mailq'):
+            store = PostqueueStore()
+            store.load()
+            data['queue'] = store.mails.count()
+        return Response(data, status=status.HTTP_200_OK)

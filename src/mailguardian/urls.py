@@ -38,7 +38,7 @@ from mail.viewsets import (
     TransportLogViewSet,
     SmtpRelayViewSet
 )
-from core.views import CurrentUserView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView
+from core.views import CurrentUserView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView, SystemMetricsAPIView
 from lists.viewsets import ListEntryViewSet, BlocklistEntryViewSet, AllowlistEntryViewSet
 from reports.views import (
     SummaryApiView,
@@ -118,6 +118,7 @@ if not settings.API_ONLY:
         path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
         path('rest-auth/', include('trench.urls')),
         path('rest-auth/', include('trench.urls.authtoken')),
+        path('host/metrics/', SystemMetricsAPIView.as_view()),
     ]
     # URL for rest-auth
     urlpatterns += [

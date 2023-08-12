@@ -17,4 +17,5 @@ argon2-cffi>=21.3.0
 pymailq>=0.9.0
 premailer>=3.10.0
 psycopg>=3.1.8
+psutil==5.9.*
 invoke>=2.1.0
