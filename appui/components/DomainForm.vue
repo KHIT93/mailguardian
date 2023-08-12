@@ -129,11 +129,17 @@ onMounted(async () => {
 })
 
 async function submit() {
-    if (props.id) {
-        await form.put(`/api/domains/${props.id}/`)
+    try {
+        if (props.id) {
+            await form.put(`/api/domains/${props.id}/`)
+        }
+        else {
+            await form.post('/api/domains/')
+        }
+        navigateTo('/domains')
     }
-    else {
-        await form.post('/api/domains/')
+    catch(error) {
+        console.log(error)
     }
 }
 </script>

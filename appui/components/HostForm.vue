@@ -73,17 +73,23 @@ onMounted(async () => {
 })
 
 async function submit() {
-    if (props.id) {
-        await form.put(`/api/hosts/${props.id}/`)
-        toast.add({
-            title: `Host ${form.hostname} has been updated`
-        })
+    try {
+        if (props.id) {
+            await form.put(`/api/hosts/${props.id}/`)
+            toast.add({
+                title: `Host ${form.hostname} has been updated`
+            })
+        }
+        else {
+            await form.post('/api/hosts/')
+            toast.add({
+                title: `Host ${form.hostname} has been created`
+            })
+        }
+        navigateTo('/cluster/nodes')
     }
-    else {
-        await form.post('/api/hosts/')
-        toast.add({
-            title: `Host ${form.hostname} has been created`
-        })
+    catch (error) {
+        console.log(error)
     }
 }
 </script>
