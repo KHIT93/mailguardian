@@ -12,21 +12,21 @@
                     <div>CPU Usage:</div>
                     <div>
                         <template v-if="metric.loading"><USkeleton class="w-1/4 h-4"/></template>
-                        <template v-else>{{metric.cpu_usage}}</template>
+                        <template v-else>{{metric.cpu_usage}} %</template>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-5">
                     <div>Memory Usage:</div>
                     <div>
                         <template v-if="metric.loading"><USkeleton class="w-1/4 h-4"/></template>
-                        <template v-else>{{metric.ram_usage}}</template>
+                        <template v-else>{{metric.ram_usage}} %</template>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-5">
                     <div>Latency:</div>
                     <div>
                         <template v-if="metric.loading"><USkeleton class="w-1/4 h-4"/></template>
-                        <template v-else>20ms</template>
+                        <template v-else>{{metric.latency}} ms</template>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-5">
@@ -38,7 +38,7 @@
                 </div>
                 <template #footer>
                     <template v-if="metric.loading"><USkeleton class="w-1/2 h-4"/></template>
-                    <template v-else>Last updated {{metric.timestamp}}</template>
+                    <template v-else>Last updated {{metric.timestamp.toLocaleString()}}</template>
                 </template>
             </UCard>
         </div>
