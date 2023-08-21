@@ -28,11 +28,19 @@
 <script setup>
     import MainLayout from '~/components/MainLayout.vue'
     import FormInput from '~/components/FormInput.vue'
+    const toast = useToast()
     const { method } = useRoute().params
     const started = ref(false)
     const mfaCode = ref(null)
     function deactivateTwoFactorAuth() {
         useBackendFetch(`/rest-auth/${method}/deactivate/`, { method:'POST', body: { code: mfaCode.value } }).then(response => {
+            toast.add({
+                'id': 'disable_mfa_done',
+                'title': `MFA Method ${method} disabled`,
+                'description': `The method ${method} has now been disabled. If you want to use it again, please enable it as you would any other MFA method`,
+                'icon': 'i-heroicons-check-circle',
+                'timeout': 5000
+            })
             return
         }).catch(error => {
             console.error(error)

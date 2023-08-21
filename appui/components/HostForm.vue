@@ -76,16 +76,17 @@ async function submit() {
     try {
         if (props.id) {
             await form.put(`/api/hosts/${props.id}/`)
-            toast.add({
-                title: `Host ${form.hostname} has been updated`
-            })
         }
         else {
             await form.post('/api/hosts/')
-            toast.add({
-                title: `Host ${form.hostname} has been created`
-            })
         }
+        toast.add({
+            'id': 'hosts_form_submitted',
+            'title': (props.id) ? `Host ${res.hostname} updated` : `Host ${res.hostname} created`,
+            'description': 'The changes will be active within a few minutes',
+            'icon': 'i-heroicons-check-circle',
+            'timeout': 5000
+        })
         navigateTo('/cluster/nodes')
     }
     catch (error) {

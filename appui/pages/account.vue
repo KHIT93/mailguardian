@@ -276,6 +276,7 @@ useHead({
 })
 
 const { $auth } = useNuxtApp()
+const toast = useToast()
 const record = ref({})
 const domains = ref([])
 const dailyQuarantineReportToggle = ref(false)
@@ -298,6 +299,13 @@ async function toggleDailyReports() {
         }
     })
     dailyQuarantineReportToggle.value = false
+    toast.add({
+        'id': 'account_pref_daily_report_updated',
+        'title': 'Preferences updated',
+        'description': 'Your preference for daily reporting has been updated',
+        'icon': 'i-heroicons-check-circle',
+        'timeout': 5000
+    })
 }
 async function toggleWeeklyReports() {
     weeklyQuarantineReportToggle.value = true
@@ -308,6 +316,13 @@ async function toggleWeeklyReports() {
         }
     })
     weeklyQuarantineReportToggle.value = false
+    toast.add({
+        'id': 'account_pref_weekly_report_updated',
+        'title': 'Preferences updated',
+        'description': 'Your preference for weekly reporting has been updated',
+        'icon': 'i-heroicons-check-circle',
+        'timeout': 5000
+    })
 }
 async function toggleMonthlyReports() {
     monthlyQuarantineReportToggle.value = true
@@ -318,6 +333,13 @@ async function toggleMonthlyReports() {
         }
     })
     monthlyQuarantineReportToggle.value = false
+    toast.add({
+        'id': 'account_pref_monthly_report_updated',
+        'title': 'Preferences updated',
+        'description': 'Your preference for monthly reporting has been updated',
+        'icon': 'i-heroicons-check-circle',
+        'timeout': 5000
+    })
 }
 
 function patchBasicData() {
@@ -328,6 +350,13 @@ function patchBasicData() {
             last_name: record.value.last_name,
             email: record.value.email
         }
+    })
+    toast.add({
+        'id': 'account_pref_updated',
+        'title': 'Account updated',
+        'description': 'Your account details have been updated',
+        'icon': 'i-heroicons-check-circle',
+        'timeout': 5000
     })
 }
 function closeMfaModal() {

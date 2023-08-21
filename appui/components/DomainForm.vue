@@ -105,6 +105,8 @@ import FormSelection from './FormSelection.vue'
 
 const props = defineProps(['id'])
 
+const toast = useToast()
+
 const form = reactive(new Form({
     name: '',
     active: '',
@@ -136,6 +138,13 @@ async function submit() {
         else {
             await form.post('/api/domains/')
         }
+        toast.add({
+            'id': 'domains_form_submitted',
+            'title': (props.id) ? `Domain ${res.name} updated` : `Domain ${res.name} created`,
+            'description': 'The changes will be active within a few minutes',
+            'icon': 'i-heroicons-check-circle',
+            'timeout': 5000
+        })
         navigateTo('/domains')
     }
     catch(error) {

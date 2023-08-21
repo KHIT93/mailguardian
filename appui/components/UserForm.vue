@@ -73,6 +73,8 @@ let form = reactive(new Form({
     custom_spam_highscore: 15.0
 }))
 
+const toast = useToast()
+
 onMounted(async () => {
     if(props.id) {
         let res = (await useBackendFetch(`/api/users/${props.id}/`))
@@ -96,6 +98,13 @@ async function submit() {
         else {
             await form.post('/api/users/')
         }
+        toast.add({
+            'id': 'users_form_submitted',
+            'title': (props.id) ? `User ${res.email} updated` : `User ${res.email} created`,
+            'description': 'The changes will be active within a few minutes',
+            'icon': 'i-heroicons-check-circle',
+            'timeout': 5000
+        })
         navigateTo('/users')
     }
     catch (error) {
