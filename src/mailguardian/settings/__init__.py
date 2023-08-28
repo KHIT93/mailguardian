@@ -20,12 +20,12 @@ else:
         }
     }
 
-if DEBUG:
-    STATICFILES_DIRS = [
-        Path(ASSETS_DIR, "dist")
-    ]
-else:
-    STATIC_ROOT = Path(ASSETS_DIR, "dist")
+# if DEBUG:
+#     STATICFILES_DIRS = [
+#         Path(ASSETS_DIR, "dist")
+#     ]
+# else:
+#     STATIC_ROOT = Path(ASSETS_DIR, "dist")
 
 # REST Framework configuration
 # http://www.django-rest-framework.org/#example
