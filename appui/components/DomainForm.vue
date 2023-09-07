@@ -14,24 +14,22 @@
             </p>
             <hr />
             <div class="md:flex space-x-2">
-                <FormSelection inputId="relay_type" label="Relay type" v-model="form.relay_type" class="w-full sm:w-1/2 my-4">
-                    <template v-slot:inputOptions>
-                        <option value="smtp">Deliver to my email server (SMTP)</option>
-                        <option value="smtps">Deliver to my email server (SMTP with SSL/TLS)</option>
-                    </template>
-                </FormSelection>
-                <p v-if="form.errors.has('relay_type')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('relay_type') }}
-                </p>
-                <FormSelection inputId="receive_type" label="Delivery type" v-model="form.receive_type" class="w-full sm:w-1/2 my-4">
-                    <template v-slot:inputOptions>
-                        <option value="load_balanced">Load balancing</option>
-                        <option value="failover">Failover</option>
-                    </template>
-                </FormSelection>
+                <UFormGroup label="Relay type" size="md" class="w-full sm:w-1/2 my-4">
+                    <USelectMenu class="w-full" size="md" placeholder="Select Relay type..." label="Relay type" name="relay_type" id="relay_type" value-attribute="value" v-model="form.relay_type" :options="relayTypes">
+                        <template #label>{{ selectedRelayType.label }}</template>
+                    </USelectMenu>
+                    <p v-if="form.errors.has('relay_type')" class="text-red-500 text-xs py-1">
+                        {{ form.errors.get('relay_type') }}
+                    </p>
+                </UFormGroup>
+                <UFormGroup label="Delivery type" size="md" class="w-full sm:w-1/2 my-4">
+                <USelectMenu class="w-full" size="md" placeholder="Select Delivery type..." label="Delivery type" name="receive_type" id="receive_type" value-attribute="value" v-model="form.receive_type" :options="receiveTypes">
+                    <template #label>{{ selectedReceiveType.label }}</template>
+                </USelectMenu>
                 <p v-if="form.errors.has('receive_type')" class="text-red-500 text-xs py-1">
                     {{ form.errors.get('receive_type') }}
                 </p>
+                </UFormGroup>
             </div>
             <Disclosure v-slot="{ open }" v-if="nodes.length > 0">
                 <DisclosureButton class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-blue-900 bg-blue-100 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
@@ -116,6 +114,19 @@ const form = reactive(new Form({
     relay_type: 'failover'
 }))
 let nodes = ref([])
+
+const relayTypes = [
+    { value: "smtp", label: "Deliver to my email server (SMTP)" },
+    { value: "smtps", label: "Deliver to my email server (SMTP with SSL/TLS)" }
+]
+const selectedRelayType = computed(() => relayTypes.find(relayType => relayType.value == form.relay_type) || {value: '', label: '-- Select --'})
+
+const receiveTypes = [
+    { value: "load_balanced", label: "Load balancing" },
+    { value: "failover", label: "Failover" }
+]
+
+const selectedReceiveType = computed(() => receiveTypes.find(receiveType => receiveType.value == form.receive_type) || {value: '', label: '-- Select --'})
 
 onMounted(async () => {
     if(props.id) {
