@@ -13,7 +13,7 @@
   "devDependencies": {
     "@headlessui/vue": "^1.7.12",
     "@heroicons/vue": "^2.0.16",
-    "@nuxthq/ui": "^2.1.0",
+    "@nuxt/ui": "^2.1.0",
     "@nuxtjs/color-mode": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.4.1",
     "@pinia/nuxt": "^0.4.7",
@@ -23,7 +23,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "@vueuse/core": "^9.13.0",
     "moment": "^2.29.4",
-    "nuxt": "^3.7.0",
+    "nuxt": "^3.7.1",
     "nuxt-security": "^0.13.0",
     "pinia": "^2.0.33",
     "qrcode.vue": "^3.3.3",

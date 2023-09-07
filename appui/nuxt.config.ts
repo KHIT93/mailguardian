@@ -2,7 +2,7 @@ export default defineNuxtConfig({
     modules: [
         // '@nuxtjs/tailwindcss',
         // '@nuxtjs/color-mode',
-        '@nuxthq/ui',
+        '@nuxt/ui',
         '@pinia/nuxt',
         'nuxt-security'
     ],
