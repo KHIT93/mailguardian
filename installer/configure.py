@@ -5,12 +5,12 @@
 import os
 import sys
 import platform
-import pytz
 import json
 import subprocess
 import configparser
 import argparse
 import distro as distribution
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
@@ -19,26 +19,26 @@ args = parser.parse_args()
 
 def which(program):
     def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
-    fpath, fname = os.path.split(program)
-    if fpath:
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
         if is_exe(program):
             return program
     else:
         for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, program)
+            exe_file = Path(path, program)
             if is_exe(exe_file):
-                return exe_file
+                return str(exe_file)
     return None
 
 if __name__ == "__main__":
-    os.system('clear')
+    subprocess.call([which('clear')])
     # First make sure that we are running on Linux
     if platform.system() != 'Linux':
         print('Your operation system is not supported. MailGuardian can only run on Linux')
         exit(255)
     # Get the current directory of this script to determine the path to use for the systemd unit file templates
-    APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    APP_DIR = Path(__file__).resolve()
     # Define some paths needed later
     SYSTEMD_PATH = '/etc/systemd/system/'
     NGINX_PATH = None
@@ -121,7 +121,7 @@ if __name__ == "__main__":
         print('Your Linux distribution or version is not supported')
         print(distro)
         exit(255)
-    os.system('clear')
+    subprocess.call([which('clear')])
     print('We will now ask you a series of questions to properly configure the application for you')
     print('Do not worry, as we will not make any changes before all questions have been answered and confirmed by you')
 
@@ -173,7 +173,7 @@ if __name__ == "__main__":
         DB_PORT = 5432
     print(chr(13))
     
-    os.system('clear')
+    subprocess.call([which('clear')])
 
     APP_HOSTNAME_INPUT = input('Please provide us with the hostname on which your MailGuardian instance will be accessible [%s]: ' % APP_HOSTNAME)
     if APP_HOSTNAME_INPUT != '' and APP_HOSTNAME_INPUT is not None:
@@ -189,7 +189,7 @@ if __name__ == "__main__":
             API_ONLY_MODE = True
             # Request data for configuration files such as secrets
             while not APP_SECRET:
-                os.system('clear')
+                subprocess.call([which('clear')])
                 print('We need to know the key for encrypted values, which was generated on the node running the web interface')
                 print('This can be found in the installer.ini file as the value of "secret" in the "mailguardian" section')
                 APP_SECRET = input('Please provide your application secret from node which runs the web interface: ')
@@ -197,32 +197,32 @@ if __name__ == "__main__":
         API_ONLY_MODE = False
         APP_SECRET = False
     
-    os.system('clear')
+    subprocess.call([which('clear')])
     if not MULTI_NODE or API_ONLY_MODE:
         MS_CONF_DIR_INPUT = input('Where are your MailScanner configuration files located? [{0}] '.format(MS_CONF_DIR))
         if MS_CONF_DIR_INPUT != '' and MS_CONF_DIR_INPUT is not None:
             MS_CONF_DIR = MS_CONF_DIR_INPUT
-        os.system('clear')
+        subprocess.call([which('clear')])
         MS_BIN_INPUT = input('Please specify the full path to the MailScanner executable file/binary? [{0}] '.format(MS_BIN))
         if MS_BIN_INPUT != '' and MS_BIN_INPUT is not None:
             MS_BIN = MS_BIN_INPUT
-        os.system('clear')
+        subprocess.call([which('clear')])
         MS_LIB_INPUT = input('Where are the MailScanner application libraries located? [{0}] '.format(MS_LIB))
         if MS_LIB_INPUT != '' and MS_LIB_INPUT is not None:
             MS_LIB = MS_LIB_INPUT
-        os.system('clear')
+        subprocess.call([which('clear')])
         MS_SHARED_INPUT = input('Please let us know where your MailScanner shared resources are located [{0}] '.format(MS_SHARED))
         if MS_SHARED_INPUT != '' and MS_SHARED_INPUT is not None:
             MS_SHARED = MS_SHARED_INPUT
-        os.system('clear')
+        subprocess.call([which('clear')])
         SALEARN_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'sa-learn\' binary is located? [{0}] '.format(SALEARN_BIN))
         if SALEARN_BIN_INPUT != '' and SALEARN_BIN_INPUT is not None:
             SALEARN_BIN = SALEARN_BIN_INPUT
-        os.system('clear')
+        subprocess.call([which('clear')])
         SA_BIN_INPUT = input('To correctly handle SPAM, could you please let us know where your \'spamassassin\' binary is located? [{0}] '.format(SA_BIN))
         if SA_BIN_INPUT != '' and SA_BIN_INPUT is not None:
             SA_BIN = SA_BIN_INPUT
-        os.system('clear')
+        subprocess.call([which('clear')])
         SA_RULES_DIR_INPUT = input('Please type in the location of your SpamAssassin rules configuration [{0}] '.format(SA_RULES_DIR))
         if SA_RULES_DIR_INPUT != '' and SA_RULES_DIR_INPUT is not None:
             SA_RULES_DIR = SA_RULES_DIR_INPUT
@@ -267,14 +267,14 @@ if __name__ == "__main__":
     print('Location of your MTA logfile: {0}'.format(MTA_LOG))
     print('Retention policy: Store for {0} day(s)'.format(RETENTION_DAYS))
 
-    print('The above will be saved in the configuration file that we will located at {0}'.format(os.path.join(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
+    print('The above will be saved in the configuration file that we will located at {0}'.format(Path(APP_DIR, 'src', 'mailguardian', 'settings', 'local.py')))
     print(chr(13))
     print('After this point everything we do is commited to disk immediately')
     print(chr(13))
     if input('Are the above settings correct and can we continue? (Y/n) ').lower() == 'n':
         print('Installation has been aborted. Please rerun the installation script to try again')
         exit(255)
-    os.system('clear')
+    subprocess.call([which('clear')])
     
     installer_config = configparser.RawConfigParser()
     installer_config['mailguardian'] = {

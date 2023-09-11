@@ -5,7 +5,33 @@ from django.utils.translation import gettext_lazy as _
 class ListEntrySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ListEntry
-        fields = ('id', 'url', 'from_address', 'from_domain', 'to_address', 'to_domain', 'listing_type')
+        fields = ('id', 'url', 'from_address', 'from_domain', 'to_address', 'to_domain', 'listing_type', 'from_entry_type', 'to_entry_type')
+
+    from_entry_type = serializers.SerializerMethodField()
+    to_entry_type = serializers.SerializerMethodField()
+
+    def get_from_entry_type(self, obj):
+        import ipaddress
+        try:
+            ip = ipaddress.ip_address(obj.from_domain)
+            return 'ip_address'
+        except ValueError:
+            if obj.from_address and obj.from_address != obj.from_domain:
+                return 'email'
+            else:
+                return 'domain'
+    
+    def get_to_entry_type(self, obj):
+        import ipaddress
+        try:
+            ip = ipaddress.ip_address(obj.to_domain)
+            return 'ip_address'
+        except ValueError:
+            if obj.to_address and obj.to_address != obj.to_domain:
+                return 'email'
+            else:
+                return 'domain'
+        
         
     def validate(self, data):
         current_user = self.context['request'].user

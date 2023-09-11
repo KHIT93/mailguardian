@@ -14,13 +14,14 @@ from django.core.management import call_command
 from io import StringIO
 import django, json
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
 
 # Create your views here.
 class LicenseAPIView(APIView):
     permission_classes = (AllowAny,)
     def get(self, request):
         license = ""
-        with open(os.path.join(os.path.dirname(settings.BASE_DIR), "LICENSE")) as f:
+        with open(Path(settings.BASE_DIR.parent, "LICENSE")) as f:
             license = f.read()
         return Response(license, 200)
 
@@ -84,7 +85,7 @@ class InitializeDatabaseAPIView(APIView):
             response['createsettings'] = _('Initial settings have been configured')
             # Last update guardianware-env.json with the branding information of the application
             data = []
-            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'src', 'mailguardian', 'settings', 'local.py'), 'r') as f:
+            with open(Path(settings.BASE_DIR.parent, 'src', 'mailguardian', 'settings', 'local.py'), 'r') as f:
                 data = f.readlines()
             for index, line in enumerate(data):
                 if line[:10] == 'BRAND_NAME':
@@ -94,7 +95,7 @@ class InitializeDatabaseAPIView(APIView):
                 if line[:10] == 'BRAND_LOGO':
                     data[index] = 'BRAND_LOGO = "{}"'.format(serializer.data['branding_logo'])
             
-            with open(os.path.join(os.path.dirname(settings.BASE_DIR), 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
+            with open(Path(settings.BASE_DIR.parent, 'src', 'mailguardian', 'settings', 'local.py'), 'w') as f:
                 f.write("\n".join(data))
             response['update_env'] = _('Settings file succesfully updated. Please run "sudo systemctl restart mailguardian.service"')
             return Response(response, status=status.HTTP_200_OK)

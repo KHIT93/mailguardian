@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -25,6 +25,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        cache-dependency-path: ./appui
         cache: 'npm'
-    - run: npm install
-    - run: npm run production
+    
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+      working-directory: ./appui
+    - name: Build Nuxt Application
+      run: yarn build
+      working-directory: ./appui

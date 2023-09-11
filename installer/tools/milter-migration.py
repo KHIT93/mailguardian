@@ -5,6 +5,27 @@
 import os
 import platform
 import subprocess
+import argparse
+from pathlib import Path
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-f','--config-file', help='Input path to MailScanner.conf')
+
+args = parser.parse_args()
+
+def which(program):
+    def is_exe(fpath):
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = Path(path, program)
+            if is_exe(exe_file):
+                return str(exe_file)
+    return None
 
 if __name__ == "__main__":
     print('This script will make the necessary changes to switch from running postfix to using the MailScanner Milter instead')
@@ -12,9 +33,9 @@ if __name__ == "__main__":
         print('Operation aborted')
         exit(255)
     print('Converting MailScanner configuration. All modified files will be saved with a .old extension')
-    os.system('cp {src} {dest}'.format(src=os.path.join('/', 'etc', 'MailScanner', 'MailScanner.conf'), dest=os.path.join('/', 'etc', 'MailScanner', 'MailScanner.conf.old')))
+    subprocess.call([which('cp'), '{src} {dest}'.format(src=Path('/', 'etc', 'MailScanner', 'MailScanner.conf'), dest=Path('/', 'etc', 'MailScanner', 'MailScanner.conf.old'))])
     conf = []
-    with open(os.path.join('/', 'etc', 'MailScanner', 'MailScanner.conf'), 'r') as f:
+    with open(Path('/', 'etc', 'MailScanner', 'MailScanner.conf'), 'r') as f:
         conf = f.readlines()
 
     config_control = [
@@ -294,25 +315,25 @@ if __name__ == "__main__":
                 conf.append('MSMail Delivery Method = QMQP')
             if 'Milter Ignore Loopback' == c:
                 conf.append('Milter Ignore Loopback = no')
-    with open(os.path.join(installer_config['mailscanner']['config'], 'MailScanner.conf'), 'w') as f:
+    with open(Path(args.config_file), 'w') as f:
         f.write("\n".join(conf))
-    if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterin')):
-        os.makedirs(os.path.join('/','var','spool','MailScanner','milterin'))
-    if not os.path.exists(os.path.join('/','var','spool','MailScanner','milterout')):
-        os.makedirs(os.path.join('/','var','spool','MailScanner','milterout'))
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/milterin')
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/milterout')
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/incoming')
-    os.system('chown postfix:mtagroup /var/spool/MailScanner/quarantine')
+    if not Path('/','var','spool','MailScanner','milterin').exists():
+        Path('/','var','spool','MailScanner','milterin').mkdir()
+    if not Path('/','var','spool','MailScanner','milterout').exists():
+        Path('/','var','spool','MailScanner','milterout').mkdir()
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/milterin'])
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/milterout'])
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/incoming'])
+    subprocess.call([which('chown'), 'postfix:mtagroup /var/spool/MailScanner/quarantine'])
 
     print('Converting Postfix configuration. All modified files will be saved with a .old extension')
-    os.system('cp /etc/postfix/master.cf /etc/posfix/master.cf.old')
-    os.system('cp /etc/postfix/main.cf /etc/posfix/main.cf.old')
-    os.system('echo "qmqp      unix  n       -       n       -       -       qmqpd" >> {postfix}/master.cf'.format(postfix=os.path.join('/', 'etc', 'postfix')))
-    os.system('echo "qmqpd_authorized_clients = 127.0.0.1" >> {postfix}/main.cf'.format(postfix=os.path.join('/', 'etc', 'postfix')))
-    os.system('echo "smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=os.path.join('/', 'etc', 'postfix')))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=os.path.join('/', 'etc', 'postfix'), hostname=platform.node()))
-    os.system('echo "/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=os.path.join('/', 'etc', 'postfix'), hostname=platform.node()))
-    os.system('echo "/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=os.path.join('/', 'etc', 'postfix')))
+    subprocess.call([which('cp'), '/etc/postfix/master.cf /etc/posfix/master.cf.old'])
+    subprocess.call([which('cp'), '/etc/postfix/main.cf /etc/posfix/main.cf.old'])
+    subprocess.call([which('echo'), '"qmqp      unix  n       -       n       -       -       qmqpd" >> {postfix}/master.cf'.format(postfix=Path('/', 'etc', 'postfix'))])
+    subprocess.call([which('echo'), '"qmqpd_authorized_clients = 127.0.0.1" >> {postfix}/main.cf'.format(postfix=Path('/', 'etc', 'postfix'))])
+    subprocess.call([which('echo'), '"smtpd_milters = inet:127.0.0.1:33333" >> {postfix}/main.cf'.format(postfix=Path('/', 'etc', 'postfix'))])
+    subprocess.call([which('echo'), '"/^Received:\ from\ {hostname}\ \(localhost\ \[127.0.0.1/ IGNORE" > {postfix}/header_checks'.format(postfix=Path('/', 'etc', 'postfix'), hostname=platform.node())])
+    subprocess.call([which('echo'), '"/^Received:\ from\ {hostname}\ \(localhost\ \[::1/ IGNORE" >> {postfix}/header_checks'.format(postfix=Path('/', 'etc', 'postfix'), hostname=platform.node())])
+    subprocess.call([which('echo'), '"/^Received:\ from\ localhost\ \(localhost\ \[127.0.0.1/ IGNORE" >> {postfix}/header_checks'.format(postfix=Path('/', 'etc', 'postfix'))])
 
     print('Conversion is now completed')

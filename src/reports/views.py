@@ -2,13 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
-from django.db.models import Count, Sum, When, Case, IntegerField
+from rest_framework import status
+from django.db.models import Count, Sum, When, Case
 from mail.models import Message
 from mail.serializers import MessageSerializer
-from .filters import MessageQuerySetFilter
-from .serializers import MessagesByDateSerializer, MessageRelaysSerializer, MessagesPerHourSerializer, TopSendersByQuantitySerializer, TopSendersByVolumeSerializer, TopRecipientsByQuantitySerializer, TopRecipientsByVolumeSerializer, TopSenderDomainsByQuantitySerializer, TopSenderDomainsByVolumeSerializer, TopRecipientDomainsByQuantitySerializer, TopRecipientDomainsByVolumeSerializer
+from reports.filters import MessageQuerySetFilter, VALID_FILTERS
+from reports.serializers import MessagesByDateSerializer, MessageRelaysSerializer, MessagesPerHourSerializer, TopSendersByQuantitySerializer, TopSendersByVolumeSerializer, TopRecipientsByQuantitySerializer, TopRecipientsByVolumeSerializer, TopSenderDomainsByQuantitySerializer, TopSenderDomainsByVolumeSerializer, TopRecipientDomainsByQuantitySerializer, TopRecipientDomainsByVolumeSerializer
 from mailguardian.pagination import PageNumberPaginationWithPageCount
-import json, datetime
+import datetime
 from django.db.models import Q
 
 class SummaryApiView(APIView):
@@ -26,7 +27,12 @@ class SummaryApiView(APIView):
         return qs
 
     def post(self, request, format=None):
-        filters = request.data
+        filters = {}
+        for filter in request.data:
+            filters[filter['name']] = {
+                'operator': filter['operator'],
+                'value': filter.get('value', None)
+            }
         response_data = {}
         qs = MessageQuerySetFilter.filter(MessageQuerySetFilter, self.get_queryset(), filters, request.user)
         try:
@@ -42,6 +48,20 @@ class SummaryApiView(APIView):
                 'count': 0
             }
         return Response(response_data, 200)
+
+class ValidFilterChoicesApiView(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request, format=None):
+        formatted_filters = [
+            {
+                'name': key,
+                'label': VALID_FILTERS[key]['label'],
+                'operators': VALID_FILTERS[key]['operators'],
+                'field_type': VALID_FILTERS[key]['field_type'],
+                'autocomplete': VALID_FILTERS[key].get('autocomplete', False),
+            } for key in VALID_FILTERS.keys()
+        ]
+        return Response(formatted_filters, status=status.HTTP_200_OK)
 
 class MessageListApiView(ListAPIView):
     serializer_class = MessageSerializer

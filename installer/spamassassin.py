@@ -2,16 +2,33 @@
 #
 # MailGuardian installation script
 #
-import os, sys, platform, subprocess
+import os
+import platform
+import subprocess
 from django.conf import settings
 import configparser
 import argparse
 import distro as distribution
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f','--config-file', help='Input path to environment configuration file')
 
 args = parser.parse_args()
+
+def which(program):
+    def is_exe(fpath):
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = Path(path, program)
+            if is_exe(exe_file):
+                return str(exe_file)
+    return None
 
 if __name__ == "__main__":
     # First make sure that we are running on Linux
@@ -23,12 +40,12 @@ if __name__ == "__main__":
     PKG_MGR = installer_config['bin']['pkg']
     APP_DIR  = installer_config['mailguardian']['app_dir']
     if not installer_config['mailguardian']['api_only']:
-        os.system('su postgres -c "createlang plpgsql {}"'.format(installer_config['database']['name']))
-        os.system('psql -U {} -f {} {}'.format(installer_config['database']['user'], os.path.join(APP_DIR, 'installer', 'tools', 'bayes.sql')), installer_config['database']['name'])
+        subprocess.call([which('su'), 'postgres -c "createlang plpgsql {}"'.format(installer_config['database']['name'])])
+        subprocess.call([which('psql'), '-U {} -f {} {}'.format(installer_config['database']['user'], Path(APP_DIR, 'installer', 'tools', 'bayes.sql')), installer_config['database']['name']])
 
     conf = []
     conf_index = 0
-    with open(os.path.join(installer_config['mailscanner']['config'], 'spamassassin.conf'), 'r') as f:
+    with open(Path(installer_config['mailscanner']['config'], 'spamassassin.conf'), 'r') as f:
         conf = f.readlines()
 
     # TODO: Make version of this that can migrate old data as a django manage.py command

@@ -21,13 +21,9 @@ from frontend.views import IndexTemplateView, DashboardApiView
 from rest_framework import routers
 from core.viewsets import (
     UserViewSet,
-    MailScannerConfigurationViewSet,
     SettingsViewSet,
     MailScannerHostViewSet,
-    ApplicationTaskViewSet,
     ApplicationNotificationViewSet,
-    TwoFactorConfigurationViewSet,
-    TwoFactorBackupCodeViewSet
 )
 from compliance.viewsets import (
     DataLogEntryViewSet
@@ -42,7 +38,7 @@ from mail.viewsets import (
     TransportLogViewSet,
     SmtpRelayViewSet
 )
-from core.views import CurrentUserView, MailScannerConfigurationFilePathsView, LoginView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView
+from core.views import CurrentUserView, DataImportUploadAPIView, GeoIPLookupAPIView, GeoIPUpdateAPIView, SystemMetricsAPIView
 from lists.viewsets import ListEntryViewSet, BlocklistEntryViewSet, AllowlistEntryViewSet
 from reports.views import (
     SummaryApiView,
@@ -57,12 +53,13 @@ from reports.views import (
     TopSenderDomainsByQuantityApiView,
     TopSenderDomainsByVolumeApiView,
     TopRecipientDomainsByQuantityApiView,
-    TopRecipientDomainsByVolumeApiView
+    TopRecipientDomainsByVolumeApiView,
+    ValidFilterChoicesApiView
 )
 from domains.viewsets import DomainViewSet
 from setup_wizard.views import LicenseAPIView, InstalledAPIView, InitializeDatabaseAPIView
 from spamassassin.viewsets import RuleDescriptionViewSet, RuleViewSet
-from rest_auth.views import (
+from dj_rest_auth.views import (
     LogoutView, UserDetailsView, PasswordChangeView,
     PasswordResetView, PasswordResetConfirmView
 )
@@ -70,7 +67,6 @@ from rest_auth.views import (
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'mailscanner-configuration', MailScannerConfigurationViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'message-headers', HeaderViewSet)
 router.register(r'spam-reports', SpamReportViewSet)
@@ -87,10 +83,7 @@ router.register(r'lists', ListEntryViewSet)
 router.register(r'domains', DomainViewSet)
 router.register(r'hosts', MailScannerHostViewSet)
 router.register(r'settings', SettingsViewSet)
-router.register(r'tasks', ApplicationTaskViewSet)
 router.register(r'notifications', ApplicationNotificationViewSet)
-router.register(r'two-factor', TwoFactorConfigurationViewSet)
-router.register(r'two-factor-codes', TwoFactorBackupCodeViewSet)
 router.register(r'datalog', DataLogEntryViewSet)
 
 urlpatterns = [
@@ -115,14 +108,17 @@ if not settings.API_ONLY:
         path('api/reports/top-sender-domains-by-volume/', TopSenderDomainsByVolumeApiView.as_view()),
         path('api/reports/top-recipient-domains-by-quantity/', TopRecipientDomainsByQuantityApiView.as_view()),
         path('api/reports/top-recipient-domains-by-volume/', TopRecipientDomainsByVolumeApiView.as_view()),
-        path('api/mailscanner-configuration-filepaths/', MailScannerConfigurationFilePathsView.as_view()),
+        path('api/reports/filters/', ValidFilterChoicesApiView.as_view()),
         path('api/data-import/', DataImportUploadAPIView.as_view()),
         path('api/geoip/lookup/', GeoIPLookupAPIView.as_view()),
         path('api/geoip/update/', GeoIPUpdateAPIView.as_view()),
         path('api/license/', LicenseAPIView.as_view()),
         path('api/installed/', InstalledAPIView.as_view()),
         path('api/setup/install/', InitializeDatabaseAPIView.as_view()),
-        path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+        path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+        path('rest-auth/', include('trench.urls')),
+        path('rest-auth/', include('trench.urls.authtoken')),
+        path('host/metrics/', SystemMetricsAPIView.as_view()),
     ]
     # URL for rest-auth
     urlpatterns += [
@@ -131,17 +127,12 @@ if not settings.API_ONLY:
             name='rest_password_reset'),
         re_path(r'^rest-auth/password/reset/confirm/$', PasswordResetConfirmView.as_view(),
             name='rest_password_reset_confirm'),
-        re_path(r'^rest-auth/login/$', LoginView.as_view(), name='rest_login'),
+        # re_path(r'^rest-auth/login/$', LoginView.as_view(), name='rest_login'),
         # URLs that require a user to be logged in with a valid session / token.
         re_path(r'^rest-auth/logout/$', LogoutView.as_view(), name='rest_logout'),
         re_path(r'^rest-auth/user/$', UserDetailsView.as_view(), name='rest_user_details'),
         re_path(r'^rest-auth/password/change/$', PasswordChangeView.as_view(),
             name='rest_password_change'),
-    ]
-
-if settings.DEBUG:
-    urlpatterns += [
-        path('admin/', admin.site.urls),
     ]
 
 # Add final wildcard route to catch the deep links

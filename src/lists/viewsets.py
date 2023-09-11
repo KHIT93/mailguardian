@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from core.permissions import IsOwnerDomainAdminOrStaff
 from django.db.models import Q
 from .models import ListEntry
 from .serializers import ListEntrySerializer
@@ -8,7 +8,7 @@ class ListEntryViewSet(viewsets.ModelViewSet):
     queryset = ListEntry.objects.all()
     serializer_class = ListEntrySerializer
     model = ListEntry
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(ListEntryViewSet, self).get_queryset()

@@ -1,4 +1,4 @@
-from .core_settings import *
+from .base import *
 try:
     from .local import *
 except:
@@ -20,12 +20,12 @@ else:
         }
     }
 
-if DEBUG:
-    STATICFILES_DIRS = [
-        os.path.join(ASSETS_DIR, "dist")
-    ]
-else:
-    STATIC_ROOT = os.path.join(ASSETS_DIR, "dist")
+# if DEBUG:
+#     STATICFILES_DIRS = [
+#         Path(ASSETS_DIR, "dist")
+#     ]
+# else:
+#     STATIC_ROOT = Path(ASSETS_DIR, "dist")
 
 # REST Framework configuration
 # http://www.django-rest-framework.org/#example
@@ -47,6 +47,6 @@ REST_FRAMEWORK = {
     )
 }
 
-REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_SERIALIZER': 'core.serializers.MailGuardianPasswordResetSerializer'
-}
+# Override APPLICATION_ISSUER if not overriden i mailguardian.settings.local
+if TRENCH_AUTH['APPLICATION_ISSUER_NAME'] in ['MyApplication', 'MailGuardian']:
+    TRENCH_AUTH['APPLICATION_ISSUER_NAME'] = BRAND_NAME + ' ({})'.format(APP_HOSTNAME) if APP_HOSTNAME else ''

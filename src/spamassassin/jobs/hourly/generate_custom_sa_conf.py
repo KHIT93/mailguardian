@@ -3,6 +3,7 @@ from spamassassin.models import Rule
 from django.conf import settings
 import os
 from django.utils.translation import gettext_lazy as _
+from pathlib import Path
 
 class Job(HourlyJob):
     help = 'Hourly job to automatically regenerate the configuration/SpamAssassin/rules.spamassassin.conf file'
@@ -11,5 +12,5 @@ class Job(HourlyJob):
         contents = []
         for rule in Rule.objects.all():
             contents.append('score {0} {1}\n'.format(rule.name, rule.score))
-        with open(os.path.join(settings.CONF_DIR, 'SpamAssassin', 'rules.spamassassin.conf'), 'w') as f:
+        with open(Path(settings.CONF_DIR, 'SpamAssassin', 'rules.spamassassin.conf'), 'w') as f:
             f.writelines(contents)

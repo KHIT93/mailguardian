@@ -1,8 +1,8 @@
 from .models import Message, Headers, SpamReport, RblReport, McpReport, MailscannerReport, TransportLog, SmtpRelay
-from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, MessageContentsSerializer, PostqueueStoreMailSerializer, PostqueueStoreSerializer, TransportLogSerializer, SmtpRelaySerializer
+from .serializers import MessageSerializer, HeaderSerializer, SpamReportSerializer, RblReportSerializer, McpReportSerializer, MailscannerReportSerializer, PostqueueStoreSerializer, TransportLogSerializer, SmtpRelaySerializer
 from mailguardian.pagination import PageNumberPaginationWithPageCount
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
@@ -11,11 +11,13 @@ from email.parser import BytesParser
 from pymailq.store import PostqueueStore
 from django.conf import settings
 from core.models import Setting, MailScannerHost
+from core.permissions import IsOwnerDomainAdminOrStaff
 from compliance.models import DataLogEntry
-import datetime
 from django.db.models import Q
 import subprocess
-import requests, json, types
+import requests
+import json
+import types
 from rest_framework.authtoken.models import Token
 from django.utils.translation import gettext_lazy as _
 
@@ -24,7 +26,7 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     model = Message
     pagination_class = PageNumberPaginationWithPageCount
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(MessageViewSet, self).get_queryset()
@@ -37,7 +39,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             qs = qs.filter(Q(from_address=self.request.user.email) | Q(to_address=self.request.user.email))
         return qs
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='contents', url_name='message-file-contents')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='contents', url_name='message-file-contents')
     def get_message_contents(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         data = { 'message_id':message.id, 'mailq_id': message.mailq_id, 'message_contents': None }
@@ -86,7 +88,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 data['message']['rich_version'] = _('Preview unavailable')
         return Response(data)
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='file-exists', url_name='message-queue-file-exists')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='file-exists', url_name='message-queue-file-exists')
     def get_file_exists(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         file_exists = False
@@ -116,13 +118,13 @@ class MessageViewSet(viewsets.ModelViewSet):
             'error': error
         })
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='transport-log', url_name='message-transport-logs')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='transport-log', url_name='message-transport-logs')
     def get_message_transport_logs(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         serializer = TransportLogSerializer(message.transportlog_set.all(), many=True, context={'request': request})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='headers', url_name='message-headers')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='headers', url_name='message-headers')
     def get_message_headers(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'headers'):
@@ -130,7 +132,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = HeaderSerializer(message.headers, context={'request': request})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='rbl-report', url_name='message-rbl-report')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='rbl-report', url_name='message-rbl-report')
     def get_message_rbl_report(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'rblreport'):
@@ -138,7 +140,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = RblReportSerializer(message.rblreport, context={'request': request})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='spam-report', url_name='message-spam-report')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='spam-report', url_name='message-spam-report')
     def get_message_spam_report(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'spamreport'):
@@ -146,7 +148,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = SpamReportSerializer(message.spamreport, context={'request': request})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='mcp-report', url_name='message-mcp-report')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='mcp-report', url_name='message-mcp-report')
     def get_message_mcp_report(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'mcpreport'):
@@ -154,7 +156,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         serializer = McpReportSerializer(message.mcpreport, context={'request': request})
         return Response(serializer.data)
 
-    @action(methods=['get'], detail=True, permission_classes=[IsAuthenticated], url_path='mailscanner-report', url_name='message-mailscanner-report')
+    @action(methods=['get'], detail=True, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='mailscanner-report', url_name='message-mailscanner-report')
     def get_message_mailscanner_report(self, request, pk=None):
         message = get_object_or_404(self.get_queryset(), pk=pk)
         if not hasattr(message, 'mailscannerreport'):
@@ -244,7 +246,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                     response.append({'qid': message['qid'], 'hostname': message['hostname'], 'error': _('You are not authorized to run this request, as this node is for API requests only')})
         return Response({ 'result': response }, status=status.HTTP_200_OK)
 
-    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='release', url_name='message-action-release')
+    @action(methods=['post'], detail=False, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='release', url_name='message-action-release')
     def post_action_release(self, request):
         if not 'messages' in request.data:
             return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
@@ -294,7 +296,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         return Response({ 'result': response }, status=status.HTTP_200_OK)
         
 
-    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-spam', url_name='message-action-mark-spam')
+    @action(methods=['post'], detail=False, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='mark-spam', url_name='message-action-mark-spam')
     def post_action_spam(self, request):
         if not 'messages' in request.data:
             return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
@@ -333,7 +335,7 @@ class MessageViewSet(viewsets.ModelViewSet):
                 response.append({'id': message_id, 'error': e})
         return Response({ 'result': response }, status=status.HTTP_200_OK)
 
-    @action(methods=['post'], detail=False, permission_classes=[IsAuthenticated], url_path='mark-nonspam', url_name='message-action-mark-nonspam')
+    @action(methods=['post'], detail=False, permission_classes=[IsOwnerDomainAdminOrStaff], url_path='mark-nonspam', url_name='message-action-mark-nonspam')
     def post_action_nonspam(self, request):
         if not 'messages' in request.data:
             return Response({'error': _('No messages to process')}, status=status.HTTP_400_BAD_REQUEST)
@@ -376,7 +378,7 @@ class HeaderViewSet(viewsets.ModelViewSet):
     queryset = Headers.objects.all()
     serializer_class = HeaderSerializer
     model = Headers
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(HeaderViewSet, self).get_queryset()
@@ -390,7 +392,7 @@ class SpamReportViewSet(viewsets.ModelViewSet):
     queryset = SpamReport.objects.all()
     serializer_class = SpamReportSerializer
     model = SpamReport
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(SpamReportViewSet, self).get_queryset()
@@ -404,7 +406,7 @@ class RblReportViewSet(viewsets.ModelViewSet):
     queryset = RblReport.objects.all()
     serializer_class = RblReportSerializer
     model = RblReport
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(RblReportViewSet, self).get_queryset()
@@ -418,7 +420,7 @@ class MailscannerReportViewSet(viewsets.ModelViewSet):
     queryset = MailscannerReport.objects.all()
     serializer_class = MailscannerReportSerializer
     model = MailscannerReport
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(MailscannerReportViewSet, self).get_queryset()
@@ -432,7 +434,7 @@ class McpReportViewSet(viewsets.ModelViewSet):
     queryset = McpReport.objects.all()
     serializer_class = McpReportSerializer
     model = McpReport
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(McpReportViewSet, self).get_queryset()
@@ -448,7 +450,7 @@ class TransportLogViewSet(viewsets.ModelViewSet):
     queryset = TransportLog.objects.all()
     serializer_class = TransportLogSerializer
     model = TransportLog
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsOwnerDomainAdminOrStaff,)
 
     def get_queryset(self):
         qs = super(TransportLogViewSet, self).get_queryset()

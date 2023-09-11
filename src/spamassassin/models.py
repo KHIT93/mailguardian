@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
-import re, uuid, subprocess
+import re
+import uuid
+import invoke
 from django.utils.translation import gettext_lazy as _
 from compliance.registry import datalog
 
@@ -26,7 +28,8 @@ class RuleDescription(models.Model):
     def sync_files(self):
         # Sync spam assassin rule descriptions to database
         # grep -hr '^\s*describe' " . SA_RULES_DIR . ' /usr/share/spamassassin /usr/local/share/spamassassin ' . SA_PREFS . ' /etc/MailScanner/spam.assassin.prefs.conf /opt/MailScanner/etc/spam.assassin.prefs.conf /usr/local/etc/mail/spamassassin /etc/mail/spamassassin /var/lib/spamassassin 2>/dev/null | sort | uniq
-        output = subprocess.check_output("/bin/grep -hr '^\s*describe' {0} {1} /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin /var/lib/spamassassin 2>/dev/null | /usr/bin/sort | /usr/bin/uniq".format(settings.SA_RULES_DIR, settings.SA_PREF), shell=True)
+        result = invoke.run("/bin/grep -hr '^\s*describe' {0} {1} /etc/MailScanner/spam.assassin.prefs.conf /etc/mail/spamassassin /var/lib/spamassassin 2>/dev/null | /usr/bin/sort | /usr/bin/uniq".format(settings.SA_RULES_DIR, settings.SA_PREF), hide=True)
+        output = result.stdout
         descriptions = re.findall(r"^(?:\s*)describe\s+(\S+)\s+(.+)$", output.decode(), re.MULTILINE)
         for match in descriptions:
             if RuleDescription.objects.filter(key=match[0]).first():

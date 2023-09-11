@@ -1,27 +1,21 @@
 from rest_framework import serializers
 from .models import (
-    MailScannerConfiguration,
     Setting,
     User,
     MailScannerHost,
-    ApplicationTask,
     ApplicationNotification,
-    TwoFactorConfiguration,
-    TwoFactorBackupCode
 )
-from rest_auth.serializers import PasswordResetSerializer
+from dj_rest_auth.serializers import PasswordResetSerializer
+from trench.serializers import UserMFAMethodSerializer
 from django.conf import settings
-import json
-from rest_auth.serializers import LoginSerializer as BaseRestAuthLoginSerializer
 from django.utils.translation import gettext_lazy as _
 
 # Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
             'id',
-            'url',
             'email',
             'is_staff',
             'is_domain_admin',
@@ -37,24 +31,56 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'custom_spam_score',
             'custom_spam_highscore',
             'skip_scan',
-            'has_two_factor'
+            'has_two_factor',
+            'mfa_method_count',
+            'mfa_methods'
         )
 
     full_name = serializers.SerializerMethodField()
     has_two_factor = serializers.SerializerMethodField()
+    mfa_method_count = serializers.SerializerMethodField()
+    mfa_methods = UserMFAMethodSerializer(many=True)
     # mailuser = MailUserSerializer(many=False, read_only=True)
 
     def get_full_name(self, obj):
         obj.get_full_name()
         
     def get_has_two_factor(self, obj):
-        return obj.get_has_two_factor()
+        return obj.has_mfa
             
+    def get_mfa_method_count(self, obj):
+        return obj.mfa_method_count
 
-class MailScannerConfigurationSerializer(serializers.HyperlinkedModelSerializer):
+class AccountUserSerializer(UserSerializer):
     class Meta:
-        model = MailScannerConfiguration
-        fields = ('id', 'url', 'key', 'value', 'filepath')
+        model = User
+        fields = (
+            'id',
+            'email',
+            'is_staff',
+            'is_domain_admin',
+            'is_active',
+            'first_name',
+            'last_name',
+            'full_name',
+            'date_joined',
+            'domains',
+            'daily_quarantine_report',
+            'weekly_quarantine_report',
+            'monthly_quarantine_report',
+            'custom_spam_score',
+            'custom_spam_highscore',
+            'skip_scan',
+            'has_two_factor',
+            'mfa_method_count',
+            'mfa_methods',
+        )
+        read_only_fields = (
+            'is_staff',
+            'is_domain_admin',
+            'is_active',
+            'date_joined',
+        )
 
 class SettingsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -92,34 +118,8 @@ class MailScannerHostSerializer(serializers.HyperlinkedModelSerializer):
         model = MailScannerHost
         fields = ('id', 'url', 'hostname', 'ip_address', 'use_tls', 'priority', 'passive')
 
-class ApplicationTaskSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ApplicationTask
-        fields = ('id', 'url', 'user_email', 'hostname', 'created', 'updated', 'completed', 'status_code', 'status_message', 'content_type_id', 'object_pk', 'method', 'params')
-    hostname = serializers.SerializerMethodField()
-    user_email = serializers.SerializerMethodField()
-
-    def get_hostname(self, obj):
-        return obj.host.name
-
-    def get_user_email(self, obj):
-        return obj.user.email
-
 class ApplicationNotificationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ApplicationNotification
         fields = ('id', 'url', 'title', 'body', 'date_start', 'date_end', 'notification_type')
 
-class LoginSerializer(BaseRestAuthLoginSerializer):
-    two_factor_token = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-    backup_code = serializers.CharField(required=False, allow_blank=True, allow_null=True)
-
-class TwoFactorConfigurationSerialiser(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = TwoFactorConfiguration
-        fields = ('id', 'url', 'user', 'totp_key')
-
-class TwoFactorBackupCodeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = TwoFactorBackupCode
-        fields = ('id', 'url', 'user', 'code')

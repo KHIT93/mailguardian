@@ -5,6 +5,21 @@
 import os
 import json
 from distutils.version import StrictVersion
+from pathlib import Path
+
+def which(program):
+    def is_exe(fpath):
+        return Path(fpath).is_file() and os.access(fpath, os.X_OK)
+    fpath = Path(program)
+    if fpath.is_absolute():
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            exe_file = Path(path, program)
+            if is_exe(exe_file):
+                return str(exe_file)
+    return None
 
 class Upgrader(object):
     config = []
@@ -51,7 +66,6 @@ class Upgrader(object):
                 'POSTQUEUE_BIN = "{}"'.format(self.config['hostconfig']['postqueue_bin'] if 'postqueue_bin' in self.config['hostconfig'] else which('postqueue')),
                 'AUDIT_LOGGING = {}'.format(self.config['audit_log']),
                 'API_ONLY = {}'.format(self.config['api_only_mode']),
-                'CONF_DIR = os.path.join(os.path.dirname(self.src_dir), "configuration")',
                 '',
                 '#MailScanner settings',
                 'MAILSCANNER_BIN = "{}"'.format(self.config['hostconfig']['mailscanner_bin']),
@@ -99,14 +113,14 @@ class Upgrader(object):
             ]
             mailguardian_env_contents = "\n".join(env_contents)
             # Write out the new configuration file
-            with open(os.path.join(self.src_dir, 'mailguardian','settings', 'local.py'), 'w') as f:
+            with open(Path(self.src_dir, 'mailguardian','settings', 'local.py'), 'w') as f:
                 f.write(mailguardian_env_contents)
 
             print('We have now migrated the contents of your configuration file into the new format')
             print('Please note that from version 1.5.0 and onwards, a new option for providing a custom support link and user feedback link are available')
-            print('Specify the BRAND_SUPPORT and BRAND_FEEDBACK options in {} to take advantage of this'.format(os.path.join(self.src_dir, 'mailguardian','config', 'local.py')))
-            print('Deleting old configuration file at {}'.format(os.path.join(self.app_dir, 'mailguardian-env.json')))
-            os.remove(os.path.join(self.app_dir, 'mailguardian-env.json'))
+            print('Specify the BRAND_SUPPORT and BRAND_FEEDBACK options in {} to take advantage of this'.format(Path(self.src_dir, 'mailguardian','config', 'local.py')))
+            print('Deleting old configuration file at {}'.format(Path(self.app_dir, 'mailguardian-env.json')))
+            Path(self.app_dir, 'mailguardian-env.json').unlink()
             return True
         else:
             return False
