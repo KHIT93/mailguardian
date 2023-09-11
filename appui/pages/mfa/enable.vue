@@ -49,12 +49,14 @@
             </div>
             <div v-else-if="currentStepIndex == 1">
                 <form @submit.prevent="startMfaActivation">
-                    <FormSelection input-id="method" v-model="method" label="Validation Method">
-                        <template v-slot:inputOptions>
-                            <option value="email">Email</option>
-                            <option value="app">App</option>
-                        </template>
-                    </FormSelection>
+                    <UFormGroup label="Validation Method" size="md" class="w-full sm:w-1/2 my-4">
+                        <USelectMenu class="w-full" size="md" placeholder="Select Validation Method..." label="Validation Method" name="method" id="method" value-attribute="value" v-model="method" :options="validationMethods">
+                            <template #label>{{ selectedVerificationMethod.label }}</template>
+                        </USelectMenu>
+                        <p v-if="form.errors.has('method')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('method') }}
+                        </p>
+                    </UFormGroup>
                     <div class="pt-5">
                         <div class="flex">
                             <button type="submit" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -69,7 +71,12 @@
                     <div class="p-4" v-if="qrcode">
                         <QRCode :value="qrcode" render-as="svg" size="400"/>
                     </div>
-                    <FormInput v-model="mfaCode" label="Verification code" type="number" autocomplete="one-time-code" input-id="code"/>
+                    <UFormGroup label="Verification code" size="md" class="my-4">
+                        <UInput id="code" type="number" v-model="mfaCode" autocomplete="one-time-code"/>
+                        <p v-if="form.errors.has('code')" class="text-red-500 text-xs py-1">
+                            {{ form.errors.get('code') }}
+                        </p>
+                    </UFormGroup>
                     <div class="pt-5">
                         <div class="flex">
                             <button type="submit" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
@@ -105,8 +112,6 @@
     import { CheckIcon } from '@heroicons/vue/24/solid'
     import { computed } from '@vue/reactivity'
     import { onMounted, reactive, ref } from 'vue'
-    import FormSelection from '~/components/FormSelection.vue'
-    import FormInput from '~/components/FormInput.vue'
     import QRCode from 'qrcode.vue'
     definePageMeta({
         middleware: ['has-no-mfa']
@@ -117,6 +122,12 @@
         { index: 2, name: 'Setup', href:'#', status: 'incomplete' },
         { index: 3, name: 'Finished', href:'#', status: 'incomplete' },
     ])
+    const validationMethods = [
+        { value: "email", label: "Email" },
+        { value: "app", label: "Mobile App" }
+    ]
+
+    const selectedVerificationMethod = computed(() => validationMethods.find(validationMethod => validationMethod.value == form.receive_type) || {value: '', label: '-- Select --'})
     const method = ref('')
     const qrcode = ref('')
     const mfaCode = ref('')

@@ -1,13 +1,10 @@
 <template>
     <div class="bg-white relative pb-8">
         <div class="w-1/2 text-left bg-white">
-                
-                <FormInputWithIcon v-model="searchKey" inputId="search-key" label="Search by email, domain or IP-address" type="search">
-                    <template v-slot:icon>
-                        <MagnifyingGlassIcon class="w-4 h-4"/>
-                    </template>
-                </FormInputWithIcon>
-            </div>
+            <UFormGroup label="Search" size="md">
+                <UInput id="search-key" name="search-key" placeholder="Search by email, domain or IP-address" v-model="searchKey" icon="i-heroicons-magnifying-glass-20-solid" size="md"/>
+            </UFormGroup>
+        </div>
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-white">
                 <tr>
@@ -23,10 +20,10 @@
                 <template v-if="loading">
                     <tr class="animate-pulse border-b" v-for="num in 20" :key="num">
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                            <div class="h-4 bg-gray-300 rounded"></div>
+                            <USkeleton class="h-4 w-full"/>
                         </td>
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                            <div class="h-4 bg-gray-300 rounded"></div>
+                            <USkeleton class="h-4 w-full"/>
                         </td>
                     </tr>
                 </template>
@@ -65,8 +62,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { PencilIcon, TrashIcon, MagnifyingGlassIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
-import FormInputWithIcon from './FormInputWithIcon.vue'
+import { PencilIcon, TrashIcon, PlusSmallIcon } from '@heroicons/vue/24/outline'
 const props = defineProps({
     listingType: String
 })

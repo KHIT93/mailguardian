@@ -18,23 +18,9 @@
                 <tbody class="bg-white">
                     <tr class="border-bg-green-200 transition duration-300">
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                            <!-- <FormSelection name="field" inputId="field" v-model="selectedFilterField" :input-options="store.getAvailableFilters">
-                                <template v-slot:inputOptions>
-                                    <option v-for="filter in store.getAvailableFilters" :key="filter.name" :value="filter.name">
-                                        {{ filter.label }}
-                                    </option>
-                                </template>
-                            </FormSelection> -->
                             <USelectMenu class="w-full" size="md" placeholder="Select Field..." name="field" id="field" v-model="selectedFilterField" :options="store.getAvailableFilters" :disabled="loading"/>
                         </td>
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                            <!-- <FormSelection name="operator" inputId="operator" v-if="selectedFilter" v-model="selectedFilterFieldOperator" :input-options="selectedFilter.operators">
-                                <template v-slot:inputOptions>
-                                    <option v-for="option in selectedFilter.operators" :key="option.value" :value="option.value" v-if="selectedFilter">
-                                        {{ option.label }}
-                                    </option>
-                                </template>
-                            </FormSelection> -->
                             <USelectMenu class="w-full" size="md" placeholder="Select Operator..." name="operator" id="operator" v-if="selectedFilterField" v-model="selectedFilterFieldOperator" :options="selectedFilterField.operators" :disabled="loading"/>
                         </td>
                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
@@ -116,7 +102,6 @@
 
 <script setup>
 import MainLayout from '~/components/MainLayout.vue'
-import FormInput from '~/components/FormInput.vue'
 import { TrashIcon } from '@heroicons/vue/24/solid'
 import { useStatisticsStore } from '~/store/index'
 import { ref } from 'vue'

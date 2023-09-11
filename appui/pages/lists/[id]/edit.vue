@@ -10,23 +10,31 @@
                         <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                             {{ form.errors.get('non_field_errors') }}
                         </p>
-                        <FormInput inputId="from_address" label="Senders email" type="text" v-model="form.from_address" v-if="entry.from_entry_type == 'email'"/>
-                        <p v-if="form.errors.has('from_address')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('from_address') }}
-                        </p>
-                        <FormInput inputId="from_domain" label="Senders domain" type="text" v-model="form.from_domain" v-if="entry.from_entry_type == 'domain' || entry.from_entry_type == 'ip_address'"/>
-                        <p v-if="form.errors.has('from_domain')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('from_domain') }}
-                        </p>
+                        <UFormGroup label="Senders email" size="md" class="my-4" v-if="entry.from_entry_type == 'email'">
+                            <UInput id="from_address" type="text" v-model="form.from_address"/>
+                            <p v-if="form.errors.has('from_address')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('from_address') }}
+                            </p>
+                        </UFormGroup>
+                        <UFormGroup label="Senders domain" size="md" class="my-4" v-if="entry.from_entry_type == 'domain' || entry.from_entry_type == 'ip_address'">
+                            <UInput id="from_domain" type="text" v-model="form.from_domain"/>
+                            <p v-if="form.errors.has('from_domain')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('from_domain') }}
+                            </p>
+                        </UFormGroup>
                         <hr class="my-4"/>
-                        <FormInput inputId="to_address" label="Recipient email" type="text" v-model="form.to_address" v-if="entry.to_entry_type == 'email'"/>
-                        <p v-if="form.errors.has('to_address')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('to_address') }}
-                        </p>
-                        <FormInput inputId="to_domain" label="Recipient domain" type="text" v-model="form.to_domain" v-if="entry.to_entry_type == 'domain' || entry.to_entry_type == 'ip_address'"/>
-                        <p v-if="form.errors.has('to_domain')" class="text-red-500 text-xs py-1">
-                            {{ form.errors.get('to_domain') }}
-                        </p>
+                        <UFormGroup label="Recipient email" size="md" class="my-4" v-if="entry.to_entry_type == 'email'">
+                            <UInput id="to_address" type="text" v-model="form.to_address"/>
+                            <p v-if="form.errors.has('to_address')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('to_address') }}
+                            </p>
+                        </UFormGroup>
+                        <UFormGroup label="Recipient domain" size="md" class="my-4" v-if="entry.to_entry_type == 'domain' || entry.to_entry_type == 'ip_address'">
+                            <UInput id="to_domain" type="text" v-model="form.to_domain"/>
+                            <p v-if="form.errors.has('to_domain')" class="text-red-500 text-xs py-1">
+                                {{ form.errors.get('to_domain') }}
+                            </p>
+                        </UFormGroup>
                     </div>
                     <div class="pt-5">
                         <div class="flex justify-end">
@@ -47,9 +55,8 @@
 <script setup>
 import { onMounted, ref, reactive, computed, toRefs } from 'vue'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
-import { RouterLink, useLink, useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import MainLayout from '~/components/MainLayout.vue'
-import FormInput from '~/components/FormInput.vue'
 import Form from '~/classes/Form'
 
 let { id } = useRoute().params

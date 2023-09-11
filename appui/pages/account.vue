@@ -76,15 +76,21 @@
 
                                         <div class="pt-6 grid grid-cols-4 gap-6">
                                             <div class="col-span-4 sm:col-span-2">
-                                                <FormInput inputId="first-name" label="First name" type="text" v-model="record.first_name"/>
+                                                <UFormGroup label="First name" size="md">
+                                                    <UInput id="first_name" type="text" v-model="record.first_name"/>
+                                                </UFormGroup>
                                             </div>
 
                                             <div class="col-span-4 sm:col-span-2">
-                                                <FormInput inputId="last-name" label="Last name" type="text" v-model="record.last_name"/>
+                                                <UFormGroup label="Last name" size="md">
+                                                    <UInput id="last_name" type="text" v-model="record.last_name"/>
+                                                </UFormGroup>
                                             </div>
 
                                             <div class="col-span-4 sm:col-span-2">
-                                                <FormInput inputId="email" label="Email address" type="email" v-model="record.email"/>
+                                                <UFormGroup label="Email" size="md">
+                                                    <UInput id="email" type="email" v-model="record.email"/>
+                                                </UFormGroup>
                                             </div>
                                         </div>
                                     </div>
@@ -269,7 +275,6 @@ import {
 import { TrashIcon } from '@heroicons/vue/24/outline'
 import { boolToHuman } from '~/filters'
 import { onMounted, ref } from '@vue/runtime-core'
-import FormInput from '~/components/FormInput.vue'
 
 useHead({
     title: 'MailGuardian - Your Account'

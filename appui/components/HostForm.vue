@@ -4,32 +4,28 @@
             <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                 {{ form.errors.get('non_field_errors') }}
             </p>
-            <FormInput inputId="hostname" label="Hostname" type="text" v-model="form.hostname"/>
-            <p v-if="form.errors.has('hostname')" class="text-red-500 text-xs py-1">
-                {{ form.errors.get('hostname') }}
-            </p>
+            <UFormGroup label="Hostname" size="md" class="my-4">
+                <UInput id="hostname" type="text" v-model="form.hostname"/>
+                <p v-if="form.errors.has('hostname')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('hostname') }}
+                </p>
+            </UFormGroup>
             <hr class="my-4"/>
-            <FormInput inputId="ip_address" label="IP Address" type="text" v-model="form.ip_address" class="my-4"/>
-            <p v-if="form.errors.has('ip_address')" class="text-red-500 text-xs py-1">
-                {{ form.errors.get('ip_address') }}
-            </p>
-            <FormInput inputId="priority" label="Priority" type="number" v-model="form.priority"/>
-            <p v-if="form.errors.has('priority')" class="text-red-500 text-xs py-1">
-                {{ form.errors.get('priority') }}
-            </p>
+            <UFormGroup label="IP Address" size="md" class="my-4">
+                <UInput id="ip_address" type="text" v-model="form.ip_address"/>
+                <p v-if="form.errors.has('ip_address')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('ip_address') }}
+                </p>
+            </UFormGroup>
+            <UFormGroup label="Priority" size="md" class="my-4">
+                <UInput id="priority" type="text" v-model="form.priority"/>
+                <p v-if="form.errors.has('priority')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('priority') }}
+                </p>
+            </UFormGroup>
             <hr class="my-4"/>
-            <div class="flex my-4 items-center">
-                <input id="use_tls" v-model="form.use_tls" name="use_tls" type="checkbox" class="transition duration-300 h-4 w-4 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded" />
-                <label for="use_tls" class="ml-2 block text-sm text-gray-900">
-                    Communicate with this host using SSL/TLS encryption
-                </label>
-            </div>
-            <div class="flex my-4 items-center">
-                <input id="passive" v-model="form.passive" name="passive" type="checkbox" class="transition duration-300 h-4 w-4 text-blue-600 focus:ring-blue-500 border-2 border-gray-300 rounded" />
-                <label for="passive" class="ml-2 block text-sm text-gray-900">
-                    This host is passive
-                </label>
-            </div>
+            <UCheckbox label="Use TLS" id="use_tls" v-model="form.use_tls" help="Communicate with this host using SSL/TLS encryption" name="use_tls" class="my-2"/>
+            <UCheckbox label="Passive host" id="passive" v-model="form.passive" help="This host is passive" name="passive" class="my-2"/>
         </div>
         <div class="pt-5">
             <div class="flex justify-end">
@@ -46,7 +42,6 @@
 
 <script setup>
 import { reactive, onMounted } from 'vue'
-import FormInput from './FormInput.vue'
 import Form from '~/classes/Form'
 const props = defineProps({
     id: String

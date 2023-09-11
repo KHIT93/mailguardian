@@ -31,19 +31,19 @@
                     <template v-if="loading">
                         <tr class="animate-pulse border-b" v-for="num in 20" :key="num">
                             <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                <div class="h-4 bg-gray-300 rounded"></div>
+                                <USkeleton class="h-4 w-full"/>
                             </td>
                             <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                <div class="h-4 bg-gray-300 rounded"></div>
+                                <USkeleton class="h-4 w-full"/>
                             </td>
                             <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                <div class="h-4 bg-gray-300 rounded"></div>
+                                <USkeleton class="h-4 w-full"/>
                             </td>
                             <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                <div class="h-4 bg-gray-300 rounded"></div>
+                                <USkeleton class="h-4 w-full"/>
                             </td>
                             <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                <div class="h-4 bg-gray-300 rounded"></div>
+                                <USkeleton class="h-4 w-full"/>
                             </td>
                         </tr>
                     </template>

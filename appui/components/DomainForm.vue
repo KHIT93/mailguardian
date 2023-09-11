@@ -4,14 +4,18 @@
             <p v-if="form.errors.has('non_field_errors')" class="text-red-500">
                 {{ form.errors.get('non_field_errors') }}
             </p>
-            <FormInput inputId="name" label="Domain" type="text" v-model="form.name" class="my-4"/>
-            <p v-if="form.errors.has('name')" class="text-red-500 text-xs py-1">
-                {{ form.errors.get('name') }}
-            </p>
-            <FormInput inputId="destination" label="Destination" type="text" v-model="form.destination" class="my-4"/>
-            <p v-if="form.errors.has('destination')" class="text-red-500 text-xs py-1">
-                {{ form.errors.get('destination') }}
-            </p>
+            <UFormGroup label="Domain" size="md" class="my-4">
+                <UInput id="name" type="text" v-model="form.name"/>
+                <p v-if="form.errors.has('name')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('name') }}
+                </p>
+            </UFormGroup>
+            <UFormGroup label="Destination" size="md" class="my-4">
+                <UInput id="destination" type="text" v-model="form.destination"/>
+                <p v-if="form.errors.has('destination')" class="text-red-500 text-xs py-1">
+                    {{ form.errors.get('destination') }}
+                </p>
+            </UFormGroup>
             <hr />
             <div class="md:flex space-x-2">
                 <UFormGroup label="Relay type" size="md" class="w-full sm:w-1/2 my-4">
@@ -23,12 +27,12 @@
                     </p>
                 </UFormGroup>
                 <UFormGroup label="Delivery type" size="md" class="w-full sm:w-1/2 my-4">
-                <USelectMenu class="w-full" size="md" placeholder="Select Delivery type..." label="Delivery type" name="receive_type" id="receive_type" value-attribute="value" v-model="form.receive_type" :options="receiveTypes">
-                    <template #label>{{ selectedReceiveType.label }}</template>
-                </USelectMenu>
-                <p v-if="form.errors.has('receive_type')" class="text-red-500 text-xs py-1">
-                    {{ form.errors.get('receive_type') }}
-                </p>
+                    <USelectMenu class="w-full" size="md" placeholder="Select Delivery type..." label="Delivery type" name="receive_type" id="receive_type" value-attribute="value" v-model="form.receive_type" :options="receiveTypes">
+                        <template #label>{{ selectedReceiveType.label }}</template>
+                    </USelectMenu>
+                    <p v-if="form.errors.has('receive_type')" class="text-red-500 text-xs py-1">
+                        {{ form.errors.get('receive_type') }}
+                    </p>
                 </UFormGroup>
             </div>
             <Disclosure v-slot="{ open }" v-if="nodes.length > 0">
@@ -98,8 +102,6 @@ import { reactive, ref, onMounted } from 'vue'
 import Form from '~/classes/Form'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { ChevronDownIcon } from '@heroicons/vue/24/solid'
-import FormInput from './FormInput.vue'
-import FormSelection from './FormSelection.vue'
 
 const props = defineProps(['id'])
 

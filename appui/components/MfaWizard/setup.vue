@@ -3,7 +3,9 @@
         <div class="p-4" v-if="qrcode">
             <QRCode :value="qrcode" render-as="svg" size="300"/>
         </div>
-        <FormInput v-model="code" label="Verification code" type="number" input-id="code"/>
+        <UFormGroup label="Verification code" size="md">
+            <UInput id="code" type="number" v-model="code" autocomplete="one-time-code"/>
+        </UFormGroup>
         <div class="pt-5">
             <div class="flex">
                 <button type="submit" class="transition duration-300 ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">

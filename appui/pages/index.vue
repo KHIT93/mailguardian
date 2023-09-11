@@ -119,14 +119,14 @@
         <div class="flex flex-col pt-4">
             <div class="-my-2 overflow-x-visible sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                    <div class="border-b border-gray-200 bg-white rounded-md p-4">
-                        <div class="flex pt-4 items-center">
+                    <!-- <div class="border-b border-gray-200 bg-white rounded-md p-4"> -->
+                        <UCard>
+                        <template #header>
+                            <div class="flex items-center">
                             <div class="w-1/2 text-left bg-white">
-                                <FormInputWithIcon v-model="searchKey" inputId="search-key" label="Search by name, email or more" type="search">
-                                    <template v-slot:icon>
-                                        <MagnifyingGlassIcon class="w-4 h-4"/>
-                                    </template>
-                                </FormInputWithIcon>
+                                <UFormGroup label="Search" size="md">
+                                    <UInput id="search-key" name="search-key" placeholder="Search by name, email or more" v-model="searchKey" icon="i-heroicons-magnifying-glass-20-solid" size="md"/>
+                                </UFormGroup>
                             </div>
                             <div class="w-1/2 text-right">
                                 <button type="button" class="text-gray-400 hover:text-gray-600 transition duration-300" @click.native="refreshDashboard">
@@ -134,6 +134,7 @@
                                 </button>
                             </div>
                         </div>
+                        </template>
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-white">
                                 <tr>
@@ -155,13 +156,16 @@
                                 <template v-if="messagesLoading">
                                     <tr class="animate-pulse border-b" v-for="num in 20" :key="num">
                                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                            <div class="h-4 bg-gray-300 rounded"></div>
-                                        </td>
-                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700" colspan="2">
-                                            <div class="h-4 bg-gray-300 rounded"></div>
+                                            <USkeleton class="h-4 w-full"/>
                                         </td>
                                         <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
-                                            <div class="h-4 bg-gray-300 rounded"></div>
+                                            <USkeleton class="h-4 w-full"/>
+                                        </td>
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                            <USkeleton class="h-4 w-full"/>
+                                        </td>
+                                        <td class="px-6 py-2 whitespace-nowrap text-sm text-gray-700">
+                                            <USkeleton class="h-4 w-full"/>
                                         </td>
                                     </tr>
                                 </template>
@@ -188,7 +192,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
+                    </UCard>
+                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -198,9 +203,8 @@
 <script setup>
     import { onMounted, ref, computed } from 'vue'
     import MainLayout from '~/components/MainLayout.vue'
-    import FormInputWithIcon from '~/components/FormInputWithIcon.vue'
     import ProgressRing from '~/components/ProgressRing.vue'
-    import { ArrowPathIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
+    import { ArrowPathIcon } from '@heroicons/vue/24/outline'
     import { partialString } from '~/filters'
     let messagesLoading = ref(false)
     let statsLoading = ref(false)
