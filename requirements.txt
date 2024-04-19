@@ -20,7 +20,7 @@ django-rest-auth==0.9.5
 djangorestframework==3.12.4
 geoip2==4.4.0
 gunicorn==22.0.0
-idna==3.2
+idna==3.7
 lxml==4.9.1
 maxminddb==2.2.0
 multidict==5.2.0
