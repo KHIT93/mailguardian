@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "mailguardian"
+version = "3.0.0"
+description = "Powerful toolstack to process emails using MailScanner"
+authors = ["Kenneth Hansen <kenneth@khansen-it.dk>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["all"], version = "^0.115.0"}
+pydantic = {extras = ["email"], version = "^2.9.2"}
+pydantic-settings = "^2.5.2"
+celery = "<6"
+uvicorn = "^0.30.6"
+psycopg = "3.1.*"
+python-dotenv = "^1.0.1"
+sqlmodel = "^0.0.22"
+httpx = {extras = ["http2"], version = "^0.27.0"}
+alembic = "^1.13.3"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["argon2", "bcrypt", "totp"], version = "^1.7.4"}
+typer = {extras = ["all"], version = "^0.12.5"}
+purepythonmilter = "^0.0.1"
+watchdog = "^4.0.2"
+invoke = "^2.2.0"
+lxml = {extras = ["html-clean"], version = "^5.3.0"}
+pymailq = "^0.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

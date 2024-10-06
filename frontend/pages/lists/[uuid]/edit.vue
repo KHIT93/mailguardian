@@ -1,0 +1,60 @@
+<template>
+    <MainLayout :page-title="pageTitle">
+        <UForm ref="form" :state="state" @submit="onSubmit">
+            <UCard>
+                <UFormGroup label="Senders address" size="md" class="my-4">
+                    <UInput id="from_address" type="text" v-model="state.from_address"/>
+                </UFormGroup>
+                <UFormGroup label="Recipient address" size="md" class="my-4">
+                    <UInput id="to_address" type="text" v-model="state.to_address"/>
+                </UFormGroup>
+
+                <template #footer>
+                    <UButton type="submit">
+                        Save
+                    </UButton>
+                </template>
+            </UCard>
+        </UForm>
+    </MainLayout>
+</template>
+<script setup>
+    import { onMounted } from 'vue';
+import MainLayout from '~/components/MainLayout.vue'
+    const { uuid } = useRoute().params
+    const pageTitle = computed(() =>  `Sender Details (${uuid})`)
+    const { pending, data: state } = (await useApi(`/allowlist/${uuid}`))
+
+    const submissionEndpoint = computed(() => {
+        if (state.value.listing_type == 'allowed') {
+            return `/allowlist/${uuid}`
+        }
+        else if (state.value.listing_type == 'blocked') {
+            return `/blocklist/${uuid}`
+        }
+        else {
+            return undefined
+        }
+    })
+
+    const form = ref()
+
+    async function onSubmit(event) {
+        form.value.clear()
+        try {
+            const response = await useApi(submissionEndpoint, {
+                method: 'PATCH',
+                body: state
+            })
+        } catch(error) {
+            if (error.statusCode == 422) {
+                console.log(error.data)
+                form.value.setErrors(error.data.detail.map((err) => ({
+                    message: err.msg,
+                    path: err.loc
+                })))
+            }
+        }
+        
+    }
+</script>

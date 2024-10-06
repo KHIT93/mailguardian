@@ -25,12 +25,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache-dependency-path: ./appui
+        cache-dependency-path: ./frontend
         cache: 'npm'
     
     - name: Install dependencies
       run: yarn install --frozen-lockfile
-      working-directory: ./appui
+      working-directory: ./frontend
     - name: Build Nuxt Application
       run: yarn build
-      working-directory: ./appui
+      working-directory: ./frontend

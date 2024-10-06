@@ -1,5 +1,0 @@
-user = mailguardian
-password = mailguardian
-hosts = localhost
-dbname = mailguardian
-query = SELECT CONCAT(relay_type,':[',destination,']') from domains_domain where name='%s' AND active = '1';

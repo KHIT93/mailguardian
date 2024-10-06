@@ -1,5 +1,0 @@
-user = mailguardian
-password = mailguardian
-hosts = localhost
-dbname = mailguardian
-query = SELECT ip_address from mail_smtprelay where (ip_address='%s' or hostname='%s') AND active = '1';
