@@ -18,7 +18,6 @@ def create_user(email: Annotated[Optional[str], typer.Argument()]):
         raise typer.Exit(code=1)
     validate_new_password(plain_password=password)
     user: User = User(email=email, password=hash_password(password=password), role=UserRole.USER)
-    print(user.password)
     # raise typer.Exit(code=0)
     with Session(engine) as session:
         session.add(user)
