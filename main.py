@@ -20,6 +20,7 @@ from mailguardian.routes.api.auth import router as auth_router
 from mailguardian.routes.api.users import router as user_router
 from mailguardian.routes.api.blocklist import router as blocklist_router
 from mailguardian.routes.api.allowlist import router as allowlist_router
+from mailguardian.routes.api.dashboard import router as dashboard_router
 from mailguardian.routes.api.messages import router as message_router
 from mailguardian.routes.api.mailscanner_hosts import router as mailscanner_hosts_router
 from mailguardian.routes.api.smtp_relays import router as smtp_relay_router
@@ -36,7 +37,7 @@ async def lifespan(app: FastAPI):
         enable_logfile(filename=settings.APP_LOGFILE)
     else:
         enable_stdout_logging()
-    # customize_fastapi_logger()
+    customize_fastapi_logger()
     # Init database
     # SQLModel.metadata.create_all(engine)
 
@@ -65,6 +66,7 @@ app.include_router(domains_router)
 app.include_router(user_router)
 app.include_router(allowlist_router)
 app.include_router(blocklist_router)
+app.include_router(dashboard_router)
 app.include_router(message_router)
 app.include_router(mailscanner_hosts_router)
 app.include_router(smtp_relay_router)
