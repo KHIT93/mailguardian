@@ -1,12 +1,13 @@
 export default defineNuxtPlugin(() => {
     const { tokenStrategy } = useAuth()
+    const runtimeConfig = useRuntimeConfig()
     const $backend = $fetch.create({
-      baseURL: 'http://localhost:8000/api/v2',
+      baseURL: runtimeConfig.public.apiBaseUrl,
       onRequest({ request, options, error }) {
         if (tokenStrategy.token?.get()) {
           // Add Authorization header
           options.headers = options.headers || {}
-          options.headers.Authorization = tokenStrategy.token?.get()
+          options.headers.set('Authorization', tokenStrategy.token?.get())
         }
       },
       // onResponseError({ response }) {
