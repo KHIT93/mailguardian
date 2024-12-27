@@ -1,29 +1,8 @@
-<template>
-    <MainLayout :page-title="pageTitle">
-        <UForm ref="form" :state="state" @submit="onSubmit">
-            <UCard>
-                <UFormGroup label="Senders address" size="md" class="my-4">
-                    <UInput id="from_address" type="text" v-model="state.from_address"/>
-                </UFormGroup>
-                <UFormGroup label="Recipient address" size="md" class="my-4">
-                    <UInput id="to_address" type="text" v-model="state.to_address"/>
-                </UFormGroup>
-
-                <template #footer>
-                    <UButton type="submit">
-                        Save
-                    </UButton>
-                </template>
-            </UCard>
-        </UForm>
-    </MainLayout>
-</template>
 <script setup>
-    import { onMounted } from 'vue';
-import MainLayout from '~/components/MainLayout.vue'
+    import MainLayout from '~/components/MainLayout.vue'
     const { uuid } = useRoute().params
     const pageTitle = computed(() =>  `Sender Details (${uuid})`)
-    const { pending, data: state } = (await useApi(`/allowlist/${uuid}`))
+    const { status, data: state } = (await useApi(`/allowlist/${uuid}`))
 
     const submissionEndpoint = computed(() => {
         if (state.value.listing_type == 'allowed') {
@@ -58,3 +37,24 @@ import MainLayout from '~/components/MainLayout.vue'
         
     }
 </script>
+
+<template>
+    <MainLayout :page-title="pageTitle">
+        <UForm ref="form" :state="state" @submit="onSubmit">
+            <UCard>
+                <UFormGroup label="Senders address" size="md" class="my-4">
+                    <UInput id="from_address" type="text" v-model="state.from_address"/>
+                </UFormGroup>
+                <UFormGroup label="Recipient address" size="md" class="my-4">
+                    <UInput id="to_address" type="text" v-model="state.to_address"/>
+                </UFormGroup>
+
+                <template #footer>
+                    <UButton type="submit">
+                        Save
+                    </UButton>
+                </template>
+            </UCard>
+        </UForm>
+    </MainLayout>
+</template>

@@ -1,3 +1,26 @@
+<script setup>
+    import { format } from 'date-fns'
+    import { VisXYContainer, VisLine, VisAxis, VisArea, VisTooltip, VisCrosshair } from '@unovis/vue'
+    const endpoint = computed(() => '/dashboard/traffic')
+    const { status, data, refresh } = (await useApi(endpoint))
+    const x = (_, i) => i
+    const y = (d) => d.count
+
+    const formatDate = (date) => {
+        return format(date, 'do MMMM y')
+    }
+
+    const xTicks = (i) => {
+        if (i === 0 || i === data.value.length - 1 || !data.value[i]) {
+            return ''
+        }
+
+        return formatDate(data.value[i].date)
+    }
+
+    const template = (d) => `${formatDate(d.date)}: ${d.count} messages`
+</script>
+
 <template>
     <UCard class="mb-4">
         <template #header>
@@ -29,29 +52,6 @@
         </VisXYContainer>
     </UCard>
 </template>
-
-<script setup>
-    import { format } from 'date-fns'
-    import { VisXYContainer, VisLine, VisAxis, VisArea, VisTooltip, VisCrosshair } from '@unovis/vue'
-    const endpoint = computed(() => '/dashboard/traffic')
-    const { status, data, refresh } = (await useApi(endpoint))
-    const x = (_, i) => i
-    const y = (d) => d.count
-
-    const formatDate = (date) => {
-        return format(date, 'do MMMM y')
-    }
-
-    const xTicks = (i) => {
-        if (i === 0 || i === data.value.length - 1 || !data.value[i]) {
-            return ''
-        }
-
-        return formatDate(data.value[i].date)
-    }
-
-    const template = (d) => `${formatDate(d.date)}: ${d.count} messages`
-</script>
 
 <style scoped>
 .unovis-xy-container {

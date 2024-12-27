@@ -1,3 +1,8 @@
+<script setup>
+    const endpoint = computed(() => '/dashboard/senders')
+    const { status, data, refresh } = (await useApi(endpoint))
+</script>
+
 <template>
     <UCard class="w-full lg:w-1/2 mb-4">
         <template #header>
@@ -37,7 +42,3 @@
         </span>
     </UCard>
 </template>
-<script setup>
-    const endpoint = computed(() => '/dashboard/senders')
-    const { status, data, refresh } = (await useApi(endpoint))
-</script>

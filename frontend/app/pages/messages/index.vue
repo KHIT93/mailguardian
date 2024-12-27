@@ -1,7 +1,38 @@
+<script setup>
+    import MainLayout from '~/components/MainLayout.vue'
+    const page = ref(1)
+    const pageCount = 50
+    const endpoint = computed(() => `/messages?page=${page.value}`)
+    const { status, data, refresh } = (await useApi(endpoint, {
+        watch: [endpoint]
+    }))
+    const columns = [
+        {
+            key: 'actions'
+        },
+        {
+            key: 'date',
+            label: 'Date'
+        },
+        {
+            key: 'from_address',
+            label: 'From'
+        },
+        {
+            key: 'to_address',
+            label: 'To'
+        },
+        {
+            key: 'subject',
+            label: 'Subject'
+        }
+    ]
+</script>
+
 <template>
     <MainLayout page-title="Messages">
         <UCard>
-            <UTable :loading="pending" :columns="columns" :rows="data?.items">
+            <UTable :loading="status != 'success'" :columns="columns" :rows="data?.items">
                 <template #actions-data="{ row }">
                     <UTooltip text="Show details">
                         <UButton color="gray" variant="ghost" icon="i-heroicons-eye" :to="`/messages/${row.uuid}`" />
@@ -39,34 +70,3 @@
         </UCard>
     </MainLayout>
 </template>
-
-<script setup>
-    import MainLayout from '~/components/MainLayout.vue'
-    const page = ref(1)
-    const pageCount = 50
-    const endpoint = computed(() => `/messages?page=${page.value}`)
-    const { pending, data, refresh } = (await useApi(endpoint, {
-        watch: [endpoint]
-    }))
-    const columns = [
-        {
-            key: 'actions'
-        },
-        {
-            key: 'date',
-            label: 'Date'
-        },
-        {
-            key: 'from_address',
-            label: 'From'
-        },
-        {
-            key: 'to_address',
-            label: 'To'
-        },
-        {
-            key: 'subject',
-            label: 'Subject'
-        }
-    ]
-</script>

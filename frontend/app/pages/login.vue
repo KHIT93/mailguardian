@@ -1,27 +1,6 @@
-<template>
-    <LoginLayout>
-        <UForm :state="state" class="space-y-8" @submit="onSubmit">
-            <UFormGroup label="Email" name="username">
-                <UInput v-model="state.username" type="email" variant="outline" size="lg" placeholder="johh.doe@example.com" icon="i-heroicons-envelope" />
-            </UFormGroup>
-
-            <UFormGroup label="Password" name="password">
-                <UInput v-model="state.password" type="password" variant="outline" size="lg" icon="i-heroicons-lock-closed" />
-            </UFormGroup>
-
-            <div class="flex flex-row-reverse">
-                <UButton type="submit" :loading="loading" size="lg" icon="i-heroicons-lock-closed-solid">
-                    Log in
-                </UButton>
-            </div>
-
-            <UDivider label="OR" />
-            <UButton icon="i-heroicons-finger-print" :disabled="loading" size="lg" block>Use passkey</UButton>
-        </UForm>
-    </LoginLayout>
-</template>
-
 <script setup>
+    import LoginLayout from '~/components/LoginLayout'
+    
     const $auth = useAuth()
 
     const loading = ref(false)
@@ -50,3 +29,26 @@
         }
     }
 </script>
+
+<template>
+    <LoginLayout>
+        <UForm :state="state" class="space-y-8" @submit="onSubmit">
+            <UFormGroup label="Email" name="username">
+                <UInput v-model="state.username" type="email" variant="outline" size="lg" placeholder="johh.doe@example.com" icon="i-heroicons-envelope" />
+            </UFormGroup>
+
+            <UFormGroup label="Password" name="password">
+                <UInput v-model="state.password" type="password" variant="outline" size="lg" icon="i-heroicons-lock-closed" />
+            </UFormGroup>
+
+            <div class="flex flex-row-reverse">
+                <UButton type="submit" :loading="loading" size="lg" icon="i-heroicons-lock-closed-solid">
+                    Log in
+                </UButton>
+            </div>
+
+            <UDivider label="OR" />
+            <UButton icon="i-heroicons-finger-print" :disabled="loading" size="lg" block>Use passkey</UButton>
+        </UForm>
+    </LoginLayout>
+</template>

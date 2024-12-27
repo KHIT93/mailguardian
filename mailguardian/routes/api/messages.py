@@ -122,7 +122,6 @@ async def show_headers(db: Annotated[Session, Depends(get_database_session)], au
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
             )
-    
     return res.spam_reports
 
 @router.get('/{uuid}/reports/mcp', response_model=List[MessageMcpReportSchema], summary='Output the MCP report of a specific Message', description='Using the UUID of a given Message, the MCP report of this is returned')

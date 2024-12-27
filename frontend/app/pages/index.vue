@@ -1,3 +1,12 @@
+<script setup>
+    
+    import MainLayout from '~/components/MainLayout.vue'
+    import TrafficGraph from '~/components/dashboard/TrafficGraph'
+    import RecentSenders from '~/components/dashboard/RecentSenders'
+    import SpamHits from '~/components/dashboard/SpamHits'
+
+</script>
+
 <template>
     <MainLayout page-title="Dashboard">
         <TrafficGraph />
@@ -8,12 +17,3 @@
         
     </MainLayout>
 </template>
-
-<script setup>
-    
-    import MainLayout from '~/components/MainLayout.vue'
-    import TrafficGraph from '~/components/dashboard/TrafficGraph'
-    import RecentSenders from '~/components/dashboard/RecentSenders'
-    import SpamHits from '~/components/dashboard/SpamHits'
-
-</script>

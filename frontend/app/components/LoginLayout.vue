@@ -1,3 +1,7 @@
+<script setup>
+
+</script>
+
 <template>
     <UContainer class="w-full h-screen flex flex-col gap-y-4 pt-36 dark:bg-gray-800">
         <UCard :ui="{ body: { base: 'lg:grid lg:grid-cols-2' } }" class="py-3">
@@ -16,7 +20,3 @@
         </UCard>
     </UContainer>
 </template>
-
-<script setup>
-
-</script>

@@ -1,3 +1,20 @@
+<script setup>
+    import AppNotifications from './AppNotifications'
+    import AppMobileNavigation from './AppMobileNavigation'
+    const props = defineProps(['pageTitle'])
+    const { isNotificationsSlideoverOpen } = useNotifications()
+    const { isMobileNavigationSlideoverOpen } = useNavigation()
+    const colorMode = useColorMode()
+    const isDark = computed({
+        get () {
+            return colorMode.value === 'dark'
+        },
+        set () {
+            colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+        }
+    })
+</script>
+
 <template>
     <div class="fixed inset-0 text-sm h-screen overflow-hidden flex bg-slate-100 dark:bg-gray-800">
         <AppNavigation class="hidden"/>
@@ -43,18 +60,3 @@
         <AppNotifications />
     </div>
 </template>
-
-<script setup>
-    const props = defineProps(['pageTitle'])
-    const { isNotificationsSlideoverOpen } = useNotifications()
-    const { isMobileNavigationSlideoverOpen } = useNavigation()
-    const colorMode = useColorMode()
-    const isDark = computed({
-        get () {
-            return colorMode.value === 'dark'
-        },
-        set () {
-            colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-        }
-    })
-</script>
