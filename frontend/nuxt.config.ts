@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   auth: {
       strategies: {
           local: {
+              url: `${process.env.SERVER_HOST}/api/v2`,
               token: {
                   property: 'access_token',
                   global: true,
@@ -35,9 +36,9 @@ export default defineNuxtConfig({
                   autoFetch: true
               },
               endpoints: {
-                  login: { url: 'http://localhost:8000/api/v2/auth/token', method: 'post' },
+                  login: { url: `${process.env.SERVER_HOST}/api/v2/auth/token`, method: 'post' },
                   logout: false,
-                  user: { url: 'http://localhost:8000/api/v2/auth/whoami', method: 'get' }
+                  user: { url: `${process.env.SERVER_HOST}/api/v2/auth/whoami`, method: 'get' }
               }
           }
       },
@@ -47,6 +48,12 @@ export default defineNuxtConfig({
           logout: '/login',
           home: '/'
       }
+  },
+
+  runtimeConfig: {
+    public: {
+        apiBaseUrl: `${process.env.SERVER_HOST}/api/v2`
+    }
   },
 
   compatibilityDate: '2024-08-15'
