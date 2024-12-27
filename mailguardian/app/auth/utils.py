@@ -65,9 +65,9 @@ def authenticate_user(request: Request, db: Annotated[Session, Depends(get_datab
             res_id=None,
             actor_id=None,
             acted_from=request.client.host,
-            message='Denied login as %s. User does not exist or is inactive' % (username,)),
+            message='Denied login as %s. User does not exist or is inactive' % (username,),
             allowed=False
-        )
+        ))
         db.commit()
         _logger.error('No active user found')
         return False
@@ -81,9 +81,9 @@ def authenticate_user(request: Request, db: Annotated[Session, Depends(get_datab
             res_id=user.id,
             actor_id=None,
             acted_from=request.client.host,
-            message='Denied login as %s. Incorrect credentials' % (username,)),
+            message='Denied login as %s. Incorrect credentials' % (username,),
             allowed=False
-        )
+        ))
         db.commit()
         _logger.error('Could not log in user with email %s as the password is incorrect' % (username,))
         return False
@@ -93,9 +93,9 @@ def authenticate_user(request: Request, db: Annotated[Session, Depends(get_datab
         res_id=user.id,
         actor_id=None,
         acted_from=request.client.host,
-        message='Authenticated login as %s.' % (username,)),
+        message='Authenticated login as %s.' % (username,),
         allowed=True
-    )
+    ))
     db.commit()
     _logger.info('User %s has authenticated' % (username,))
     return user
