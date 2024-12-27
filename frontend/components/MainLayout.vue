@@ -8,7 +8,7 @@
                         <div class="flex items-stretch gap-1.5 min-w-0">
                             <!-- Mobile Nav -->
                             <UButton color="gray" variant="ghost" class="lg:hidden" square @click="isMobileNavigationSlideoverOpen = true" aria-label="Open Main Menu">
-                                <UIcon name="i-heroicons-bars-3-20-solid h-5 w-5" />
+                                <UIcon name="i-heroicons-bars-3-20-solid" class="h-5 w-5" />
                             </UButton>
                             <!-- Mobile Nav -->
                             <h1 class="flex items-center gap-1.5 font-semibold text-gray-900 dark:text-white min-w-0">

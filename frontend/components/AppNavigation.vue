@@ -11,7 +11,7 @@
                     <div class="flex-1 px-4 flex flex-col gap-y-2 overflow-y-auto">
                         <UVerticalNavigation :links="links" />
                         <UDivider/>
-                        <UVerticalNavigation :links="adminLinks" />
+                        <UVerticalNavigation v-if="currentUser.role == 'superuser'" :links="adminLinks" />
                         <div class="flex-1"/>
                         <UVerticalNavigation :links="supportLinks" />
                         <UDropdown mode="hover" :items="userMenuItems" :ui="{ width: 'w-full', item: { disabled: 'cursor-text select-text' } }" :popper="{ strategy: 'absolute', placement: 'top' }" class="w-full">
@@ -64,11 +64,11 @@
                 to: '/lists/blocked',
                 icon: 'i-heroicons-x-circle'
             },
-            {
-                label: 'Statistics',
-                to: '/statistics',
-                icon: 'i-heroicons-chart-bar'
-            },
+            // {
+            //     label: 'Statistics',
+            //     to: '/statistics',
+            //     icon: 'i-heroicons-chart-bar'
+            // },
         ]
     ]
     const adminLinks = [
@@ -84,29 +84,29 @@
                 icon: 'i-heroicons-globe-europe-africa'
             },
         ],
-        [
-            {
-                label: 'Cluster Dashboard',
-                to: '/cluster',
-                icon: 'i-heroicons-rectangle-group'
-            },
-            {
-                label: 'Cluster Hosts',
-                to: '/cluster/nodes',
-                icon: 'i-heroicons-server'
-            }
-        ],
+        // [
+        //     {
+        //         label: 'Cluster Dashboard',
+        //         to: '/cluster',
+        //         icon: 'i-heroicons-rectangle-group'
+        //     },
+        //     {
+        //         label: 'Cluster Hosts',
+        //         to: '/cluster/nodes',
+        //         icon: 'i-heroicons-server'
+        //     }
+        // ],
         [
             {
                 label: 'Audit Log',
                 to: '/audit/log',
                 icon: 'i-heroicons-document-text'
             },
-            {
-                label: 'Audit Settings',
-                to: '/audit/settings',
-                icon: 'i-heroicons-cog'
-            }
+            // {
+            //     label: 'Audit Settings',
+            //     to: '/audit/settings',
+            //     icon: 'i-heroicons-cog'
+            // }
         ]
     ]
     const supportLinks = [

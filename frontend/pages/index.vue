@@ -1,26 +1,19 @@
 <template>
     <MainLayout page-title="Dashboard">
-        <UCard class="mb-4">
-            <template #header>
-                Traffic
-            </template>
-        </UCard>
-        <div class="flex space-x-4">
-            <UCard class="w-1/2">
-                <template #header>
-                    Recent senders
-                </template>
-            </UCard>
-            <UCard class="w-1/2">
-                <template #header>
-                    Recent spam hits
-                </template>
-            </UCard>
+        <TrafficGraph />
+        <div class="lg:flex lg:space-x-4">
+            <RecentSenders />
+            <SpamHits />
         </div>
         
     </MainLayout>
 </template>
 
 <script setup>
+    
     import MainLayout from '~/components/MainLayout.vue'
+    import TrafficGraph from '~/components/dashboard/TrafficGraph'
+    import RecentSenders from '~/components/dashboard/RecentSenders'
+    import SpamHits from '~/components/dashboard/SpamHits'
+
 </script>
