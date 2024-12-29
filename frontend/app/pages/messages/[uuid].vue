@@ -172,7 +172,7 @@
                 <!-- <template #header>
                     <h3 class="font-bold">Transport logs</h3>
                 </template> -->
-            <UTable :loading="logs_status = 'success'" :columns="logsColumns" :rows="logs" />
+            <UTable :loading="logs_status != 'success'" :columns="logsColumns" :rows="logs" />
             </UCard>
             <UModal v-model="showHeaders" :ui="{ width: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
                 <UCard>
@@ -182,7 +182,7 @@
                             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showHeaders = false" />
                         </div>
                     </template>
-                <UTable :loading="headers_status = 'success'" :columns="headerColumns" :rows="headers"/>
+                <UTable :loading="headers_status != 'success'" :columns="headerColumns" :rows="headers"/>
                 </UCard>
             </UModal>
 
@@ -222,7 +222,7 @@
                             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showSpamAnalysis = false" />
                         </div>
                     </template>
-                <UTable :loading="spamreport_status = 'success'" :columns="spamReportColumns" :rows="spamreport"/>
+                <UTable :loading="spamreport_status != 'success'" :columns="spamReportColumns" :rows="spamreport"/>
                 </UCard>
             </UModal>
         </div>
