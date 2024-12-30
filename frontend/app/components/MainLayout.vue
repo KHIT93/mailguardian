@@ -13,6 +13,9 @@
             colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
         }
     })
+    useSeoMeta({
+        title: () => `${props.pageTitle} - MailGuardian`
+    })
 </script>
 
 <template>
