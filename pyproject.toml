@@ -2,8 +2,10 @@
 name = "mailguardian"
 version = "3.0.0"
 description = "Powerful toolstack to process emails using MailScanner"
-authors = ["Kenneth Hansen <kenneth@khansen-it.dk>"]
-license = "MIT"
+authors = [
+    { name = "Kenneth Hansen", email = "kenneth@khansen-it.dk" }
+]
+license = { file = "LICENSE" }
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -12,7 +14,7 @@ dependencies = [
     "fastapi[all]>=0.115.*",
     "httpx[http2]>=0.28.*",
     "invoke>=2.2.*",
-    "lxml[html-clean]>=5.3.",
+    "lxml[html-clean]>=5.3.*",
     "passlib>=1.7.*",
     "psycopg>=3.2.*",
     "purepythonmilter>=0.0.1",
@@ -22,6 +24,6 @@ dependencies = [
     "python-dotenv>=1.0.*",
     "python-jose>=3.3.*",
     "sqlmodel>=0.0.22",
-    "typer[all]>=0.15.1",
+    "typer>=0.15.1",
     "watchdog>=6.0.*",
 ]
