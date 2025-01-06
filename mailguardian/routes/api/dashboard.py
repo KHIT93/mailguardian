@@ -1,16 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
 import datetime
-import uuid
-from typing import Any, List, Annotated
-from mailguardian.app.http.pagination import paginate
-from mailguardian.app.models.audit_log import AuditLog
+from typing import Annotated
+
+from fastapi import APIRouter, Depends
+from sqlmodel import Session, select
+
+from mailguardian.app.dependencies import (
+    get_current_user,
+    get_database_session,
+    oauth2_scheme,
+)
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.user import User
-from mailguardian.app.schemas.audit_log import AuditLog as AuditLogSchema
-from sqlmodel import Session, select, func
-from mailguardian.app.dependencies import get_database_session, oauth2_scheme, get_current_user, requires_app_admin
-from mailguardian.app.schemas.dashboard import TrafficGraph, SenderCount
-from mailguardian.app.schemas.pagination import PaginatedResponse
+from mailguardian.app.schemas.dashboard import SenderCount, TrafficGraph
 from mailguardian.app.schemas.user import UserRole
 
 router = APIRouter(
@@ -19,8 +20,9 @@ router = APIRouter(
     tags=['Dashboard']
 )
 
-@router.get('/traffic', response_model=List[TrafficGraph], summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
-async def traffic(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> List[TrafficGraph]:
+
+@router.get('/traffic', summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
+async def traffic(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[TrafficGraph]:
     end_date: datetime.date = datetime.date(year=2018, month=3, day=12)
     start_date: datetime.date = end_date - datetime.timedelta(days=30)
     query = select(Message).where(Message.from_address == authenticated_user.email or Message.to_address == authenticated_user.email)
@@ -43,14 +45,13 @@ async def traffic(db: Annotated[Session, Depends(get_database_session)], authent
         else:
             response_date[record.date] = 1
 
-    
-
     single_dataset = [TrafficGraph(date=key, count=response_date[key]) for key in response_date.keys()]
 
     return single_dataset
 
-@router.get('/senders', response_model=List[SenderCount], summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
-async def senders(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> List[SenderCount]:
+
+@router.get('/senders', summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
+async def senders(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[SenderCount]:
     end_date: datetime.date = datetime.date(year=2018, month=3, day=12)
     start_date: datetime.date = end_date - datetime.timedelta(days=30)
     query = select(Message).where(Message.from_address == authenticated_user.email or Message.to_address == authenticated_user.email)
@@ -73,14 +74,15 @@ async def senders(db: Annotated[Session, Depends(get_database_session)], authent
             sender_stats[record.from_domain] += 1
         else:
             sender_stats[record.from_domain] = 1
-    
+
     sender_list: list[SenderCount] = [SenderCount(domain=sender, count=sender_stats[sender]) for sender in sender_stats.keys()]
     sender_list.sort(key=lambda x: x.count, reverse=True)
 
     return sender_list[:20]
 
-@router.get('/spammers', response_model=List[SenderCount], summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
-async def spammers(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> List[SenderCount]:
+
+@router.get('/spammers', summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
+async def spammers(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[SenderCount]:
     end_date: datetime.date = datetime.date(year=2018, month=3, day=12)
     start_date: datetime.date = end_date - datetime.timedelta(days=30)
     query = select(Message).where(Message.from_address == authenticated_user.email or Message.to_address == authenticated_user.email)
@@ -103,7 +105,7 @@ async def spammers(db: Annotated[Session, Depends(get_database_session)], authen
             spam_stats[record.from_domain] += 1
         else:
             spam_stats[record.from_domain] = 1
-    
+
     sender_list: list[SenderCount] = [SenderCount(domain=sender, count=spam_stats[sender]) for sender in spam_stats.keys()]
     sender_list.sort(key=lambda x: x.count, reverse=True)
 
