@@ -29,7 +29,7 @@ router = APIRouter(
 
 
 @router.get('', summary='List all users', description='Returns a list of all users in the system')
-async def index(q: Annotated[str, Query(default='')], page: Annotated[int, Query(1, ge=1)], per_page: Annotated[int, Query(20, ge=0)]) -> PaginatedResponse[User]:
+async def index(q: Annotated[str, Query()] = '', page: Annotated[int, Query(ge=1)] = 1, per_page: Annotated[int, Query(ge=0)] = 20) -> PaginatedResponse[User]:
     query = select(User)
     if q:
         query = query.where(User.email.contains(q))

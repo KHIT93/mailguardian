@@ -31,7 +31,7 @@ router = APIRouter(
 
 
 @router.get('', summary='List all domains', description='Returns a list of all domains in the system')
-async def index(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)], q: Annotated[str, Query(default='')], page: Annotated[int, Query(1, ge=1)], per_page: Annotated[int, Query(20, ge=0)]) -> PaginatedResponse[Domain]:
+async def index(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)], q: Annotated[str, Query()] = '', page: Annotated[int, Query(ge=1)] = 1, per_page: Annotated[int, Query(ge=0)] = 20) -> PaginatedResponse[Domain]:
     # NOTE: By default the domains endpoint is not accessible to normal users, so we set the recordset to an empty list
     # NOTE: A Domain Administrator can access the domains that they manage
     current_user = db.exec(select(User).where(User.id == authenticated_user.id)).first()

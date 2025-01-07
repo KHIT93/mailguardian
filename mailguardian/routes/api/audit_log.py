@@ -25,7 +25,7 @@ router = APIRouter(
 
 
 @router.get('', summary='List all AuditLogs', description='Returns a list of all AuditLogs in the system')
-async def index(page: Annotated[int, Query(1, ge=1)], per_page: Annotated[int, Query(20, ge=0)]) -> PaginatedResponse[AuditLog]:
+async def index(page: Annotated[int, Query(ge=1)] = 1, per_page: Annotated[int, Query(ge=0)] = 20) -> PaginatedResponse[AuditLog]:
     # NOTE: By default the AuditLogs endpoint is not accessible to normal users, so we set the recordset to an empty list
     query = select(AuditLog)
     return await paginate(query=query, page=page, per_page=per_page)

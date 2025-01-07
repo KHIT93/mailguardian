@@ -56,7 +56,7 @@ router = APIRouter(
 
 
 @router.get('', summary='List all Messages', description='Returns a list of all Messages in the system')
-async def index(authenticated_user: Annotated[User, Depends(get_current_user)], page: Annotated[int, Query(1, ge=1)], per_page: Annotated[int, Query(20, ge=0)]) -> PaginatedResponse[Message]:
+async def index(authenticated_user: Annotated[User, Depends(get_current_user)], page: Annotated[int, Query(ge=1)] = 1, per_page: Annotated[int, Query(ge=0)] = 20) -> PaginatedResponse[Message]:
     # NOTE: By default the Messages endpoint is not accessible to normal users, so we set the recordset to an empty list
     # results: list[Message] = []
     # NOTE: An Application Administrator can access everything

@@ -31,7 +31,7 @@ router = APIRouter(
 
 
 @router.get('', summary='List all allowed senders', description='Returns a list of all allowed senders in the system')
-async def index(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)], q: Annotated[str, Query(default='')], page: Annotated[int, Query(1, ge=1)], per_page: Annotated[int, Query(20, ge=0)]) -> PaginatedResponse[ListEntry]:
+async def index(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)], q: Annotated[str, Query()] = '', page: Annotated[int, Query(ge=1)] = 1, per_page: Annotated[int, Query(ge=0)] = 20) -> PaginatedResponse[ListEntry]:
     # NOTE: By default the ListEntrys endpoint is not accessible to normal users, so we set the recordset to an empty list
     query = select(ListEntry).where(ListEntry.listing_type == ListingType.ALLOWED)
     # NOTE: A ListEntry Administrator can access the ListEntrys that they manage
