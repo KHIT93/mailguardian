@@ -1,19 +1,25 @@
 #! /usr/bin/env python3
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+
 import typer
-from mailguardian.config.app import API_VERSION, settings
-from mailguardian.app.console.user import app as user_cli
+from fastapi import FastAPI
 
 from mailguardian.app.console import commands
-from mailguardian.config.logging import enable_logfile, enable_stdout_logging, init_logger
 from mailguardian.app.http.middleware import middleware as http_middleware
+from mailguardian.config.app import API_VERSION, settings
+from mailguardian.config.logging import (
+    enable_logfile,
+    enable_stdout_logging,
+    init_logger,
+)
 
 # Application bootstrapping
 # TODO: See if we can move this to separate python module and then simply import it here
+
+
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # noqa: ARG001
     # On Startup
     init_logger(level=settings.APP_LOGLEVEL)
     if settings.APP_LOGFILE and settings.APP_LOG_TO_FILE:
@@ -22,6 +28,7 @@ async def lifespan(app: FastAPI):
         enable_stdout_logging()
 
     yield
+
 
 api = FastAPI(
     title='MailGuardian',
