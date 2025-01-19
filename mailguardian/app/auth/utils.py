@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime, timezone
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import Depends, Request
 from jose import JWTError, jwt
 import logging
@@ -8,15 +8,14 @@ import random
 from sqlmodel import Session, select
 import string
 from mailguardian.app.auth.validation import CommonPasswordValidator, MinimumLengthValidator, NumericPasswordValidator, UserAttributeSimilarityValidator, BaseValidator
+from mailguardian.app.auth.totp import verify_totp
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.app.models.audit_log import AuditLog
 from mailguardian.app.models.user import User
 from mailguardian.app.schemas.audit_log import AuditAction
-from mailguardian.config.app import settings, TOKEN_ALGORITHM
+from mailguardian.config.app import settings, TOKEN_ALGORITHM, RANDOM_CHARACTER_DATA
 from mailguardian.database.connect import engine
 
-
-RANDOM_CHARACTER_DATA: list[str] = list(string.ascii_letters + string.digits + string.punctuation.replace('"','').replace('\'',''))
 
 def get_random_string(length: int) -> str:
     # Define list of characters to use in password
@@ -53,7 +52,7 @@ def hash_password(password: str) -> str:
     return crypt_context.hash(secret=password)
 
 _logger = logging.getLogger(__name__)
-def authenticate_user(request: Request, db: Annotated[Session, Depends(get_database_session)], username: str, password: str) -> User | bool:
+def authenticate_user(request: Request, db: Annotated[Session, Depends(get_database_session)], username: str, password: str, verification_code: Optional[str] = '') -> User | bool:
     # with Session(engine) as db:
     user: User = db.exec(select(User).where(User.email == username and User.is_active == True)).first()
 
@@ -87,6 +86,20 @@ def authenticate_user(request: Request, db: Annotated[Session, Depends(get_datab
         db.commit()
         _logger.error('Could not log in user with email %s as the password is incorrect' % (username,))
         return False
+    if user.totp_codes:
+        if not any(verify_totp(totp.totp_secret, verification_code) for totp in user.totp_codes):
+            db.add(AuditLog(
+                action=AuditAction.LOGIN,
+                model=User.__name__,
+                res_id=user.id,
+                actor_id=None,
+                acted_from=request.client.host,
+                message='Denied login as %s. Incorrect 2FA' % (username,),
+                allowed=False
+            ))
+            db.commit()
+            _logger.error('Could not log in user with email %s as the 2FA verification code is invalid' % (username,))
+            return False
     db.add(AuditLog(
         action=AuditAction.LOGIN,
         model=User.__name__,
@@ -111,3 +124,4 @@ def create_access_token(data: dict, expires_delta: timedelta | None) -> str:
     encoded_jwt = jwt.encode(claims=to_encode, key=settings.SECRET_KEY, algorithm=TOKEN_ALGORITHM)
 
     return encoded_jwt
+

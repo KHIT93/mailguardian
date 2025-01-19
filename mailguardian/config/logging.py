@@ -97,6 +97,7 @@ def enable_logfile(filename: Path):
 
 def customize_fastapi_logger():
     fastapi_logger = logging.getLogger('fastapi')
+    fastapi_cli_logger = logging.getLogger('fastapi_cli')
     uvicorn = logging.getLogger("uvicorn")
     uvicorn_access = logging.getLogger("uvicorn.access")
     uvicorn_error = logging.getLogger("uvicorn.error")
@@ -105,6 +106,8 @@ def customize_fastapi_logger():
     console.setFormatter(formatter)
     fastapi_logger.handlers = []
     fastapi_logger.addHandler(console)
+    fastapi_cli_logger.handlers = []
+    fastapi_cli_logger.addHandler(console)
     uvicorn.handlers = []
     uvicorn.addHandler(console)
     uvicorn_access.handlers = []

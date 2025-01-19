@@ -100,6 +100,7 @@ class OAuth2MfaPasswordRequestForm(OAuth2PasswordRequestForm):
         self.grant_type = grant_type
         self.username = username
         self.password = password
+        self.verification_code = verification_code
         self.scopes = scope.split()
         self.client_id = client_id
         self.client_secret = client_secret

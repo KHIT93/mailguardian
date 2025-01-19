@@ -1,4 +1,5 @@
 from . import audit_log
+from . import auth
 from . import dashboard
 from . import domain
 from . import list_entry
