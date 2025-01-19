@@ -13,7 +13,7 @@
             label: 'Security',
             icon: 'i-heroicons-lock-closed',
             to: '/account/security',
-            exact: true
+            exact: false
         },
         {
             label: 'Domains',

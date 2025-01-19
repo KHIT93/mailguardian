@@ -1,5 +1,6 @@
 <script setup>
     import MainLayout from '~/components/MainLayout.vue'
+    import { listEntrySchema } from '~/schemas/lists.ts'
 
     const listingTypes = [
         {
@@ -57,15 +58,15 @@
 
 <template>
     <MainLayout page-title="Create sender">
-        <UForm ref="form" :state="state" @submit="onSubmit">
+        <UForm ref="form" :schema="listEntrySchema" :state="state" @submit="onSubmit">
             <UCard>
-                    <UFormGroup label="Senders address" size="md" class="my-4">
+                    <UFormGroup label="Senders address" name="from_address" size="md" class="my-4">
                         <UInput id="from_address" type="text" v-model="state.from_address"/>
                     </UFormGroup>
-                    <UFormGroup label="Recipient address" size="md" class="my-4">
+                    <UFormGroup label="Recipient address" name="to_address" size="md" class="my-4">
                         <UInput id="to_address" type="text" v-model="state.to_address"/>
                     </UFormGroup>
-                    <UFormGroup label="Action" size="md" class="my-4">
+                    <UFormGroup label="Action" name="listing_type" size="md" class="my-4">
                         <UInputMenu v-model="state.listing_type" :options="listingTypes" value-attribute="value" option-attribute="label" placeholder="Select action to take..."/>
                     </UFormGroup>
 

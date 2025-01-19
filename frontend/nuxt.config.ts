@@ -8,7 +8,7 @@ export default defineNuxtConfig({
         enabled: true
     },
 
-    modules: ['@nuxt/ui', '@nuxt-alt/auth', 'nuxt-security'],
+    modules: ['@nuxt/ui', '@nuxt-alt/auth', 'nuxt-security', 'nuxt-auth-utils'],
 
     app: {
         head: {
@@ -37,7 +37,8 @@ export default defineNuxtConfig({
                 },
                 endpoints: {
                     login: { url: `${process.env.SERVER_HOST}/api/v2/auth/token`, method: 'post' },
-                    logout: false,
+                    logout: { url: `${process.env.SERVER_HOST}/api/v2/auth/terminate`, method: 'delete' },
+                    refresh: false,
                     user: { url: `${process.env.SERVER_HOST}/api/v2/auth/whoami`, method: 'get' }
                 }
             }
@@ -52,7 +53,8 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         public: {
-            apiBaseUrl: `${process.env.SERVER_HOST}/api/v2`
+            apiBaseUrl: `${process.env.SERVER_HOST}/api/v2`,
+            enforceMfa: process.env.APP_ENFORCE_MFA,
         }
     },
 

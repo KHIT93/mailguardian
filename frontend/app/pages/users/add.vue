@@ -1,5 +1,6 @@
 <script setup>
     import MainLayout from '~/components/MainLayout.vue'
+    import { userSchema } from '~/schemas/users.ts'
 
     const submissionEndpoint = computed(() => `/users`)
 
@@ -49,16 +50,16 @@
 
 <template>
     <MainLayout page-title="Add User">
-        <UForm ref="form" :state="state" @submit="onSubmit">
+        <UForm ref="form" :schema="userSchema" :state="state" @submit="onSubmit">
             <UCard>
-                <UFormGroup label="Email" size="md" class="my-4">
+                <UFormGroup label="Email" name="email" size="md" class="my-4">
                     <UInput id="email" type="email" v-model="state.email"/>
                 </UFormGroup>
                 <div class="flex justify-between">
-                    <UFormGroup label="First Name" size="md" class="my-4 pr-1 w-1/2">
+                    <UFormGroup label="First Name" name="first_name" size="md" class="my-4 pr-1 w-1/2">
                         <UInput id="first_name" type="text" v-model="state.first_name"/>
                     </UFormGroup>
-                    <UFormGroup label="Last Name" size="md" class="my-4 pl-1 w-1/2">
+                    <UFormGroup label="Last Name" name="last_name" size="md" class="my-4 pl-1 w-1/2">
                         <UInput id="last_name" type="text" v-model="state.last_name"/>
                     </UFormGroup>
                 </div>

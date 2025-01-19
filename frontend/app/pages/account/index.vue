@@ -1,14 +1,18 @@
 <script setup>
     import TopNavigation from '~/components/account/TopNavigation'
     import MainLayout from '~/components/MainLayout.vue'
+    import { personalDetailsSchema } from '~/schemas/account.ts'
     const endpoint = computed(() => `/me/personal`)
 
-    const { status, data: state } = (await useApi(endpoint))
+    const { status, data } = (await useApi(endpoint))
 
-    const form = ref()
+    const state = reactive({
+        first_name: data.value.first_name,
+        last_name: data.value.last_name,
+        email: data.value.email
+    })
 
     async function onSubmit(event) {
-        form.value.clear()
         try {
             const response = await useApi(endpoint, {
                 method: 'POST',
@@ -23,7 +27,6 @@
                 })))
             }
         }
-        
     }
 
 </script>
@@ -31,7 +34,7 @@
 <template>
     <MainLayout page-title="My Account">
         <TopNavigation />
-        <UForm ref="form" :state="state" @submit="onSubmit">
+        <UForm :schema="personalDetailsSchema" :state="state" @submit="onSubmit">
             <UCard>
                 <UFormGroup
                     name="first_name"
@@ -78,33 +81,12 @@
                         size="md"
                     />
                 </UFormGroup>
-                <!-- <UDivider class="my-4" /> -->
-                <!-- <UFormGroup
-                    name="password"
-                    label="Password"
-                    description="Confirm your current password before setting a new one."
-                    class="grid grid-cols-2 gap-2"
-                    >
-                    <UInput
-                        id="password"
-                        v-model="state.password_current"
-                        type="password"
-                        placeholder="Current password"
-                        size="md"
-                    />
-                    <UInput
-                        id="password_new"
-                        v-model="state.password_new"
-                        type="password"
-                        placeholder="New password"
-                        size="md"
-                        class="mt-2"
-                    />
-                </UFormGroup> -->
                 <template #footer>
-                    <UButton type="submit">
-                        Save
-                    </UButton>
+                    <div class="flex flex-row-reverse">
+                        <UButton type="submit">
+                            Save
+                        </UButton>
+                    </div>
                 </template>
             </UCard>
         </UForm>

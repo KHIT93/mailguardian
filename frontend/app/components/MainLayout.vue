@@ -1,6 +1,7 @@
 <script setup>
     import AppNotifications from './AppNotifications'
     import AppMobileNavigation from './AppMobileNavigation'
+    import OnlineIndicator from './OnlineIndicator'
     const props = defineProps(['pageTitle'])
     const { isNotificationsSlideoverOpen } = useNotifications()
     const { isMobileNavigationSlideoverOpen } = useNavigation()
@@ -36,6 +37,14 @@
                             </h1>
                         </div>
                         <div class="flex items-stretch flex-shrink-0 gap-1.5">
+                            <div class="relative inline-flex">
+                                <ClientOnly>
+                                    <OnlineIndicator />
+                                    <template #fallback>
+                                        <div class="w-8 h-8" />
+                                    </template>
+                                </ClientOnly>
+                            </div>
                             <div class="relative inline-flex">
                                 <ClientOnly>
                                     <UButton :icon="isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'" color="gray" variant="ghost" aria-label="Theme" square @click="isDark = !isDark"/>
