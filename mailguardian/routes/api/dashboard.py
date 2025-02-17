@@ -23,7 +23,7 @@ router = APIRouter(
 
 @router.get('/traffic', summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
 async def traffic(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[TrafficGraph]:
-    end_date: datetime.date = datetime.date(year=2018, month=3, day=12)
+    end_date: datetime.date = datetime.date.today()
     start_date: datetime.date = end_date - datetime.timedelta(days=30)
     query = select(Message).where(Message.from_address == authenticated_user.email or Message.to_address == authenticated_user.email)
 
@@ -52,7 +52,7 @@ async def traffic(db: Annotated[Session, Depends(get_database_session)], authent
 
 @router.get('/senders', summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
 async def senders(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[SenderCount]:
-    end_date: datetime.date = datetime.date(year=2018, month=3, day=12)
+    end_date: datetime.date = datetime.date.today()
     start_date: datetime.date = end_date - datetime.timedelta(days=30)
     query = select(Message).where(Message.from_address == authenticated_user.email or Message.to_address == authenticated_user.email)
 
@@ -83,7 +83,7 @@ async def senders(db: Annotated[Session, Depends(get_database_session)], authent
 
 @router.get('/spammers', summary='Dashboard Traffic statistics', description='Returns traffic statistics for the application dashboard')
 async def spammers(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[SenderCount]:
-    end_date: datetime.date = datetime.date(year=2018, month=3, day=12)
+    end_date: datetime.date = datetime.date.today()
     start_date: datetime.date = end_date - datetime.timedelta(days=30)
     query = select(Message).where(Message.from_address == authenticated_user.email or Message.to_address == authenticated_user.email)
 

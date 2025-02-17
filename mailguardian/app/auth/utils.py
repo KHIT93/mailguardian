@@ -36,7 +36,7 @@ def get_random_string(length: int) -> str:
     return "".join(password)
 
 # TODO: Find out what parameters we can define to make the usage of argon2 as secure as possible
-crypt_context: CryptContext = CryptContext(schemes=['argon2'])
+crypt_context: CryptContext = CryptContext(schemes=['argon2'], argon2__time_cost=4, argon2__memory_cost=64*1024, argon2__parallelism=8)
 
 def validate_new_password(plain_password: str) -> bool:
     for validator in [CommonPasswordValidator, MinimumLengthValidator, NumericPasswordValidator, UserAttributeSimilarityValidator]:
@@ -48,7 +48,6 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return crypt_context.verify(secret=plain_password, hash=hashed_password)
 
 def hash_password(password: str) -> str:
-    # return crypt_context.using(time_cost=3, memory_cost=102400, max_threads=8).hash(secret=password)
     return crypt_context.hash(secret=password)
 
 _logger = logging.getLogger(__name__)

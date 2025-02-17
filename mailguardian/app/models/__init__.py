@@ -10,6 +10,7 @@ from . import message_mcp_report
 from . import message_rbl_report
 from . import message_spam_report
 from . import message_transport_log
+from . import scheduler
 from . import smtp_relay
 from . import spamassassin_rule_description
 from . import spamassassin_rule

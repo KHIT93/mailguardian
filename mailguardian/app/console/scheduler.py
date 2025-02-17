@@ -4,12 +4,9 @@ import logging
 import rich
 from sqlmodel import Session, select
 import time
-from typing import Optional, Annotated
 import typer
-from mailguardian.app.dependencies import get_database_session
 from mailguardian.app.models.task import Task, TaskState
-from mailguardian.config.app import settings
-from mailguardian.database.connect import Database, engine
+from mailguardian.database.connect import engine
 
 logger = logging.getLogger(__name__)
 

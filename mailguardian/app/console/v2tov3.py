@@ -1,3 +1,4 @@
+import datetime
 import uuid
 from dotenv import load_dotenv
 import rich
@@ -8,7 +9,7 @@ from pathlib import Path
 from pydantic import PostgresDsn
 import psycopg
 import os
-from mailguardian.app.utils.spamassassin import format_spamassassin_report
+from mailguardian.app.utils.spamassassin import extract_rules_and_scores_from_report
 from mailguardian.config.app import ENV_FILE as APP_ENV_FILE
 
 app: typer.Typer = typer.Typer(help='Utilities related to switching/upgrading from 2.x.x to 3.0.0')
@@ -41,11 +42,11 @@ def migrate_domains(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
 def migrate_users(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
     from mailguardian.app.schemas.user import UserRole
     length: int = 0
-    src.execute('SELECT count(id) from core_user')
+    src.execute('SELECT count(id) from core_user WHERE email <> %s', ['AnonymousUser'])
     length = src.fetchone()[0]
     rich.print(f'[bold white]Migrating {length} users to new database structure ...[/bold white]')
     with typer.progressbar(length=length) as progress:
-        for result in src.stream("SELECT id, first_name, last_name, email, password, is_staff, is_domain_admin, is_active, date_joined, last_login, daily_quarantine_report, weekly_quarantine_report, monthly_quarantine_report, custom_spam_score, custom_spam_highscore, skip_scan FROM domains_domain"):
+        for result in src.stream("SELECT id, first_name, last_name, email, password, is_staff, is_domain_admin, is_active, date_joined, last_login, daily_quarantine_report, weekly_quarantine_report, monthly_quarantine_report, custom_spam_score, custom_spam_highscore, skip_scan FROM core_user WHERE email <> %s", ['AnonymousUser']):
             data: dict[str, Any] = __build_dict_from_cursor_tuple(cr=src, row=result)
             if data['is_staff']:
                 data['role'] = UserRole.SUPERUSER
@@ -61,13 +62,14 @@ def migrate_users(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
                 'first_name': data['first_name'],
                 'last_name': data['last_name'],
                 'email': data['email'],
-                'password': data['password'],
+                'password': data['password'].replace('argon2$', '$'), # This makes the hashes from Django, compatible with passlib
                 'role': data['role'],
-                'is_active': data['is_active']
+                'is_active': data['is_active'],
+                'created_at': data['date_joined']
             }
-            target.execute('INSERT INTO users (uuid, first_name, last_name, email, password, role, is_active) VALUES(%s, %s, %s, %s, %s, %s, %s) RETURNING id', __build_tuple_from_dict(new_data))
+            target.execute('INSERT INTO users (uuid, first_name, last_name, email, password, role, is_active, created_at) VALUES(%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id', __build_tuple_from_dict(new_data))
             progress.update(1)
-    print(f'Processed {length} domains')
+    print(f'Processed {length} users')
 
 def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
     length: int = 0
@@ -120,6 +122,8 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
             spam_report: str = data.pop('spam_report', '')
             data['spam_score'] = data['spam_score'] or 0.00
             data['mcp_score'] = data['mcp_score'] or 0.00
+            data['timestamp'] = data['timestamp'] + datetime.timedelta(days=(365*7) - 10)
+            data['date'] = data['date'] + datetime.timedelta(days=(365*7) - 10)
             target.execute(("INSERT INTO messages "
                 "("
                     "uuid, "
@@ -220,9 +224,12 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
                     rbl_report
                 ])
             if spam_report:
-                vals: list[dict[str, str]] = format_spamassassin_report(spamreport=spam_report)
+                vals: list[dict[str, float]] = extract_rules_and_scores_from_report(spamreport=spam_report)
                 for val in vals:
-                    target.execute('INSERT INTO message_spam_reports (message_id, uuid, rule, score) VALUES(%s,%s,%s, %s)', [value for value in val.values()])
+                    values: list = [record_id, uuid.uuid4(), val.get('rule'), val.get('score')]
+                    if val.get('rule') == 'too' and val.get('score') == 'large':
+                        values = [record_id, uuid.uuid4(), f'{val.get("rule")} {val.get("score")}', 0.0]
+                    target.execute('INSERT INTO message_spam_reports (message_id, uuid, rule, score) VALUES(%s, %s, %s, %s)', values)
                 # raw = spam_report.replace('not spam, ', '').replace('not spam (too large)', 'too large').replace('spam( ', '').replace('spam, ', '').replace('SpamAssassin (', '').replace('not cached, ', '').replace(')', '').replace('autolearn=', '').split(', ')
                 # if 'too large' in raw:
                 #     vals.append([

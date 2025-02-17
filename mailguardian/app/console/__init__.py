@@ -7,10 +7,12 @@ from .user import app as user_app
 from .v2tov3 import app as v2tov3_app
 from .maillog import app as maillog_app
 from .scheduler import app as scheduler_app
+from .huey import app as huey_app
 
 commands: dict[str, typer.Typer] = {
     "user": user_app,
     'v2tov3': v2tov3_app,
     "maillog": maillog_app,
     'scheduler': scheduler_app,
+    'huey': huey_app
 }

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, List, Optional
 from sqlmodel import Column, ForeignKey, Uuid, Integer, String, Boolean, Field, Relationship, SQLModel
 import uuid
 
-class UserRole(str, Enum):
+class UserRole(Enum):
     USER = 'user'
     DOMAIN_ADMINISTRATOR = 'domain_admin'
     SUPERUSER = 'superuser'
@@ -40,13 +40,13 @@ class TokenData(BaseModel):
     role: UserRole = UserRole.USER
     session_id: uuid.UUID
 
-class TotpScope(str, Enum):
+class TotpScope(Enum):
     APP = 'app' # Short codes (6-8 digits) from a mobile app and with short lifetime (30 seconds)
     EMAIL = 'email' # Longer codes (8-10 digits) sent by email and with longer lifetime (5 minutes)
 
 class TimeBasedCode(SQLModel):
     user_id: Optional[int] = Field(foreign_key="users.id", index=True)
-    # scope: TotpScope = Field(default=TotpScope.APP)
+    scope: TotpScope = Field(default=TotpScope.APP)
     name: str
     created_at: datetime.datetime
     totp_secret: str

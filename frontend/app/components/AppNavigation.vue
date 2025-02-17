@@ -23,11 +23,11 @@
                 to: '/lists/blocked',
                 icon: 'i-heroicons-x-circle'
             },
-            // {
-            //     label: 'Statistics',
-            //     to: '/statistics',
-            //     icon: 'i-heroicons-chart-bar'
-            // },
+            {
+                label: 'Statistics',
+                to: '/statistics',
+                icon: 'i-heroicons-chart-bar'
+            },
         ]
     ]
     const adminLinks = [

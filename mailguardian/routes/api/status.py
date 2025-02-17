@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends
 
 from mailguardian.app.dependencies import get_database_session
