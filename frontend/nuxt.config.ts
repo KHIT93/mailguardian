@@ -14,7 +14,7 @@ export default defineNuxtConfig({
         head: {
             title: 'MailGuardian',
             bodyAttrs: {
-                class: 'bg-slate-100'
+                class: 'bg-slate-100 dark:bg-gray-800'
             }
         }
     },
