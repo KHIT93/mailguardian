@@ -162,21 +162,26 @@
                 <template #field-data="{ row }">
                     {{ fieldOptions.find(f => f.value == row.field).label }}
                 </template>
-                <template #operator-data="{ row }">
-                    {{ operatorOptions.find(f => f.value == row.operator).label }}
+                <UTable :columns="columns" :rows="filters">
+                    <template #field-data="{ row }">
+                        {{ fieldOptions.find(f => f.value == row.field).label }}
+                    </template>
+                    <template #operator-data="{ row }">
+                        {{ operatorOptions.find(f => f.value == row.operator).label }}
+                    </template>
+                    <template #actions-data="{ row }">
+                        <UTooltip text="Remove filter">
+                            <UButton color="red" variant="ghost" icon="i-heroicons-trash" @click="filters.splice(filters.findIndex(f => f.field == row.field), 1)" />
+                        </UTooltip>
+                    </template>
+                </UTable>
+                <template #footer v-if="filters.length">
+                    <UButton icon="i-heroicons-magnifying-glass" size="md" @click="showResults = true">
+                        Show results
+                    </UButton>
                 </template>
-                <template #actions-data="{ row }">
-                    <UTooltip text="Remove filter">
-                        <UButton color="red" variant="ghost" icon="i-heroicons-trash" @click="filters.splice(filters.findIndex(f => f.field == row.field), 1)" />
-                    </UTooltip>
-                </template>
-            </UTable>
-            <template #footer v-if="filters.length">
-                <UButton icon="i-heroicons-magnifying-glass" size="md" @click="showResults = true">
-                    Show results
-                </UButton>
-            </template>
-        </UCard>
+            </UCard>
+        </div>
         
         <UModal v-model:open="showResults" fullscreen>
             <template #content>
