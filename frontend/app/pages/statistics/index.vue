@@ -124,7 +124,7 @@
                 description: `Filter for ${fieldOptions.find(f => f.value == state.field).label} has already been created`,
                 timeout: 10000,
                 icon: 'i-heroicons-exclamation-circle-solid',
-                color: 'red'
+                color: 'error'
             })   
             
         }
@@ -133,49 +133,47 @@
 
 <template>
     <MainLayout page-title="Statistics">
-        <UCard>
-            <template #header>
-                Message filters
-            </template>
-            <UForm :state="state" @submit="addFilter">
-                <UFormField label="Field" name="field" size="md" required class="my-4" help="Select what field/information you want to search in">
-                    <UInputMenu v-model="state.field" :items="fieldOptions" required value-key="value" label-key="label" placeholder="Select field..."/>
-                </UFormField>
-                <UFormField label="Matches" name="operator" required size="md" class="my-4" help="Select how you want to search the selected field/information">
-                    <UInputMenu v-model="state.operator" :items="operatorOptions" required value-kye="value" label-key="label" placeholder="Select relay type..."/>
-                </UFormField>
-                <UFormField label="Value" name="query" required size="md" help="Type/Select the value to search for">
-                    <UInput v-model="state.query" :type="fieldTypes[state.field]" />
-                </UFormField>
-                <USeparator class="my-4" />
-                <UButton type="submit" size="md" icon="i-heroicons-plus-solid">
-                    Add Filter
-                </UButton>
-            </UForm>
-        </UCard>
-
-        <UCard class="my-2">
-            <template #header>
-                Applied filters
-            </template>
-            <UTable :columns="columns" :data="filters">
-                <template #field-data="{ row }">
-                    {{ fieldOptions.find(f => f.value == row.field).label }}
+        <div class="lg:flex">
+            <UCard class="w-full lg:w-1/2 lg:mx-1">
+                <template #header>
+                    Message filters
                 </template>
-                <UTable :columns="columns" :rows="filters">
-                    <template #field-data="{ row }">
-                        {{ fieldOptions.find(f => f.value == row.field).label }}
+                <UForm :state="state" @submit="addFilter">
+                    <UFormField label="Field" name="field" size="md" required class="my-4" help="Select what field/information you want to search in">
+                        <UInputMenu v-model="state.field" :items="fieldOptions" required value-key="value" label-key="label" placeholder="Select field..."/>
+                    </UFormField>
+                    <UFormField label="Matches" name="operator" required size="md" class="my-4" help="Select how you want to search the selected field/information">
+                        <UInputMenu v-model="state.operator" :items="operatorOptions" required value-kye="value" label-key="label" placeholder="Select relay type..."/>
+                    </UFormField>
+                    <UFormField label="Value" name="query" required size="md" help="Type/Select the value to search for">
+                        <UInput v-model="state.query" :type="fieldTypes[state.field]" />
+                    </UFormField>
+                    <USeparator class="my-4" />
+                    <UButton type="submit" size="md" icon="i-heroicons-plus-solid">
+                        Add Filter
+                    </UButton>
+                </UForm>
+            </UCard>
+
+            <UCard class="w-full lg:w-1/2 my-2 lg:my-0 lg:mx-1">
+                <template #header>
+                    Applied filters
+                </template>
+                <UTable :columns="columns" :data="filters">
+                    <template #field-cell="{ getValue }">
+                        {{ fieldOptions.find(f => f.value == getValue()).label }}
                     </template>
-                    <template #operator-data="{ row }">
-                        {{ operatorOptions.find(f => f.value == row.operator).label }}
+                    <template #operator-cell="{ getValue }">
+                        {{ operatorOptions.find(f => f.value == getValue()).label }}
                     </template>
-                    <template #actions-data="{ row }">
+                    <template #actions-cell="{ row }">
                         <UTooltip text="Remove filter">
-                            <UButton color="red" variant="ghost" icon="i-heroicons-trash" @click="filters.splice(filters.findIndex(f => f.field == row.field), 1)" />
+                            <UButton color="error" variant="ghost" icon="i-heroicons-trash" @click="filters.splice(filters.findIndex(f => f.field == row.original.field), 1)" />
                         </UTooltip>
                     </template>
                 </UTable>
                 <template #footer v-if="filters.length">
+                    {{ filters }}
                     <UButton icon="i-heroicons-magnifying-glass" size="md" @click="showResults = true">
                         Show results
                     </UButton>

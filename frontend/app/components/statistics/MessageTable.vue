@@ -32,7 +32,7 @@
 </script>
 
 <template>
-    <UTable :loading="status != 'success'" :columns="columns" :data="data?.items">
+    <UTable :loading="status == 'pending'" :columns="columns" :data="data?.items">
         <template #actions-cell="{ row }">
             <UTooltip text="Show details">
                 <UButton color="neutral" variant="ghost" icon="i-heroicons-eye" :to="`/messages/${row.original.uuid}`" />
