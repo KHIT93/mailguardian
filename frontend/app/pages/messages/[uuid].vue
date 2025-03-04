@@ -20,21 +20,21 @@
             {
                 label: 'View Headers',
                 icon: 'i-heroicons-eye',
-                click: () => {
+                onSelect: () => {
                     showHeaders.value = true
                 }
             },
             {
                 label: 'View Contents',
                 icon: 'i-heroicons-eye',
-                click: () => {
+                onSelect: () => {
                     showContents.value = true
                 }
             },
             {
                 label: 'View Spam Analysis',
                 icon: 'i-heroicons-academic-cap',
-                click: () => {
+                onSelect: () => {
                     showSpamAnalysis.value = true
                 }
             },
@@ -55,50 +55,50 @@
 
     const headerColumns = [
         {
-            key: 'key',
-            label: 'Name'
+            accessorKey: 'key',
+            header: 'Name'
         },
         {
-            key: 'value',
-            label: 'Value'
+            accessorKey: 'value',
+            header: 'Value'
         }
     ]
 
     const logsColumns = [
         {
-            key: 'timestamp',
-            label: 'When'
+            accessorKey: 'timestamp',
+            header: 'When'
         },
         {
-            key: 'transport_host',
-            label: 'Transport Host'
+            accessorKey: 'transport_host',
+            header: 'Transport Host'
         },
         {
-            key: 'relay_host',
-            label: 'Relay Host'
+            accessorKey: 'relay_host',
+            header: 'Relay Host'
         },
         {
-            key: 'delay',
-            label: 'Delay'
+            accessorKey: 'delay',
+            header: 'Delay'
         },
         {
-            key: 'dsn',
-            label: 'DSN'
+            accessorKey: 'dsn',
+            header: 'DSN'
         },
         {
-            key: 'dsn_message',
-            label: 'Message'
+            accessorKey: 'dsn_message',
+            header: 'Message'
         }
     ]
 
     const spamReportColumns = [
         {
-            key: 'rule',
-            label: 'Rule'
+            accessorKey: 'rule',
+            header: 'Rule'
         },
         {
-            key: 'score',
-            label: 'Score'
+            accessorKey: 'score',
+            header: 'Score'
         }
     ]
 
@@ -115,16 +115,18 @@
                     <div class="flex justify-between">
                         <h2 class="truncate text-ellipsis w-1/2">
                             <UTooltip text="Show Spam Analysis">
-                                <UBadge :color="(data.is_spam) ? 'red': 'green'" :ui="{ base: 'hidden md:inline-flex' }" variant="subtle" class="cursor-pointer"size="md" @click="showSpamAnalysis = true">
-                                    <UIcon name="i-heroicons-academic-cap"/>
-                                    <span class="pl-1">{{ data.spam_score }}</span>
+                                <UBadge :color="(data.is_spam) ? 'error': 'success'" icon="i-heroicons-academic-cap" variant="subtle" class="cursor-pointer"size="md" @click="showSpamAnalysis = true">
+                                    {{ data.spam_score }}
                                 </UBadge>
                             </UTooltip>
                             {{ data.subject }}
                         </h2>
-                        <UDropdown :items="messageActions" mode="click">
+                        <UDropdownMenu :items="messageActions" mode="click">
+                            <template #msgheader>
+                                
+                            </template>
                             <UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
-                        </UDropdown>
+                        </UDropdownMenu>
                     </div>
                 </template>
                 <div class="mt-6">
@@ -172,58 +174,64 @@
                 <!-- <template #header>
                     <h3 class="font-bold">Transport logs</h3>
                 </template> -->
-            <UTable :loading="logs_status != 'success'" :columns="logsColumns" :rows="logs" />
+                <UTable :loading="logs_status == 'pending'" :columns="logsColumns" :rows="logs" />
             </UCard>
-            <UModal v-model="showHeaders" :ui="{ width: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
-                <UCard>
-                    <template #header>
-                        <div class="flex items-center justify-between">
-                            <h3>Headers for {{ data.uuid }}</h3>
-                            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showHeaders = false" />
-                        </div>
-                    </template>
-                <UTable :loading="headers_status != 'success'" :columns="headerColumns" :rows="headers"/>
-                </UCard>
+            <UModal v-model:open="showHeaders" :title="`Headers for ${data.uuid}`" :description="`View messages headers for ${data.uuid}`" :ui="{ content: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
+                <template #content>
+                    <UCard>
+                        <template #header>
+                            <div class="flex items-center justify-between">
+                                <h3>Headers for {{ data.uuid }}</h3>
+                                <UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showHeaders = false" />
+                            </div>
+                        </template>
+                        <UTable :loading="headers_status == 'pending'" :columns="headerColumns" :data="headers"/>
+                    </UCard>
+                </template>
             </UModal>
 
-            <UModal v-model="showContents" :ui="{ width: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
-                <UCard>
-                    <template #header>
-                        <div class="flex items-center justify-between">
-                            <h3>{{ data.subject }}</h3>
-                            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showContents = false" />
-                        </div>
+            <UModal v-model:open="showContents" :title="`Contents for ${data.uuid}`" :description="`View messages contents for ${data.uuid}`" :ui="{ content: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
+                <template #content>
+                    <UCard>
+                        <template #header>
+                            <div class="flex items-center justify-between">
+                                <h3>{{ data.subject }}</h3>
+                                <UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showContents = false" />
+                            </div>
+                            <div>
+                                <span class="text-gray-300 font-bold">From:</span> {{ data.from_address }}
+                            </div>
+                            <div>
+                                <span class="text-gray-300 font-bold">To:</span> {{ data.to_address }}
+                            </div>
+                        </template>
                         <div>
-                            <span class="text-gray-300 font-bold">From:</span> {{ data.from_address }}
+                            {{ contents?.body }}
                         </div>
-                        <div>
-                            <span class="text-gray-300 font-bold">To:</span> {{ data.to_address }}
-                        </div>
-                    </template>
-                    <div>
-                        {{ contents?.body }}
-                    </div>
-                    <template #footer v-if="contents?.attachments">
-                        <ul>
-                            <li v-for="attachment in contents?.attachments" :key="attachment">
-                                {{ attachment }}
-                            </li>
-                        </ul>
-                    </template>
-                <!-- <UTable :loading="contents_status = 'success'" :columns="headerColumns" :rows="contents"/> -->
-                </UCard>
+                        <template #footer v-if="contents?.attachments">
+                            <ul>
+                                <li v-for="attachment in contents?.attachments" :key="attachment">
+                                    {{ attachment }}
+                                </li>
+                            </ul>
+                        </template>
+                        <!-- <UTable :loading="contents_status = 'success'" :columns="headerColumns" :data="contents"/> -->
+                    </UCard>
+                </template>
             </UModal>
 
-            <UModal v-model="showSpamAnalysis" :ui="{ width: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
-                <UCard>
-                    <template #header>
-                        <div class="flex items-center justify-between">
-                            <h3>Spam Analysis {{ data.uuid }}</h3>
-                            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showSpamAnalysis = false" />
-                        </div>
-                    </template>
-                <UTable :loading="spamreport_status != 'success'" :columns="spamReportColumns" :rows="spamreport"/>
-                </UCard>
+            <UModal v-model:open="showSpamAnalysis" :title="`Spam Analysis for ${data.uuid}`" :description="`View Spam Analysis for ${data.uuid}`" :ui="{ content: 'w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl 2xl:max-w-screen-2xl' }">
+                <template #content>
+                    <UCard>
+                        <template #header>
+                            <div class="flex items-center justify-between">
+                                <h3>Spam Analysis {{ data.uuid }}</h3>
+                                <UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" :ui="{ rounded: 'rounded-full' }" class="-my-1" @click="showSpamAnalysis = false" />
+                            </div>
+                        </template>
+                        <UTable :loading="spamreport_status == 'pending'" :columns="spamReportColumns" :data="spamreport"/>
+                    </UCard>
+                </template>
             </UModal>
         </div>
         <UCard v-else="">

@@ -8,31 +8,31 @@
     }))
     const columns = [
         {
-            key: 'actions'
+            accessorKey: 'name',
+            header: 'Domain'
         },
         {
-            key: 'name',
-            label: 'Domain'
+            accessorKey: 'relay_type',
+            header: 'Transport'
         },
         {
-            key: 'relay_type',
-            label: 'Transport'
+            accessorKey: 'destination',
+            header: 'Deliver To'
         },
         {
-            key: 'destination',
-            label: 'Deliver To'
+            accessorKey: 'reception_type',
+            header: 'Configuration'
         },
         {
-            key: 'reception_type',
-            label: 'Configuration'
+            accessorKey: 'created_at',
+            header: 'Created'
         },
         {
-            key: 'created_at',
-            label: 'Created'
+            accessorKey: 'updated_at',
+            header: 'Updated'
         },
         {
-            key: 'updated_at',
-            label: 'Updated'
+            id: 'actions'
         }
     ]
 </script>
@@ -43,16 +43,16 @@
             <template #header>
                 <UButton to="/domains/add" size="md" icon="i-heroicons-plus">Add Domain</UButton>
             </template>
-            <UTable :loading="status != 'success'" :columns="columns" :rows="data?.items">
-                <template #actions-data="{ row }">
+            <UTable :loading="status != 'success'" :columns="columns" :data="data?.items">
+                <template #actions-cell="{ row }">
                     <UTooltip text="Edit entry">
-                        <UButton color="gray" variant="ghost" icon="i-heroicons-pencil" :to="`/domains/${row.uuid}/edit`" />
+                        <UButton color="neutral" variant="ghost" icon="i-heroicons-pencil" :to="`/domains/${row.original.uuid}/edit`" />
                     </UTooltip>
                 </template>
             </UTable>
             <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
-                <UButton color="gray" leading-icon="i-heroicons-arrow-small-left-20-solid" :disabled="!data?.previous_page" @click="page -= 1" label="Previous"/>
-                <UButton color="gray" trailing-icon="i-heroicons-arrow-small-right-20-solid" :disabled="!data?.next_page" @click="page += 1" label="Next"/>
+                <UButton color="neutral" leading-icon="i-heroicons-arrow-small-left-20-solid" :disabled="!data?.previous_page" @click="page -= 1" label="Previous"/>
+                <UButton color="neutral" trailing-icon="i-heroicons-arrow-small-right-20-solid" :disabled="!data?.next_page" @click="page += 1" label="Next"/>
             </div>
         </UCard>
     </MainLayout>

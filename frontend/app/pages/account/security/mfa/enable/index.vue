@@ -65,17 +65,17 @@
                 <div class="flex justify-center" v-else="">
                     <div class="w-full md:w-1/2">
                         <img :src="qr" class="w-64 h-64"/>
-                        <UFormGroup label="Name" name="name">
+                        <UFormField label="Name" name="name">
                             <UInput v-model="state.name" type="text" autcomplete="off" variant="outline" icon="i-heroicons-pencil" required />
-                        </UFormGroup>
+                        </UFormField>
 
-                        <UFormGroup label="Password" name="password">
+                        <UFormField label="Password" name="password">
                             <UInput v-model="state.password" type="password" autcomplete="current-password" variant="outline" icon="i-heroicons-lock-closed" required />
-                        </UFormGroup>
+                        </UFormField>
 
-                        <UFormGroup label="Verification Code" name="verification_code">
-                            <UInput v-model="state.code" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" variant="outline" icon="i-heroicons-check-badge" required />
-                        </UFormGroup>
+                        <UFormField label="Verification Code" name="verification_code">
+                            <UPinInput v-model="state.code" otp :length="6" variant="outline" size="lg" placeholder="123456" icon="i-heroicons-check-badge" required />
+                        </UFormField>
                         <div class="flex flex-row-reverse mt-4">
                             <UButton type="submit" :loading="loading" icon="i-heroicons-lock-closed-solid">
                                 Enable 2FA

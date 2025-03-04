@@ -11,16 +11,16 @@
 
     const columns = [
         {
-            key: 'name',
-            label: 'Domain'
+            accessorKey: 'name',
+            header: 'Domain'
         },
         {
-            key: 'relay_type',
-            label: 'Transport'
+            accessorKey: 'relay_type',
+            header: 'Transport'
         },
         {
-            key: 'destination',
-            label: 'Deliver To'
+            accessorKey: 'destination',
+            header: 'Deliver To'
         }
     ]
 
@@ -34,7 +34,7 @@
         </UCard>
         <UCard v-else="">
             The below list of domains are the ones that you have access to
-            <UTable :loading="status != 'success'" :columns="columns" :rows="data" />
+            <UTable :loading="status != 'success'" :columns="columns" :data="data" />
         </UCard>
     </MainLayout>
 </template>

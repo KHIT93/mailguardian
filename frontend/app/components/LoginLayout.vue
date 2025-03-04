@@ -4,7 +4,7 @@
 
 <template>
     <UContainer class="w-full h-screen flex flex-col gap-y-4 pt-36 dark:bg-gray-800">
-        <UCard :ui="{ body: { base: 'lg:grid lg:grid-cols-2' } }" class="py-3">
+        <UCard :ui="{ body: 'lg:grid lg:grid-cols-2' }" class="py-3">
             <div class="space-y-8>">
                 <div class="flex items-stretch gap-1.5 min-w-0 flex-1">
                     <UIcon name="i-heroicons-shield-check" class="h-8 w-8 text-blue-500"/>

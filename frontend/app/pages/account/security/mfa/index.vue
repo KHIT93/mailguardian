@@ -13,15 +13,15 @@
     const { status, data, refresh } = (await useApi(endpoint))
     const columns = [
         {
-            key: 'name',
-            label: 'Name'
+            accessorKey: 'name',
+            header: 'Name'
         },
         {
-            key: 'created_at',
-            label: 'Created'
+            accessorKey: 'created_at',
+            header: 'Created'
         },
         {
-            key: 'actions'
+            id: 'actions'
         },
     ]
 
@@ -54,13 +54,13 @@
         <TopNavigation />
         <UCard>
             <UButton to="/account/security/mfa/enable" size="md" icon="i-heroicons-plus">Add TOTP Device</UButton>
-            <UTable :loading="status != 'success'" :columns="columns" :rows="data">
-                <template #created_at-data="{row}">
-                    {{ formatDate(row.created_at) }}
+            <UTable :loading="status == 'pending'" :columns="columns" :data="data">
+                <template #created_at-cell="{ getValue }">
+                    {{ formatDate(getValue()) }}
                 </template>
-                <template #actions-data="{ row }">
+                <template #actions-cell="{ row }">
                     <UTooltip text="Revoke TOTP">
-                        <UButton color="red" variant="ghost" icon="i-heroicons-trash" @click="revokeTotpDevice(row)" />
+                        <UButton color="error" variant="ghost" icon="i-heroicons-trash" @click="revokeTotpDevice(row.original)" />
                     </UTooltip>
                 </template>
             </UTable>

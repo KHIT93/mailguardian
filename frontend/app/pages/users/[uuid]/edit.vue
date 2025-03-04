@@ -48,21 +48,21 @@
     <MainLayout :page-title="pageTitle">
         <UForm ref="form" :schema="userSchema" :state="state" @submit="onSubmit">
             <UCard>
-                <UFormGroup label="Email" name="email" size="md" class="my-4">
+                <UFormField label="Email" name="email" size="md" class="my-4">
                     <UInput id="email" type="email" v-model="state.email"/>
-                </UFormGroup>
+                </UFormField>
                 <div class="flex justify-between">
-                    <UFormGroup label="First Name" name="first_name" size="md" class="my-4 pr-1 w-1/2">
+                    <UFormField label="First Name" name="first_name" size="md" class="my-4 pr-1 w-1/2">
                         <UInput id="first_name" type="text" v-model="state.first_name"/>
-                    </UFormGroup>
-                    <UFormGroup label="Last Name" name="last_name" size="md" class="my-4 pl-1 w-1/2">
+                    </UFormField>
+                    <UFormField label="Last Name" name="last_name" size="md" class="my-4 pl-1 w-1/2">
                         <UInput id="last_name" type="text" v-model="state.last_name"/>
-                    </UFormGroup>
+                    </UFormField>
                 </div>
 
-                <UFormGroup label="Role" size="md" class="my-4">
-                    <UInputMenu v-model="state.role" :options="userRoles" value-attribute="value" option-attribute="label" placeholder="Select role..."/>
-                </UFormGroup>
+                <UFormField label="Role" size="md" class="my-4">
+                    <UInputMenu v-model="state.role" :items="userRoles" value-key="value" label-key="label" placeholder="Select role..."/>
+                </UFormField>
 
                 <template #footer>
                     <UButton type="submit">

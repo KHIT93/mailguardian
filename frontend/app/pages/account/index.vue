@@ -36,7 +36,7 @@
         <TopNavigation />
         <UForm :schema="personalDetailsSchema" :state="state" @submit="onSubmit">
             <UCard>
-                <UFormGroup
+                <UFormField
                     name="first_name"
                     label="First Name"
                     description="Will appear on receipts, invoices, and other communication."
@@ -49,9 +49,9 @@
                         icon="i-heroicons-user"
                         size="md"
                     />
-                </UFormGroup>
-                <UDivider class="my-4" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-4" />
+                <UFormField
                     name="last_name"
                     label="Last Name"
                     description="Will appear on receipts, invoices, and other communication."
@@ -64,9 +64,9 @@
                         icon="i-heroicons-user"
                         size="md"
                     />
-                </UFormGroup>
-                <UDivider class="my-4" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-4" />
+                <UFormField
                     name="email"
                     label="Email"
                     description="Used to sign in, for email receipts and product updates."
@@ -80,7 +80,7 @@
                         icon="i-heroicons-envelope"
                         size="md"
                     />
-                </UFormGroup>
+                </UFormField>
                 <template #footer>
                     <div class="flex flex-row-reverse">
                         <UButton type="submit">

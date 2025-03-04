@@ -90,19 +90,19 @@
 
     const columns = [
         {
-            key: 'field',
-            label: 'Field'
+            accessorKey: 'field',
+            header: 'Field'
         },
         {
-            key: 'operator',
-            label: 'Matches'
+            accessorKey: 'operator',
+            header: 'Matches'
         },
         {
-            key: 'value',
-            label: 'Value'
+            accessorKey: 'value',
+            header: 'Value'
         },
         {
-            key: 'actions'
+            id: 'actions'
         }
     ]
 
@@ -138,16 +138,16 @@
                 Message filters
             </template>
             <UForm :state="state" @submit="addFilter">
-                <UFormGroup label="Field" name="field" size="md" required class="my-4" help="Select what field/information you want to search in">
-                    <UInputMenu v-model="state.field" :options="fieldOptions" required value-attribute="value" option-attribute="label" placeholder="Select field..."/>
-                </UFormGroup>
-                <UFormGroup label="Matches" name="operator" required size="md" class="my-4" help="Select how you want to search the selected field/information">
-                    <UInputMenu v-model="state.operator" :options="operatorOptions" required value-attribute="value" option-attribute="label" placeholder="Select relay type..."/>
-                </UFormGroup>
-                <UFormGroup label="Value" name="query" required size="md" help="Type/Select the value to search for">
+                <UFormField label="Field" name="field" size="md" required class="my-4" help="Select what field/information you want to search in">
+                    <UInputMenu v-model="state.field" :items="fieldOptions" required value-key="value" label-key="label" placeholder="Select field..."/>
+                </UFormField>
+                <UFormField label="Matches" name="operator" required size="md" class="my-4" help="Select how you want to search the selected field/information">
+                    <UInputMenu v-model="state.operator" :items="operatorOptions" required value-kye="value" label-key="label" placeholder="Select relay type..."/>
+                </UFormField>
+                <UFormField label="Value" name="query" required size="md" help="Type/Select the value to search for">
                     <UInput v-model="state.query" :type="fieldTypes[state.field]" />
-                </UFormGroup>
-                <UDivider class="my-4" />
+                </UFormField>
+                <USeparator class="my-4" />
                 <UButton type="submit" size="md" icon="i-heroicons-plus-solid">
                     Add Filter
                 </UButton>
@@ -158,7 +158,7 @@
             <template #header>
                 Applied filters
             </template>
-            <UTable :columns="columns" :rows="filters">
+            <UTable :columns="columns" :data="filters">
                 <template #field-data="{ row }">
                     {{ fieldOptions.find(f => f.value == row.field).label }}
                 </template>
@@ -178,20 +178,22 @@
             </template>
         </UCard>
         
-        <UModal v-model="showResults" fullscreen>
-            <UCard>
-                <template #header>
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-                            Query Results
-                        </h3>
-                        <UTooltip text="Close">
-                            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="showResults = false" />
-                        </UTooltip>
-                    </div>
-                </template>
-                <MessageTable :filters="filters"></MessageTable>
-            </UCard>
+        <UModal v-model:open="showResults" fullscreen>
+            <template #content>
+                <UCard>
+                    <template #header>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                                Query Results
+                            </h3>
+                            <UTooltip text="Close">
+                                <UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="showResults = false" />
+                            </UTooltip>
+                        </div>
+                    </template>
+                    <MessageTable :filters="filters"></MessageTable>
+                </UCard>
+            </template>
         </UModal>
     </MainLayout>
 </template>

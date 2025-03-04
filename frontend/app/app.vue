@@ -1,8 +1,9 @@
 <template>
-    <NuxtLayout>
+    <UApp>
         <NuxtLoadingIndicator />
-        <NuxtPage />
-        <UNotifications />
-        <UModals />
-    </NuxtLayout>
+  
+        <NuxtLayout>
+            <NuxtPage />
+        </NuxtLayout>
+    </UApp>
 </template>

@@ -43,12 +43,12 @@
     <MainLayout :page-title="pageTitle">
         <UForm ref="form" :schema="listEntrySchema" :state="state" @submit="onSubmit">
             <UCard>
-                <UFormGroup label="Senders address" name="from_address" size="md" class="my-4">
+                <UFormField label="Senders address" name="from_address" size="md" class="my-4">
                     <UInput id="from_address" type="text" v-model="state.from_address"/>
-                </UFormGroup>
-                <UFormGroup label="Recipient address" name="to_address" size="md" class="my-4">
+                </UFormField>
+                <UFormField label="Recipient address" name="to_address" size="md" class="my-4">
                     <UInput id="to_address" type="text" v-model="state.to_address"/>
-                </UFormGroup>
+                </UFormField>
 
                 <template #footer>
                     <UButton type="submit">

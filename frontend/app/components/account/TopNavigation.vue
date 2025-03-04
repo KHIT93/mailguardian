@@ -32,5 +32,5 @@
 </script>
 
 <template>
-    <UHorizontalNavigation :links="links" class="border-b border-gray-200 dark:border-gray-800 mb-4" />
+    <UNavigationMenu orientation="horizontal" :items="links" class="border-b border-gray-200 dark:border-gray-800 mb-4" />
 </template>

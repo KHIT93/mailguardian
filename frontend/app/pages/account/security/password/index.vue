@@ -47,7 +47,7 @@
         <TopNavigation />
         <UForm :schema="changePasswordSchema" ref="form" :state="state" @submit="onSubmit">
             <UCard>
-                <UFormGroup
+                <UFormField
                     name="current_password"
                     label="Change your password"
                     description="Confirm your current password be setting a new one."
@@ -63,9 +63,9 @@
                         required
                         size="md"
                     />
-                </UFormGroup>
-                <UDivider class="my-2" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-2" />
+                <UFormField
                     name="password"
                     label="New password"
                     description="Enter your new password, twice"
@@ -89,21 +89,21 @@
                         placeholder="Confirm new password"
                         required
                         size="md"
-                        class="mt-2"
+                        class="ml-2"
                     />
-                </UFormGroup>
-                <UDivider class="my-2" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-2" />
+                <UFormField
                     name="terminate_sessions"
                     label="Log out of other sessions"
                     description="Check this to log out of your account on all other devices than the current one"
                     class="grid grid-cols-2 gap-2 items-center"
                     >
-                    <UCheckbox
+                    <USwitch
                         v-model="state.terminate_sessions"
                         id="terminate_sessions"
                     />
-                </UFormGroup>
+                </UFormField>
                 <template #footer>
                     <div class="flex flex-row-reverse">
                         <UButton :loading="loading" type="submit">
@@ -111,7 +111,7 @@
                         </UButton>
                     </div>
                 </template>
-        </UCard>
-    </UForm>
-</MainLayout>
+            </UCard>
+        </UForm>
+    </MainLayout>
 </template>

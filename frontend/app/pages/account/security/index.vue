@@ -61,8 +61,8 @@
                 <UProgress animation="carousel" />
             </div>
             <template v-else="">
-                <UDivider class="my-4" />
-                <UFormGroup
+                <USeparator class="my-4" />
+                <UFormField
                     v-if="hasPassword"
                     name="manage_password"
                     label="Password"
@@ -74,9 +74,9 @@
                             Change password
                         </UButton>
                     </div>
-                </UFormGroup>
-                <UDivider class="my-4" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-4" />
+                <UFormField
                     v-if="hasPassword"
                     name="manage_mfa"
                     label="Multi-Factor Authentication"
@@ -84,16 +84,16 @@
                     class="flex flex-wrap items-center justify-between gap-4"
                     >
                     <div>
-                        <UButton v-if="!hasMfa" to="/account/security/mfa/enable" color="green" icon="i-heroicons-check-badge-solid">
+                        <UButton v-if="!hasMfa" to="/account/security/mfa/enable" color="success" icon="i-heroicons-check-badge-solid">
                             Enable 2FA
                         </UButton>
                         <UButton v-if="hasMfa" to="/account/security/mfa" icon="i-heroicons-check-badge-solid">
                             Manage 2FA
                         </UButton>
                     </div>
-                </UFormGroup>
-                <UDivider class="my-4" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-4" />
+                <UFormField
                     name="enable_passkeys"
                     label="Passkeys"
                     description="Using passkeys, you do not have to use your password to log in. Simply enroll passkeys from your devices and you are ready"
@@ -104,21 +104,21 @@
                             Manage
                         </UButton>
                     </div>
-                </UFormGroup>
-                <UDivider class="my-4" />
-                <UFormGroup
+                </UFormField>
+                <USeparator class="my-4" />
+                <UFormField
                     name="terminate_sessions"
                     label="Active sessions"
                     description="Logging out of all devices/sessions, will require you to log in again on all devices"
                     class="flex flex-wrap items-center justify-between gap-4"
                     >
                     <div>
-                        <UButton color="red" icon="i-heroicons-exclamation-circle-solid" @click="terminateAllSessions()">
+                        <UButton color="error" icon="i-heroicons-exclamation-circle-solid" @click="terminateAllSessions()">
                             Log out
                         </UButton>
                     </div>
-                </UFormGroup>
-                <UDivider class="my-4" />
+                </UFormField>
+                <USeparator class="my-4" />
             </template>
         </UCard>
     </MainLayout>

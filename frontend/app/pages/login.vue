@@ -75,17 +75,17 @@
 <template>
     <LoginLayout>
         <UForm :schema="loginFormSchema" :state="state" class="space-y-8" @submit="onSubmit">
-            <UFormGroup label="Email" name="username">
+            <UFormField label="Email" name="username">
                 <UInput v-model="state.username" type="email" :autofocus="!authCheckCompleted" autocomplete="email" variant="outline" size="lg" placeholder="johh.doe@example.com" icon="i-heroicons-envelope" @keyup.enter="check2faRequirement()" @blur="check2faRequirement()" />
-            </UFormGroup>
+            </UFormField>
 
-            <UFormGroup label="Password" name="password" v-if="requiresPassword">
+            <UFormField label="Password" name="password" v-if="requiresPassword">
                 <UInput v-model="state.password" type="password" :autofocus="requiresPassword" autcomplete="current-password" variant="outline" size="lg" icon="i-heroicons-lock-closed" :required="requiresPassword" />
-            </UFormGroup>
+            </UFormField>
 
-            <UFormGroup label="Verification Code" name="verification_code" v-if="requiresMfa">
-                <UInput v-model="state.verification_code" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" variant="outline" size="lg" placeholder="123456" icon="i-heroicons-check-badge" :required="requiresMfa" />
-            </UFormGroup>
+            <UFormField label="Verification Code" name="verification_code" v-if="requiresMfa">
+                <UPinInput v-model="state.verification_code" otp :length="6" variant="outline" size="lg" placeholder="123456" icon="i-heroicons-check-badge" :required="requiresMfa" />
+            </UFormField>
 
             <div class="flex flex-row-reverse" v-if="requiresPassword || requiresEmailLink">
                 <UButton type="submit" :loading="loading" size="lg" icon="i-heroicons-lock-closed-solid">
@@ -93,7 +93,7 @@
                 </UButton>
             </div>
 
-            <UDivider label="OR" v-if="requiresPasskey" />
+            <USeparator label="OR" v-if="requiresPasskey" />
             <UButton icon="i-heroicons-finger-print" :disabled="loading" size="lg" block v-if="requiresPasskey">Use passkey</UButton>
         </UForm>
     </LoginLayout>

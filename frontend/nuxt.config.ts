@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     },
 
     modules: ['@nuxt/ui', '@nuxt-alt/auth', 'nuxt-security', 'nuxt-auth-utils'],
+    css: ['~/assets/css/main.css'],
 
     app: {
         head: {

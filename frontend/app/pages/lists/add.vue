@@ -60,15 +60,15 @@
     <MainLayout page-title="Create sender">
         <UForm ref="form" :schema="listEntrySchema" :state="state" @submit="onSubmit">
             <UCard>
-                    <UFormGroup label="Senders address" name="from_address" size="md" class="my-4">
-                        <UInput id="from_address" type="text" v-model="state.from_address"/>
-                    </UFormGroup>
-                    <UFormGroup label="Recipient address" name="to_address" size="md" class="my-4">
-                        <UInput id="to_address" type="text" v-model="state.to_address"/>
-                    </UFormGroup>
-                    <UFormGroup label="Action" name="listing_type" size="md" class="my-4">
-                        <UInputMenu v-model="state.listing_type" :options="listingTypes" value-attribute="value" option-attribute="label" placeholder="Select action to take..."/>
-                    </UFormGroup>
+                <UFormField label="Senders address" name="from_address" size="md" class="my-4">
+                    <UInput id="from_address" type="text" v-model="state.from_address"/>
+                </UFormField>
+                <UFormField label="Recipient address" name="to_address" size="md" class="my-4">
+                    <UInput id="to_address" type="text" v-model="state.to_address"/>
+                </UFormField>
+                <UFormField label="Action" name="listing_type" size="md" class="my-4">
+                    <UInputMenu v-model="state.listing_type" :items="listingTypes" value-key="value" label-key="label" placeholder="Select action to take..."/>
+                </UFormField>
 
                 <template #footer>
                     <UButton type="submit">

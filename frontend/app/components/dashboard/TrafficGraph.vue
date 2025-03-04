@@ -30,12 +30,12 @@
             <VisLine
                 :x="x"
                 :y="y"
-                color="rgb(var(--color-primary-DEFAULT))"
+                color="rgb(var(--ui-primary))"
             />
             <VisArea
                 :x="x"
                 :y="y"
-                color="rgb(var(--color-primary-DEFAULT))"
+                color="rgb(var(--ui-primary))"
                 :opacity="0.1"
             />
             <VisAxis
@@ -45,7 +45,7 @@
             />
             <VisAxis type="y" />
             <VisCrosshair
-                color="rgb(var(--color-primary-DEFAULT))"
+                color="rgb(var(--ui-primary))"
                 :template="template"
             />
             <VisTooltip />
@@ -55,30 +55,15 @@
 
 <style scoped>
 .unovis-xy-container {
-  --vis-crosshair-line-stroke-color: rgb(var(--color-primary-500));
-  --vis-crosshair-circle-stroke-color: #fff;
+  --vis-crosshair-line-stroke-color: var(--ui-primary);
+  --vis-crosshair-circle-stroke-color: var(--ui-bg);
 
-  --vis-axis-grid-color: rgb(var(--color-gray-200));
-  --vis-axis-tick-color: rgb(var(--color-gray-200));
-  --vis-axis-tick-label-color: rgb(var(--color-gray-400));
+  --vis-axis-grid-color: var(--ui-border);
+  --vis-axis-tick-color: var(--ui-border);
+  --vis-axis-tick-label-color: var(--ui-text-dimmed);
 
-  --vis-tooltip-background-color: #fff;
-  --vis-tooltip-border-color: rgb(var(--color-gray-200));
-  --vis-tooltip-text-color: rgb(var(--color-gray-900));
-}
-
-.dark {
-  .unovis-xy-container {
-    --vis-crosshair-line-stroke-color: rgb(var(--color-primary-400));
-    --vis-crosshair-circle-stroke-color: rgb(var(--color-gray-900));
-
-    --vis-axis-grid-color: rgb(var(--color-gray-800));
-    --vis-axis-tick-color: rgb(var(--color-gray-800));
-    --vis-axis-tick-label-color: rgb(var(--color-gray-500));
-
-    --vis-tooltip-background-color: rgb(var(--color-gray-900));
-    --vis-tooltip-border-color: rgb(var(--color-gray-800));
-    --vis-tooltip-text-color: #fff;
-  }
+  --vis-tooltip-background-color: var(--ui-bg);
+  --vis-tooltip-border-color: var(--ui-border);
+  --vis-tooltip-text-color: var(--ui-text-highlighted);
 }
 </style>
