@@ -30,12 +30,12 @@
             <VisLine
                 :x="x"
                 :y="y"
-                color="rgb(var(--ui-primary))"
+                color="var(--ui-primary)"
             />
             <VisArea
                 :x="x"
                 :y="y"
-                color="rgb(var(--ui-primary))"
+                color="var(--ui-primary)"
                 :opacity="0.1"
             />
             <VisAxis
@@ -45,7 +45,7 @@
             />
             <VisAxis type="y" />
             <VisCrosshair
-                color="rgb(var(--ui-primary))"
+                color="var(--ui-primary)"
                 :template="template"
             />
             <VisTooltip />
