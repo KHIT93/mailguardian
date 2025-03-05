@@ -55,6 +55,7 @@
                     class="grid grid-cols-2 gap-2 items-center"
                     >
                     <UInput
+                        class="w-full"
                         v-model="state.current_password"
                         id="current_password"
                         type="password"
@@ -73,6 +74,7 @@
                     class="grid grid-cols-2 gap-2 items-center"
                     >
                     <UInput
+                        class="w-full"
                         v-model="state.password"
                         id="password"
                         type="password"
@@ -82,6 +84,7 @@
                         size="md"
                     />
                     <UInput
+                        class="w-full ml-2"
                         v-model="state.confirm_password"
                         id="confirm_password"
                         type="password"
@@ -89,7 +92,6 @@
                         placeholder="Confirm new password"
                         required
                         size="md"
-                        class="ml-2"
                     />
                 </UFormField>
                 <USeparator class="my-2" />

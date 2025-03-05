@@ -76,15 +76,15 @@
     <LoginLayout>
         <UForm :schema="loginFormSchema" :state="state" class="space-y-8" @submit="onSubmit">
             <UFormField label="Email" name="username">
-                <UInput v-model="state.username" type="email" :autofocus="!authCheckCompleted" autocomplete="email" variant="outline" size="lg" placeholder="johh.doe@example.com" icon="i-heroicons-envelope" @keyup.enter="check2faRequirement()" @blur="check2faRequirement()" />
+                <UInput class="w-full" v-model="state.username" type="email" :autofocus="!authCheckCompleted" autocomplete="email" variant="outline" size="lg" placeholder="johh.doe@example.com" icon="i-heroicons-envelope" @keyup.enter="check2faRequirement()" @blur="check2faRequirement()" />
             </UFormField>
 
             <UFormField label="Password" name="password" v-if="requiresPassword">
-                <UInput v-model="state.password" type="password" :autofocus="requiresPassword" autcomplete="current-password" variant="outline" size="lg" icon="i-heroicons-lock-closed" :required="requiresPassword" />
+                <UInput class="w-full" v-model="state.password" type="password" :autofocus="requiresPassword" autcomplete="current-password" variant="outline" size="lg" icon="i-heroicons-lock-closed" :required="requiresPassword" />
             </UFormField>
 
             <UFormField label="Verification Code" name="verification_code" v-if="requiresMfa">
-                <UPinInput v-model="state.verification_code" otp :length="6" variant="outline" size="lg" placeholder="123456" icon="i-heroicons-check-badge" :required="requiresMfa" />
+                <UPinInput v-model="state.verification_code" otp :length="6" variant="outline" size="lg" placeholder="" icon="i-heroicons-check-badge" :required="requiresMfa" />
             </UFormField>
 
             <div class="flex flex-row-reverse" v-if="requiresPassword || requiresEmailLink">

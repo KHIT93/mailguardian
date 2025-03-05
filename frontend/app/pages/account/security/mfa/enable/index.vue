@@ -59,22 +59,22 @@
         <TopNavigation />
         <UForm :schema="totpSetupSchema" :state="state" class="space-y-8" @submit="onSubmit">
             <UCard>
-                <div class="flex items-center p-12" v-if="status != 'success'">
+                <div class="flex items-center p-12" v-if="status == 'pending'">
                     <UProgress animation="carousel" />
                 </div>
                 <div class="flex justify-center" v-else="">
                     <div class="w-full md:w-1/2">
                         <img :src="qr" class="w-64 h-64"/>
                         <UFormField label="Name" name="name">
-                            <UInput v-model="state.name" type="text" autcomplete="off" variant="outline" icon="i-heroicons-pencil" required />
+                            <UInput class="w-full" v-model="state.name" type="text" autcomplete="off" variant="outline" icon="i-heroicons-pencil" required />
                         </UFormField>
 
                         <UFormField label="Password" name="password">
-                            <UInput v-model="state.password" type="password" autcomplete="current-password" variant="outline" icon="i-heroicons-lock-closed" required />
+                            <UInput class="w-full" v-model="state.password" type="password" autcomplete="current-password" variant="outline" icon="i-heroicons-lock-closed" required />
                         </UFormField>
 
-                        <UFormField label="Verification Code" name="verification_code">
-                            <UPinInput v-model="state.code" otp :length="6" variant="outline" size="lg" placeholder="123456" icon="i-heroicons-check-badge" required />
+                        <UFormField label="Verification Code" name="code">
+                            <UPinInput v-model="state.code" otp :length="6" variant="outline" size="lg" placeholder="" icon="i-heroicons-check-badge" required />
                         </UFormField>
                         <div class="flex flex-row-reverse mt-4">
                             <UButton type="submit" :loading="loading" icon="i-heroicons-lock-closed-solid">

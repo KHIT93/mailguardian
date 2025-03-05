@@ -49,19 +49,19 @@
         <UForm ref="form" :schema="userSchema" :state="state" @submit="onSubmit">
             <UCard>
                 <UFormField label="Email" name="email" size="md" class="my-4">
-                    <UInput id="email" type="email" v-model="state.email"/>
+                    <UInput class="w-full" id="email" type="email" v-model="state.email"/>
                 </UFormField>
                 <div class="flex justify-between">
                     <UFormField label="First Name" name="first_name" size="md" class="my-4 pr-1 w-1/2">
-                        <UInput id="first_name" type="text" v-model="state.first_name"/>
+                        <UInput class="w-full" id="first_name" type="text" v-model="state.first_name"/>
                     </UFormField>
                     <UFormField label="Last Name" name="last_name" size="md" class="my-4 pl-1 w-1/2">
-                        <UInput id="last_name" type="text" v-model="state.last_name"/>
+                        <UInput class="w-full" id="last_name" type="text" v-model="state.last_name"/>
                     </UFormField>
                 </div>
 
                 <UFormField label="Role" size="md" class="my-4">
-                    <UInputMenu v-model="state.role" :items="userRoles" value-key="value" label-key="label" placeholder="Select role..."/>
+                    <UInputMenu class="w-full" v-model="state.role" :items="userRoles" value-key="value" label-key="label" placeholder="Select role..."/>
                 </UFormField>
 
                 <template #footer>

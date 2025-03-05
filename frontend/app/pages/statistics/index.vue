@@ -140,13 +140,13 @@
                 </template>
                 <UForm :state="state" @submit="addFilter">
                     <UFormField label="Field" name="field" size="md" required class="my-4" help="Select what field/information you want to search in">
-                        <UInputMenu v-model="state.field" :items="fieldOptions" required value-key="value" label-key="label" placeholder="Select field..."/>
+                        <UInputMenu class="w-full" v-model="state.field" :items="fieldOptions" required value-key="value" label-key="label" placeholder="Select field..."/>
                     </UFormField>
                     <UFormField label="Matches" name="operator" required size="md" class="my-4" help="Select how you want to search the selected field/information">
-                        <UInputMenu v-model="state.operator" :items="operatorOptions" required value-kye="value" label-key="label" placeholder="Select relay type..."/>
+                        <UInputMenu class="w-full" v-model="state.operator" :items="operatorOptions" required value-kye="value" label-key="label" placeholder="Select relay type..."/>
                     </UFormField>
                     <UFormField label="Value" name="query" required size="md" help="Type/Select the value to search for">
-                        <UInput v-model="state.query" :type="fieldTypes[state.field]" />
+                        <UInput class="w-full" v-model="state.query" :type="fieldTypes[state.field]" />
                     </UFormField>
                     <USeparator class="my-4" />
                     <UButton type="submit" size="md" icon="i-heroicons-plus-solid">

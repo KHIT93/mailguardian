@@ -61,13 +61,13 @@
         <UForm ref="form" :schema="listEntrySchema" :state="state" @submit="onSubmit">
             <UCard>
                 <UFormField label="Senders address" name="from_address" size="md" class="my-4">
-                    <UInput id="from_address" type="text" v-model="state.from_address"/>
+                    <UInput class="w-full" id="from_address" type="text" v-model="state.from_address"/>
                 </UFormField>
                 <UFormField label="Recipient address" name="to_address" size="md" class="my-4">
-                    <UInput id="to_address" type="text" v-model="state.to_address"/>
+                    <UInput class="w-full" id="to_address" type="text" v-model="state.to_address"/>
                 </UFormField>
                 <UFormField label="Action" name="listing_type" size="md" class="my-4">
-                    <UInputMenu v-model="state.listing_type" :items="listingTypes" value-key="value" label-key="label" placeholder="Select action to take..."/>
+                    <UInputMenu class="w-full" v-model="state.listing_type" :items="listingTypes" value-key="value" label-key="label" placeholder="Select action to take..."/>
                 </UFormField>
 
                 <template #footer>

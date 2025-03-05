@@ -56,18 +56,18 @@
         <UForm ref="form" :schema="domainSchema" :state="state" @submit="onSubmit">
             <UCard>
                 <UFormField label="Domain" name="name" size="md" class="my-4">
-                    <UInput id="name" type="text" v-model="state.name"/>
+                    <UInput class="w-full" id="name" type="text" v-model="state.name"/>
                 </UFormField>
 
                 <UFormField label="Deliver To" name="destination" size="md" class="my-4" help="This is the hostname/IP-address of the server to which email should be delivered after processing">
-                    <UInput id="destination" type="text" v-model="state.destination"/>
+                    <UInput class="w-full" id="destination" type="text" v-model="state.destination"/>
                 </UFormField>
                 <UFormField label="Transport" name="relay_type" size="md" class="my-4" help="The protocol/method used to transport messages to the destination server">
-                    <UInputMenu v-model="state.relay_type" :items="relayTypes" value-key="value" label-key="label" placeholder="Select relay type..."/>
+                    <UInputMenu class="w-full" v-model="state.relay_type" :items="relayTypes" value-key="value" label-key="label" placeholder="Select relay type..."/>
                 </UFormField>
 
                 <UFormField label="Configuration" name="reception_type" size="md" class="my-4" help="The selected configuration will allow the application to correctly configure DNS to work in the desired configuration">
-                    <UInputMenu v-model="state.reception_type" :items="receptionTypes" value-key="value" label-key="label" placeholder="Select relay type..."/>
+                    <UInputMenu class="w-full" v-model="state.reception_type" :items="receptionTypes" value-key="value" label-key="label" placeholder="Select relay type..."/>
                 </UFormField>
 
                 <UFormField label="Active" name="active" size="md" class="my-4">

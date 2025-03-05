@@ -44,6 +44,7 @@
                     class="grid grid-cols-2 gap-2 items-center"
                     >
                     <UInput
+                        class="w-full"
                         v-model="state.first_name"
                         autocomplete="off"
                         icon="i-heroicons-user"
@@ -59,6 +60,7 @@
                     class="grid grid-cols-2 gap-2 items-center"
                     >
                     <UInput
+                        class="w-full"
                         v-model="state.last_name"
                         autocomplete="off"
                         icon="i-heroicons-user"
@@ -74,6 +76,7 @@
                     class="grid grid-cols-2 gap-2"
                     >
                     <UInput
+                        class="w-full"
                         v-model="state.email"
                         type="email"
                         autocomplete="off"

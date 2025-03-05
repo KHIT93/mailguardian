@@ -44,10 +44,10 @@
         <UForm ref="form" :schema="listEntrySchema" :state="state" @submit="onSubmit">
             <UCard>
                 <UFormField label="Senders address" name="from_address" size="md" class="my-4">
-                    <UInput id="from_address" type="text" v-model="state.from_address"/>
+                    <UInput class="w-full" id="from_address" type="text" v-model="state.from_address"/>
                 </UFormField>
                 <UFormField label="Recipient address" name="to_address" size="md" class="my-4">
-                    <UInput id="to_address" type="text" v-model="state.to_address"/>
+                    <UInput class="w-full" id="to_address" type="text" v-model="state.to_address"/>
                 </UFormField>
 
                 <template #footer>
