@@ -13,11 +13,11 @@
   "dependencies": {
     "@nuxt-alt/auth": "^3.1.7",
     "@nuxt-alt/http": "^1.7.10",
-    "@nuxt/ui": "^3.0.0-beta.2",
+    "@nuxt/ui": "^3.0.0",
     "@unovis/ts": "^1.5.0",
     "@unovis/vue": "^1.5.0",
     "date-fns": "^4.1.0",
-    "nuxt": "^3.15.4",
+    "nuxt": "^3.16.0",
     "nuxt-auth-utils": "0.5.7",
     "qrcode": "^1.5.4",
     "vite": "^5.4.11",
@@ -26,10 +26,7 @@
     "zod": "^3.24.1"
   },
   "resolutions": {
-    "vite": "^5.4.11",
-    "tailwindcss": "4.0.7",
-    "@tailwindcss/postcss": "4.0.7",
-    "@tailwindcss/vite": "4.0.7"
+    "vite": "^5.4.11"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
