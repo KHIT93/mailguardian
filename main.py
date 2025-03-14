@@ -33,6 +33,7 @@ from mailguardian.routes.api.spamassassin_rules import router as sa_rules_router
 from mailguardian.routes.api.status import router as status_router
 from mailguardian.routes.api.totp import router as totp_router
 from mailguardian.routes.api.users import router as user_router
+from mailguardian.routes.api.statistics import router as statistics_router
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +89,7 @@ app.include_router(sa_rule_descriptions_router)
 app.include_router(audit_log_router)
 app.include_router(status_router)
 app.include_router(totp_router)
+app.include_router(statistics_router)
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
