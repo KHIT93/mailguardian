@@ -29,6 +29,8 @@ If applicable, add screenshots to help explain your problem.
  - PostgreSQL version: [e.g. 12.3]
  - Postfix version: [e.g. 3.3.5]
  - MailScanner version [e.g. 5.3.4-1]
+ - Linux Distribution [e.g. CentOS, AlmaLinux, Ubuntu, Debian etc.]
+ - Linux Disitribution version [e.g. Ubuntu 24.04, CentoS 8.9, Debian 12.3]
 
 **Desktop (please complete the following information):**
  - OS: [e.g. iOS]
