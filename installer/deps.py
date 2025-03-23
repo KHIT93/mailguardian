@@ -64,7 +64,7 @@ def setup_deb(pkg_mgr, os_release, os_version):
     os.system('{pkg} purge postfix -y'.format(pkg=PKG_MGR))
     os.system('{pkg} install sudo wget postfix-pgsql python3 python3-setuptools python3-dev python3-pip libpq-dev nginx ca-certificates openssl libpng-dev lsb-release build-essential postgresql-common -y'.format(pkg=PKG_MGR))
     print('Adding Node.js')
-    os.system('curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -')
+    os.system('curl -sL https://deb.nodesource.com/setup_18.x | bash -')
     os.system('{pkg} update'.format(pkg=PKG_MGR))
     os.system('{pkg} install nodejs -y'.format(pkg=PKG_MGR))
 
