@@ -41,11 +41,9 @@ if __name__ == "__main__":
     # If we can detect you specific Linux distribution,
     # we will skip the parts where we configure systemd,
     # and your webserver
-    distro_data = distribution.linux_distribution(full_distribution_name=False)
-    distro = distro_data[0] or 'LINUX'
-    distro_version = distro_data[1] or '0'
-    distro_version_codename = distro_data[2] or 'Core'
-    if distro.lower() not in ['centos', 'debian', 'ubuntu', 'almalinux', 'rocky', 'rhel']:
+    distro = distribution.id()
+    distro_version = distribution.version().split('.')[0]
+    if distro.lower() not in ['debian', 'ubuntu', 'almalinux', 'rocky', 'rhel']:
         print('Your Linux distribution or version is not supported')
         print(distro)
         exit(255)

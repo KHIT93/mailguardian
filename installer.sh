@@ -9,10 +9,7 @@ then
     exit 255
 fi
 export LNX_OS_RELEASE
-if [ $LNX_OS_RELEASE == 'centos' ];
-then
-    LNX_PKG_MGR='yum'
-elif [ $LNX_OS_RELEASE == 'almalinux' ];
+if [ $LNX_OS_RELEASE == 'almalinux' ];
 then
     LNX_PKG_MGR='dnf'
 elif [ $LNX_OS_RELEASE == 'rocky' ];
@@ -32,10 +29,7 @@ then
     LNX_PKG_MGR='apt'
 else
     LNX_OS_RELEASE=$(grep '^ID=' < /etc/os-release | sed 's/ID=//g')
-    if [ $LNX_OS_RELEASE == 'centos' ];
-    then
-        LNX_PKG_MGR='yum'
-    elif [ $LNX_OS_RELEASE == 'almalinux' ];
+    if [ $LNX_OS_RELEASE == 'almalinux' ];
     then
         LNX_PKG_MGR='dnf'
     elif [ $LNX_OS_RELEASE == 'rocky' ];
@@ -54,7 +48,7 @@ else
     then
         LNX_PKG_MGR='apt'
     else
-        echo 'Unable to determine Linux distribution. Only Debian, Ubuntu and CentOS are supported for this script'
+        echo 'Unable to determine Linux distribution. Only Debian, Ubuntu, AlmaLinux and Rocky Linux are supported for this script'
         exit 255
     fi
 fi
@@ -75,10 +69,6 @@ echo 'Installing...'
 if [[ $HAS_PY3 -eq 0 ]]
 then
     echo 'Installing Python 3...'
-    if [ $LNX_OS_RELEASE == 'centos' ];
-    then
-        $LNX_PKG_MGR install -y epel-release
-    fi
     $LNX_PKG_MGR install -y python3 python3-setuptools
 fi
 $LNX_PKG_MGR install -y python3-pip
@@ -92,7 +82,7 @@ su - mailguardian -c 'git clone https://github.com/KHIT93/mailguardian.git /home
 cd /home/mailguardian/mailguardian || exit 1
 ENV_DB_PASS=$(date +%s | sha256sum | base64 | head -c 32)
 export ENV_DB_PASS
-pip3 install pytz distro
+pip3 install pytz distro==1.9.0
 if ! python3 ./installer/configure.py -f /home/mailguardian/mailguardian/installer.ini; then
     echo 'We are really sorry, but something has gone wrong during initial steps of installation. Please fix the errors above and try again'
     exit 1
