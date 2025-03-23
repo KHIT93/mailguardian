@@ -193,16 +193,17 @@ if __name__ == "__main__":
         exit()
     if HTTP_SECURE:
         if installer_config['installation'].getboolean('letsencrypt'):
-            # Check if certbot is installed and if not, then we install it
-            if not which('certbot'):
-                if distro == 'debian':
-                    os.system(PKG_MGR + ' install certbot -t {distro}-backports -y'.format(distro=distro_version_codename))
-                else:
-                    os.system(PKG_MGR + ' install certbot -y')
-            # Request a certificate and note the path
-            PRIVKEY_PATH = '/etc/letsencrypt/live/{0}/privkey.pem'.format(APP_HOSTNAME)
-            CERT_PATH = '/etc/letsencrypt/live/{0}/fullchain.pem'.format(APP_HOSTNAME)
-            os.system(which('certbot') + ' certonly --standalone --rsa-key-size 4096 -d {0} --pre-hook "{1} stop nginx" --post-hook "{1} start nginx"'.format(APP_HOSTNAME, SYSTEMCTL_BIN))
+            PRIVKEY_PATH = '/etc/ssl/{0}.pem'.format(APP_HOSTNAME)
+            CERT_PATH = '/etc/ssl/{0}.pem'.format(APP_HOSTNAME)
+            os.system('curl https://get.acme.sh | sh -s')
+            os.system('~/.acme.sh/acme.sh --set-default-ca --server letsencrypt')
+            os.system('~/.acme.sh/acme.sh --issue --nginx -d {}'.format(APP_HOSTNAME))
+            os.system('~/.acme.sh/acme.sh --install-cert -d {} --key-file {} --fullchain-file {} --reloadcmd "{} force-reload nginx.service"'.format(
+                APP_HOSTNAME,
+                PRIVKEY_PATH,
+                CERT_PATH,
+                which('systemctl')
+            ))
         else:
             print('Since you did not want us to generate a letsEncrypt Certificate and did not provide us with a Certificate from a trusted Certification Authority, we will generate a self-signed certificate')
             # Generate a new 4096-bit private key and CSR (Certificate Signing Request)
