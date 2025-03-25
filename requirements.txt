@@ -6,7 +6,7 @@ cffi==1.14.6
 chardet==3.0.4
 coreschema==0.0.4
 cryptography==40.0.2; python_version < '3.7'
-cryptography==43.0.1; python_version > '3.7'
+cryptography==43.0.1; python_version >= '3.7'
 cssselect==1.1.0
 cssutils==2.3.0
 distro==1.6.0
@@ -19,7 +19,7 @@ django-rest-auth==0.9.5
 djangorestframework==3.15.1
 geoip2==4.4.0
 gunicorn==21.2.0; python_version < '3.7'
-gunicorn==22.0.0; python_version > '3.7'
+gunicorn==22.0.0; python_version >= '3.7'
 idna==3.7
 lxml==4.9.1
 maxminddb==2.2.0
@@ -33,7 +33,7 @@ python-crontab==2.5.1
 python-dateutil==2.6.0
 pytz==2021.3
 requests==2.27.0; python_version < '3.7'
-requests==2.31.0; python_version > '3.7'
+requests==2.31.0; python_version >= '3.7'
 six==1.16.0
 typing-extensions==3.7.4.3
 urllib3==1.26.19
