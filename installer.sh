@@ -141,9 +141,7 @@ su - mailguardian -c 'cd /home/mailguardian/mailguardian; npm install; npm run p
 echo 'Waiting a short moment to allow startup of virus scanners'
 bin/python -c 'import time; time.sleep(10)'
 
-spamassassin -D -p /etc/MailScanner/spamassassin.conf --lint
-
-MailScanner --lint
+systemctl reload nginx.service
 
 echo 'Installation has finished. Please reboot your system and finish the application configuration in your web browser'
 exit 0
