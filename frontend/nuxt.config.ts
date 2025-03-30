@@ -8,7 +8,7 @@ export default defineNuxtConfig({
         enabled: true
     },
 
-    modules: ['@nuxt/ui', '@nuxt-alt/auth', 'nuxt-security', 'nuxt-auth-utils'],
+    modules: ['@nuxt/ui', '@nuxt-alt/auth', 'nuxt-security'],
     css: ['~/assets/css/main.css'],
 
     app: {
