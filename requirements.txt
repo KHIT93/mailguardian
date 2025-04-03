@@ -39,6 +39,7 @@ pymailq==0.9.0
 pyotp==2.9.0
 python-crontab==3.2.0
 python-dateutil==2.9.0.post0
+pytz==2025.2
 requests==2.32.3
 six==1.17.0
 sqlparse==0.5.3

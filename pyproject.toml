@@ -24,4 +24,5 @@ dependencies = [
     "pyotp==2.9.*",
     "python-crontab==3.2.*",
     "requests==2.32.*",
+    "pytz>=2025.2",
 ]
