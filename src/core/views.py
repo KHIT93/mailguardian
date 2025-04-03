@@ -4,13 +4,13 @@ from .serializers import UserSerializer, LoginSerializer
 from .models import MailScannerConfiguration, User, TwoFactorConfiguration, TwoFactorBackupCode
 from compliance.models import DataLogEntry
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_auth.views import LoginView as RestAuthBaseLoginView
+from dj_rest_auth.views import LoginView as RestAuthBaseLoginView
 from rest_framework.parsers import FileUploadParser
 from rest_framework import status
 from django.conf import settings
 from .exceptions import TwoFactorRequired, TwoFactorInvalid, InvalidBackupCode
-from rest_auth.app_settings import create_token, JWTSerializer
-from rest_auth.utils import jwt_encode
+from dj_rest_auth.app_settings import api_settings
+from dj_rest_auth.utils import jwt_encode
 from .helpers import TOTP
 from lists.models import ListEntry
 from domains.models import Domain
@@ -99,13 +99,13 @@ class LoginView(RestAuthBaseLoginView):
             else:
                 raise TwoFactorRequired()
 
-        if getattr(settings, 'REST_USE_JWT', False):
+        if getattr(api_settings, 'USE_JWT', False):
             self.token = jwt_encode(self.user)
         else:
-            self.token = create_token(self.token_model, self.user,
+            self.token = api_settings.TOKEN_CREATOR(self.token_model, self.user,
                                       self.serializer)
 
-        if getattr(settings, 'REST_SESSION_LOGIN', True):
+        if getattr(api_settings, 'SESSION_LOGIN', True):
             self.process_login()
 
 class DataImportUploadAPIView(APIView):

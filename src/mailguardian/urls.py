@@ -62,7 +62,7 @@ from reports.views import (
 from domains.viewsets import DomainViewSet
 from setup_wizard.views import LicenseAPIView, InstalledAPIView, InitializeDatabaseAPIView
 from spamassassin.viewsets import RuleDescriptionViewSet, RuleViewSet
-from rest_auth.views import (
+from dj_rest_auth.views import (
     LogoutView, UserDetailsView, PasswordChangeView,
     PasswordResetView, PasswordResetConfirmView
 )
