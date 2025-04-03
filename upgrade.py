@@ -105,7 +105,7 @@ if __name__ == "__main__":
 
     print('Your installation has been upgraded to version {version}'.format(version=DESTINATION_VERSION))
     
-    print('If you expected a higher version, please insepct the output from this script to find out what has went wrong')
+    print('If you expected a higher version, please inspect the output from this script to find out what has went wrong')
     
     if len(notices):
         print('During the upgrade, our upgrade system raised some important information, which is nlisted below')
