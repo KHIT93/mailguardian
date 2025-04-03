@@ -98,22 +98,19 @@ if __name__ == "__main__":
     distro_version_codename = distro_data[2] or 'Core'
     
     if distro in ['centos', 'rocky', 'almalinux', 'rhel']:
-        PKG_MGR = which('yum')
-        if distro_version[0] == '7':
-            PKG_MGR = which('yum')
-        elif distro_version[0] == '8':
+        if distro_version[0] == '9':
             PKG_MGR = which('dnf')
         NGINX_PATH = '/etc/nginx/conf.d/'
         NGINX_EXTENSION = '.conf'
     elif distro == 'debian':
         PKG_MGR = which('apt')
-        if distro_version in ['9', '10', '11']:
+        if distro_version in ['11', '12']:
             NGINX_PATH = '/etc/nginx/sites-enabled/'
         else:
             print('Your version of Debian is not supported')
     elif distro.lower() == 'ubuntu':
         PKG_MGR = which('apt')
-        if distro_version in ['16.04', '18.04', '20.04', '22.04']:
+        if distro_version in ['20.04', '22.04', '24.04']:
             NGINX_PATH = '/etc/nginx/sites-enabled/'
         else:
             print('Your version of Ubuntu is not supported')
