@@ -7,7 +7,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BeforeValidator, PostgresDsn, model_validator, validator, AnyHttpUrl, EmailStr, HttpUrl, Field, computed_field
 from typing import Annotated, Any, Dict, List, Optional, Union, Literal
 from typing_extensions import Self
-from distutils.util import strtobool
 
 APP_VERSION = '3.0.0'
 API_VERSION = '2.0.0'
