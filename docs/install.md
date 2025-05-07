@@ -187,7 +187,201 @@ PostgreSQL Database = mailguardian
 TBD
 
 ### Install the application
-TBD
+There are multiple ways to install the application depending on how you normally deploy your applications.
+
+The most "modern" is to clone the source code directly from [GitHub](https://github.com/khit93/mailguardian) and then switch to the desired release. This method also allows you to easily update to a new version, as the system is already configured to keep certain configuration files that you will create throughout the installation process.
+
+Start by creating the user for running the application
+
+```bash
+sudo useradd -d /srv/mailguardian -m -G postfix -s /bin/bash mailguardian
+```
+
+#### Installation using git
+Ensure that you have `git` installed.
+
+Debian/Ubuntu:
+
+```bash
+sudo apt install git -y
+```
+
+AlmaLinux:
+
+```bash
+sudo dnf install git -y
+```
+
+Next switch to the `mailguardian` user
+
+```bash
+sudo su - mailguardian
+```
+
+The clone the application source code
+
+```bash
+git clone https://github.com/khit93/mailguardian /srv/mailguardian/app
+```
+
+This will put the application code in `/srv/mailguardian/app`
+
+Now switch to the desired release
+
+```bash
+git checkout 3.0.0
+```
+
+You might get this warning about being in `detached HEAD`
+
+```
+Note: switching to '3.0.0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at db09021 Update to use latest MailScanner release
+```
+
+#### Installing from downloaded archive
+This process can be a bit easier to work with, but updates can be harder to install as you need to essentially delete the entire installation and reconfigure it.
+
+We will cover it just to let you have the option
+
+Go the [GitHub Release](https://github.com/KHIT93/mailguardian/releases) page and find the desired release, such as `3.0.0`.
+
+Under `Assets` you need to copy the link for `Source code (tar.gz)`.
+
+Then download the files onto your server by switching to the `mailguardian` user
+
+```bash
+sudo su - mailguardian
+```
+
+Then download the archive
+
+```bash
+wget https://github.com/KHIT93/mailguardian/archive/refs/tags/3.0.0.tar.gz
+```
+
+If you get an error about `wget` not being found, then you will most likely have `curl`, which you can use to download the archive instead
+
+```bash
+curl -O https://github.com/KHIT93/mailguardian/archive/refs/tags/3.0.0.tar.gz
+```
+
+Once downloaded, we can extract the application code
+
+```bash
+tar xvzf 3.0.0.tar.gz -C /srv/mailguardian
+```
+
+Once done, you will have folder in `/srv/mailguardian` that is named after the downloaded release, such as `mailguardian-3.0.0`.
+
+We need to rename this folder to the folder that we expect
+
+```bash
+mv /srv/mailguardian/mailguardian-3.0.0 /srv/mailguardian/app
+```
+
+
+
+
+#### Configure systemd to run the API
+Unit file example:
+
+```
+[Unit]
+Description=MailGuardian API
+After=network.target
+
+[Service]
+User=mailguardian
+Group=postfix
+WorkingDirectory=/srv/mailguardian/app
+ExecStart=/srv/mailguardian/app/.venv/bin/fastapi run --host 127.0.0.1 --port 8000 --proxy-headers main.py
+Restart=always
+EnvironmentFile=/srv/mailguardian/app/.env
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+#### Configure systemd to run the frontend application
+
+```
+[Unit]
+Description=MailGuardian Frontend
+After=network.target
+
+[Service]
+User=mailguardian
+Group=mailguardian
+WorkingDirectory=/srv/mailguardian/app
+ExecStart=/usr/bin/bash -c 'node /srv/mailguardian/app/frontend/.output/server/index.mjs'
+Restart=always
+Environment=HOST=127.0.0.1
+Environment=PORT=3000
+Environment=NODE_ENV=production
+EnvironmentFile=/srv/mailguardian/app/.env
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+#### Configure Nginx to serve the application
+
+```
+server {
+    server_name dev1.mailguardian.org
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    ssl_certificate /srv/mailguardian/ssl/cert.pem;
+    ssl_certificate_key /srv/mailguardian/ssl/privkey.pem;
+
+    ssl_protocols TLSv1.3;
+    ssl_ecdh_curve X25519:prime256v1:secp384r1;
+    ssl_prefer_server_ciphers off;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host:$proxy_port;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /api/v2 {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name dev1.mailguardian.org;
+
+    return 301 https://$host$request_uri;
+}
+```
 
 ### Configuration changes for MailScanner
 Here we need to make some changes to `/etc/MailScanner/MailScanner.conf`. Please note that most of these options might already be there. In case an option is already there, simply update the value to macth
