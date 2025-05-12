@@ -316,7 +316,7 @@ Restart=always
 EnvironmentFile=/srv/mailguardian/app/.env
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=mailguardian.target
 
 ```
 
@@ -339,7 +339,18 @@ Environment=NODE_ENV=production
 EnvironmentFile=/srv/mailguardian/app/.env
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=mailguardian.target
+
+```
+
+#### Configure a group/target to manage both parts as one entity
+
+```
+[Unit]
+Description=MailGuardian
+Requires=mailguardian-api.service mailguardian-frontend.service
+After=mailguardian-api.service mailguardian-frontend.service
+AllowIsolate=yes
 
 ```
 
