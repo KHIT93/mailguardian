@@ -346,6 +346,8 @@ sub ListenForMessages {
                 last;
             }
         }
+    }
+}
 
 
 sub EndMailWatchLogging {
