@@ -32,7 +32,7 @@ package MailScanner::CustomConfig;
 
 use strict;
 use DBI;
-use DBD:Pg;
+use DBD::Pg;
 use JSON;
 use utf8;
 use Data::UUID;
@@ -309,22 +309,22 @@ sub ListenForMessages {
 
             $current_message_id = $sth_mail->fetchrow_array();
 
-            my %headers_payload = ('message_id'=>$current_message_id, 'headers'=>$$message{headers})
-            my %spamreport_payload = ('message_id'=>$current_message_id, 'spamreport'=>$$message{spamreport})
+            my %headers_payload = ('message_id'=>$current_message_id, 'headers'=>$$message{headers});
+            my %spamreport_payload = ('message_id'=>$current_message_id, 'spamreport'=>$$message{spamreport});
 
             eval {$sth_task->execute(
                 $ug->create_str(), # uuid
                 'mailguardian.app.tasks.message_headers', # module
                 'message_headers_to_db', # task
                 encode_json \%headers_payload # payload
-            )}
+            );};
 
             eval {$sth_task->execute(
                 $ug->create_str(), # uuid
                 'mailguardian.app.tasks', # module
                 'spamassassin_report_to_db', # task
                 encode_json \%spamreport_payload # payload
-            )}
+            );};
 
             # Something went wrong
             if ($@ || !$sth_mail) {
