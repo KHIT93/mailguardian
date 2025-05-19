@@ -67,10 +67,10 @@ my $timeout = 3600;
 my $ug = Data::UUID->new;
 my ($SQLversion);
 
-# Get database information from MailGuardianConf.pm
+# Get database information from MailGuardianConfig.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailGuardianConf.pm';
+require $dirname.'/MailGuardianConfig.pm';
 
 my ($db_name) = MailGuardian_get_db_name();
 my ($db_host) = MailGuardian_get_db_host();

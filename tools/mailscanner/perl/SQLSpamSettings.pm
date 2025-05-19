@@ -52,17 +52,17 @@ my (%LowSpamScores, %HighSpamScores);
 my (%ScanList);
 my ($sstime, $hstime, $nstime);
 
-# Get database information from MailGuardianConf.pm
+# Get database information from MailGuardianConfig.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailGuardianConf.pm';
+require $dirname.'/MailGuardianConfig.pm';
 
 my ($db_name) = MailGuardian_get_db_name();
 my ($db_host) = MailGuardian_get_db_host();
 my ($db_user) = MailGuardian_get_db_user();
 my ($db_pass) = MailGuardian_get_db_password();
 
-# Get refresh time from from MailGuardianConf.pm
+# Get refresh time from from MailGuardianConfig.pm
 my ($ss_refresh_time) =  MailGuardian_get_SS_refresh_time();
 
 sub CheckSQLVersion {
