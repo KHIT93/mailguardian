@@ -170,7 +170,7 @@ sub EndSQLNoScan
 sub CreateScoreList
 {
     my ($type, $UserList) = @_;
-    my ($sql, $username, $count);
+    my ($sql, $email, $name, $count);
     my $version = CheckSQLVersion();
 
     # Cannot get SQL version, bail out with count of 0
@@ -234,7 +234,7 @@ sub CreateScoreList
 sub CreateNoScanList
 {
     my ($type, $NoScanList) = @_;
-    my ($sql, $username, $count);
+    my ($sql, $email, $name, $count);
 
     eval {
         $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
