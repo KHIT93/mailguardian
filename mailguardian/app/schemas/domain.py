@@ -27,5 +27,9 @@ class Domain(SQLModel):
     # was receive_type
     reception_type: ReceptionType = Field(default=ReceptionType.FAILOVER)
 
+    designate_as_spam: Optional[int] = Field(default=None, nullable=True)
+    designate_as_definite_spam: Optional[int] = Field(default=None, nullable=True)
+    bypass_spam_check: bool = Field(default=False)
+
     def __str__(self):
         return self.name

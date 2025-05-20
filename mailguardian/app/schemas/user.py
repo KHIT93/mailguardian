@@ -20,6 +20,13 @@ class User(PersonalDetails):
 
     role: UserRole = Field(default=UserRole.USER)
 
+    # was custom_spam_score
+    designate_as_spam: Optional[int] = Field(default=None, nullable=True)
+    # was custom_spam_highscore
+    designate_as_definite_spam: Optional[int] = Field(default=None, nullable=True)
+    # was skip_scan
+    bypass_spam_check: bool = Field(default=False)
+
     @property
     def is_domain_admin(self):
         return self.role == UserRole.DOMAIN_ADMINISTRATOR
