@@ -86,14 +86,14 @@ sub CheckSQLVersion {
 #
 sub InitSQLAllowlist {
     MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Allowlist");
-    my $entries = CreateList('allowed', \%Allowlist);
+    my $entries = CreateList('ALLOWED', \%Allowlist);
     MailScanner::Log::InfoLog("MailGuardian: Read %d allowlist entries", $entries);
     $wtime = time();
 }
 
 sub InitSQLBlocklist {
     MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Blocklist");
-    my $entries = CreateList('blocked', \%Blocklist);
+    my $entries = CreateList('BLOCKED', \%Blocklist);
     MailScanner::Log::InfoLog("MailGuardian: Read %d blocklist entries", $entries);
     $btime = time();
 }
@@ -162,7 +162,7 @@ sub CreateList {
         delete $BlockAllow->{$_};
     }
     
-    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type=$type";
+    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type = '$type'::listingtype";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$to_address, \$from_address);
