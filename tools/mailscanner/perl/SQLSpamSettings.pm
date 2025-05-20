@@ -234,7 +234,7 @@ sub CreateScoreList
 sub CreateNoScanList
 {
     my ($type, $NoScanList) = @_;
-    my ($sql, $email, $name, $count);
+    my ($sql, $email, $name, $bypass, $count, );
 
     eval {
         $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
@@ -248,26 +248,26 @@ sub CreateNoScanList
         return 0;
     }
 
-    $sql = "SELECT email, $type FROM users WHERE $type = true";
+    $sql = "SELECT email, $type AS bypass FROM users WHERE $type = true";
     $sth = $dbh->prepare($sql);
     $sth->execute;
-    $sth->bind_columns(undef, \$email, \$type);
+    $sth->bind_columns(undef, \$email, \$bypass);
     $count = 0;
     
     while($sth->fetch())
     {
-        $NoScanList->{lc($email)} = $type; # Store entry
+        $NoScanList->{lc($email)} = $bypass; # Store entry
         $count++;
     }
 
     # Fetch for the domains
-    $sql = "SELECT name, $type FROM domains WHERE $type = true";
+    $sql = "SELECT name, $type AS bypass FROM domains WHERE $type = true";
     $sth = $dbh->prepare($sql);
     $sth->execute;
-    $sth->bind_columns(undef, \$name, \$type);
+    $sth->bind_columns(undef, \$name, \$bypass);
     while($sth->fetch())
     {
-        $NoScanList->{lc($name)} = $type; # Store entry
+        $NoScanList->{lc($name)} = $bypass; # Store entry
         $count++;
     }
 
