@@ -422,6 +422,29 @@ Required SpamAssassin Score = &SQLSpamScores
 High SpamAssassin Score = &SQLHighSpamScores
 ```
 
+### Linking scripts/plugins for MailScanner
+
+```bash
+ln -sf /srv/mailguardian/app/tools/mailscanner/perl/MailGuardian.pm /usr/share/MailScanner/perl/custom/MailGuardian.pm
+ln -sf /srv/mailguardian/app/tools/mailscanner/perl/SQLBlockAllowList.pm /usr/share/MailScanner/perl/custom/SQLBlockAllowList.pm
+ln -sf /srv/mailguardian/app/tools/mailscanner/perl/SQLSpamSettings.pm /usr/share/MailScanner/perl/custom/SQLSpamSettings.pm
+cp /srv/mailguardian/app/tools/mailscanner/perl/MailGuardianConfig.pm /usr/share/MailScanner/perl/custom/MailGuardianConfig.pm
+```
+
+Next edit the configuration file `/usr/share/MailScanner/perl/custom/MailGuardianConfig.pm` and adjust the database connection settings
+
+Once done, we need to ensure that we have the required perl modules installed and ready to use
+
+```bash
+cpan DBI
+cpan DBD:Pg
+cpan Data::UUID
+cpan Encoding::FixLatin
+cpan Digest::SHA1
+cpan Data::Dumper
+```
+
+
 ### Configure SpamAssassin
 Next we need to make some changes to how SpamAssassin works, so that we can shared the state of what is spam and what is not
 
