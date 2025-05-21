@@ -137,7 +137,7 @@ class Settings(BaseSettings):
 
     # Application logging
     APP_LOG_TO_FILE: bool = True
-    APP_LOGFILE: Optional[Path] = Field(default=Path(STORAGE_DIR, 'logs', 'mailguardian.app.log'))
+    APP_LOGDIR: Optional[Path] = Field(default=Path(STORAGE_DIR, 'logs'))
     APP_LOGLEVEL: int = logging.INFO
 
     # Security
