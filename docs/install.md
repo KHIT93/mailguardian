@@ -58,16 +58,16 @@ Ubuntu/Debian:
 
 ```bash
 sudo apt update
-sudo apt install build-essential python3 python3-dev python3-pip python3-virtualenv python3-poetry wget ca-certificates openssl libpng-dev lsb-release sudo -y
+sudo apt install build-essential python3 python3-dev python3-pip python3-virtualenv wget ca-certificates openssl libpng-dev lsb-release sudo nodejs npm -y
 ```
 
 AlmaLinux:
 
 ```bash
-sudo dnf config-manager --set-enabled crb
 sudo dnf groupinstall "Development Tools" -y
 sudo dnf install epel-release -y
-sudo dnf install python3.12 python3.12-devel python3.12-pip python3.12-setuptools python3-virtualenv openssl ca-certificates libpng-devel redhat-lsb-core wget sudo -y
+sudo dnf config-manager --set-enabled crb
+sudo dnf install python3.12 python3.12-devel python3.12-pip python3.12-setuptools python3-virtualenv openssl ca-certificates libpng-devel lsb-release wget sudo -y
 ```
 
 ## Installing the database server
@@ -78,13 +78,13 @@ Debian/Ubuntu:
 
 ```bash
 sudo apt update
-sudo apt install postgresql postgresql-server-dev-all libpq-dev
+sudo apt install postgresql postgresql-server-dev-all libpq-dev -y
 ```
 
 AlmaLinux:
 
 ```bash
-sudo dnf install postgresql postgresql-server libpq-devel
+sudo dnf install postgresql postgresql-server libpq-devel -y
 ```
 
 ## Install an MTA
@@ -93,11 +93,37 @@ As a good starting point, we will use `postfix` alongside an extension for conne
 
 For all supported systems, simply install `postfix` and `postfix-pgsql` and you are done
 
+Debian/Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install postfix postfix-pgsql -y
+```
+
+AlmaLinux:
+
+```bash
+sudo dnf install postfix postfix-pgsql -y
+```
+
 ## Installing a webserver
 Since MailGuardian is running as an application on the local server, we need a way to expose it to the world. There are many ways, but the most common is to install a webserver.
 Then configure the webserver to interact with MailGuardian and we are done.
 There are again many webservers and you can choose whichever you want.
 We are most familiar with `nginx`, so this is what we will use and you can install it within any of the supported Linux distributions.
+
+Debian/Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install nginx -y
+```
+
+AlmaLinux:
+
+```bash
+sudo dnf install nginx -y
+```
 
 ## Installing MailScanner
 First install the package to your system
@@ -106,7 +132,6 @@ Debian/Ubuntu:
 ```bash
 cd /opt/mginstaller
 sudo dpkg -i MailScanner-5.5.3-2.noarch.deb
-sudo apt install -fy
 ```
 
 AlmaLinux:
@@ -184,10 +209,55 @@ PostgreSQL Database = mailguardian
 
 
 ## Configure the PostgreSQL database
-TBD
+There are multiple ways to configure the PostgreSQL database server and create the required ressources for the application to work
+If you are running a single server configuration, then you might only need to create the user and the database and leave out the configuration changes
+
+First we need to create the user and the database
+
+```bash
+sudo -u postgres createuser -P mailguardian
+```
+
+```bash
+sudo -u postgres createdb -O mailguardian mailguardian
+```
 
 ### Install the application
-TBD
+First we need to create a user under which we will run the application
+
+```bash
+sudo useradd -d /srv/mailguardian -m -G postfix -s /bin/bash mailguardian
+```
+
+Next swap to the user and download the application
+
+```bash
+sudo su - mailguardian
+git clone https://github.com/khit93/mailguardian -b next app
+```
+
+Next create the environment in which we will run the application and enable it
+
+```bash
+virtualenv -p python3 .venv
+source .venv/bin/activate
+```
+
+Next we need to install the application like this
+
+```bash
+pip install .
+```
+
+Next we need to install and build the UI
+
+```bash
+npm install
+npm run build
+```
+
+
+
 
 ### Configuration changes for MailScanner
 Here we need to make some changes to `/etc/MailScanner/MailScanner.conf`. Please note that most of these options might already be there. In case an option is already there, simply update the value to macth
@@ -266,3 +336,4 @@ hosts = localhost
 dbname = mailguardian
 query = SELECT ip_address from smtp_relays where (ip_address='%s' or hostname='%s') AND active = '1';
 ```
+
