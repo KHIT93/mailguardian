@@ -125,7 +125,7 @@
                             <template #msgheader>
                                 
                             </template>
-                            <UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
+                            <UButton color="neutral" variant="outline" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
                         </UDropdownMenu>
                     </div>
                 </template>
@@ -133,11 +133,11 @@
                     <dl class="grid grid-cols-1 sm:grid-cols-2">
                         <div class="px-4 pb-6 sm:col-span-1 sm:px-0">
                             <dt class="text-sm font-bold leading-6 text-gray-900 dark:text-gray-200">Recieved from</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-200 sm:mt-2">{{ data.client_ip }} <UBadge color="sky" variant="subtle"><UIcon name="i-heroicons-clock"/> <span class="pl-1">{{ data.timestamp }}</span></UBadge></dd>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-200 sm:mt-2">{{ data.client_ip }} <UBadge color="info" variant="subtle"><UIcon name="i-heroicons-clock"/> <span class="pl-1">{{ data.timestamp }}</span></UBadge></dd>
                         </div>
                         <div class="px-4 pb-6 sm:col-span-1 sm:px-0">
                             <dt class="text-sm font-bold leading-6 text-gray-900 dark:text-gray-200">Recieved by</dt>
-                            <dd class="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-200 sm:mt-2">{{ data.mailscanner_hostname }} <UBadge color="sky" variant="subtle"><UIcon name="i-heroicons-clock"/> <span class="pl-1">{{ data.timestamp }}</span></UBadge></dd>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 dark:text-gray-200 sm:mt-2">{{ data.mailscanner_hostname }} <UBadge color="info" variant="subtle"><UIcon name="i-heroicons-clock"/> <span class="pl-1">{{ data.timestamp }}</span></UBadge></dd>
                         </div>
 
                         <div class="border-t border-gray-100 px-4 py-6 sm:col-span-1 sm:px-0">

@@ -19,7 +19,7 @@ from mailguardian.app.models.message_transport_log import MessageTransportLog
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.config.app import settings
 
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(message)s')
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
 class SyslogParser:
     def __init__(self, line):

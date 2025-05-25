@@ -52,17 +52,17 @@ my (%LowSpamScores, %HighSpamScores);
 my (%ScanList);
 my ($sstime, $hstime, $nstime);
 
-# Get database information from MailGuardianConf.pm
+# Get database information from MailGuardianConfig.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailGuardianConf.pm';
+require $dirname.'/MailGuardianConfig.pm';
 
 my ($db_name) = MailGuardian_get_db_name();
 my ($db_host) = MailGuardian_get_db_host();
 my ($db_user) = MailGuardian_get_db_user();
 my ($db_pass) = MailGuardian_get_db_password();
 
-# Get refresh time from from MailGuardianConf.pm
+# Get refresh time from from MailGuardianConfig.pm
 my ($ss_refresh_time) =  MailGuardian_get_SS_refresh_time();
 
 sub CheckSQLVersion {
@@ -89,21 +89,21 @@ sub CheckSQLVersion {
 #
 sub InitSQLSpamScores
 {
-    my ($entries) = CreateScoreList('custom_spam_score', \%LowSpamScores);
+    my ($entries) = CreateScoreList('designate_as_spam', \%LowSpamScores);
     MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d Spam entries", $entries);
     $sstime = time();
 }
 
 sub InitSQLHighSpamScores
 {
-    my $entries = CreateScoreList('custom_spam_highscore', \%HighSpamScores);
+    my $entries = CreateScoreList('designate_as_definite_spam', \%HighSpamScores);
     MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d high Spam entries", $entries);
     $hstime = time();
 }
 
 sub InitSQLNoScan
 {
-    my $entries = CreateNoScanList('skip_scan', \%ScanList);
+    my $entries = CreateNoScanList('bypass_spam_check', \%ScanList);
     MailScanner::Log::InfoLog("MailGuardian: SQLSpamSettings:: Read %d No Spam Scan entries", $entries);
     $nstime = time();
 }
@@ -170,7 +170,7 @@ sub EndSQLNoScan
 sub CreateScoreList
 {
     my ($type, $UserList) = @_;
-    my ($sql, $username, $count);
+    my ($sql, $email, $name, $count);
     my $version = CheckSQLVersion();
 
     # Cannot get SQL version, bail out with count of 0
@@ -189,16 +189,37 @@ sub CreateScoreList
         MailScanner::Log::WarnLog("MailGuardian: SQLSpamSettings:: CreateScoreList::: Unable to initialise database connection: %s", $DBI::errstr);
         return 0;
     }
-
-    $sql = "SELECT email AS username, $type FROM users WHERE $type > 0";
+    # First fetch for each user
+    $sql = "SELECT email, $type FROM users WHERE $type > 0";
     $sth = $dbh->prepare($sql);
     $sth->execute;
-    $sth->bind_columns(undef, \$username, \$type);
+    $sth->bind_columns(undef, \$email, \$type);
     $count = 0;
     
     while($sth->fetch())
     {
-        $UserList->{lc($username)} = $type; # Store entry
+        $UserList->{lc($email)} = $type; # Store entry
+        $count++;
+    }
+
+    # Fetch for the domains
+    $sql = "SELECT name, $type FROM domains WHERE $type > 0";
+    $sth = $dbh->prepare($sql);
+    $sth->execute;
+    $sth->bind_columns(undef, \$name, \$type);
+    while($sth->fetch())
+    {
+        $UserList->{lc($name)} = $type; # Store entry
+        $count++;
+    }
+
+    # Make these two definitions as configurations in the database for easier customization
+    if ($type == 'designate_as_spam') {
+        $UserList->{'DEFAULT'} = 5;
+        $count++;
+    }
+    if ($type == 'designate_as_definite_spam') {
+        $UserList->{'DEFAULT'} = 15;
         $count++;
     }
 
@@ -213,7 +234,7 @@ sub CreateScoreList
 sub CreateNoScanList
 {
     my ($type, $NoScanList) = @_;
-    my ($sql, $username, $count);
+    my ($sql, $email, $name, $bypass, $count, );
 
     eval {
         $dbh = DBI->connect("DBI:Pg:database=$db_name;host=$db_host",
@@ -227,14 +248,26 @@ sub CreateNoScanList
         return 0;
     }
 
-    $sql = "SELECT email AS username, $type FROM users WHERE $type = true";
+    $sql = "SELECT email, $type AS bypass FROM users WHERE $type = true";
     $sth = $dbh->prepare($sql);
     $sth->execute;
-    $sth->bind_columns(undef, \$username, \$type);
+    $sth->bind_columns(undef, \$email, \$bypass);
     $count = 0;
+    
     while($sth->fetch())
     {
-        $NoScanList->{lc($username)} = 1; # Store entry
+        $NoScanList->{lc($email)} = $bypass; # Store entry
+        $count++;
+    }
+
+    # Fetch for the domains
+    $sql = "SELECT name, $type AS bypass FROM domains WHERE $type = true";
+    $sth = $dbh->prepare($sql);
+    $sth->execute;
+    $sth->bind_columns(undef, \$name, \$bypass);
+    while($sth->fetch())
+    {
+        $NoScanList->{lc($name)} = $bypass; # Store entry
         $count++;
     }
 
@@ -273,8 +306,8 @@ sub LookupScoreList
     # value to just let the email through.
     return $LowHigh->{$to} if $LowHigh->{$to};
     return $LowHigh->{$todomain} if $LowHigh->{$todomain};
-    return $LowHigh->{'domain-admin@' . $todomain} if $LowHigh->{'domain-admin@' . $todomain};
-    return $LowHigh->{"admin"} if $LowHigh->{"admin"};
+    return $LowHigh->{$todomain} if $LowHigh->{$todomain};
+    return $LowHigh->{"DEFAULT"} if $LowHigh->{"DEFAULT"};
 
     # There are no Spam scores to return if we made it this far, so let the email through.
     return 999;

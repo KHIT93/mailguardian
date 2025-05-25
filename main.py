@@ -7,12 +7,9 @@ from starlette.middleware.cors import CORSMiddleware
 from mailguardian.app.http.middleware import middleware as http_middleware
 from mailguardian.config.app import API_VERSION, settings
 
-# from mailguardian.config.logging import (
-#     customize_fastapi_logger,
-#     enable_logfile,
-#     enable_stdout_logging,
-#     init_logger,
-# )
+from mailguardian.config.logging import (
+    setup_logging
+)
 from mailguardian.routes.api.allowlist import router as allowlist_router
 
 # Add routers
@@ -35,7 +32,7 @@ from mailguardian.routes.api.totp import router as totp_router
 from mailguardian.routes.api.users import router as user_router
 from mailguardian.routes.api.statistics import router as statistics_router
 
-logger = logging.getLogger(__name__)
+logger = setup_logging(log_level=settings.APP_LOGLEVEL, log_output='default', log_dir=settings.APP_LOGDIR if settings.APP_LOG_TO_FILE else None)
 
 # Application bootstrapping
 # TODO: See if we can move this to separate python module and then simply import it here

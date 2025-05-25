@@ -7,12 +7,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BeforeValidator, PostgresDsn, model_validator, validator, AnyHttpUrl, EmailStr, HttpUrl, Field, computed_field
 from typing import Annotated, Any, Dict, List, Optional, Union, Literal
 from typing_extensions import Self
-from distutils.util import strtobool
 
 APP_VERSION = '3.0.0'
 API_VERSION = '2.0.0'
 
 BASE_DIR: Path = Path(__file__).parent.parent
+FRONTEND_DIR: Path = Path(BASE_DIR.parent, 'frontend')
 ENV_FILE: Path = Path(BASE_DIR.parent, '.env')
 ALLOWED_MTAS: List[str] = ['postfix']
 
@@ -137,11 +137,14 @@ class Settings(BaseSettings):
 
     # Application logging
     APP_LOG_TO_FILE: bool = True
-    APP_LOGFILE: Optional[Path] = Field(default=Path(STORAGE_DIR, 'logs', 'mailguardian.app.log'))
+    APP_LOGDIR: Optional[Path] = Field(default=Path(STORAGE_DIR, 'logs'))
     APP_LOGLEVEL: int = logging.INFO
 
     # Security
     APP_ENFORCE_MFA: bool = True
+
+    # Nuxt Reference
+    NUXT_BIN: Path = Path(FRONTEND_DIR, 'node_modules', '.bin', 'nuxt')
     
     model_config = SettingsConfigDict(env_file=ENV_FILE, env_file_encoding='utf-8', case_sensitive=False, extra='ignore')
 

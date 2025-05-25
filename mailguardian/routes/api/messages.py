@@ -4,7 +4,7 @@ from typing import Annotated, Literal
 import invoke
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pymailq.store import PostqueueStore
-from sqlmodel import Session, select
+from sqlmodel import Session, select, desc
 
 from mailguardian.app.dependencies import (
     get_current_user,
@@ -69,7 +69,7 @@ async def index(authenticated_user: Annotated[User, Depends(get_current_user)], 
         query = select(Message).where(
             Message.from_domain in [domain.name for domain in authenticated_user.domains] or Message.to_domain in [domain.name for domain in authenticated_user.domains]
         )
-    query = query.order_by(Message.date)
+    query = query.order_by(desc(Message.date))
     # return results
     return await paginate(query=query, page=page, per_page=per_page)
 

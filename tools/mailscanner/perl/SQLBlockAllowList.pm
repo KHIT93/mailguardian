@@ -49,17 +49,17 @@ my ($dbh);
 my ($sth);
 my ($SQLversion);
 
-# Get database information from MailGuardianConf.pm
+# Get database information from MailGuardianConfig.pm
 use File::Basename;
 my $dirname = dirname(__FILE__);
-require $dirname.'/MailGuardianConf.pm';
+require $dirname.'/MailGuardianConfig.pm';
 
 my ($db_name) = MailGuardian_get_db_name();
 my ($db_host) = MailGuardian_get_db_host();
 my ($db_user) = MailGuardian_get_db_user();
 my ($db_pass) = MailGuardian_get_db_password();
 
-# Get refresh time from from MailGuardianConf.pm
+# Get refresh time from from MailGuardianConfig.pm
 my ($bwl_refresh_time) =  MailGuardian_get_BWL_refresh_time();
 
 sub CheckSQLVersion {
@@ -86,14 +86,14 @@ sub CheckSQLVersion {
 #
 sub InitSQLAllowlist {
     MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Allowlist");
-    my $entries = CreateList('allowed', \%Allowlist);
+    my $entries = CreateList('ALLOWED', \%Allowlist);
     MailScanner::Log::InfoLog("MailGuardian: Read %d allowlist entries", $entries);
     $wtime = time();
 }
 
 sub InitSQLBlocklist {
     MailScanner::Log::InfoLog("MailGuardian: Starting up MailGuardian SQL Blocklist");
-    my $entries = CreateList('blocked', \%Blocklist);
+    my $entries = CreateList('BLOCKED', \%Blocklist);
     MailScanner::Log::InfoLog("MailGuardian: Read %d blocklist entries", $entries);
     $btime = time();
 }
@@ -162,7 +162,7 @@ sub CreateList {
         delete $BlockAllow->{$_};
     }
     
-    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type='$type'";
+    $sql = "SELECT to_address, from_address FROM list_entries WHERE listing_type = '$type'::listingtype";
     $sth = $dbh->prepare($sql);
     $sth->execute;
     $sth->bind_columns(undef, \$to_address, \$from_address);

@@ -21,11 +21,11 @@ from mailguardian.config.logging import (
 @asynccontextmanager
 async def lifespan(app: FastAPI):  # noqa: ARG001
     # On Startup
-    init_logger(level=settings.APP_LOGLEVEL)
-    if settings.APP_LOGFILE and settings.APP_LOG_TO_FILE:
-        enable_logfile(filename=settings.APP_LOGFILE)
-    else:
-        enable_stdout_logging()
+    # init_logger(level=settings.APP_LOGLEVEL)
+    # if settings.APP_LOGFILE and settings.APP_LOG_TO_FILE:
+    #     enable_logfile(filename=settings.APP_LOGFILE)
+    # else:
+    #     enable_stdout_logging()
 
     yield
 
@@ -49,9 +49,9 @@ for command in commands.keys():
 
 
 if __name__ == '__main__':
-    init_logger(level=settings.APP_LOGLEVEL)
-    if settings.APP_LOGFILE and settings.APP_LOG_TO_FILE:
-        enable_logfile(filename=settings.APP_LOGFILE)
-    else:
-        enable_stdout_logging()
+    # init_logger(level=settings.APP_LOGLEVEL)
+    # if settings.APP_LOGFILE and settings.APP_LOG_TO_FILE:
+    #     enable_logfile(filename=settings.APP_LOGFILE)
+    # else:
+    #     enable_stdout_logging()
     app()
