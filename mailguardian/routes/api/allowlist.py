@@ -78,7 +78,7 @@ async def store(db: Annotated[Session, Depends(get_database_session)], request: 
     res: ListEntry = ListEntry(**data.model_dump())
     db.add(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.CREATE, model=ListEntry.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Created Allowed Sender ({res.id})')
+    audit_interaction(request=request, action=AuditAction.CREATE, model=ListEntry.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Created Allowed Sender ({res.id})')
     db.refresh(res)
 
     return res
@@ -134,7 +134,7 @@ async def update(db: Annotated[Session, Depends(get_database_session)], request:
     res.sqlmodel_update(data.model_dump())
     db.add(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.UPDATE, model=ListEntry.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Allowed Sender ({res.id})', old=res.model_dump(), new=data.model_dump())
+    audit_interaction(request=request, action=AuditAction.UPDATE, model=ListEntry.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Allowed Sender ({res.id})', old=res.model_dump(), new=data.model_dump())
     db.refresh(res)
 
     return res
@@ -165,7 +165,7 @@ async def partial_update(db: Annotated[Session, Depends(get_database_session)], 
     res.sqlmodel_update(data)
     db.add(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.UPDATE, model=ListEntry.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Allowed Sender ({res.id})', old=res.model_dump(), new=data)
+    audit_interaction(request=request, action=AuditAction.UPDATE, model=ListEntry.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Allowed Sender ({res.id})', old=res.model_dump(), new=data)
     db.refresh(res)
 
     return res
@@ -196,4 +196,4 @@ async def destroy(db: Annotated[Session, Depends(get_database_session)], request
     res_id: int = res.id
     db.delete(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.DELETE, model=ListEntry.__name__, res_id=res_id, actor_id=authenticated_user.id, message=f'Deleted Allowed Sender ({res_id})', old=data, new={})
+    audit_interaction(request=request, action=AuditAction.DELETE, model=ListEntry.__name__, res_id=res_id, actor_id=authenticated_user.id, message=f'Deleted Allowed Sender ({res_id})', old=data, new={})

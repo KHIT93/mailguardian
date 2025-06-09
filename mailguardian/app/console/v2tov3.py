@@ -12,7 +12,7 @@ import os
 from mailguardian.app.utils.spamassassin import extract_rules_and_scores_from_report
 from mailguardian.config.app import ENV_FILE as APP_ENV_FILE
 
-app: typer.Typer = typer.Typer(help='Utilities related to switching/upgrading from 2.x.x to 3.0.0')
+app: typer.Typer = typer.Typer(name='v2tov3', help='Utilities related to switching/upgrading from 2.x.x to 3.0.0')
 
 def __build_dict_from_cursor_tuple(cr: psycopg.Cursor, row: tuple) -> dict[str, Any]:
     """ Extract the information from the cursor on what columns/fields are fetched

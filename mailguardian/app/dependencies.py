@@ -2,18 +2,18 @@ from typing import Annotated, Any
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from mailguardian.app import services
 from mailguardian.app.models.user import User, UserSession
 from mailguardian.app.schemas.user import TokenData, UserRole
 from mailguardian.config.app import settings, TOKEN_ALGORITHM
-from mailguardian.database.connect import engine
+from mailguardian.database.connect import Database, engine
 from sqlmodel import create_engine, SQLModel, Session, select
 import logging
 
 logger = logging.getLogger(__name__)
 
-def get_database_session():
-    with Session(engine) as session:
-        yield session
+def get_database_session() -> Session:
+    return services.get(Database).get_session()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/token')
 
@@ -34,7 +34,7 @@ async def get_current_token(token: Annotated[str, Depends(oauth2_scheme)]) -> To
     
     return token_data
 
-async def get_current_user(token: Annotated[TokenData, Depends(get_current_token)]) -> User:
+async def get_current_user(db: Annotated[Session, Depends(get_database_session)], token: Annotated[TokenData, Depends(get_current_token)]) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -55,17 +55,16 @@ async def get_current_user(token: Annotated[TokenData, Depends(get_current_token
     # except JWTError:
     #     raise credentials_exception
     
-    with Session(engine) as db:
-        user: User = db.exec(select(User).where(User.email == token.username and User.is_active == True)).first()
-        if not user:
-            raise credentials_exception
-        
-        user_session: UserSession = db.exec(select(UserSession).where(UserSession.user_id == user.id).where(UserSession.uuid == token.session_id)).first()
+    user: User = db.exec(select(User).where(User.email == token.username and User.is_active == True)).first()
+    if not user:
+        raise credentials_exception
+    
+    user_session: UserSession = db.exec(select(UserSession).where(UserSession.user_id == user.id).where(UserSession.uuid == token.session_id)).first()
 
-        if not user_session:
-            raise credentials_exception
+    if not user_session:
+        raise credentials_exception
 
-        return user
+    return user
     
 async def requires_app_admin(user: Annotated[User, Depends(get_current_user)]) -> bool:
     if not user.role == UserRole.SUPERUSER:

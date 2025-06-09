@@ -7,6 +7,7 @@ import logging
 import re
 import sys
 import time
+from injector import inject
 import rich
 from typing import Annotated
 import typer
@@ -18,6 +19,7 @@ from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportLog
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.config.app import settings
+from mailguardian.database.connect import Database
 
 # logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
@@ -80,7 +82,8 @@ class SyslogParser:
             self.entry = entry
 
 class MtaLogProcessor(ABC):
-    def __init__(self, db: Annotated[Session, Depends(get_database_session)]):
+    @inject
+    def __init__(self, db: Database):
         self.mtaprocess = None
         self.delay_field = None
         self.status_field = None
@@ -90,7 +93,7 @@ class MtaLogProcessor(ABC):
         self.entry = None
         self.entries = {}
 
-        self.db = db
+        self.db: Session = db.get_session()
 
     @abstractmethod
     def extract_key_value_pairs(self, match):
@@ -279,7 +282,7 @@ class PostfixLogFileHandler(FileSystemEventHandler):
             for line in self.file:
                 self.log_processor.process_line(line.strip())
 
-app: typer.Typer = typer.Typer()
+app: typer.Typer = typer.Typer(name='postfix')
 
 @app.command(name='process')
 def postfix_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False, test: Annotated[bool, typer.Option('--test', help='Verify if the script is working by providing a set of sample lines')] = False):

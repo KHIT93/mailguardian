@@ -2,12 +2,14 @@ import rich
 from sqlmodel import Session
 from typing import Optional, Annotated
 import typer
+
+from mailguardian.app import services
 from mailguardian.app.auth.utils import validate_new_password, hash_password
 from mailguardian.app.models.user import User
 from mailguardian.app.schemas.user import UserRole
-from mailguardian.database.connect import engine
+from mailguardian.database.connect import Database
 
-app: typer.Typer = typer.Typer()
+app: typer.Typer = typer.Typer(name='user')
 
 @app.command(name='createuser')
 def create_user(email: Annotated[Optional[str], typer.Argument()]):
@@ -19,7 +21,7 @@ def create_user(email: Annotated[Optional[str], typer.Argument()]):
     validate_new_password(plain_password=password)
     user: User = User(email=email, password=hash_password(password=password), role=UserRole.USER)
     # raise typer.Exit(code=0)
-    with Session(engine) as session:
+    with services.get(Database).session_scope() as session:
         session.add(user)
         session.commit()
         session.refresh(user)
@@ -35,7 +37,7 @@ def create_user(email: Annotated[Optional[str], typer.Argument()]):
         raise typer.Exit(code=1)
     validate_new_password(plain_password=password)
     user: User = User(email=email, password=hash_password(password=password), role=UserRole.SUPERUSER)
-    with Session(engine) as session:
+    with services.get(Database).session_scope() as session:
         session.add(user)
         session.commit()
         session.refresh(user)

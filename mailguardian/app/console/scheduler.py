@@ -5,12 +5,14 @@ import rich
 from sqlmodel import Session, select
 import time
 import typer
+
+from mailguardian.app import services
 from mailguardian.app.models.task import Task, TaskState
-from mailguardian.database.connect import engine
+from mailguardian.database.connect import Database
 
 logger = logging.getLogger(__name__)
 
-app: typer.Typer = typer.Typer()
+app: typer.Typer = typer.Typer(name='scheduler')
 
 @app.command('run')
 def run_task():
@@ -25,7 +27,7 @@ def run_task():
     # just store the raw headers + the raw spam report
     # and then we can split it in Python and store the individual parts
     logger.info('Started scheduler')
-    with Session(engine) as db:
+    with services.get(Database).session_scope() as db:
         # Find the next task to run
         while True:
             time.sleep(1)

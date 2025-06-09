@@ -7,7 +7,7 @@ import typer
 
 from mailguardian.config.app import settings, FRONTEND_DIR
 
-app: typer.Typer = typer.Typer()
+app: typer.Typer = typer.Typer(name='application')
 
 @app.command(name='rebuild')
 def rebuild(debug: Annotated[bool, typer.Option('--debug', help='Used to render detailed command output')] = False):

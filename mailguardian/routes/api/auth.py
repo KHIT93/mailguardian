@@ -34,7 +34,7 @@ router = APIRouter(
 
 @router.post('/token')
 async def login(form_data: Annotated[OAuth2PasswordRequest, Depends()], request: Request, db: Annotated[Session, Depends(get_database_session)]) -> Token:
-    user: User = authenticate_user(request=request, db=db, username=form_data.username, password=form_data.password, verification_code=form_data.verification_code)
+    user: User = authenticate_user(request=request, username=form_data.username, password=form_data.password, verification_code=form_data.verification_code)
     # TODO: Verify 2FA code
 
     if not user:

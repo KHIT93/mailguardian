@@ -96,7 +96,7 @@ async def show(db: Annotated[Session, Depends(get_database_session)], request: R
                 status_code=status.HTTP_404_NOT_FOUND,
             )
 
-    audit_interaction(db=db, request=request, action=AuditAction.READ, model=Message.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Viewed Message ({res.mailq_id})')
+    audit_interaction(request=request, action=AuditAction.READ, model=Message.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Viewed Message ({res.mailq_id})')
 
     db.refresh(res)
     return res
@@ -261,7 +261,7 @@ async def view_message_contents(db: Annotated[Session, Depends(get_database_sess
 
     message_details: MessageDetail = get_neutralized_message(message=res.file_path())
 
-    audit_interaction(db=db, request=request, action=AuditAction.READ, model=Message.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Viewed Message Contents ({res.mailq_id})')
+    audit_interaction(request=request, action=AuditAction.READ, model=Message.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Viewed Message Contents ({res.mailq_id})')
 
     return message_details
 
@@ -303,7 +303,7 @@ async def spamassassin_learn(db: Annotated[Session, Depends(get_database_session
 
     invoke.run(f'spamassassin -p {settings.SA_PREF} {type} < {res.file_path()} 2>&1')
 
-    audit_interaction(db=db, request=request, action=AuditAction.UPDATE, model=Message.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Learned Message ({res.mailq_id}) as {type}')
+    audit_interaction(request=request, action=AuditAction.UPDATE, model=Message.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Learned Message ({res.mailq_id}) as {type}')
 
     return True
 
@@ -316,6 +316,6 @@ async def view_mailqueue(db: Annotated[Session, Depends(get_database_session)], 
         ProcessableMessage(**mail) for mail in store.mails
     ])
 
-    audit_interaction(db=db, request=request, action=AuditAction.READ, model=Message.__name__, res_id=None, actor_id=authenticated_user.id, message='Viewed Mail Processing Queue')
+    audit_interaction(request=request, action=AuditAction.READ, model=Message.__name__, res_id=None, actor_id=authenticated_user.id, message='Viewed Mail Processing Queue')
 
     return res

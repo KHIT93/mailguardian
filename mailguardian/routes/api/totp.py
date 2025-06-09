@@ -34,7 +34,7 @@ def get_totp_status(authenticated_user: Annotated[User, Depends(get_current_user
 @router.get('/devices', summary='Shows configured devices/apps for TOTP', description='Returns a list of the devices/apps configured for TOTP codes on the current user')
 def get_totp_devices(db: Annotated[Session, Depends(get_database_session)], request: Request, authenticated_user: Annotated[User, Depends(get_current_user)]) -> list[TimeBasedCode]:
     current_user: User = db.exec(select(User).where(User.id == authenticated_user.id)).first()
-    audit_interaction(db=db, request=request, action=AuditAction.READ, model=TimeBasedCode.__name__, res_id=authenticated_user.id, actor_id=authenticated_user.id, message=f'Fetched TOTP Codes')
+    audit_interaction(request=request, action=AuditAction.READ, model=TimeBasedCode.__name__, res_id=authenticated_user.id, actor_id=authenticated_user.id, message=f'Fetched TOTP Codes')
     return current_user.totp_codes
 
 @router.delete('/devices/{id}', summary='Revoke a TOTP device/app', description='Removes an assigned TOTP device/app from the current user to make it invalid')
@@ -47,12 +47,12 @@ def delete_totp_device(db: Annotated[Session, Depends(get_database_session)], re
     totp_name: str = totp_code.name
     db.delete(totp_code)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.DELETE, model=TimeBasedCode.__name__, res_id=authenticated_user.id, actor_id=authenticated_user.id, message=f'Revoked TOTP Code for {totp_name}')
+    audit_interaction(request=request, action=AuditAction.DELETE, model=TimeBasedCode.__name__, res_id=authenticated_user.id, actor_id=authenticated_user.id, message=f'Revoked TOTP Code for {totp_name}')
     return True
 
 @router.post('/enable', summary='Enable 2FA with TOTP', description='Enable the TOTP-based 2FA for your user')
 def enable_totp(db: Annotated[Session, Depends(get_database_session)], request: Request, authenticated_user: Annotated[User, Depends(get_current_user)]) -> TotpSetup:
-    audit_interaction(db=db, request=request, action=AuditAction.CREATE, model=User.__name__, res_id=authenticated_user.id, actor_id=authenticated_user.id, message=f'Started TOTP setup for {authenticated_user.email} [ID: {authenticated_user.id}]')
+    audit_interaction(request=request, action=AuditAction.CREATE, model=User.__name__, res_id=authenticated_user.id, actor_id=authenticated_user.id, message=f'Started TOTP setup for {authenticated_user.email} [ID: {authenticated_user.id}]')
 
     secret: str = generate_secret()
     setup: TotpSetup = TotpSetup(secret=secret, url=generate_totp_url(secret=secret, user=authenticated_user))
@@ -63,7 +63,7 @@ def enable_totp(db: Annotated[Session, Depends(get_database_session)], request: 
 def confirm_enable_totp(db: Annotated[Session, Depends(get_database_session)], request: Request, authenticated_user: Annotated[User, Depends(get_current_user)], data: TotpSetupVerification) -> bool:
     # First verify the users current password, just to ensure that they actually know it and that we do not have some kind of hijacked JWT
     if not verify_password(plain_password=data.password, hashed_password=authenticated_user.password):
-        audit_interaction(db=db, request=request, action=AuditAction.LOGIN, model=User.__name__, actor_id=authenticated_user.id, message=f'Setup of TOTP for {authenticated_user.email} [ID: {authenticated_user.id}] has failed, due to an invalid password')
+        audit_interaction(request=request, action=AuditAction.LOGIN, model=User.__name__, actor_id=authenticated_user.id, message=f'Setup of TOTP for {authenticated_user.email} [ID: {authenticated_user.id}] has failed, due to an invalid password')
         raise HTTPException(
             detail='Setup failed. Invalid credentials',
             status_code=status.HTTP_400_BAD_REQUEST
@@ -71,7 +71,7 @@ def confirm_enable_totp(db: Annotated[Session, Depends(get_database_session)], r
     
     # Verify if the user device
     if not verify_totp(secret=data.secret, code=data.code):
-        audit_interaction(db=db, request=request, action=AuditAction.LOGIN, model=User.__name__, actor_id=authenticated_user.id, message=f'Setup of TOTP for {authenticated_user.email} [ID: {authenticated_user.id}] has failed, due to an invalid verification code')
+        audit_interaction(request=request, action=AuditAction.LOGIN, model=User.__name__, actor_id=authenticated_user.id, message=f'Setup of TOTP for {authenticated_user.email} [ID: {authenticated_user.id}] has failed, due to an invalid verification code')
         raise HTTPException(
             detail='Setup failed. Invalid verification code',
             status_code=status.HTTP_400_BAD_REQUEST

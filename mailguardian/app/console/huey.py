@@ -5,7 +5,7 @@ import typer
 
 from mailguardian.app.scheduler import queue
 
-app = typer.Typer()
+app = typer.Typer(name='huey')
 
 @app.command()
 def run():

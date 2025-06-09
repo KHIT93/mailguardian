@@ -5,16 +5,19 @@ import logging
 import re
 import sys
 import time
+from injector import inject
 import rich
 from sqlmodel import Session, select
 from typing import Annotated
 import typer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from mailguardian.app import services
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportIdentifier
 from mailguardian.config.app import settings
+from mailguardian.database.connect import Database
 
 # logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 idqueue: list = []
@@ -66,18 +69,20 @@ def _process_milter_log_entry(line: str) -> None:
                     logging.debug(f'{__name__}: Delivery attempt for smtpid {smtpid} detected and updated in queue')
                     break
 
-def process_sql(db: Annotated[Session, Depends(get_database_session)]):
+def process_sql():
     global idqueue
 
     idcount = len(idqueue)
     i = 0
+
+    db_session: Session = services.get(Database).get_session()
 
     while i < idcount:
         if idqueue[i][3] is not None:
             message_id = idqueue[i][1]
             to = idqueue[i][3]
             smtp_id = idqueue[i][0]
-            message: Message = db.exec(select(Message).where(Message.mail_message_id == message_id and Message.to_address == to)).first()
+            message: Message = db_session.exec(select(Message).where(Message.mail_message_id == message_id and Message.to_address == to)).first()
             # query = f"SELECT mailq_id FROM `messages` WHERE mail_message_id='{message_id}' AND to_address LIKE '%{to}%' LIMIT 1;"
             # result = dbquery(query)
             smtps_id = message.mailq_id
@@ -85,11 +90,11 @@ def process_sql(db: Annotated[Session, Depends(get_database_session)]):
             logging.debug(f'milter_relay: idqueue {i} of {idcount - 1} / {smtp_id} / {message_id} / {to} => {smtps_id}')
 
             if smtps_id and smtps_id != smtp_id:
-                mtalog_ids: MessageTransportIdentifier = db.exec(select(MessageTransportIdentifier).where(MessageTransportIdentifier.smtpd_id == smtps_id and MessageTransportIdentifier.smtp_id == smtp_id))
+                mtalog_ids: MessageTransportIdentifier = db_session.exec(select(MessageTransportIdentifier).where(MessageTransportIdentifier.smtpd_id == smtps_id and MessageTransportIdentifier.smtp_id == smtp_id))
                 if not mtalog_ids:
                     mtalog_ids = MessageTransportIdentifier(smtpd_id=smtps_id, smtp_id=smtp_id)
-                    db.add(mtalog_ids)
-                    db.commit()
+                    db_session.add(mtalog_ids)
+                    db_session.commit()
                 # replace_query = f"REPLACE INTO `mtalog_ids` VALUES ('{smtps_id}', '{smtp_id}')"
                 # dbquery(replace_query)
                 idqueue.pop(i)  # Removes the current element from the queue
@@ -105,7 +110,7 @@ def remove_entry(smtpid):
 
     logging.debug(f'{__name__}: Removed smtpid {smtpid} from relay queue')
 
-app: typer.Typer = typer.Typer()
+app: typer.Typer = typer.Typer(name='milter')
 
 @app.command(name='process')
 def milter_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False, test: Annotated[bool, typer.Option('--test', help='Verify if the script is working by providing a set of sample lines')] = False):

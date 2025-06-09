@@ -55,7 +55,7 @@ async def store(db: Annotated[Session, Depends(get_database_session)], request: 
     res: Domain = Domain(**data.model_dump())
     db.add(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.CREATE, model=Domain.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Created Domain ({res.name})')
+    audit_interaction(request=request, action=AuditAction.CREATE, model=Domain.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Created Domain ({res.name})')
     db.refresh(res)
 
     return res
@@ -92,7 +92,7 @@ async def update(db: Annotated[Session, Depends(get_database_session)], request:
     res.sqlmodel_update(domain_data)
     db.add(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.UPDATE, model=Domain.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Domain ({res.name})', old=res.model_dump(), new=domain.model_dump())
+    audit_interaction(request=request, action=AuditAction.UPDATE, model=Domain.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Domain ({res.name})', old=res.model_dump(), new=domain.model_dump())
     db.refresh(res)
 
     return res
@@ -109,7 +109,7 @@ async def partial_update(db: Annotated[Session, Depends(get_database_session)], 
     res.sqlmodel_update(domain_data)
     db.add(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.UPDATE, model=Domain.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Domain ({res.name})', old=res.model_dump(), new=domain.model_dump())
+    audit_interaction(request=request, action=AuditAction.UPDATE, model=Domain.__name__, res_id=res.id, actor_id=authenticated_user.id, message=f'Updated Domain ({res.name})', old=res.model_dump(), new=domain.model_dump())
     db.refresh(res)
 
     return res
@@ -127,4 +127,4 @@ async def destroy(db: Annotated[Session, Depends(get_database_session)], request
     data: dict[str, Any] = res.model_dump()
     db.delete(res)
     db.commit()
-    audit_interaction(db=db, request=request, action=AuditAction.DELETE, model=Domain.__name__, res_id=res_id, actor_id=authenticated_user.id, message=f'Deleted Domain ({res_name})', old=data, new={})
+    audit_interaction(request=request, action=AuditAction.DELETE, model=Domain.__name__, res_id=res_id, actor_id=authenticated_user.id, message=f'Deleted Domain ({res_name})', old=data, new={})

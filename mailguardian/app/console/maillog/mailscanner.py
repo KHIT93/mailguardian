@@ -5,16 +5,19 @@ import logging
 import re
 import sys
 import time
+from injector import inject
 import rich
 from sqlmodel import Session, select
 from typing import Annotated
 import typer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from mailguardian.app import services
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportIdentifier
 from mailguardian.config.app import settings
+from mailguardian.database.connect import Database
 
 # logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 idqueue: list = []
@@ -29,18 +32,19 @@ class MilterLogFileHandler(FileSystemEventHandler):
             for line in self.file:
                 _process_mailscanner_log_entry(line=line.strip())
 
-def _process_mailscanner_log_entry(db: Annotated[Session, Depends(get_database_session)], line: str) -> None:
+def _process_mailscanner_log_entry(line: str) -> None:
     match = re.match(r'^.*MailScanner.*: Requeue: (\S+\.\S+) to (\S+)\s$', line)
+    db_session: Session = services.get(Database).get_session()
     if match:
         smtpd_id = match.group(1)
         smtp_id = match.group(2)
-        mtalog_ids: MessageTransportIdentifier = db.exec(select(MessageTransportIdentifier).where(MessageTransportIdentifier.smtpd_id == smtpd_id and MessageTransportIdentifier.smtp_id == smtp_id))
+        mtalog_ids: MessageTransportIdentifier = db_session.exec(select(MessageTransportIdentifier).where(MessageTransportIdentifier.smtpd_id == smtpd_id and MessageTransportIdentifier.smtp_id == smtp_id))
         if not mtalog_ids:
             mtalog_ids = MessageTransportIdentifier(smtpd_id=smtpd_id, smtp_id=smtp_id)
-            db.add(mtalog_ids)
-            db.commit()
+            db_session.add(mtalog_ids)
+            db_session.commit()
 
-app: typer.Typer = typer.Typer()
+app: typer.Typer = typer.Typer(name='mailscanner')
 
 @app.command(name='process')
 def mailscanner_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False, test: Annotated[bool, typer.Option('--test', help='Verify if the script is working by providing a set of sample lines')] = False):

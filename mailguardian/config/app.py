@@ -145,6 +145,10 @@ class Settings(BaseSettings):
 
     # Nuxt Reference
     NUXT_BIN: Path = Path(FRONTEND_DIR, 'node_modules', '.bin', 'nuxt')
+
+    # Application folders
+    ROUTES: Path = Path(BASE_DIR, 'routes')
+    COMMANDS: Path = Path(BASE_DIR, 'app', 'console')
     
     model_config = SettingsConfigDict(env_file=ENV_FILE, env_file_encoding='utf-8', case_sensitive=False, extra='ignore')
 

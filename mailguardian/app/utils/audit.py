@@ -1,13 +1,17 @@
 import json
 from typing import Any
 from fastapi import Request
+from injector import inject
 from sqlmodel import Session
 
+from mailguardian.app import services
 from mailguardian.app.models.audit_log import AuditLog
 from mailguardian.app.schemas.audit_log import AuditAction
+from mailguardian.database.connect import Database
 
 
-def audit_interaction(db: Session, action: AuditAction, model: str, res_id: int, actor_id: int, request: Request = None, message: str = '', allowed: bool = True, old: dict[str, Any] = None, new: dict[str, Any] = None) -> None:
+def audit_interaction(action: AuditAction, model: str, res_id: int, actor_id: int, request: Request = None, message: str = '', allowed: bool = True, old: dict[str, Any] = None, new: dict[str, Any] = None) -> None:
+    db: Session = services.get(Database).get_session()
     changes: dict[str, dict[str, Any]] = {}
     if old and new:
         for change in new.keys():

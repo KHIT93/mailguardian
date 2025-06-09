@@ -15,6 +15,7 @@ dependencies = [
     "fastapi[all]==0.115.*",
     "httpx[http2]==0.28.*",
     "huey==2.5.*",
+    "injector>=0.22.0",
     "invoke==2.2.*",
     "lxml[html-clean]==5.3.*",
     "passlib[argon2]==1.7.*",
