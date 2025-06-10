@@ -33,7 +33,7 @@ python-crontab==2.5.1
 python-dateutil==2.6.0
 pytz==2021.3
 requests==2.27.0; python_version < '3.7'
-requests==2.31.0; python_version >= '3.7'
+requests==2.32.4; python_version >= '3.7'
 six==1.16.0
 typing-extensions==3.7.4.3
 urllib3==1.26.19
