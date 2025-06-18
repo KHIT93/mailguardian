@@ -36,4 +36,4 @@ requests==2.27.0; python_version < '3.7'
 requests==2.31.0; python_version >= '3.7'
 six==1.16.0
 typing-extensions==3.7.4.3
-urllib3==1.26.19
+urllib3==2.5.0
