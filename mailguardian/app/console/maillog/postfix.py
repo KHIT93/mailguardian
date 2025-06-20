@@ -11,13 +11,11 @@ from injector import inject
 import rich
 from typing import Annotated
 import typer
-from fastapi import Depends
 from sqlmodel import Session, select
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportLog
-from mailguardian.app.dependencies import get_database_session
 from mailguardian.config.app import settings
 from mailguardian.database.connect import Database
 

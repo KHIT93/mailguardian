@@ -1,12 +1,10 @@
 import re
 from typing import Annotated
 
-from fastapi import Depends
-from injector import inject
 from sqlmodel import Session, select
 
-from mailguardian.app import services
 from mailguardian.app.models.spamassassin_rule_description import SpamAssassinRuleDescription
+from mailguardian.app.service_providers.dependency_injection import Depends, inject_dependencies
 from mailguardian.database.connect import Database
 
 # List of non-rule lines
@@ -19,8 +17,9 @@ not_rules_lines: list[str] = [
 # Remove 'score=', 'required', and similar lines
 not_rules_lines_regex: str = '|'.join(map(re.escape, not_rules_lines))
 
-def get_sa_rule_desc(rule: str) -> dict[str, str] | bool:
-    db: Session = services.get(Database).get_session()
+@inject_dependencies()
+def get_sa_rule_desc(db_connection: Annotated[Database, Depends()], rule: str) -> dict[str, str] | bool:
+    db: Session = db_connection.get_session()
     # Initialize rule score
     rule_score = ''
     

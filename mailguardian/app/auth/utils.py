@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime, timezone
 from typing import Annotated, Optional
-from fastapi import Depends, Request
+from fastapi import Request
 from injector import inject
 from jose import JWTError, jwt
 import logging
@@ -14,6 +14,8 @@ from mailguardian.app.auth.totp import verify_totp
 from mailguardian.app.models.audit_log import AuditLog
 from mailguardian.app.models.user import User
 from mailguardian.app.schemas.audit_log import AuditAction
+from mailguardian.app.service_providers.dependency_injection import Depends, inject_dependencies
+from mailguardian.app.utils.audit import audit_interaction
 from mailguardian.config.app import settings, TOKEN_ALGORITHM, RANDOM_CHARACTER_DATA
 from mailguardian.database.connect import Database
 
@@ -54,65 +56,61 @@ def hash_password(password: str) -> str:
     return crypt_context.hash(secret=password)
 
 
-def authenticate_user(request: Request, username: str, password: str, verification_code: Optional[str] = '') -> User | bool:
-    db_session: Session = services.get(Database).get_session()
+@inject_dependencies()
+def authenticate_user(db: Annotated[Database, Depends()], request: Request, username: str, password: str, verification_code: Optional[str] = '') -> User | bool:
+    db_session: Session = db.get_session()
     user: User = db_session.exec(select(User).where(User.email == username and User.is_active == True)).first()
 
     if not user:
         _logger.info('No valid user found')
-        db_session.add(AuditLog(
+        audit_interaction(
+            request=request,
             action=AuditAction.LOGIN,
             model=User.__name__,
             res_id=None,
             actor_id=None,
-            acted_from=request.client.host,
-            message='Denied login as %s. User does not exist or is inactive' % (username,),
+            message=f'Denied login as {username}. User does not exist or is inactive',
             allowed=False
-        ))
-        db_session.commit()
+        )
         _logger.error('No active user found')
         return False
 
-    _logger.info('Found user with email %s' % (username,))
+    _logger.info(f'Found user with email {username}')
     
     if not verify_password(plain_password=password, hashed_password=user.password):
-        db_session.add(AuditLog(
+        audit_interaction(
             action=AuditAction.LOGIN,
             model=User.__name__,
             res_id=user.id,
             actor_id=None,
-            acted_from=request.client.host,
-            message='Denied login as %s. Incorrect credentials' % (username,),
+            message=f'Denied login as {username}. Incorrect credentials',
             allowed=False
-        ))
-        db_session.commit()
-        _logger.error('Could not log in user with email %s as the password is incorrect' % (username,))
+        )
+        _logger.error(f'Could not log in user with email {username} as the password is incorrect')
         return False
     if user.totp_codes:
         if not any(verify_totp(totp.totp_secret, verification_code) for totp in user.totp_codes):
-            db_session.add(AuditLog(
+            audit_interaction(
                 action=AuditAction.LOGIN,
                 model=User.__name__,
                 res_id=user.id,
                 actor_id=None,
-                acted_from=request.client.host,
-                message='Denied login as %s. Incorrect 2FA' % (username,),
+                message=f'Denied login as {username}. Incorrect 2FA',
                 allowed=False
-            ))
+            )
             db_session.commit()
-            _logger.error('Could not log in user with email %s as the 2FA verification code is invalid' % (username,))
+            _logger.error(f'Could not log in user with email {username} as the 2FA verification code is invalid')
             return False
-    db_session.add(AuditLog(
+    audit_interaction(
         action=AuditAction.LOGIN,
         model=User.__name__,
         res_id=user.id,
         actor_id=None,
-        acted_from=request.client.host,
-        message='Authenticated login as %s.' % (username,),
+        message=f'Authenticated login as {username}.',
         allowed=True
-    ))
+    )
     db_session.commit()
-    _logger.info('User %s has authenticated' % (username,))
+    _logger.info(f'User {username} has authenticated')
     return user
     
 def create_access_token(data: dict, expires_delta: timedelta | None) -> str:

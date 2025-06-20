@@ -1,2 +1,2 @@
-from mailguardian.app.services.service_container import ServiceContainer, setup_service_container
-from mailguardian.app.services.dependency_injection import inject_dependencies, Depends
+from mailguardian.app.service_providers.service_container import ServiceContainer, setup_service_container
+from mailguardian.app.service_providers.dependency_injection import inject_dependencies, Depends

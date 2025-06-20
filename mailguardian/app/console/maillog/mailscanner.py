@@ -1,21 +1,19 @@
-from fastapi import Depends
 from io import TextIOWrapper
 from pathlib import Path
 import logging
 import re
 import sys
 import time
-from injector import inject
 import rich
 from sqlmodel import Session, select
 from typing import Annotated
 import typer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
-from mailguardian.app import services
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportIdentifier
+from mailguardian.app.service_providers.dependency_injection import Depends, inject_dependencies
 from mailguardian.config.app import settings
 from mailguardian.database.connect import Database
 
@@ -32,9 +30,10 @@ class MilterLogFileHandler(FileSystemEventHandler):
             for line in self.file:
                 _process_mailscanner_log_entry(line=line.strip())
 
-def _process_mailscanner_log_entry(line: str) -> None:
+@inject_dependencies()
+def _process_mailscanner_log_entry(db_connection: Annotated[Database, Depends()], line: str) -> None:
     match = re.match(r'^.*MailScanner.*: Requeue: (\S+\.\S+) to (\S+)\s$', line)
-    db_session: Session = services.get(Database).get_session()
+    db_session: Session = db_connection.get_session()
     if match:
         smtpd_id = match.group(1)
         smtp_id = match.group(2)

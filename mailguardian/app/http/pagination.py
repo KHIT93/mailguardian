@@ -1,14 +1,17 @@
-from typing import Optional
+from typing import Annotated, Optional
 
+from injector import inject
 from sqlalchemy import Select, func
 from sqlmodel import Session, select
 
+from mailguardian.app.service_providers.service_container import services
 from mailguardian.app.http.middleware import request_object
-from mailguardian.database.connect import engine
+from mailguardian.app.service_providers.dependency_injection import Depends, inject_dependencies
+from mailguardian.database.connect import Database
 
 class Paginator:
-    def __init__(self, session: Session, query: Select, page: int, per_page: int = 20):
-        self.session = session
+    def __init__(self, query: Select, page: int, per_page: int = 20):
+        self.db = services.get(Database)
         self.query = query
         self.page = page
         self.per_page = per_page
@@ -37,7 +40,7 @@ class Paginator:
             'count': await self._get_total_count(),
             'next_page': self._get_next_page(),
             'previous_page': self._get_previous_page(),
-            'items': [item for item in self.session.scalars(self.query.limit(self.limit).offset(self.offset))]
+            'items': [item for item in self.db.get_session().scalars(self.query.limit(self.limit).offset(self.offset))]
         }
 
     def _get_number_of_pages(self, count: int) -> int:
@@ -46,12 +49,27 @@ class Paginator:
         return quotient if not rest else quotient + 1
 
     async def _get_total_count(self) -> int:
-        count = self.session.scalar(select(func.count()).select_from(self.query.subquery()))
+        count = self.db.get_session().scalar(select(func.count()).select_from(self.query.subquery()))
         self.number_of_pages = self._get_number_of_pages(count)
         return count
 
 
+# async def paginate(query: Select, page: int, per_page: int = 20) -> dict:
+#     with Session(engine) as session:
+#         paginator = Paginator(session, query, page, per_page)
+#         return await paginator.get_response()
+
 async def paginate(query: Select, page: int, per_page: int = 20) -> dict:
-    with Session(engine) as session:
-        paginator = Paginator(session, query, page, per_page)
-        return await paginator.get_response()
+    paginator = Paginator(query, page, per_page)
+    return await paginator.get_response()
+    
+# async def paginate(query: Select, page: int, per_page: int = 20) -> dict:
+#     with services.get(Database).session_scope() as session:
+#         paginator = Paginator(session, query, page, per_page)
+#         return await paginator.get_response()
+    
+# @inject_dependencies()
+# async def paginate(db_connection: Annotated[Database, Depends()], query: Select, page: int, per_page: int = 20) -> dict:
+#     with db_connection.session_scope() as session:
+#         paginator = Paginator(session, query, page, per_page)
+#         return await paginator.get_response()

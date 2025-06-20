@@ -1,10 +1,10 @@
 from functools import wraps
-from typing import Annotated, Any, Callable, Dict, TypeVar, get_type_hints, get_origin, get_args
-from injector import Injector, Module, provider, singleton
+from typing import Annotated, Any, Callable, TypeVar, get_type_hints, get_origin, get_args
+from injector import Injector
 import inspect
 import sys
 
-from mailguardian.app import services
+from mailguardian.app.service_providers.service_container import services
 
 # Type variable for decorated functions
 F = TypeVar('F', bound=Callable[..., Any])

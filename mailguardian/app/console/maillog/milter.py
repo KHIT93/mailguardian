@@ -5,17 +5,16 @@ import logging
 import re
 import sys
 import time
-from injector import inject
 import rich
 from sqlmodel import Session, select
 from typing import Annotated
 import typer
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
-from mailguardian.app import services
 from mailguardian.app.dependencies import get_database_session
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportIdentifier
+from mailguardian.app.service_providers.dependency_injection import inject_dependencies
 from mailguardian.config.app import settings
 from mailguardian.database.connect import Database
 
@@ -69,13 +68,14 @@ def _process_milter_log_entry(line: str) -> None:
                     logging.debug(f'{__name__}: Delivery attempt for smtpid {smtpid} detected and updated in queue')
                     break
 
-def process_sql():
+@inject_dependencies()
+def process_sql(db_connection: Annotated[Database, Depends()]):
     global idqueue
 
     idcount = len(idqueue)
     i = 0
 
-    db_session: Session = services.get(Database).get_session()
+    db_session: Session = db_connection.get_session()
 
     while i < idcount:
         if idqueue[i][3] is not None:
