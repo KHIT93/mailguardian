@@ -12,6 +12,7 @@ dependencies = [
     "alembic==1.14.*",
     "celery<6",
     "chardet>=5.2.0",
+    "fastapi-mail==1.5.*",
     "fastapi[all]==0.115.*",
     "httpx[http2]==0.28.*",
     "huey==2.5.*",
