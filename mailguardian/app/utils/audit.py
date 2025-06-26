@@ -1,13 +1,15 @@
 import json
 from typing import Annotated, Any
+
 from fastapi import Request
-from injector import inject
 from sqlmodel import Session
 
-from mailguardian.app import services
 from mailguardian.app.models.audit_log import AuditLog
 from mailguardian.app.schemas.audit_log import AuditAction
-from mailguardian.app.service_providers.dependency_injection import Depends, inject_dependencies
+from mailguardian.app.service_providers.dependency_injection import (
+    Depends,
+    inject_dependencies,
+)
 from mailguardian.database.connect import Database
 
 

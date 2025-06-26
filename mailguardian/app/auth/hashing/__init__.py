@@ -1,8 +1,9 @@
-# django.contrib.auth.hashers.Argon2PasswordHasher
-
+import importlib
 import math
 from typing import Any
-from mailguardian.app.auth.utils import get_random_string, RANDOM_CHARACTER_DATA
+
+from mailguardian.app.auth.utils import RANDOM_CHARACTER_DATA, get_random_string
+
 
 class BasePasswordHasher:
     """
@@ -28,12 +29,11 @@ class BasePasswordHasher:
                 module = importlib.import_module(mod_path)
             except ImportError as e:
                 raise ValueError(
-                    "Couldn't load %r algorithm library: %s"
-                    % (self.__class__.__name__, e)
+                    f"Couldn't load {self.__class__.__name__} algorithm library: {e}"
                 )
             return module
         raise ValueError(
-            "Hasher %r doesn't specify a library attribute" % self.__class__.__name__
+            f"Hasher {self.__class__.__name__} doesn't specify a library attribute"
         )
 
     def salt(self):

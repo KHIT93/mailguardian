@@ -1,17 +1,21 @@
 import datetime
 from typing import Annotated
-from fastapi import APIRouter, Depends, Request
+
+from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
 from mailguardian.app.dependencies import (
     get_current_user,
     get_database_session,
     oauth2_scheme,
-    requires_app_admin,
 )
-from mailguardian.app.models.user import User
 from mailguardian.app.models.message import Message
-from mailguardian.app.schemas.statistics import MessageFilter, StatisticsResponse, MessageStatistics, FilterOperator
+from mailguardian.app.models.user import User
+from mailguardian.app.schemas.statistics import (
+    FilterOperator,
+    MessageFilter,
+    MessageStatistics,
+)
 from mailguardian.app.schemas.user import UserRole
 
 router = APIRouter(
@@ -20,13 +24,14 @@ router = APIRouter(
     tags=['Statistics']
 )
 
+
 @router.post('/messages', summary='Statistics Endpoint for email messages', description='A generic endpoint for handling statistic queries into message data')
-def message_stats(db: Annotated[Session, Depends(get_database_session)], request: Request, authenticated_user: Annotated[User, Depends(get_current_user)], filters: list[MessageFilter]) -> MessageStatistics:
-    filter_fields: list[str] = [filter.field for filter in filters]
-    print(filters)
-    
+def message_stats(db: Annotated[Session, Depends(get_database_session)], authenticated_user: Annotated[User, Depends(get_current_user)], filters: list[MessageFilter]) -> MessageStatistics:
+    # filter_fields: list[str] = [filter.field for filter in filters]
+    # print(filters)
+
     query = select(Message)
-    
+
     apply_from_address_filter: bool = True
     apply_to_address_filter: bool = True
     apply_from_domain_filter: bool = True
@@ -35,17 +40,17 @@ def message_stats(db: Annotated[Session, Depends(get_database_session)], request
     if authenticated_user.role == UserRole.DOMAIN_ADMINISTRATOR:
         apply_from_address_filter = False
         apply_to_address_filter = False
-    
+
     elif authenticated_user.role == UserRole.SUPERUSER:
         apply_from_address_filter = False
         apply_from_domain_filter = False
         apply_to_address_filter = False
         apply_to_domain_filter = False
-    
+
     for filter in filters:
         if filter.field == 'date':
             filter.value = datetime.datetime.strptime(filter.value, '%Y-%m-%d').date()
-        
+
         if filter.operator == FilterOperator.EQUAL:
             query = query.where(getattr(Message, filter.field) == filter.value)
         elif filter.operator == FilterOperator.NOT_EQUAL:

@@ -3,11 +3,13 @@ from pathlib import Path
 
 from mailguardian.config.app import settings
 
+
 def register_web_routes() -> list:
     routes: list = []
     for module in Path(settings.ROUTES, 'web').iterdir():
         pass
     return routes
+
 
 def register_api_routes() -> list:
     routes: list = []
@@ -21,4 +23,3 @@ def register_api_routes() -> list:
         if hasattr(python_module, 'router'):
             routes.append(python_module.router)
     return routes
-

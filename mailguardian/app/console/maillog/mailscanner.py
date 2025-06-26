@@ -1,34 +1,36 @@
-from io import TextIOWrapper
-from pathlib import Path
-import logging
 import re
 import sys
-import time
-import rich
-from sqlmodel import Session, select
+from io import TextIOWrapper
+from pathlib import Path
 from typing import Annotated
+
 import typer
-from watchdog.observers import Observer
+from sqlmodel import Session, select
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
-from mailguardian.app.dependencies import get_database_session
-from mailguardian.app.models.message import Message
+from watchdog.observers import Observer
+
 from mailguardian.app.models.message_transport_log import MessageTransportIdentifier
-from mailguardian.app.service_providers.dependency_injection import Depends, inject_dependencies
+from mailguardian.app.service_providers.dependency_injection import (
+    Depends,
+    inject_dependencies,
+)
 from mailguardian.config.app import settings
 from mailguardian.database.connect import Database
 
-# logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 idqueue: list = []
+
 
 class MilterLogFileHandler(FileSystemEventHandler):
     def __init__(self, file_path: Path | str) -> None:
         self.file_path: Path = file_path if isinstance(file_path, Path) else Path(file_path)
         self.file: TextIOWrapper = self.file_path.open('r')
-        self.file.seek(0, 2) # Go to the end of the file
+        self.file.seek(0, 2)  # Go to the end of the file
+
     def on_modified(self, event: FileSystemEvent) -> None:
         if event.src_path == str(self.file_path):
             for line in self.file:
                 _process_mailscanner_log_entry(line=line.strip())
+
 
 @inject_dependencies()
 def _process_mailscanner_log_entry(db_connection: Annotated[Database, Depends()], line: str) -> None:
@@ -43,10 +45,12 @@ def _process_mailscanner_log_entry(db_connection: Annotated[Database, Depends()]
             db_session.add(mtalog_ids)
             db_session.commit()
 
+
 app: typer.Typer = typer.Typer(name='mailscanner')
 
+
 @app.command(name='process')
-def mailscanner_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False, test: Annotated[bool, typer.Option('--test', help='Verify if the script is working by providing a set of sample lines')] = False):
+def mailscanner_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False):
     if follow:
         event_handler: MilterLogFileHandler = MilterLogFileHandler(file_path=settings.MTA_LOGFILE)
         observer = Observer()
@@ -58,7 +62,7 @@ def mailscanner_maillog(follow: Annotated[bool, typer.Option('--follow', help='W
                 observer.join(1)
         except KeyboardInterrupt:
             observer.stop()
-        
+
         observer.join()
     elif not follow:
         for line in sys.stdin:

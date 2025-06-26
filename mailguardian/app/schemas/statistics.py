@@ -1,11 +1,13 @@
 import datetime
 import enum
-from typing import Any, Literal, TypeVar, Generic
+from typing import Any, Generic, TypeVar
+
 from pydantic import BaseModel
 
 from mailguardian.app.models.message import Message
 
 T = TypeVar('T')
+
 
 class FilterOperator(enum.Enum):
     EQUAL = '='
@@ -15,14 +17,17 @@ class FilterOperator(enum.Enum):
     CONTAINS = 'in'
     NOT_CONTAINS = 'not in'
 
+
 class StatisticsResponse(BaseModel, Generic[T]):
     total: int
     first_date: datetime.date | None
     last_date: datetime.date | None
     items: list[T]
 
+
 class MessageStatistics(StatisticsResponse[Message]):
     pass
+
 
 class MessageFilter(BaseModel):
     field: str

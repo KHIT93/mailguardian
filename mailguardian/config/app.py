@@ -1,11 +1,19 @@
 import logging
 import string
-from dotenv import load_dotenv
 from pathlib import Path
-import os
+from typing import Annotated, Any
+
+from pydantic import (
+    AnyHttpUrl,
+    BeforeValidator,
+    EmailStr,
+    Field,
+    HttpUrl,
+    PostgresDsn,
+    computed_field,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BeforeValidator, PostgresDsn, model_validator, validator, AnyHttpUrl, EmailStr, HttpUrl, Field, computed_field
-from typing import Annotated, Any, Dict, List, Optional, Union, Literal
 from typing_extensions import Self
 
 APP_VERSION = '3.0.0'
@@ -14,14 +22,15 @@ API_VERSION = '2.0.0'
 BASE_DIR: Path = Path(__file__).parent.parent
 FRONTEND_DIR: Path = Path(BASE_DIR.parent, 'frontend')
 ENV_FILE: Path = Path(BASE_DIR.parent, '.env')
-ALLOWED_MTAS: List[str] = ['postfix']
+ALLOWED_MTAS: list[str] = ['postfix']
 
 # TODO: Find out if HS256 is secure enough for our JWT tokens or if something is better to use
 TOKEN_ALGORITHM: str = 'HS256'
 
-RANDOM_CHARACTER_DATA: list[str] = list(string.ascii_letters + string.digits + string.punctuation.replace('"','').replace('\'',''))
+RANDOM_CHARACTER_DATA: list[str] = list(string.ascii_letters + string.digits + string.punctuation.replace('"', '').replace('\'', ''))
 
 # load_dotenv(ENV_FILE)
+
 
 def parse_cors(v: Any) -> list[str] | str:
     if isinstance(v, str) and not v.startswith("["):
@@ -29,6 +38,7 @@ def parse_cors(v: Any) -> list[str] | str:
     elif isinstance(v, list | str):
         return v
     raise ValueError(v)
+
 
 class Settings(BaseSettings):
     API_ROOT: str = '/api/v2'
@@ -63,12 +73,12 @@ class Settings(BaseSettings):
         )
 
     SMTP_TLS: bool = True
-    SMTP_PORT: Optional[int] = None
-    SMTP_HOST: Optional[str] = None
-    SMTP_USER: Optional[str] = None
-    SMTP_PASSWORD: Optional[str] = None
-    EMAILS_FROM_EMAIL: Optional[EmailStr] = None
-    EMAILS_FROM_NAME: Optional[str] = "MailGuardian"
+    SMTP_PORT: int | None = None
+    SMTP_HOST: str | None = None
+    SMTP_USER: str | None = None
+    SMTP_PASSWORD: str | None = None
+    EMAILS_FROM_EMAIL: EmailStr | None = None
+    EMAILS_FROM_NAME: str | None = "MailGuardian"
 
     @model_validator(mode="after")
     def _set_default_emails_from(self) -> Self:
@@ -97,7 +107,7 @@ class Settings(BaseSettings):
         if self.MTA not in ALLOWED_MTAS:
             raise ValueError(f'MTA {self.MTA} is not supported. Supported MTA are the following: {" ".join(ALLOWED_MTAS)}')
         return self
-    
+
     MTA_LOGFILE: Path = Path('/var/log/maillog')
     SENDMAIL_BIN: Path = Path('/usr/sbin/sendmail')
     POSTQUEUE_BIN: Path = Path('/usr/sbin/postqueue')
@@ -118,9 +128,9 @@ class Settings(BaseSettings):
     # GeoIP
     MAXMIND_DB_PATH: Path = Path(BASE_DIR, 'run')
     MAXMIND_DB_FILE: Path = Path(MAXMIND_DB_PATH, 'GeoLite2.mmdb')
-    MAXMIND_ACCOUNT_API_KEY: Optional[str] = Field(default=None)
+    MAXMIND_ACCOUNT_API_KEY: str | None = Field(default=None)
 
-    #MailScanner settings
+    # MailScanner settings
     MAILSCANNER_BIN: Path = Path('/usr/sbin/MailScanner')
     MAILSCANNER_CONFIG_DIR: Path = Path('/etc/MailScanner')
     MAILSCANNER_SHARE_DIR: Path = Path('/usr/share/MailScanner')
@@ -137,7 +147,7 @@ class Settings(BaseSettings):
 
     # Application logging
     APP_LOG_TO_FILE: bool = True
-    APP_LOGDIR: Optional[Path] = Field(default=Path(STORAGE_DIR, 'logs'))
+    APP_LOGDIR: Path | None = Field(default=Path(STORAGE_DIR, 'logs'))
     APP_LOGLEVEL: int = logging.INFO
 
     # Security
@@ -149,7 +159,7 @@ class Settings(BaseSettings):
     # Application folders
     ROUTES: Path = Path(BASE_DIR, 'routes')
     COMMANDS: Path = Path(BASE_DIR, 'app', 'console')
-    
+
     model_config = SettingsConfigDict(env_file=ENV_FILE, env_file_encoding='utf-8', case_sensitive=False, extra='ignore')
 
 

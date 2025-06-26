@@ -1,14 +1,11 @@
-from alembic import context
-
 from logging.config import fileConfig
 
-import os
-
+from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlmodel import SQLModel
 
+from mailguardian.app import models  # noqa: F401
 from mailguardian.config.app import settings
-from mailguardian.app import models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -30,6 +27,7 @@ target_metadata = SQLModel.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+
 def get_url():
     # user = os.getenv("POSTGRES_USER", "postgres")
     # password = os.getenv("POSTGRES_PASSWORD", "")
@@ -37,7 +35,6 @@ def get_url():
     # db = os.getenv("POSTGRES_DB", "app")
     # return f"postgresql://{user}:{password}@{server}/{db}"
     return settings.SQLALCHEMY_DATABASE_URI.unicode_string()
-
 
 
 def run_migrations_offline() -> None:

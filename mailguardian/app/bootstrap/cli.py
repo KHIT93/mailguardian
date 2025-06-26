@@ -3,6 +3,7 @@ from pathlib import Path
 
 from mailguardian.config.app import settings
 
+
 def register_cli_routes() -> list:
     routes: list = []
     for module in Path(settings.COMMANDS).iterdir():
@@ -15,4 +16,3 @@ def register_cli_routes() -> list:
         if hasattr(python_module, 'app'):
             routes.append(python_module.app)
     return routes
-

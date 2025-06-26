@@ -1,24 +1,18 @@
-from mailguardian.app.models.base import BaseModel
-from mailguardian.app.schemas.domain import Domain as DomainSchema
-from mailguardian.app.models.many2many import UserDomain
-from datetime import datetime
 import logging
-from pydantic import UUID4, EmailStr, AwareDatetime
-from typing import TYPE_CHECKING, List, Optional, Literal
-from sqlalchemy import event
-from sqlmodel import Field, Relationship, DateTime, insert
-from sqlalchemy.engine.base import Connection
-from sqlalchemy.orm.events import MapperEvents
-from sqlalchemy.orm import Mapper
 
-import uuid
+from sqlmodel import Relationship
+
+from mailguardian.app.models.base import BaseModel
+from mailguardian.app.models.many2many import UserDomain
+from mailguardian.app.schemas.domain import Domain as DomainSchema
 
 _logger = logging.getLogger(__name__)
+
 
 class Domain(DomainSchema, BaseModel, table=True):
     __tablename__ = 'domains'
 
-    users: List["User"] = Relationship(back_populates='domains', link_model=UserDomain)
+    users: list["User"] = Relationship(back_populates='domains', link_model=UserDomain)  # type: ignore # noqa: F821
 
 # @event.listens_for(Domain, "after_insert")
 # def log_domain_creation(mapper: Mapper[Domain], connection: Connection, target: Domain) -> None:

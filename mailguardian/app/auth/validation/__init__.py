@@ -1,16 +1,12 @@
-# django.contrib.auth.password_validation.UserAttributeSimilarityValidator
-# django.contrib.auth.password_validation.MinimumLengthValidator
-# django.contrib.auth.password_validation.CommonPasswordValidator
-# django.contrib.auth.password_validation.NumericPasswordValidator
-
-from difflib import SequenceMatcher
 import re
+from difflib import SequenceMatcher
 from pathlib import Path
+
 
 class BaseValidator:
     def validate(self, password: str, user = None) -> None:
         raise NotImplementedError()
-    
+
     def get_help_text(self) -> str:
         raise NotImplementedError()
 
@@ -27,12 +23,13 @@ class MinimumLengthValidator(BaseValidator):
         if len(password) < self.min_length:
             raise ValueError(
                 "This password is too short. It must contain at least "
-                "%(min_length)d character."  % {"min_length": self.min_length}
+                f"{self.min_length} character."
             )
 
     def get_help_text(self):
-        return "Your password must contain at least %(min_length)d character." % {"min_length": self.min_length}
-    
+        return f"Your password must contain at least {self.min_length} character."
+
+
 def exceeds_maximum_length_ratio(password, max_similarity, value):
     """
     Test that value is within a reasonable range of password.
@@ -61,7 +58,8 @@ def exceeds_maximum_length_ratio(password, max_similarity, value):
     length_bound_similarity = max_similarity / 2 * pwd_len
     value_len = len(value)
     return pwd_len >= 10 * value_len and value_len < length_bound_similarity
-    
+
+
 class UserAttributeSimilarityValidator(BaseValidator):
     """
     Validate that the password is sufficiently different from the user's
@@ -98,12 +96,13 @@ class UserAttributeSimilarityValidator(BaseValidator):
                     continue
                 if (SequenceMatcher(a=password, b=value_part).quick_ratio() >= self.max_similarity):
                     raise ValueError(
-                        "The password is too similar to the %(name)s." % {"name": attribute_name}
+                        f"The password is too similar to the {attribute_name}."
                     )
 
     def get_help_text(self):
         return "Your password can not be too similar to your other personal information."
-    
+
+
 class NumericPasswordValidator(BaseValidator):
     """
     Validate that the password is not entirely numeric.
@@ -116,8 +115,9 @@ class NumericPasswordValidator(BaseValidator):
             )
 
     def get_help_text(self):
-        return "Your password can’t be entirely numeric."
-    
+        return "Your password cannot be entirely numeric."
+
+
 class CommonPasswordValidator(BaseValidator):
     """
     Validate that the password is not a common password.
@@ -134,7 +134,7 @@ class CommonPasswordValidator(BaseValidator):
     def __init__(self, password_list_path: Path = DEFAULT_PASSWORD_LIST_PATH):
         if password_list_path is CommonPasswordValidator.DEFAULT_PASSWORD_LIST_PATH:
             password_list_path = self.DEFAULT_PASSWORD_LIST_PATH
-        
+
         with password_list_path.open("r", encoding="utf-8") as f:
             self.passwords = {x.strip() for x in f.readlines()}
 

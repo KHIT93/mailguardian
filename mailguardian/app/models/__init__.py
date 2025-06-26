@@ -1,20 +1,19 @@
-from . import audit_log
-from . import base
-from . import domain
-from . import list_entry
-from . import mailscanner_host
-from . import message
-from . import message_header
-from . import message_mailscanner_report
-from . import message_mcp_report
-from . import message_rbl_report
-from . import message_spam_report
-from . import message_transport_log
-from . import scheduler
-from . import smtp_relay
-from . import spamassassin_rule_description
-from . import spamassassin_rule
-from . import task
-from . import user
-
-from . import many2many
+from . import audit_log as audit_log
+from . import base as base
+from . import domain as domain
+from . import list_entry as list_entry
+from . import mailscanner_host as mailscanner_host
+from . import many2many as many2many
+from . import message as message
+from . import message_header as message_header
+from . import message_mailscanner_report as message_mailscanner_report
+from . import message_mcp_report as message_mcp_report
+from . import message_rbl_report as message_rbl_report
+from . import message_spam_report as message_spam_report
+from . import message_transport_log as message_transport_log
+from . import scheduler as scheduler
+from . import smtp_relay as smtp_relay
+from . import spamassassin_rule as spamassassin_rule
+from . import spamassassin_rule_description as spamassassin_rule_description
+from . import task as task
+from . import user as user

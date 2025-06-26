@@ -1,11 +1,11 @@
 import logging
 
 from fastapi_mail import FastMail
-from injector import Module, provider, Injector, inject, singleton
+from injector import Injector, Module, provider, singleton
 
-from mailguardian.config.app import settings
 from mailguardian.config.mail import config as mail_config
 from mailguardian.database.connect import Database
+
 
 class ServiceContainer(Module):
     def __init__(self):

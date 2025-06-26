@@ -1,7 +1,6 @@
 import typer
-from . import milter
-from . import postfix
-from . import mailscanner
+
+from . import mailscanner, milter, postfix
 
 app: typer.Typer = typer.Typer(name='maillog')
 

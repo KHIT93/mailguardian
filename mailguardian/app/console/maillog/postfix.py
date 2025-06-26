@@ -1,30 +1,29 @@
-from abc import ABC, abstractmethod
 import datetime
-from io import TextIOWrapper
 import os
-from pathlib import Path
-import logging
 import re
 import sys
 import time
-from injector import inject
-import rich
-from typing import Annotated
+from abc import ABC, abstractmethod
+from io import TextIOWrapper
+from pathlib import Path
+from typing import Annotated, Any
+
 import typer
+from injector import inject
 from sqlmodel import Session, select
-from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.observers import Observer
+
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportLog
 from mailguardian.config.app import settings
 from mailguardian.database.connect import Database
 
-# logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 
 class SyslogParser:
     def __init__(self, line):
         # Define the months mapping
-        self.months = {
+        self.months: dict[str, int] = {
             'Jan': 1,
             'Feb': 2,
             'Mar': 3,
@@ -40,44 +39,45 @@ class SyslogParser:
         }
 
         # Parse the date, time, host, process pid and log entry
-        match = re.match(r'^(\S+)\s+(\d+)\s(\d+):(\d+):(\d+)\s(\S+)\s(\S+)\[(\d+)\]:\s(.+)$', line)
+        match: re.Match[str] | None = re.match(r'^(\S+)\s+(\d+)\s(\d+):(\d+):(\d+)\s(\S+)\s(\S+)\[(\d+)\]:\s(.+)$', line)
         if match:
             # Store raw line
-            self.raw = match.group(0)
+            self.raw: str = match.group(0)
 
             # Decode the syslog time/date
-            month_str = match.group(1)
-            day = int(match.group(2))
-            hour = int(match.group(3))
-            minute = int(match.group(4))
-            second = int(match.group(5))
-            host = match.group(6)
-            process = match.group(7)
-            pid = match.group(8)
-            entry = match.group(9)
+            month_str: str | Any = match.group(1)
+            day: int = int(match.group(2))
+            hour: int = int(match.group(3))
+            minute: int = int(match.group(4))
+            second: int = int(match.group(5))
+            host: str | Any = match.group(6)
+            process: str | Any = match.group(7)
+            pid: str | Any = match.group(8)
+            entry: str | Any = match.group(9)
 
-            month = self.months[month_str]
-            this_month = datetime.now().month
-            this_year = datetime.now().year
+            month: str = self.months[month_str]
+            this_month: int = datetime.datetime.now().month
+            this_year: int = datetime.datetime.now().year
 
             # Determine the correct year
-            year = this_year if month <= this_month else this_year - 1
+            year: int = this_year if month <= this_month else this_year - 1
 
             # Format date and time
-            date_str = f"{year}-{month:02}-{day:02}"
-            time_str = f"{hour:02}:{minute:02}:{second:02}"
-            datetime_str = f"{date_str} {time_str}"
+            date_str: str = f"{year}-{month:02}-{day:02}"
+            time_str: str = f"{hour:02}:{minute:02}:{second:02}"
+            datetime_str: str = f"{date_str} {time_str}"
 
             # Parse to timestamp and RFC3339 datetime
-            self.timestamp = int(time.mktime(time.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')))
-            self.rfctime = datetime.fromtimestamp(self.timestamp).isoformat()
+            self.timestamp: int = int(time.mktime(time.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')))
+            self.rfctime: str = datetime.datetime.fromtimestamp(self.timestamp).isoformat()
 
-            self.date = date_str
-            self.time = time_str
-            self.host = host
-            self.process = process
-            self.pid = pid
-            self.entry = entry
+            self.date: str = date_str
+            self.time: str = time_str
+            self.host: str = host
+            self.process: str = process
+            self.pid: str = pid
+            self.entry: str = entry
+
 
 class MtaLogProcessor(ABC):
     @inject
@@ -94,36 +94,36 @@ class MtaLogProcessor(ABC):
         self.db: Session = db.get_session()
 
     @abstractmethod
-    def extract_key_value_pairs(self, match):
+    def extract_key_value_pairs(self, match) -> dict:
         pass
 
-    def get_reject_reasons(self):
+    def get_reject_reasons(self) -> dict:
         return {}
 
-    def get_rulesets(self):
+    def get_rulesets(self) -> dict:
         return {}
 
-    def process_line(self, line):
+    def process_line(self, line) -> None:
         parser = SyslogParser(line)
-        _timestamp = parser.timestamp
-        _host = parser.host
-        _dsn = ''
-        _delay = ''
-        _relay = ''
-        _msg_id = ''
-        _status = ''
-        _type = None
-        _to = ''
+        _timestamp: int = parser.timestamp
+        _host: str = parser.host
+        _dsn: str = ''
+        _delay: str = ''
+        _relay: str = ''
+        _msg_id: str = ''
+        _status: str = ''
+        _type: str = None
+        _to: str = ''
 
         if parser.process == self.mtaprocess:
             self.parse(parser.entry)
 
             print(self.__dict__)
 
-            _msg_id = self.id
+            _msg_id: str = self.id
 
             # Apply rulesets if they exist
-            rulesets = self.get_rulesets()
+            rulesets: dict = self.get_rulesets()
             _type = rulesets.get('type', _type)
             _relay = rulesets.get('relay', _relay)
             _status = rulesets.get('status', _status)
@@ -164,7 +164,7 @@ class MtaLogProcessor(ABC):
                 self.db.add(log_entry)
                 self.db.commit()
 
-    def follow(self, file):
+    def follow(self, file) -> None:
         size = os.path.getsize(file)
         lines = 1
 
@@ -183,7 +183,7 @@ class MtaLogProcessor(ABC):
 
             size = current_size
 
-    def doit(self, input_cmd):
+    def doit(self, input_cmd) -> None:
         try:
             fp = os.popen(input_cmd)
             lines = 1
@@ -194,7 +194,7 @@ class MtaLogProcessor(ABC):
         except Exception as e:
             sys.exit(f"Error: {e}")
 
-    def parse(self, line):
+    def parse(self, line) -> bool:
         self.id = None
         self.entry = None
         self.entries = {}
@@ -230,13 +230,14 @@ class MtaLogProcessor(ABC):
 
         return False
 
-    def get_ip(self):
+    def get_ip(self) -> str:
         match = re.search(r'\[(\d+\.\d+\.\d+\.\d+)\]', self.entries.get('relay', ''))
         return match.group(1) if match else self.entries.get('relay', '')
 
-    def get_email(self):
+    def get_email(self) -> str:
         match = re.search(r'<(\S+)>', self.entries.get('to', ''))
         return match.group(1) if match else self.entries.get('to', '')
+
 
 class PostfixLogProcessor(MtaLogProcessor):
     def __init__(self) -> None:
@@ -268,19 +269,23 @@ class PostfixLogProcessor(MtaLogProcessor):
         )
         entries = re.match(pattern, match.group(2))
         return entries.groupdict() if entries else {}
-    
+
+
 class PostfixLogFileHandler(FileSystemEventHandler):
     def __init__(self, file_path: Path | str, log_processor: MtaLogProcessor) -> None:
         self.file_path: Path = file_path if isinstance(file_path, Path) else Path(file_path)
         self.file: TextIOWrapper = self.file_path.open('r')
         self.log_processor: MtaLogProcessor = log_processor
-        self.file.seek(0, 2) # Go to the end of the file
+        self.file.seek(0, 2)  # Go to the end of the file
+
     def on_modified(self, event: FileSystemEvent) -> None:
         if event.src_path == str(self.file_path):
             for line in self.file:
                 self.log_processor.process_line(line.strip())
 
+
 app: typer.Typer = typer.Typer(name='postfix')
+
 
 @app.command(name='process')
 def postfix_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False, test: Annotated[bool, typer.Option('--test', help='Verify if the script is working by providing a set of sample lines')] = False):
@@ -299,7 +304,7 @@ def postfix_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will 
                 observer.join(1)
         except KeyboardInterrupt:
             observer.stop()
-        
+
         observer.join()
     elif not follow:
         print('Processing stdin...')

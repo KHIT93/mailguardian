@@ -1,5 +1,6 @@
 from . import BasePasswordHasher
 
+
 class Argon2PasswordHasher(BasePasswordHasher):
     """
     Secure password hashing using the argon2 algorithm.

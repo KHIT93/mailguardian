@@ -1,14 +1,15 @@
 import email
 import email.message
 import email.policy
-from email import message_from_string, message_from_file
-from email.message import EmailMessage
 import logging
-import markupsafe
-from pathlib import Path
 import re
+from pathlib import Path
+
+import markupsafe
+
 from mailguardian.app.schemas.message import MessageDetail
 from mailguardian.app.utils.sanitize import html_sanitize
+
 _logger = logging.getLogger(__name__)
 
 def html_keep_url(text: str) -> str:
@@ -18,10 +19,11 @@ def html_keep_url(text: str) -> str:
     link_tags = re.compile(r"""(?<!["'])((ftp|http|https):\/\/(\w+:{0,1}\w*@)?([^\s<"']+)(:[0-9]+)?(\/|\/([^\s<"']))?)(?![^\s<"']*["']|[^\s<"']*</a>)""")
     for item in re.finditer(link_tags, text):
         final += text[idx:item.start()]
-        final += '<a href="%s" target="_blank" rel="noreferrer noopener">%s</a>' % (item.group(0), item.group(0))
+        final += f'<a href="{item.group(0)}" target="_blank" rel="noreferrer noopener">{item.group(0)}</a>'
         idx = item.end()
     final += text[idx:]
     return final
+
 
 def plaintext2html(text: str, container_tag: str = None) -> markupsafe.Markup:
     r"""Convert plaintext into html. Content of the text is escaped to manage
@@ -57,8 +59,9 @@ def plaintext2html(text: str, container_tag: str = None) -> markupsafe.Markup:
 
     # 5. container
     if container_tag: # FIXME: validate that container_tag is just a simple tag?
-        final = '<%s>%s</%s>' % (container_tag, final, container_tag)
+        final = f'<{container_tag}>{final}</{container_tag}>'
     return markupsafe.Markup(final)
+
 
 def append_content_to_html(html: str, content: str, plaintext: bool = True, preserve: bool = False, container_tag: str = None) -> markupsafe.Markup:
     """ Append extra content at the end of an HTML snippet, trying
@@ -86,28 +89,27 @@ def append_content_to_html(html: str, content: str, plaintext: bool = True, pres
         :rtype: markupsafe.Markup
     """
     if plaintext and preserve:
-        content = '\n<pre>%s</pre>\n' % markupsafe.escape(content)
+        content = f'\n<pre>{markupsafe.escape(content)}</pre>\n'
     elif plaintext:
-        content = '\n%s\n' % plaintext2html(content, container_tag)
+        content = f'\n{plaintext2html(content, container_tag)}\n'
     else:
         content = re.sub(r'(?i)(</?(?:html|body|head|!\s*DOCTYPE)[^>]*>)', '', content)
-        content = '\n%s\n' % content
+        content = f'\n{content}\n'
     # Force all tags to lowercase
-    html = re.sub(r'(</?)(\w+)([ >])',
-        lambda m: '%s%s%s' % (m[1], m[2].lower(), m[3]), html)
+    html = re.sub(r'(</?)(\w+)([ >])', lambda m: f'{m[1]}{m[2].lower()}{m[3]}', html)
     insert_location = html.find('</body>')
     if insert_location == -1:
         insert_location = html.find('</html>')
     if insert_location == -1:
-        return markupsafe.Markup('%s%s' % (html, content))
-    return markupsafe.Markup('%s%s%s' % (html[:insert_location], content, html[insert_location:]))
+        return markupsafe.Markup(f'{html}{content}')
+    return markupsafe.Markup(f'{html[:insert_location]}{content}{html[insert_location:]}')
+
 
 def get_neutralized_message(message: Path) -> MessageDetail:
     body: str = ''
     attachments: list[str] = []
     with message.open('rb') as msg:
         email_message: email.message.EmailMessage = email.message_from_file(fp=msg, policy=email.policy.SMTP)
-        
 
         if email_message.get_content_maintype() == 'text':
             body = email_message.get_content()
@@ -130,7 +132,7 @@ def get_neutralized_message(message: Path) -> MessageDetail:
                     mixed = True
                 if part.get_content_maintype() == 'multipart':
                     continue  # skip container
-                
+
                 filename = part.get_filename()
                 if part.get_content_type() == 'text/xml' and not part.get_param('charset'):
                     # for text/xml with omitted charset, the charset is assumed to be ASCII by the `email` module

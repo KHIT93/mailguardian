@@ -1,14 +1,16 @@
-from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+
 from fastapi.param_functions import Form
-from typing import Union, Annotated
+from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Doc
+
 
 class OAuth2MfaPasswordRequestForm(OAuth2PasswordRequestForm):
     def __init__(
         self,
         *,
         grant_type: Annotated[
-            Union[str, None],
+            str | None,
             Form(pattern="password"),
             Doc(
                 """
@@ -74,7 +76,7 @@ class OAuth2MfaPasswordRequestForm(OAuth2PasswordRequestForm):
             ),
         ] = "",
         client_id: Annotated[
-            Union[str, None],
+            str | None,
             Form(),
             Doc(
                 """
@@ -85,7 +87,7 @@ class OAuth2MfaPasswordRequestForm(OAuth2PasswordRequestForm):
             ),
         ] = None,
         client_secret: Annotated[
-            Union[str, None],
+            str | None,
             Form(),
             Doc(
                 """

@@ -1,23 +1,23 @@
 import logging
 import logging.config
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Literal, Optional, Union
+from typing import Literal
 
 LogLevelType = Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 LogOutputFormat = Literal["default", "json"]
 
-def setup_logging(log_level: Union[LogLevelType, str] = 'INFO', log_output: Union[LogOutputFormat, str] = 'default', log_dir: Union[str, Path] = None) -> logging.Logger:
+
+def setup_logging(log_level: LogLevelType | str = 'INFO', log_output: LogOutputFormat | str = 'default', log_dir: str | Path = None) -> logging.Logger:
     """
     Set up logging configuration for the application
-    
+
     Args:
         log_level: The logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
         log_level: The logging outoput format (default, json)
         log_dir: Directory to store log files
-        
+
     Returns:
         The configured logger for the application
     """
@@ -107,6 +107,6 @@ def setup_logging(log_level: Union[LogLevelType, str] = 'INFO', log_output: Unio
 
     # Apply the configuration
     logging.config.dictConfig(config)
-    
+
     # Return a logger for the application
     return logging.getLogger("mailguardian")

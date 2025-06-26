@@ -1,16 +1,13 @@
 import datetime
-from mailguardian.config.app import settings
-from typing import TYPE_CHECKING, Optional
-from pathlib import Path
-from pydantic import UUID4, EmailStr, IPvAnyAddress, AwareDatetime
-from sqlmodel import Column, ForeignKey, Uuid, Integer, String, Boolean, Float, DateTime, Date, Field, Relationship, SQLModel
-import uuid
+
+from sqlmodel import Field, SQLModel
+
 
 class MessageTransportLog(SQLModel):
 
-    message_id: Optional[int] = Field(foreign_key="messages.id", index=True)
+    message_id: int | None = Field(foreign_key="messages.id", index=True)
 
-    mail_message_id: Optional[str] = Field(nullable=True)
+    mail_message_id: str | None = Field(nullable=True)
 
     timestamp: datetime.datetime = Field(index=True)
 

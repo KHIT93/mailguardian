@@ -1,10 +1,13 @@
 import logging
-from datetime import timedelta, datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlmodel import Session, select
 
+from mailguardian.app.auth.providers import (
+    OAuth2MfaPasswordRequestForm as OAuth2PasswordRequest,
+)
 from mailguardian.app.auth.utils import authenticate_user, create_access_token
 from mailguardian.app.dependencies import (
     get_current_token,
@@ -15,15 +18,14 @@ from mailguardian.app.dependencies import (
 from mailguardian.app.models.audit_log import AuditLog
 from mailguardian.app.models.user import User, UserSession
 from mailguardian.app.schemas.audit_log import AuditAction
-from mailguardian.app.schemas.auth import AuthenticationParameters, AuthenticationRequest
+from mailguardian.app.schemas.auth import (
+    AuthenticationParameters,
+    AuthenticationRequest,
+)
 from mailguardian.app.schemas.user import Token, TokenData
 from mailguardian.config.app import settings
 
 _logger = logging.getLogger(__name__)
-
-from mailguardian.app.auth.providers import (
-    OAuth2MfaPasswordRequestForm as OAuth2PasswordRequest,
-)
 
 
 router = APIRouter(
@@ -63,9 +65,10 @@ async def login(form_data: Annotated[OAuth2PasswordRequest, Depends()], request:
     return Token(access_token=access_token, token_type="bearer")
 
 
-@router.get('/whoami', dependencies=[Depends(oauth2_scheme)])
-async def session(authenticated_user: Annotated[User, Depends(get_current_user)], token: Annotated[TokenData, Depends(get_current_token)]) -> User:
+@router.get('/whoami', dependencies=[Depends(oauth2_scheme), Depends(get_current_token)])
+async def session(authenticated_user: Annotated[User, Depends(get_current_user)]) -> User:
     return authenticated_user
+
 
 @router.delete('/terminate', dependencies=[Depends(oauth2_scheme)])
 async def logout(db: Annotated[Session, Depends(get_database_session)], request: Request, authenticated_user: Annotated[User, Depends(get_current_user)], token: Annotated[TokenData, Depends(get_current_token)]) -> None:
@@ -85,9 +88,10 @@ async def logout(db: Annotated[Session, Depends(get_database_session)], request:
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
+
 @router.post('/params', summary='Authentication Parameters', description='Endpoint used by clients to determine what specific authentication options are supported')
 async def auth_params(db: Annotated[Session, Depends(get_database_session)], data: AuthenticationRequest) -> AuthenticationParameters:
-    attempted_user: User = db.exec(select(User).where(User.email == data.username and User.is_active == True)).first()
+    attempted_user: User = db.exec(select(User).where(User.email == data.username and User.is_active is True)).first()
 
     if not attempted_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'User with email {data.username} could not be found')

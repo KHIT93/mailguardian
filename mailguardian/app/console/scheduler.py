@@ -1,10 +1,10 @@
-from fastapi import Depends
 import importlib
 import logging
-import rich
-from sqlmodel import Session, select
 import time
+
+import rich
 import typer
+from sqlmodel import select
 
 from mailguardian.app import services
 from mailguardian.app.models.task import Task, TaskState
@@ -13,6 +13,7 @@ from mailguardian.database.connect import Database
 logger = logging.getLogger(__name__)
 
 app: typer.Typer = typer.Typer(name='scheduler')
+
 
 @app.command('run')
 def run_task():
@@ -46,7 +47,7 @@ def run_task():
                 task_module = importlib.import_module(next_task.module)
                 if not hasattr(task_module, next_task.task):
                     next_task.state = TaskState.REJECTED
-                    rich.print('[red][bold] %s.%s does not exist!' % (next_task.module, next_task.task))
+                    rich.print(f'[red][bold] {next_task.module}.{next_task.task} does not exist!')
                     db.add(next_task)
                     db.commit()
                 else:
@@ -56,15 +57,14 @@ def run_task():
                         task_exec(db=db, payload=next_task.payload)
                     # Upon success, mark the task as completed
                         next_task.state = TaskState.SUCCESS
-                    except:
+                    except Exception:
                         # Upon an error, register the issue on the task and allow the scheduler to continue on to the next task
                         next_task.state = TaskState.FAILURE
                     finally:
                         db.add(next_task)
                         db.commit()
-                
+
             except KeyboardInterrupt:
                 raise typer.Exit(0)
-    
-    rich.print('Task processing stopped')
 
+    rich.print('Task processing stopped')

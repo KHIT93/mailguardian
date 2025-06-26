@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 
+
 class AuthenticationRequest(BaseModel):
     username: str
+
 
 class AuthenticationParameters(BaseModel):
     password: bool = True

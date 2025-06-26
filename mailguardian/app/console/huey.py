@@ -1,11 +1,13 @@
 import logging
+
+import typer
 from huey.consumer import Consumer
 from huey.consumer_options import ConsumerConfig
-import typer
 
 from mailguardian.app.scheduler import queue
 
 app = typer.Typer(name='huey')
+
 
 @app.command()
 def run():

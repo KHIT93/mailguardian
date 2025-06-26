@@ -4,7 +4,7 @@ from typing import Annotated, Literal
 import invoke
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pymailq.store import PostqueueStore
-from sqlmodel import Session, select, desc
+from sqlmodel import Session, desc, select
 
 from mailguardian.app.dependencies import (
     get_current_user,
@@ -308,8 +308,8 @@ async def spamassassin_learn(db: Annotated[Session, Depends(get_database_session
     return True
 
 
-@router.delete('/queue', summary='View the mail processing queue', description='Returns the list of items on the email processing queue of the MTA', dependencies=[Depends(requires_app_admin)])
-async def view_mailqueue(db: Annotated[Session, Depends(get_database_session)], request: Request, authenticated_user: Annotated[User, Depends(get_current_user)]) -> MessageProcessingQueue:
+@router.get('/queue', summary='View the mail processing queue', description='Returns the list of items on the email processing queue of the MTA', dependencies=[Depends(requires_app_admin)])
+async def view_mailqueue(request: Request, authenticated_user: Annotated[User, Depends(get_current_user)]) -> MessageProcessingQueue:
     store: PostqueueStore = PostqueueStore()
     store.load()
     res: MessageProcessingQueue = MessageProcessingQueue(messages=[

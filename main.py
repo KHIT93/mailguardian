@@ -1,12 +1,9 @@
-import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from injector import Injector
 from starlette.middleware.cors import CORSMiddleware
 
-from mailguardian.app import web_routes, api_routes
-
+from mailguardian.app import api_routes, web_routes
 from mailguardian.app.http.middleware import middleware as http_middleware
 from mailguardian.config.app import API_VERSION, settings
 
@@ -44,7 +41,7 @@ app = FastAPI(
 )
 
 # for route in web_routes:
-    # DO SOMETHING
+# DO SOMETHING
 
 for route in api_routes:
     app.include_router(route)

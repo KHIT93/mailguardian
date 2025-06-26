@@ -1,11 +1,8 @@
 #! /usr/bin/env python3
 
-from injector import Injector
 import typer
 
 from mailguardian.app import commands
-# from mailguardian.app.console import commands
-from mailguardian.config.app import API_VERSION, settings
 
 app: typer.Typer = typer.Typer()
 

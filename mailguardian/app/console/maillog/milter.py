@@ -1,36 +1,38 @@
-from fastapi import Depends
-from io import TextIOWrapper
-from pathlib import Path
 import logging
 import re
 import sys
 import time
-import rich
-from sqlmodel import Session, select
+from io import TextIOWrapper
+from pathlib import Path
 from typing import Annotated
+
 import typer
-from watchdog.observers import Observer
+from fastapi import Depends
+from sqlmodel import Session, select
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
-from mailguardian.app.dependencies import get_database_session
+from watchdog.observers import Observer
+
 from mailguardian.app.models.message import Message
 from mailguardian.app.models.message_transport_log import MessageTransportIdentifier
 from mailguardian.app.service_providers.dependency_injection import inject_dependencies
 from mailguardian.config.app import settings
 from mailguardian.database.connect import Database
 
-# logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 idqueue: list = []
+
 
 class MilterLogFileHandler(FileSystemEventHandler):
     def __init__(self, file_path: Path | str) -> None:
         self.file_path: Path = file_path if isinstance(file_path, Path) else Path(file_path)
         self.file: TextIOWrapper = self.file_path.open('r')
-        self.file.seek(0, 2) # Go to the end of the file
+        self.file.seek(0, 2)  # Go to the end of the file
+
     def on_modified(self, event: FileSystemEvent) -> None:
         if event.src_path == str(self.file_path):
             for line in self.file:
                 _process_milter_log_entry(line.strip())
             process_sql()
+
 
 def _process_milter_log_entry(line: str) -> None:
     global idqueue
@@ -68,6 +70,7 @@ def _process_milter_log_entry(line: str) -> None:
                     logging.debug(f'{__name__}: Delivery attempt for smtpid {smtpid} detected and updated in queue')
                     break
 
+
 @inject_dependencies()
 def process_sql(db_connection: Annotated[Database, Depends()]):
     global idqueue
@@ -104,13 +107,16 @@ def process_sql(db_connection: Annotated[Database, Depends()]):
 
         i += 1
 
+
 def remove_entry(smtpid):
     global idqueue
     idqueue = [entry for entry in idqueue if entry[0] != smtpid]
 
     logging.debug(f'{__name__}: Removed smtpid {smtpid} from relay queue')
 
+
 app: typer.Typer = typer.Typer(name='milter')
+
 
 @app.command(name='process')
 def milter_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will watch the logfile for any changes and process them')] = False, test: Annotated[bool, typer.Option('--test', help='Verify if the script is working by providing a set of sample lines')] = False):
@@ -135,7 +141,7 @@ def milter_maillog(follow: Annotated[bool, typer.Option('--follow', help='Will w
                 observer.join(1)
         except KeyboardInterrupt:
             observer.stop()
-        
+
         observer.join()
     elif not follow:
         for line in sys.stdin:

@@ -1,18 +1,20 @@
 import datetime
-import uuid
-from dotenv import load_dotenv
-import rich
-from sqlmodel import Session
-from typing import Any, Dict, List, Optional, Annotated
-import typer
-from pathlib import Path
-from pydantic import PostgresDsn
-import psycopg
 import os
+import uuid
+from pathlib import Path
+from typing import Annotated, Any
+
+import psycopg
+import rich
+import typer
+from dotenv import load_dotenv
+from pydantic import PostgresDsn
+
 from mailguardian.app.utils.spamassassin import extract_rules_and_scores_from_report
 from mailguardian.config.app import ENV_FILE as APP_ENV_FILE
 
 app: typer.Typer = typer.Typer(name='v2tov3', help='Utilities related to switching/upgrading from 2.x.x to 3.0.0')
+
 
 def __build_dict_from_cursor_tuple(cr: psycopg.Cursor, row: tuple) -> dict[str, Any]:
     """ Extract the information from the cursor on what columns/fields are fetched
@@ -20,9 +22,11 @@ def __build_dict_from_cursor_tuple(cr: psycopg.Cursor, row: tuple) -> dict[str, 
     """
     return {d.name: row[i] for i, d in enumerate(cr.description)}
 
+
 def __build_tuple_from_dict(data: dict) -> tuple:
     """ Does the inverse of __build_dict_from_cursor_tuple where we convert a dict into a tuple that can then be used for parameters on a database cursor"""
     return tuple(data.values())
+
 
 def migrate_domains(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
     from mailguardian.app.schemas.domain import ReceptionType
@@ -38,6 +42,7 @@ def migrate_domains(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
             target.execute('INSERT INTO domains (uuid, name, destination, relay_type, created_at, updated_at, active, catchall, reception_type) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id', __build_tuple_from_dict(data))
             progress.update(1)
     print(f'Processed {length} domains')
+
 
 def migrate_users(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
     from mailguardian.app.schemas.user import UserRole
@@ -62,7 +67,7 @@ def migrate_users(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
                 'first_name': data['first_name'],
                 'last_name': data['last_name'],
                 'email': data['email'],
-                'password': data['password'].replace('argon2$', '$'), # This makes the hashes from Django, compatible with passlib
+                'password': data['password'].replace('argon2$', '$'),  # This makes the hashes from Django, compatible with passlib
                 'role': data['role'],
                 'is_active': data['is_active'],
                 'created_at': data['date_joined']
@@ -71,11 +76,12 @@ def migrate_users(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
             progress.update(1)
     print(f'Processed {length} users')
 
+
 def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
     length: int = 0
     src.execute('SELECT count(id) FROM mail_message')
     length = src.fetchone()[0]
-    query: str = str(("SELECT mm.id, "
+    query: str = str("SELECT mm.id, "
             "mm.from_address, "
             "mm.from_domain, "
             "mm.to_address, "
@@ -108,22 +114,22 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
         "LEFT JOIN mail_mailscannerreport AS mmsr ON mmsr.message_id = mm.id "
         "LEFT JOIN mail_mcpreport AS mcp ON mcp.message_id = mm.id "
         "LEFT JOIN mail_rblreport AS rbl ON rbl.message_id = mm.id "
-        "LEFT JOIN mail_spamreport AS msr ON msr.message_id = mm.id"))
-    
+        "LEFT JOIN mail_spamreport AS msr ON msr.message_id = mm.id")
+
     rich.print(f'[bold white]Migrating {length} messages to new database structure ...[/bold white]')
 
     with typer.progressbar(length=length) as progress:
         for result in src.stream(query=query):
             data: dict[str, Any] = __build_dict_from_cursor_tuple(cr=src, row=result)
             headers: str = data.pop('headers', '')
-            mailscanner_report: str = data.pop('mailscanner_report', '')
+            # mailscanner_report: str = data.pop('mailscanner_report', '')
             mcp_report: str = data.pop('mcp_report', '')
             rbl_report: str = data.pop('rbl_report', '')
             spam_report: str = data.pop('spam_report', '')
             data['spam_score'] = data['spam_score'] or 0.00
             data['mcp_score'] = data['mcp_score'] or 0.00
-            data['timestamp'] = data['timestamp'] + datetime.timedelta(days=(365*7) - 10)
-            data['date'] = data['date'] + datetime.timedelta(days=(365*7) - 10)
+            data['timestamp'] = data['timestamp'] + datetime.timedelta(days=(365 * 7) - 10)
+            data['date'] = data['date'] + datetime.timedelta(days=(365 * 7) - 10)
             target.execute(("INSERT INTO messages "
                 "("
                     "uuid, "
@@ -149,7 +155,7 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
                     "scanned, "
                     "allowed, "
                     "blocked"
-                ")" 
+                ")"
                 "VALUES("
                     "%s, "
                     "%s, "
@@ -175,12 +181,12 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
                     "%s, "
                     "%s"
                 ") RETURNING id"), __build_tuple_from_dict(data=data))
-            
+
             record_id = target.fetchone()[0]
             if headers:
-                raw: List[str] = headers.replace('\r\n\t', '').splitlines()
+                raw: list[str] = headers.replace('\r\n\t', '').splitlines()
                 previous: str = ''
-                to_insert: Dict[str, str] = {}
+                to_insert: dict[str, str] = {}
                 for h in raw:
                     data = h.split(': ', 1)
                     if len(data) > 1:
@@ -191,14 +197,13 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
                 for header in to_insert.keys():
                     # print(headers)
                     # TODO: Create one big query with all headers
-                    q: str = 'INSERT INTO message_headers (message_id, uuid, key, value) VALUES'
                     vals = [
                         record_id,
                         str(uuid.uuid4()),
                         header,
                         to_insert[header]
                     ]
-                    args = target
+
                     target.execute('INSERT INTO message_headers (message_id, uuid, key, value) VALUES(%s, %s, %s, %s)', [
                         record_id,
                         str(uuid.uuid4()),
@@ -259,8 +264,8 @@ def migrate_messages(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
             progress.update(1)
     print(f'Processed {length} messages')
 
+
 def migrate_list_entries(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
-    from mailguardian.app.schemas.list_entry import ListingType
     length: int = 0
     src.execute('SELECT count(id) FROM domains_domain')
     length = src.fetchone()[0]
@@ -276,11 +281,11 @@ def migrate_list_entries(src: psycopg.Cursor, target: psycopg.Cursor) -> None:
 
 @app.command(name='migrate', help='Migrate data from MailGuardian 2.x.x to MailGuardian 3.0.0')
 def migrate_v2tov3(
-        env_file: Path = Path(APP_ENV_FILE.parent, '.env.migrate'), 
-        all: Annotated[bool, typer.Option('--all', help='Migrate all compatible records')] = False, 
-        messages: Annotated[bool, typer.Option('--messages', help='Migrate processed messages and their metadata')] = False, 
-        domains: Annotated[bool, typer.Option('--domains', help='Migrate the domains being handled')] = False, 
-        compliance: Annotated[bool, typer.Option('--compliance', help='Migrate compatible data related to GDPR compliance and audit')] = False, 
+        env_file: Path = Path(APP_ENV_FILE.parent, '.env.migrate'),
+        all: Annotated[bool, typer.Option('--all', help='Migrate all compatible records')] = False,
+        messages: Annotated[bool, typer.Option('--messages', help='Migrate processed messages and their metadata')] = False,
+        domains: Annotated[bool, typer.Option('--domains', help='Migrate the domains being handled')] = False,
+        compliance: Annotated[bool, typer.Option('--compliance', help='Migrate compatible data related to GDPR compliance and audit')] = False,
         users: Annotated[bool, typer.Option('--users', help='Migrated users of the application')] = False,
         lists: Annotated[bool, typer.Option('--lists', help='Migrated allowed/blocked senders')] = False,
         hosts: Annotated[bool, typer.Option('--hosts', help='Migrate configuration data for hosts that process data')] = False,
@@ -333,13 +338,21 @@ def migrate_v2tov3(
     if users:
         migrate_users(src=src, target=target)
     # Migrate MailGuardian hosts
+    if hosts:
+        rich.print('[bold][red]Hosts are not yet supported for migration[/red][/bold]')
     # Migrate App settings - if applicable
     # Migrate App notifications (persistent notifications for login screen and dashboard)
     # Migrate compliance logs
+    if compliance:
+        rich.print('[bold][red]Compliance settings are not yet supported for migration[/red][/bold]')
     # Migrate allowed senders + blocked senders
     if lists:
         migrate_list_entries(src=src, target=target)
         target_connection.commit()
 
     # Migrate SMTP relay settings
+    if relays:
+        rich.print('[bold][red]SMTP Relays are not yet supported for migration[/red][/bold]')
     # Migrate SpamAssassin rules + descriptors
+    if spamassassin:
+        rich.print('[bold][red]SpamAssassin settings are not yet supported for migration[/red][/bold]')
