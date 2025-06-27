@@ -1,11 +1,15 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from mailguardian.app import api_routes, web_routes
+# from mailguardian.app import api_routes, web_routes
+from mailguardian.app.bootstrap.routes import register_api_routes, register_web_routes
 from mailguardian.app.http.middleware import middleware as http_middleware
 from mailguardian.config.app import API_VERSION, settings
+
+api_routes: list[APIRouter] = register_api_routes()
+web_routes: list = register_web_routes()
 
 
 @asynccontextmanager
@@ -19,6 +23,7 @@ async def lifespan(app: FastAPI):  # noqa: ARG001
     # customize_fastapi_logger()
     # Init database
     # SQLModel.metadata.create_all(engine)
+
 
     yield
 
@@ -42,7 +47,6 @@ app = FastAPI(
 
 # for route in web_routes:
 # DO SOMETHING
-
 for route in api_routes:
     app.include_router(route)
 

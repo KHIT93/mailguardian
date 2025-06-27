@@ -6,9 +6,9 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from sqlmodel import Session, select
 
-from mailguardian.app import services
 from mailguardian.app.models.user import User, UserSession
 from mailguardian.app.schemas.user import TokenData, UserRole
+from mailguardian.app.service_providers.service_container import services
 from mailguardian.config.app import TOKEN_ALGORITHM, settings
 from mailguardian.database.connect import Database
 
